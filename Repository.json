@@ -451,7 +451,7 @@
   },
   {
     "Name": "Aatrox",
-    "Description": "",
+    "Description": "Plays Aatrox. It's doing the Q-E-R combo if you can kill the enemy, otherwise it's doing Q-E. The W usage is changing automatically the W depending on your actual life. Also, it has some options like killsteal with R and E, interrumpt with Q, draws and so on.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/Areidz/Leaguesharp",
@@ -461,7 +461,7 @@
   },
   {
     "Name": "AttackDrawer",
-    "Description": "",
+    "Description": "It draws the attack range of your enemies. Enjoy your trades at botlane :^)",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/Areidz/Leaguesharp",
@@ -471,7 +471,7 @@
   },
   {
     "Name": "Blitzcrank",
-    "Description": "",
+    "Description": "Plays Blitzcrank. Mainly doing Q-E-R combo. If you can't use Q, it will try to use E if you are near the enemy, and R. Also has some other features, like interrumpt spells with your abilities, automatic R casting if you can hit more than a number of enemies, and automatic R killsteal.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/Areidz/Leaguesharp",
@@ -481,7 +481,7 @@
   },
   {
     "Name": "SimpleUltLeveler",
-    "Description": "",
+    "Description": "Simple assembly to automatic level up the ultimate ability of your character. Useful to almost every single character in the game.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/Areidz/Leaguesharp",
@@ -491,7 +491,7 @@
   },
   {
     "Name": "ChewyMoonsIrelia",
-    "Description": "",
+    "Description": "Plays Irelia. SBTW Combo, Combo settings, Auto Q -> E to interrupt ults/tp's.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/ChewyMoon/ChewyMoonScripts",
@@ -501,7 +501,7 @@
   },
   {
     "Name": "ChewyMoonsLux",
-    "Description": "",
+    "Description": "Plays Lux.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/ChewyMoon/ChewyMoonScripts",
@@ -511,7 +511,7 @@
   },
   {
     "Name": "Kassadin",
-    "Description": "",
+    "Description": "Plays Kassadin",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/DangerousMindLoL/league-sharp",
@@ -521,7 +521,7 @@
   },
   {
     "Name": "PerfectWard",
-    "Description": "",
+    "Description": "Marks areas on the map to facilitate difficult ward placement over walls",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/jasteph/LeagueSharp",
