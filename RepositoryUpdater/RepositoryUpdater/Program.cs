@@ -23,7 +23,7 @@ namespace LSharpRepoUpdater
 
             using (var client = new WebClient())
             {
-                var server = JsonConvert.DeserializeObject<List<AssemblyEntity>>(client.DownloadString("https://raw.githubusercontent.com/h3h3/LSharpAssemblyProvider/master/Repository.json"));
+                var server = JsonConvert.DeserializeObject<List<AssemblyEntity>>(client.DownloadString("https://raw.githubusercontent.com/h3h3/LeagueSharp/master/RepositoryUpdater/RepositoryUpdater/Repository.json"));
                 var list = new List<AssemblyEntity>();
                 var repos = File.ReadAllLines("repos.txt");
 

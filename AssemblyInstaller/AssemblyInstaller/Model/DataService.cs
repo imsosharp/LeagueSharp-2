@@ -26,7 +26,7 @@ namespace AssemblyInstaller.Model
 
                 using (var client = new WebClient())
                 {
-                    var result = client.DownloadString(new Uri("https://raw.githubusercontent.com/h3h3/LSharpAssemblyProvider/master/Repository.json"));
+                    var result = client.DownloadString(new Uri("https://raw.githubusercontent.com/h3h3/LeagueSharp/master/RepositoryUpdater/RepositoryUpdater/Repository.json"));
                     var data = JsonConvert.DeserializeObject<List<AssemblyEntity>>(result);
 
                     foreach (var entity in data)
