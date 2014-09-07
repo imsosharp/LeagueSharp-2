@@ -1341,7 +1341,7 @@
   },
   {
     "Name": "Nami",
-    "Description": "",
+    "Description": "Full Combo [Q;W;E;R], Harass [W], Use Aqua Prision on Gapclosers (Not tested)Use Aqua Prision on Dashes / Immobile targetsInterrupt spells [Q;R]Auto Heal Ally'sBlock Attacks to Minions that aren't on Ally's range [Mixed Mode]",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/madk/LeagueSharp",
@@ -1351,7 +1351,7 @@
   },
   {
     "Name": "Nidalee",
-    "Description": "",
+    "Description": "Full Combo [Q;W;E;R;Items], Harass [Human: Q;W], Lane/Jungle Clear [Cougar: Q;W;E // Human: E].",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/madk/LeagueSharp",
@@ -1361,7 +1361,7 @@
   },
   {
     "Name": "Talon",
-    "Description": "",
+    "Description": "Plays Talon. Full Combo [Q;W;E;R;Items;Ignite], Ultimate Rush on Killabe Targets, Harass [W], Lane/Jungle Clear [Q;W], Auto Ignite.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/madk/LeagueSharp",
