@@ -25,9 +25,10 @@ namespace LSharpAssemblyProvider.Design
             return new ObservableCollectionEx<LogEntity>();
         }
         
-        public ObservableCollectionEx<LogEntity> GetLSharp_IssuesData()
+        
+        public ObservableCollectionEx<AssemblyEntity> GetLSharp_IssuesData()
         {
-            return new ObservableCollectionEx<LSharp_IssuesgEntity>();
+            return new ObservableCollectionEx<AssemblyEntity>();
         }
 
         public bool IsInitComplete()
