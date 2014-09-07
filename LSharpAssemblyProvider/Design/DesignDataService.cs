@@ -25,6 +25,7 @@ namespace LSharpAssemblyProvider.Design
             return new ObservableCollectionEx<LogEntity>();
         }
 
+
         public bool IsInitComplete()
         {
             return true;

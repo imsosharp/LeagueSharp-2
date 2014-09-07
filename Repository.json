@@ -1,7 +1,7 @@
 [
   {
     "Name": "Support",
-    "Description": "Plays Thresh, Morgana, Blitzcrank, Sona, Leona, Nami and Zyra",
+    "Description": "Plays Thresh, Morgana, Blitzcrank, Sona, Leona, Nami and Zyra.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/Dibes/LeagueSharp",
@@ -11,7 +11,7 @@
   },
   {
     "Name": "kKayle2",
-    "Description": "Plays Kayle. Smart Clear wave, Good for Lane/Jungle, Heal Self on Combo, Low Health/Ult, Heal Friends on       Low Health/Ult Logic, Full Combo and Harrass",
+    "Description": "Plays Kayle. Smart Clear wave, Good for Lane/Jungle, Heal Self on Combo, Low Health/Ult, Heal Friends on Low Health/Ult Logic, Full Combo and Harrass.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/lKk2/LeagueSharp",
@@ -21,7 +21,7 @@
   },
   {
     "Name": "kPoppy2",
-    "Description": "Plays Poppy. Smart KS, Harras, Ult Logic on Tanker or Support, Full Combo",
+    "Description": "Plays Poppy. Smart KS, Harras, Ult Logic on Tanker or Support, Full Combo.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/lKk2/LeagueSharp",
@@ -31,7 +31,7 @@
   },
   {
     "Name": "SigmaFizz",
-    "Description": "Plays Fizz. Combo -Q W (uses it before aa.) E (two jump support) R (only ult if combo killable), Harras -       same no ult, WaveClear, Lasthit Drawing",
+    "Description": "Plays Fizz. Combo -Q W (uses it before aa.) E (two jump support) R (only ult if combo killable), Harras - same no ult, WaveClear, Lasthit Drawing.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/fueledbyflux/LeagueSharp-Public",
@@ -41,7 +41,7 @@
   },
   {
     "Name": "kTalon2",
-    "Description": "Plays Talon, Use Ignite, Hydra, Ghostblade, Smart KS, Lane Clear, Harras, Full Combo",
+    "Description": "Plays Talon, Use Ignite, Hydra, Ghostblade, Smart KS, Lane Clear, Harras, Full Combo.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/lKk2/LeagueSharp",
@@ -51,7 +51,7 @@
   },
   {
     "Name": "recalltrackerLS",
-    "Description": "Tracks enemy recalls",
+    "Description": "Tracks enemy recalls.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/Irvinee/leaguesharp",
@@ -61,7 +61,7 @@
   },
   {
     "Name": "BankPlank",
-    "Description": "Plays Gankplank",
+    "Description": "Plays Gankplank.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/blm95/LeagueSharp",
@@ -71,7 +71,7 @@
   },
   {
     "Name": "Nasus the doG",
-    "Description": "Plays Nasus",
+    "Description": "Plays Nasus.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/blm95/LeagueSharp",
@@ -81,7 +81,7 @@
   },
   {
     "Name": "Olaf",
-    "Description": "",
+    "Description": "Plays Olaf.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/blm95/LeagueSharp",
@@ -91,7 +91,7 @@
   },
   {
     "Name": "WolfUrgot",
-    "Description": "",
+    "Description": "Plays Urgot. Uses Q, E; Smart W automatically casts W when E Hits.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/GuiltyWolf/LeagueSharp",
@@ -101,7 +101,7 @@
   },
   {
     "Name": "WolfZilean",
-    "Description": "",
+    "Description": "Plays Zilean. Full SBTW Combo, Auto R at % HP.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/GuiltyWolf/LeagueSharp",
@@ -111,7 +111,7 @@
   },
   {
     "Name": "MasterActivator",
-    "Description": "All in one activator that supports purifers, clears, smite, offensive and defensive items, regenerators,       team use, combo mode and an imporved target selector",
+    "Description": "All in one activator that supports purifiers, clears, smite, offensive and defensive items, regenerators, team use, combo mode and an improved target selector.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/Crisdmc/LeagueSharp",
@@ -121,7 +121,7 @@
   },
   {
     "Name": "MasterYi",
-    "Description": "Plays Yi. Combo: Use QWER - Orbwalk Lock - Use Packet, W Options, LaneClear, Draw, AutoLevel skills",
+    "Description": "Plays Yi. Combo: Use QWER - Orbwalk Lock - Use Packet, W Options, LaneClear, Draw, AutoLevel skills.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/Crisdmc/LeagueSharp",
@@ -141,7 +141,7 @@
   },
   {
     "Name": "Ajumper",
-    "Description": "Wardjump for different champions (Katarina, Jax, Lee Sin)",
+    "Description": "Wardjump for different champions (Katarina, Jax, Lee Sin).",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/Quangcha/LSharp",
@@ -151,7 +151,7 @@
   },
   {
     "Name": "Annie",
-    "Description": "",
+    "Description": "Advanced combo supporting flash, harass, drawing.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/TC-Crew/L-Assemblies",
@@ -161,7 +161,7 @@
   },
   {
     "Name": "Cassio",
-    "Description": "",
+    "Description": "Plays Cassiopeia. Simple combo, drawing.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/TC-Crew/L-Assemblies",
@@ -171,7 +171,7 @@
   },
   {
     "Name": "Cho'Gath",
-    "Description": "",
+    "Description": "Simple combo, drawing and some additional features.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/TC-Crew/L-Assemblies",
@@ -181,7 +181,7 @@
   },
   {
     "Name": "Darius",
-    "Description": "",
+    "Description": "Simple combo with advanced ult logic.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/TC-Crew/L-Assemblies",
@@ -191,7 +191,7 @@
   },
   {
     "Name": "Evelynn",
-    "Description": "",
+    "Description": "Advanced combo, farming, drawing.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/TC-Crew/L-Assemblies",
@@ -201,7 +201,7 @@
   },
   {
     "Name": "Katarina",
-    "Description": "",
+    "Description": "Advanced combo, harass, farming, killsteal, drawing.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/TC-Crew/L-Assemblies",
@@ -211,7 +211,7 @@
   },
   {
     "Name": "Tracker",
-    "Description": "",
+    "Description": "Tracks wards, spells and alerts about incoming ganks.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/TC-Crew/L-Assemblies",
@@ -221,7 +221,7 @@
   },
   {
     "Name": "Zed",
-    "Description": "",
+    "Description": "Plays Zed (Currently in progress, not yet completed).",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/TC-Crew/L-Assemblies",
@@ -231,7 +231,7 @@
   },
   {
     "Name": "iVLee",
-    "Description": "",
+    "Description": "Plays LeeSin.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/MobbyGFX96/LeagueSharp",
@@ -241,7 +241,7 @@
   },
   {
     "Name": "iVRiven",
-    "Description": "",
+    "Description": "Plays Riven.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/MobbyGFX96/LeagueSharp",
@@ -251,7 +251,7 @@
   },
   {
     "Name": "SephElise",
-    "Description": "",
+    "Description": "Plays Elise.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/SephLeague/LeagueSharp",
@@ -261,7 +261,7 @@
   },
   {
     "Name": "KurisuMorgana",
-    "Description": "",
+    "Description": "Plays Morgana. Smart Q and smart W, Combo, Harras and Laneclear.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/Kurisu44/Leaguesharp",
@@ -271,7 +271,7 @@
   },
   {
     "Name": "Jax",
-    "Description": "",
+    "Description": "Plays Jax (Missing farming and wardjump).",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/AnimatedHF/Leaguesharp",
@@ -281,7 +281,7 @@
   },
   {
     "Name": "ANSkarner",
-    "Description": "",
+    "Description": "Plays Skarner.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/AnimatedHF/Leaguesharp",
@@ -291,7 +291,7 @@
   },
   {
     "Name": "WinZhao",
-    "Description": "",
+    "Description": "Plays Xin Zhao.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/AnimatedHF/Leaguesharp",
@@ -311,7 +311,7 @@
   },
   {
     "Name": "AutoIgnite",
-    "Description": "",
+    "Description": "Auto ignites to kill jungle.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/trees-software/leaguesharp",
@@ -321,7 +321,7 @@
   },
   {
     "Name": "AutoLantern",
-    "Description": "",
+    "Description": "Automatically uses Thresh lantern.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/trees-software/leaguesharp",
@@ -331,7 +331,7 @@
   },
   {
     "Name": "QuickTeleport",
-    "Description": "",
+    "Description": "Teleports you to the unit closest to your cursor.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/trees-software/leaguesharp",
@@ -341,7 +341,7 @@
   },
   {
     "Name": "QuickTimers",
-    "Description": "",
+    "Description": "Displays various timers.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/trees-software/leaguesharp",
@@ -351,7 +351,7 @@
   },
   {
     "Name": "Resizer",
-    "Description": "",
+    "Description": "Modify champion size.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/trees-software/leaguesharp",
@@ -361,7 +361,7 @@
   },
   {
     "Name": "TUrgot",
-    "Description": "",
+    "Description": "Plays Urgot.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/trees-software/leaguesharp",
@@ -371,7 +371,7 @@
   },
   {
     "Name": "GXAutoPotion",
-    "Description": "",
+    "Description": "Uses potions automatically.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/Xionanx/Leaguesharp-Projects",
@@ -381,7 +381,7 @@
   },
   {
     "Name": "GX Auto Shield",
-    "Description": "",
+    "Description": "Uses shields to block incoming damage.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/Xionanx/Leaguesharp-Projects",
@@ -391,7 +391,7 @@
   },
   {
     "Name": "GX-Automation",
-    "Description": "",
+    "Description": "Automates different things.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/Xionanx/Leaguesharp-Projects",
@@ -956,7 +956,7 @@
     "Votes": 0,
     "Url": "https://github.com/trus/L-",
     "Repositroy": "L-",
-    "Developer": "trus",
+    "Developer": "TRUS",
     "Category": "Champion"
   },
   {
@@ -966,7 +966,7 @@
     "Votes": 0,
     "Url": "https://github.com/trus/L-",
     "Repositroy": "L-",
-    "Developer": "trus",
+    "Developer": "TRUS",
     "Category": "Library"
   },
   {
@@ -976,7 +976,7 @@
     "Votes": 0,
     "Url": "https://github.com/trus/L-",
     "Repositroy": "L-",
-    "Developer": "trus",
+    "Developer": "TRUS",
     "Category": "Utility"
   },
   {
@@ -986,7 +986,7 @@
     "Votes": 0,
     "Url": "https://github.com/trus/L-",
     "Repositroy": "L-",
-    "Developer": "trus",
+    "Developer": "TRUS",
     "Category": "Utility"
   },
   {
@@ -996,7 +996,7 @@
     "Votes": 0,
     "Url": "https://github.com/trus/L-",
     "Repositroy": "L-",
-    "Developer": "trus",
+    "Developer": "TRUS",
     "Category": "Utility"
   },
   {
@@ -1006,8 +1006,8 @@
     "Votes": 0,
     "Url": "https://github.com/trus/L-",
     "Repositroy": "L-",
-    "Developer": "trus",
-    "Category": "Utility"
+    "Developer": "TRUS",
+    "Category": "Champion"
   },
   {
     "Name": "Vladimir",
@@ -1016,7 +1016,7 @@
     "Votes": 0,
     "Url": "https://github.com/trus/L-",
     "Repositroy": "L-",
-    "Developer": "trus",
+    "Developer": "TRUS",
     "Category": "Champion"
   },
   {
@@ -1191,7 +1191,7 @@
   },
   {
     "Name": "SFAhri",
-    "Description": "",
+    "Description": "Just a request script with a basic combo, only took 20 minutes. Will update soon. Request features on IRC",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/Snorflake/SFScripts",
@@ -1201,7 +1201,7 @@
   },
   {
     "Name": "SFKatarina",
-    "Description": "",
+    "Description": "The best katarina script on the market for League# <- Developers description lol.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/Snorflake/SFScripts",
@@ -1221,7 +1221,7 @@
   },
   {
     "Name": "SFTemplate",
-    "Description": "",
+    "Description": "This is a code base for new devs, not for you to compile and run ingame.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/Snorflake/SFScripts",
@@ -1231,7 +1231,7 @@
   },
   {
     "Name": "Alistar",
-    "Description": "",
+    "Description": "W-Q Combo ( Will use W and Q if it is possible to do the headbutt combo. Otherwise will just use Q), Interrupt with W and Q and Killsteal with Q, W.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/OnlyTheBest/LeagueSharp",
@@ -1241,7 +1241,7 @@
   },
   {
     "Name": "Leona",
-    "Description": "",
+    "Description": "Plays Leona. Q - Before AA, On AA, After AA - W.E and R - When target is stunned ( you can press T to auto aim the ultimate if the target did not get stunned ).",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/OnlyTheBest/LeagueSharp",
@@ -1251,7 +1251,7 @@
   },
   {
     "Name": "Nasus",
-    "Description": "",
+    "Description": "Plays Nasus",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/OnlyTheBest/LeagueSharp",
@@ -1261,7 +1261,7 @@
   },
   {
     "Name": "StonedAmumu",
-    "Description": "",
+    "Description": "Plays Amumu. Aims Q with collison check, Usage of W, Usage of E, Usage of R If enemies in Range set by user, OrbWalking, Draws Ranges, JungleClear, Usage of items and WaveClear.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/TheKushStyle/LeagueSharp",
@@ -1271,7 +1271,7 @@
   },
   {
     "Name": "StonedVolibear",
-    "Description": "",
+    "Description": "SBTW Combo with W and R logic, Harass, Draws Ranges, OrbWalking, Usage of items.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/TheKushStyle/LeagueSharp",
@@ -1281,7 +1281,7 @@
   },
   {
     "Name": "EasyEzreal",
-    "Description": "",
+    "Description": "Plays Ezreal",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/ikkeflikkeri/LeagueSharp",
@@ -1291,7 +1291,7 @@
   },
   {
     "Name": "EasyKogMaw",
-    "Description": "",
+    "Description": "Plays KogMaw",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/ikkeflikkeri/LeagueSharp",
@@ -1301,17 +1301,7 @@
   },
   {
     "Name": "EasyXerath",
-    "Description": "",
-    "Points": 0,
-    "Votes": 0,
-    "Url": "https://github.com/ikkeflikkeri/LeagueSharp",
-    "Repositroy": "LeagueSharp",
-    "Developer": "ikkeflikkeri",
-    "Category": "Champion"
-  },
-  {
-    "Name": "EasyXerath",
-    "Description": "",
+    "Description": "Plays Xerath.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/ikkeflikkeri/LeagueSharp",
@@ -1321,7 +1311,7 @@
   },
   {
     "Name": "SAwareness",
-    "Description": "",
+    "Description": "Timers, Ranges, Tracker, Detector, Object Health, AutoLeveler, AutoSmite, WardPlacer and AutoPot.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/Screeder/SAwareness",
@@ -1331,7 +1321,7 @@
   },
   {
     "Name": "AhriSharp",
-    "Description": "",
+    "Description": "Plays Ahri.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/JoKerr-/LeagueSharp",
@@ -1341,7 +1331,7 @@
   },
   {
     "Name": "Nami",
-    "Description": "",
+    "Description": "Full Combo [Q;W;E;R], Harass [W], Use Aqua Prision on Gapclosers (Not tested), Use Aqua Prision on Dashes / Immobile targets, Interrupt spells [Q;R,], Auto Heal Ally's, Block Attacks to Minions that aren't on Ally's range [Mixed Mode].",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/madk/LeagueSharp",
@@ -1351,7 +1341,7 @@
   },
   {
     "Name": "Nidalee",
-    "Description": "",
+    "Description": "Full Combo [Q;W;E;R;Items], Harass [Human: Q;W], Lane/Jungle Clear [Cougar: Q;W;E // Human: E].",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/madk/LeagueSharp",
@@ -1361,7 +1351,7 @@
   },
   {
     "Name": "Talon",
-    "Description": "",
+    "Description": "Plays Talon. Full Combo [Q;W;E;R;Items;Ignite], Ultimate Rush on Killabe Targets, Harass [W], Lane/Jungle Clear [Q;W], Auto Ignite.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/madk/LeagueSharp",
