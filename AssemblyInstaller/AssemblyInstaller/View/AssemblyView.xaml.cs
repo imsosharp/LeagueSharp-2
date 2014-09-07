@@ -1,4 +1,7 @@
-﻿namespace AssemblyInstaller.View
+﻿using AssemblyInstaller.ViewModel;
+using Microsoft.Practices.ServiceLocation;
+
+namespace AssemblyInstaller.View
 {
 	/// <summary>
 	/// Interaction logic for UpdateView.xaml

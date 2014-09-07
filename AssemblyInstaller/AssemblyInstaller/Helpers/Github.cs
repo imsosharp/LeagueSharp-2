@@ -48,13 +48,20 @@ namespace AssemblyInstaller.Helpers
 
         public static long LocalVersion(AssemblyEntity entity)
         {
-            if (!Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Repositories", entity.Developer, entity.Repositroy)))
-                return 0;
+            try
+            {
+                if (!Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Repositories", entity.Developer, entity.Repositroy)))
+                    return 0;
 
-            var workingCopyClient = new SvnWorkingCopyClient();
-            SvnWorkingCopyVersion version;
-            workingCopyClient.GetVersion(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Repositories", entity.Developer, entity.Repositroy), out version);
-            return version.End;
+                var workingCopyClient = new SvnWorkingCopyClient();
+                SvnWorkingCopyVersion version;
+                workingCopyClient.GetVersion(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Repositories", entity.Developer, entity.Repositroy), out version);
+                return version.End;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
         }
 
         public static long RepositorieVersion(AssemblyEntity entity)
@@ -65,7 +72,7 @@ namespace AssemblyInstaller.Helpers
             {
                 client.GetInfo(new Uri(String.Format("https://github.com/{0}/{1}", entity.Developer, entity.Repositroy)), out info);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return 0;
             }

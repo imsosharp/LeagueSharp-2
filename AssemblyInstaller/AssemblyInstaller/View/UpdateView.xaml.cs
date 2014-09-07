@@ -11,7 +11,6 @@ namespace AssemblyInstaller.View
 		public UpdateView()
 		{
 			this.InitializeComponent();
-		    ServiceLocator.Current.GetInstance<MainViewModel>().UpdateGrid = UpdateGrid;
 		}
 	}
 }

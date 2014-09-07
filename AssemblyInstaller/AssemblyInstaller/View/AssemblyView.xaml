@@ -3,6 +3,7 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:Custom="http://www.galasoft.ch/mvvmlight"
 	mc:Ignorable="d"
 	x:Class="AssemblyInstaller.View.AssemblyView"
 	d:DesignWidth="993" d:DesignHeight="600.277">
@@ -15,8 +16,9 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid x:Name="LayoutRoot">
-        <DataGrid 
+	<Grid x:Name="LayoutRoot">
+		<DataGrid 
+			x:Name="DataGrid"
 			ItemsSource="{Binding}" 
 			AutoGenerateColumns="False" 
 			SelectionMode="Single" 
@@ -24,78 +26,118 @@
 			CanUserDeleteRows="False" 
 			FontSize="16" 
 			FontWeight="Medium" 
-            IsReadOnly="True"
-            SelectedItem="{Binding Main.SelectedAssembly, Source={StaticResource Locator}}">
-            <DataGrid.RowDetailsTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Description}" Margin="10" />
-                </DataTemplate>
-            </DataGrid.RowDetailsTemplate>
-            <DataGrid.GroupStyle>
-                <GroupStyle>
-                    <GroupStyle.HeaderTemplate>
-                        <DataTemplate>
-                            <StackPanel>
-                                <TextBlock Text="{Binding Name}" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </GroupStyle.HeaderTemplate>
-                    <GroupStyle.ContainerStyle>
-                        <Style TargetType="{x:Type GroupItem}">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type GroupItem}">
-                                        <Expander IsExpanded="True">
-                                            <Expander.Header>
-                                                <TextBlock Text="{Binding Name}" />
-                                            </Expander.Header>
-                                            <ItemsPresenter />
-                                        </Expander>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </GroupStyle.ContainerStyle>
-                </GroupStyle>
-            </DataGrid.GroupStyle>
-            <DataGrid.ContextMenu>
-                <ContextMenu>
-                    <MenuItem 
-                        Header="Install" 
-                        Command="{Binding Main.InstallCommand, Source={StaticResource Locator}, Mode=OneWay}"/>
-                    <MenuItem 
-                        Header="Delete" 
-                        Command="{Binding Main.DeleteCommand, Source={StaticResource Locator}, Mode=OneWay}"/>
-                </ContextMenu>
-            </DataGrid.ContextMenu>
-            <DataGrid.Columns>
-                <DataGridTemplateColumn  
-								Header="Rating" 
-								MinWidth="170">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Image 
-                                Source="{Binding Rating}" 
-                                Stretch="None" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTextColumn 
-								Width="SizeToCells" 
-								Header="State" 
-								Binding="{Binding State}" 
-								MinWidth="150" />
-                <DataGridTextColumn 
-								Width="SizeToCells" 
-								Header="Developer" 
-								Binding="{Binding Developer}" 
-								MinWidth="150" />
-                <DataGridTextColumn 
-								Width="*" 
-								Header="Name" 
-								Binding="{Binding Name}" 
-								MinWidth="200" />
-            </DataGrid.Columns>
-        </DataGrid>
-    </Grid>
+			IsReadOnly="False"
+			SelectedItem="{Binding Main.SelectedAssembly, Source={StaticResource Locator}}">
+			<DataGrid.RowDetailsTemplate>
+				<DataTemplate>
+					<TextBlock Text="{Binding Description}" Margin="10" />
+				</DataTemplate>
+			</DataGrid.RowDetailsTemplate>
+			<DataGrid.GroupStyle>
+				<GroupStyle>
+					<GroupStyle.HeaderTemplate>
+						<DataTemplate>
+							<StackPanel>
+								<TextBlock Text="{Binding Name}" />
+							</StackPanel>
+						</DataTemplate>
+					</GroupStyle.HeaderTemplate>
+					<GroupStyle.ContainerStyle>
+						<Style TargetType="{x:Type GroupItem}">
+							<Setter Property="Template">
+								<Setter.Value>
+									<ControlTemplate TargetType="{x:Type GroupItem}">
+										<Expander IsExpanded="True">
+											<Expander.Header>
+												<TextBlock Text="{Binding Name}" />
+											</Expander.Header>
+											<ItemsPresenter />
+										</Expander>
+									</ControlTemplate>
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</GroupStyle.ContainerStyle>
+				</GroupStyle>
+			</DataGrid.GroupStyle>
+			<DataGrid.ContextMenu>
+				<ContextMenu>
+					<MenuItem 
+						Header="Install" 
+						Command="{Binding Main.InstallCommand, Mode=OneWay, Source={StaticResource Locator}}"/>
+					<MenuItem 
+						Header="Install Selected" 
+						Command="{Binding Main.InstallSelectedCommand, Mode=OneWay, Source={StaticResource Locator}}"/>
+					<MenuItem 
+						Header="Delete" 
+						Command="{Binding Main.DeleteCommand, Mode=OneWay, Source={StaticResource Locator}}"/>
+				</ContextMenu>
+			</DataGrid.ContextMenu>
+			<DataGrid.Columns>
+
+				<DataGridTemplateColumn  
+					Header="Rating" 
+					MinWidth="170">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<Image 
+								Source="{Binding Rating}" 
+								Stretch="None" />
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+
+				<DataGridTemplateColumn
+					Width="SizeToCells" 
+					MinWidth="40" >
+					<DataGridTemplateColumn.HeaderTemplate>
+						<DataTemplate>
+							<CheckBox>
+								<i:Interaction.Triggers>
+									<i:EventTrigger EventName="Checked">
+										<Custom:EventToCommand Command="{Binding Main.CheckAssemblyCommand, Mode=OneWay, Source={StaticResource Locator}}"/>
+									</i:EventTrigger>
+									<i:EventTrigger EventName="Unchecked">
+										<Custom:EventToCommand Command="{Binding Main.UncheckAssemblyCommand, Mode=OneWay, Source={StaticResource Locator}}"/>
+									</i:EventTrigger>
+								</i:Interaction.Triggers>
+							</CheckBox>
+						</DataTemplate>
+					</DataGridTemplateColumn.HeaderTemplate>
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<CheckBox IsChecked="{Binding IsChecked}">
+								<i:Interaction.Triggers>
+									<i:EventTrigger EventName="Checked">
+										<Custom:EventToCommand Command="{Binding Main.CheckAssemblyCommand, Mode=OneWay, Source={StaticResource Locator}}" CommandParameter="{Binding Main.SelectedAssembly, Source={StaticResource Locator}}"/>
+									</i:EventTrigger>
+									<i:EventTrigger EventName="Unchecked">
+										<Custom:EventToCommand Command="{Binding Main.UncheckAssemblyCommand, Mode=OneWay, Source={StaticResource Locator}}" CommandParameter="{Binding Main.SelectedAssembly, Source={StaticResource Locator}}"/>
+									</i:EventTrigger>
+								</i:Interaction.Triggers>
+							</CheckBox>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+
+				<DataGridTextColumn 
+					Width="SizeToCells" 
+					Header="State" 
+					Binding="{Binding State}" 
+					MinWidth="150" />
+                
+				<DataGridTextColumn 
+					Width="SizeToCells" 
+					Header="Developer" 
+					Binding="{Binding Developer}" 
+					MinWidth="150" />
+                
+				<DataGridTextColumn 
+					Width="*" 
+					Header="Name" 
+					Binding="{Binding Name}" 
+					MinWidth="200" />
+			</DataGrid.Columns>
+		</DataGrid>
+	</Grid>
 </UserControl>

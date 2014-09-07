@@ -313,6 +313,101 @@ namespace AssemblyInstaller.ViewModel
             }
         }
 
+        private RelayCommand<AssemblyEntity> _checkAssemblyCommand;
+
+        /// <summary>
+        /// Gets the CheckAssemblyCommand.
+        /// </summary>
+        public RelayCommand<AssemblyEntity> CheckAssemblyCommand
+        {
+            get
+            {
+                return _checkAssemblyCommand
+                    ?? (_checkAssemblyCommand = new RelayCommand<AssemblyEntity>(
+                                          p =>
+                                          {
+                                              if (p == null)
+                                              {
+                                                  var collection = new ObservableCollectionEx<AssemblyEntity>();
+                                                  switch (StartPage)
+                                                  {
+                                                      case 0:
+                                                          collection = Champion;
+                                                          break;
+                                                      case 1:
+                                                          collection = Utility;
+                                                          break;
+                                                      case 2:
+                                                          collection = Library;
+                                                          break;
+                                                  }
+
+                                                  foreach (var c in collection)
+                                                  {
+                                                      c.IsChecked = true;
+                                                      _multiSelect.Add(c);
+                                                  }
+                                              }
+                                              else
+                                              {
+                                                  if (!_multiSelect.Contains(p))
+                                                  {
+                                                      p.IsChecked = true;
+                                                      _multiSelect.Add(p);
+                                                  }
+                                              }
+
+                                              _multiSelect = new ObservableCollectionEx<AssemblyEntity>(_multiSelect.Distinct());
+                                          }));
+            }
+        }
+
+        private RelayCommand<AssemblyEntity> _uncheckAssemblyCommand;
+
+        /// <summary>
+        /// Gets the UncheckAssemblyCommand.
+        /// </summary>
+        public RelayCommand<AssemblyEntity> UncheckAssemblyCommand
+        {
+            get
+            {
+                return _uncheckAssemblyCommand
+                    ?? (_uncheckAssemblyCommand = new RelayCommand<AssemblyEntity>(
+                                          p =>
+                                          {
+                                              if (p == null)
+                                              {
+                                                  var collection = new ObservableCollectionEx<AssemblyEntity>();
+                                                  switch (StartPage)
+                                                  {
+                                                      case 0:
+                                                          collection = Champion;
+                                                          break;
+                                                      case 1:
+                                                          collection = Utility;
+                                                          break;
+                                                      case 2:
+                                                          collection = Library;
+                                                          break;
+                                                  }
+
+                                                  foreach (var c in collection)
+                                                  {
+                                                      c.IsChecked = false;
+                                                      _multiSelect.Remove(c);
+                                                  }
+                                              }
+                                              else
+                                              {
+                                                  if (_multiSelect.Contains(p))
+                                                      _multiSelect.Remove(p);
+                                              }
+
+                                              _multiSelect = new ObservableCollectionEx<AssemblyEntity>(_multiSelect.Distinct());
+                                          }));
+            }
+        }
+
         private RelayCommand _installCommand;
 
         /// <summary>
@@ -334,6 +429,20 @@ namespace AssemblyInstaller.ViewModel
             }
         }
 
+        private RelayCommand _installSelectedCommand;
+
+        /// <summary>
+        /// Gets the InstallCommand.
+        /// </summary>
+        public RelayCommand InstallSelectedCommand
+        {
+            get
+            {
+                return _installSelectedCommand
+                    ?? (_installSelectedCommand = new RelayCommand(InstallSelectedAssembly));
+            }
+        }
+
         private RelayCommand _deleteCommand;
 
         /// <summary>
@@ -349,7 +458,13 @@ namespace AssemblyInstaller.ViewModel
                                           {
                                               if (SelectedAssembly != null)
                                               {
-                                                  var path = Path.Combine(Settings.Default.LeagueSharpPath, "Assemblies", SelectedAssembly.Name + ".exe");
+                                                  var path = "";
+
+                                                  if (SelectedAssembly.OutputType == "Exe")
+                                                      path = Path.Combine(Settings.Default.LeagueSharpPath, "Assemblies", SelectedAssembly.Developer + "-" + SelectedAssembly.AssemblyName + ".exe");
+
+                                                  if (SelectedAssembly.OutputType == "Library")
+                                                      path = Path.Combine(Settings.Default.LeagueSharpPath, "Assemblies", "System", SelectedAssembly.AssemblyName + ".dll");
 
                                                   if (File.Exists(path))
                                                       File.Delete(path);
@@ -412,7 +527,7 @@ namespace AssemblyInstaller.ViewModel
             }
         }
 
-        public DataGrid UpdateGrid { get; set; }
+        private ObservableCollectionEx<AssemblyEntity> _multiSelect = new ObservableCollectionEx<AssemblyEntity>();
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -504,8 +619,13 @@ namespace AssemblyInstaller.ViewModel
                     foreach (var util in Utility)
                     {
                         util.LocalVersion = Github.LocalVersion(util);
+                        var old = Path.Combine(Settings.Default.LeagueSharpPath, "Assemblies", util.Developer + "-" + util.AssemblyName + ".exe");
+                        var newName = Path.Combine(Settings.Default.LeagueSharpPath, "Assemblies", util.AssemblyName + " - " + util.Developer + ".exe");
 
-                        if (File.Exists(Path.Combine(Settings.Default.LeagueSharpPath, "Assemblies", util.Developer + "-" + util.Name + ".exe")))
+                        if (File.Exists(old) && !File.Exists(newName))
+                            File.Move(old, newName);
+
+                        if (File.Exists(Path.Combine(Settings.Default.LeagueSharpPath, "Assemblies", util.AssemblyName + " - " + util.Developer + ".exe")))
                         {
                             util.State = "Installed";
                             update.Add(util);
@@ -522,8 +642,13 @@ namespace AssemblyInstaller.ViewModel
                     foreach (var champ in Champion)
                     {
                         champ.LocalVersion = Github.LocalVersion(champ);
+                        var old = Path.Combine(Settings.Default.LeagueSharpPath, "Assemblies", champ.Developer + "-" + champ.AssemblyName + ".exe");
+                        var newName = Path.Combine(Settings.Default.LeagueSharpPath, "Assemblies", champ.AssemblyName + " - " + champ.Developer + ".exe");
 
-                        if (File.Exists(Path.Combine(Settings.Default.LeagueSharpPath, "Assemblies", champ.Developer + "-" + champ.Name + ".exe")))
+                        if (File.Exists(old) && !File.Exists(newName))
+                            File.Move(old, newName);
+
+                        if (File.Exists(newName))
                         {
                             champ.State = "Installed";
                             update.Add(champ);
@@ -566,24 +691,40 @@ namespace AssemblyInstaller.ViewModel
                 ProgressMax = 6;
                 OverlayText = string.Format("{0}/{1} Update Check", Progress, ProgressMax);
 
+                // Update cleanup
                 if (Directory.Exists("Update"))
+                {
                     Directory.Delete("Update", true);
 
+                    if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LSharpAssemblyProvider.exe")))
+                        File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LSharpAssemblyProvider.exe"));
+
+                    if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LSharpAssemblyProvider.exe.config")))
+                        File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LSharpAssemblyProvider.exe.config"));
+                }
+
+
                 var result = new Dictionary<string, string> { { versionUrl, "" }, { lSharpVersionUrl, "" } };
-                Parallel.ForEach(result, url =>
+
+                try
                 {
-                    try
+                    Parallel.ForEach(result, url =>
                     {
+
                         using (var client = new WebClient())
                         {
-                            result[url.Key] = client.DownloadString(url.Key);
+                            lock (result)
+                            {
+                                result[url.Key] = client.DownloadString(url.Key);
+                            }
                         }
-                    }
-                    catch
-                    {
-                    }
-                    Progress++;
-                });
+
+                        Progress++;
+                    });
+                }
+                catch
+                {
+                }
 
                 using (var client = new WebClient())
                 {
@@ -640,11 +781,8 @@ namespace AssemblyInstaller.ViewModel
 
                         await DialogService.ShowMessage("Auto Update", "Update Complete\n\nRestarting Application", MessageDialogStyle.Affirmative);
 
-                        Task.Factory.StartNew(() =>
-                        {
-                            Process.Start(Application.ResourceAssembly.Location);
-                            Environment.Exit(0);
-                        });
+                        Process.Start(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AssemblyInstaller.exe"));
+                        Environment.Exit(0);
                     }
                 }
             }
@@ -766,7 +904,7 @@ namespace AssemblyInstaller.ViewModel
                     }
                     else
                     {
-                        LogFile.Write(assembly.Name, "Project File not Found - " + assembly.Name + ".csproj");
+                        LogFile.Write(assembly.Name, "Project File not Found - " + assembly.ProjectFile);
                         assembly.State = "Broken";
                     }
 
@@ -775,7 +913,7 @@ namespace AssemblyInstaller.ViewModel
                 }
                 catch (Exception e)
                 {
-                    DialogService.ShowMessage("Compile - " + assembly.Name, e.Message, MessageDialogStyle.Affirmative);
+                    DialogService.ShowMessage("Compile - " + assembly.Name, e.ToString(), MessageDialogStyle.Affirmative);
                 }
             }
 
@@ -797,24 +935,24 @@ namespace AssemblyInstaller.ViewModel
 
                     if (File.Exists(info.FullName))
                     {
-                        if (info.Extension == ".dll")
+                        if (file.Key.OutputType == "Library")
                         {
-                            var dll = Path.Combine(Settings.Default.LeagueSharpPath, "Assemblies", "System", info.Name);
+                            var dll = Path.Combine(Settings.Default.LeagueSharpPath, "Assemblies", "System", file.Key.AssemblyName + " - " + file.Key.Developer + ".dll");
                             if (File.Exists(dll))
                                 File.Delete(dll);
                             File.Move(file.Value, dll);
 
-                            LogFile.Write(info.Name.Replace(".dll", ""), "Move - " + info.FullName + " -> " + dll);
+                            LogFile.Write(file.Key.Name, "Move - " + info.FullName + " -> " + dll);
                         }
 
-                        if (info.Extension == ".exe")
+                        if (file.Key.OutputType == "Exe")
                         {
-                            var exe = Path.Combine(Settings.Default.LeagueSharpPath, "Assemblies", file.Key.Developer + "-" + info.Name);
+                            var exe = Path.Combine(Settings.Default.LeagueSharpPath, "Assemblies", file.Key.AssemblyName + " - " + file.Key.Developer + ".exe");
                             if (File.Exists(exe))
                                 File.Delete(exe);
                             File.Move(file.Value, exe);
 
-                            LogFile.Write(info.Name.Replace(".exe", ""), "Move - " + info.FullName + " -> " + exe);
+                            LogFile.Write(file.Key.Name, "Move - " + info.FullName + " -> " + exe);
                         }
                     }
 
@@ -860,6 +998,93 @@ namespace AssemblyInstaller.ViewModel
                     LogFile.Write("Error", e.Message);
                     DialogService.ShowMessage("Error", e.ToString(), MessageDialogStyle.Affirmative);
                 }
+
+                DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                {
+                    switch (StartPage)
+                    {
+                        case 0:
+                            CollectionViewSource.GetDefaultView(Champion).Refresh();
+                            break;
+                        case 1:
+                            CollectionViewSource.GetDefaultView(Utility).Refresh();
+                            break;
+                        case 2:
+                            CollectionViewSource.GetDefaultView(Library).Refresh();
+                            break;
+                        case 3:
+                            CollectionViewSource.GetDefaultView(Update).Refresh();
+                            break;
+                    }
+                });
+
+                IsOverlay = false;
+            });
+        }
+
+        private void InstallSelectedAssembly()
+        {
+            foreach (var entity in _multiSelect)
+            {
+                Console.WriteLine("Install: " + entity);
+            }
+
+            Task.Factory.StartNew(() =>
+            {
+                IsOverlay = true;
+                try
+                {
+                    var updates = VersionCheck(_multiSelect);
+                    Download(updates);
+                    var complete = Compile(_multiSelect);
+
+                    if (complete.Count > 0)
+                    {
+                        Copy(complete);
+                        lock (_multiSelect)
+                        {
+                            DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                            {
+                                foreach (var entity in _multiSelect)
+                                {
+                                    if (!Update.Contains(entity))
+                                        Update.Add(entity);
+
+                                    if (complete.ContainsKey(entity))
+                                        entity.State = "Installed";
+                                    else
+                                        entity.State = "Broken";
+
+                                    entity.IsChecked = false;
+                                }
+                            });
+
+                            _multiSelect.Clear();
+                        }
+
+                        Progress = ProgressMax;
+                        OverlayText = "Complete";
+                        DialogService.ShowMessage("Install", "Install Complete\n\n" + complete.Count + " Assemblies Installed.", MessageDialogStyle.Affirmative);
+                    }
+                    else
+                    {
+                        DialogService.ShowMessage("Install", "Install Failed - Compiler Error", MessageDialogStyle.Affirmative);
+                    }
+
+                    DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                    {
+                        CollectionViewSource.GetDefaultView(Champion).Refresh();
+                        CollectionViewSource.GetDefaultView(Utility).Refresh();
+                        CollectionViewSource.GetDefaultView(Library).Refresh();
+                        CollectionViewSource.GetDefaultView(Update).Refresh();
+                    });
+                }
+                catch (Exception e)
+                {
+                    LogFile.Write("Error", e.Message);
+                    DialogService.ShowMessage("Error", e.ToString(), MessageDialogStyle.Affirmative);
+                }
+
                 IsOverlay = false;
             });
         }
@@ -892,6 +1117,26 @@ namespace AssemblyInstaller.ViewModel
                     LogFile.Write("Error", e.Message);
                     MessageBox.Show(e.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
+
+                DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                {
+                    switch (StartPage)
+                    {
+                        case 0:
+                            CollectionViewSource.GetDefaultView(Champion).Refresh();
+                            break;
+                        case 1:
+                            CollectionViewSource.GetDefaultView(Utility).Refresh();
+                            break;
+                        case 2:
+                            CollectionViewSource.GetDefaultView(Library).Refresh();
+                            break;
+                        case 3:
+                            CollectionViewSource.GetDefaultView(Update).Refresh();
+                            break;
+                    }
+                });
+
                 IsOverlay = false;
             });
         }

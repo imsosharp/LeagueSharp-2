@@ -19,7 +19,8 @@ namespace AssemblyInstaller.Model
         public int Points { get; set; }
         public int Votes { get; set; }
         public string ProjectFile { get; set; }
-        public string AssemblyFile { get; set; }
+        public string AssemblyName { get; set; }
+        public string OutputType { get; set; }
 
         [JsonIgnore]
         public long RepositroyVersion
@@ -65,15 +66,27 @@ namespace AssemblyInstaller.Model
                 return Votes > 0 ? "/Images/star" + (Points/Votes) + ".png" : "/Images/star0.png";
             }
         }
+        [JsonIgnore]
+        public bool IsChecked
+        {
+            get
+            {
+                return _isChecked;
+            }
+            set
+            {
+                Set(() => IsChecked, ref _isChecked, value);
+            }
+        }
 
-
+        private bool _isChecked;
         private string _state;
         private long _repositroyVersion;
         private long _localVersion;
 
         public ProjectFile GetProjectFile()
         {
-            var file = Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Repositories", Developer, Repositroy, "trunk"), Name + ".csproj", SearchOption.AllDirectories).FirstOrDefault();
+            var file = Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Repositories", Developer, Repositroy, "trunk"), ProjectFile, SearchOption.AllDirectories).FirstOrDefault();
             
             if (file == null)
                 return null;
@@ -87,6 +100,11 @@ namespace AssemblyInstaller.Model
                 PostbuildEvent = true,
                 PrebuildEvent = true
             };
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0}|{1}|{2}|{3}|{4}", Name, Developer, Repositroy, Category, ProjectFile);
         }
     }
 }
