@@ -1,7 +1,7 @@
 [
   {
     "Name": "Support",
-    "Description": "Plays Thresh, Morgana, Blitzcrank, Sona, Leona, Nami and Zyra",
+    "Description": "Plays Thresh, Morgana, Blitzcrank, Sona, Leona, Nami and Zyra.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/Dibes/LeagueSharp",
@@ -11,7 +11,7 @@
   },
   {
     "Name": "kKayle2",
-    "Description": "Plays Kayle. Smart Clear wave, Good for Lane/Jungle, Heal Self on Combo, Low Health/Ult, Heal Friends on       Low Health/Ult Logic, Full Combo and Harrass",
+    "Description": "Plays Kayle. Smart Clear wave, Good for Lane/Jungle, Heal Self on Combo, Low Health/Ult, Heal Friends on Low Health/Ult Logic, Full Combo and Harrass.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/lKk2/LeagueSharp",
@@ -21,7 +21,7 @@
   },
   {
     "Name": "kPoppy2",
-    "Description": "Plays Poppy. Smart KS, Harras, Ult Logic on Tanker or Support, Full Combo",
+    "Description": "Plays Poppy. Smart KS, Harras, Ult Logic on Tanker or Support, Full Combo.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/lKk2/LeagueSharp",
@@ -31,7 +31,7 @@
   },
   {
     "Name": "SigmaFizz",
-    "Description": "Plays Fizz. Combo -Q W (uses it before aa.) E (two jump support) R (only ult if combo killable), Harras -       same no ult, WaveClear, Lasthit Drawing",
+    "Description": "Plays Fizz. Combo -Q W (uses it before aa.) E (two jump support) R (only ult if combo killable), Harras - same no ult, WaveClear, Lasthit Drawing.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/fueledbyflux/LeagueSharp-Public",
@@ -41,7 +41,7 @@
   },
   {
     "Name": "kTalon2",
-    "Description": "Plays Talon, Use Ignite, Hydra, Ghostblade, Smart KS, Lane Clear, Harras, Full Combo",
+    "Description": "Plays Talon, Use Ignite, Hydra, Ghostblade, Smart KS, Lane Clear, Harras, Full Combo.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/lKk2/LeagueSharp",
@@ -51,7 +51,7 @@
   },
   {
     "Name": "recalltrackerLS",
-    "Description": "Tracks enemy recalls",
+    "Description": "Tracks enemy recalls.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/Irvinee/leaguesharp",
@@ -61,7 +61,7 @@
   },
   {
     "Name": "BankPlank",
-    "Description": "Plays Gankplank",
+    "Description": "Plays Gankplank.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/blm95/LeagueSharp",
@@ -71,7 +71,7 @@
   },
   {
     "Name": "Nasus the doG",
-    "Description": "Plays Nasus",
+    "Description": "Plays Nasus.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/blm95/LeagueSharp",
@@ -81,7 +81,7 @@
   },
   {
     "Name": "Olaf",
-    "Description": "Plays Olaf",
+    "Description": "Plays Olaf.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/blm95/LeagueSharp",
@@ -91,7 +91,7 @@
   },
   {
     "Name": "WolfUrgot",
-    "Description": "Plays Urgot. Uses Q, E; Smart W automatically casts W when E Hits",
+    "Description": "Plays Urgot. Uses Q, E; Smart W automatically casts W when E Hits.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/GuiltyWolf/LeagueSharp",
@@ -101,7 +101,7 @@
   },
   {
     "Name": "WolfZilean",
-    "Description": "Plays Zilean. Full SBTW Combo, Auto R at % HP",
+    "Description": "Plays Zilean. Full SBTW Combo, Auto R at % HP.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/GuiltyWolf/LeagueSharp",
@@ -111,7 +111,7 @@
   },
   {
     "Name": "MasterActivator",
-    "Description": "All in one activator that supports purifers, clears, smite, offensive and defensive items, regenerators,       team use, combo mode and an imporved target selector",
+    "Description": "All in one activator that supports purifiers, clears, smite, offensive and defensive items, regenerators, team use, combo mode and an improved target selector.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/Crisdmc/LeagueSharp",
@@ -121,7 +121,7 @@
   },
   {
     "Name": "MasterYi",
-    "Description": "Plays Yi. Combo: Use QWER - Orbwalk Lock - Use Packet, W Options, LaneClear, Draw, AutoLevel skills",
+    "Description": "Plays Yi. Combo: Use QWER - Orbwalk Lock - Use Packet, W Options, LaneClear, Draw, AutoLevel skills.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/Crisdmc/LeagueSharp",
@@ -141,7 +141,7 @@
   },
   {
     "Name": "Ajumper",
-    "Description": "Wardjump for different champions (Katarina, Jax, Lee Sin)",
+    "Description": "Wardjump for different champions (Katarina, Jax, Lee Sin).",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/Quangcha/LSharp",
@@ -151,7 +151,7 @@
   },
   {
     "Name": "Annie",
-    "Description": "Advanced combo supporting flash, harass, drawing",
+    "Description": "Advanced combo supporting flash, harass, drawing.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/TC-Crew/L-Assemblies",
@@ -161,7 +161,7 @@
   },
   {
     "Name": "Cassio",
-    "Description": "Simple combo, drawing",
+    "Description": "Plays Cassiopeia. Simple combo, drawing.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/TC-Crew/L-Assemblies",
@@ -171,7 +171,7 @@
   },
   {
     "Name": "Cho'Gath",
-    "Description": "Simple combo, drawing and some additional features",
+    "Description": "Simple combo, drawing and some additional features.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/TC-Crew/L-Assemblies",
@@ -181,7 +181,7 @@
   },
   {
     "Name": "Darius",
-    "Description": "Simple combo with advanced ult logic",
+    "Description": "Simple combo with advanced ult logic.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/TC-Crew/L-Assemblies",
@@ -191,7 +191,7 @@
   },
   {
     "Name": "Evelynn",
-    "Description": "Advanced combo, farming, drawing)",
+    "Description": "Advanced combo, farming, drawing.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/TC-Crew/L-Assemblies",
@@ -201,7 +201,7 @@
   },
   {
     "Name": "Katarina",
-    "Description": "Advanced combo, harass, farming, killsteal, drawing",
+    "Description": "Advanced combo, harass, farming, killsteal, drawing.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/TC-Crew/L-Assemblies",
@@ -211,7 +211,7 @@
   },
   {
     "Name": "Tracker",
-    "Description": "Tracks wards, spells and alerts about incoming ganks",
+    "Description": "Tracks wards, spells and alerts about incoming ganks.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/TC-Crew/L-Assemblies",
@@ -221,7 +221,7 @@
   },
   {
     "Name": "Zed",
-    "Description": "Plays Zed (Currently in progress, not yet completed)",
+    "Description": "Plays Zed (Currently in progress, not yet completed).",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/TC-Crew/L-Assemblies",
@@ -231,7 +231,7 @@
   },
   {
     "Name": "iVLee",
-    "Description": "Plays LeeSin",
+    "Description": "Plays LeeSin.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/MobbyGFX96/LeagueSharp",
@@ -241,7 +241,7 @@
   },
   {
     "Name": "iVRiven",
-    "Description": "Plays Riven",
+    "Description": "Plays Riven.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/MobbyGFX96/LeagueSharp",
@@ -251,7 +251,7 @@
   },
   {
     "Name": "SephElise",
-    "Description": "Plays Elise",
+    "Description": "Plays Elise.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/SephLeague/LeagueSharp",
@@ -261,7 +261,7 @@
   },
   {
     "Name": "KurisuMorgana",
-    "Description": "Plays Morgana. Smart Q and smart W, Combo, Harras and Laneclear",
+    "Description": "Plays Morgana. Smart Q and smart W, Combo, Harras and Laneclear.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/Kurisu44/Leaguesharp",
@@ -271,7 +271,7 @@
   },
   {
     "Name": "Jax",
-    "Description": "Plays Jax (Missing farming and wardjump)",
+    "Description": "Plays Jax (Missing farming and wardjump).",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/AnimatedHF/Leaguesharp",
@@ -281,7 +281,7 @@
   },
   {
     "Name": "ANSkarner",
-    "Description": "Plays Skarner",
+    "Description": "Plays Skarner.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/AnimatedHF/Leaguesharp",
@@ -291,7 +291,7 @@
   },
   {
     "Name": "WinZhao",
-    "Description": "Plays Xin Zhao",
+    "Description": "Plays Xin Zhao.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/AnimatedHF/Leaguesharp",
@@ -321,7 +321,7 @@
   },
   {
     "Name": "AutoLantern",
-    "Description": "Automatically uses Thresh lantern",
+    "Description": "Automatically uses Thresh lantern.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/trees-software/leaguesharp",
@@ -331,7 +331,7 @@
   },
   {
     "Name": "QuickTeleport",
-    "Description": "Teleports you to the unit closest to your cursor",
+    "Description": "Teleports you to the unit closest to your cursor.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/trees-software/leaguesharp",
@@ -341,7 +341,7 @@
   },
   {
     "Name": "QuickTimers",
-    "Description": "Displays various timers",
+    "Description": "Displays various timers.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/trees-software/leaguesharp",
@@ -351,7 +351,7 @@
   },
   {
     "Name": "Resizer",
-    "Description": "Modify champion size",
+    "Description": "Modify champion size.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/trees-software/leaguesharp",
@@ -361,7 +361,7 @@
   },
   {
     "Name": "TUrgot",
-    "Description": "Plays Urgot",
+    "Description": "Plays Urgot.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/trees-software/leaguesharp",
@@ -371,7 +371,7 @@
   },
   {
     "Name": "GXAutoPotion",
-    "Description": "Uses potions automatically",
+    "Description": "Uses potions automatically.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/Xionanx/Leaguesharp-Projects",
@@ -381,7 +381,7 @@
   },
   {
     "Name": "GX Auto Shield",
-    "Description": "Uses shields to block incoming damage",
+    "Description": "Uses shields to block incoming damage.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/Xionanx/Leaguesharp-Projects",
@@ -391,7 +391,7 @@
   },
   {
     "Name": "GX-Automation",
-    "Description": "Automates different things",
+    "Description": "Automates different things.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/Xionanx/Leaguesharp-Projects",
