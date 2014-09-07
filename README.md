@@ -1,4 +1,4 @@
-LSharpAssemblyProvider
+Assembly Installer
 ======================
  - Easy Setup
  - OneClick Assembly Install
