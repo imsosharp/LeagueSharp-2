@@ -18,7 +18,6 @@ using GalaSoft.MvvmLight.Threading;
 using LSharpAssemblyProvider.Helpers;
 using LSharpAssemblyProvider.Model;
 using LSharpAssemblyProvider.Properties;
-using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using Microsoft.Win32;
 
@@ -401,14 +400,8 @@ namespace LSharpAssemblyProvider.ViewModel
                                                   {
                                                       LeagueSharpPath = dia.FileName.Replace("LeagueSharp.Loader.exe", "");
                                                       Cleanup();
-
-                                                      await DialogService.ShowMessage("Restart", "Restarting Application!", MessageDialogStyle.Affirmative);
-
-                                                      Task.Factory.StartNew(() =>
-                                                      {
-                                                          Process.Start(Application.ResourceAssembly.Location);
-                                                          Environment.Exit(0);
-                                                      });
+                                                      StartPage = 3;
+                                                      UpdateLoaderPath();
                                                   }
                                                   else
                                                   {
@@ -426,15 +419,13 @@ namespace LSharpAssemblyProvider.ViewModel
         /// </summary>
         public MainViewModel(IDataService service)
         {
-            if (string.IsNullOrEmpty(Settings.Default.LeagueSharpPath))
-            {
-                Console.WriteLine("Setup");
-                StartPage = 5;
-                return;
-            }
-
             if (!IsInDesignMode)
                 IsOverlay = true;
+
+            if (string.IsNullOrEmpty(Settings.Default.LeagueSharpPath))
+            {
+                StartPage = 5;
+            }
 
             Task.Factory.StartNew(() =>
             {
@@ -446,8 +437,7 @@ namespace LSharpAssemblyProvider.ViewModel
                     while (!service.IsInitComplete())
                         Thread.Sleep(100);
 
-                    // TODO: stays cancer for now
-                    DispatcherHelper.RunAsync(() =>
+                    DispatcherHelper.CheckBeginInvokeOnUI(() =>
                     {
                         Champion = service.GetChampionData();
                         Utility = service.GetUtilityData();
@@ -468,71 +458,9 @@ namespace LSharpAssemblyProvider.ViewModel
                         v = CollectionViewSource.GetDefaultView(Update);
                         v.GroupDescriptions.Add(new PropertyGroupDescription("Category"));
                         v.SortDescriptions.Add(sort);
-
-                        using (var update = Update.DelayNotifications())
-                        {
-                            foreach (var lib in Library)
-                            {
-                                lib.LocalVersion = Github.LocalVersion(lib);
-
-                                if (File.Exists(Path.Combine(Settings.Default.LeagueSharpPath, "Assemblies", "System", lib.Name + ".dll")))
-                                {
-                                    lib.State = "Installed";
-                                    update.Add(lib);
-                                }
-                                else
-                                {
-                                    lib.State = "Available";
-                                }
-
-                                Progress++;
-                                OverlayText = string.Format("{0}/{1} Loading", Progress, ProgressMax);
-                            }
-
-
-                            foreach (var util in Utility)
-                            {
-                                util.LocalVersion = Github.LocalVersion(util);
-
-                                if (File.Exists(Path.Combine(Settings.Default.LeagueSharpPath, "Assemblies", util.Name + ".exe")))
-                                {
-                                    util.State = "Installed";
-                                    update.Add(util);
-                                }
-                                else
-                                {
-                                    util.State = "Available";
-                                }
-
-                                Progress++;
-                                OverlayText = string.Format("{0}/{1} Loading", Progress, ProgressMax);
-                            }
-
-                            foreach (var champ in Champion)
-                            {
-                                champ.LocalVersion = Github.LocalVersion(champ);
-
-                                if (File.Exists(Path.Combine(Settings.Default.LeagueSharpPath, "Assemblies", champ.Name + ".exe")))
-                                {
-                                    champ.State = "Installed";
-                                    update.Add(champ);
-                                }
-                                else
-                                {
-                                    champ.State = "Available";
-                                }
-
-                                Progress++;
-                                OverlayText = string.Format("{0}/{1} Loading", Progress, ProgressMax);
-                            }
-                        }
-
-                        Update = new ObservableCollectionEx<AssemblyEntity>(Update.OrderBy(a => a.Name));
-                        CollectionViewSource.GetDefaultView(Update).Refresh();
-                        CollectionViewSource.GetDefaultView(Champion).Refresh();
-                        CollectionViewSource.GetDefaultView(Utility).Refresh();
-                        CollectionViewSource.GetDefaultView(Library).Refresh();
                     });
+
+                    UpdateLoaderPath();
                 }
                 catch (Exception e)
                 {
@@ -540,6 +468,80 @@ namespace LSharpAssemblyProvider.ViewModel
                 }
 
                 LogFile.Write("", "Init Complete");
+            });
+        }
+
+        private void UpdateLoaderPath()
+        {
+            // TODO: stays cancer for now
+            DispatcherHelper.CheckBeginInvokeOnUI(() =>
+            {
+                IsOverlay = true;
+                Update.Clear();
+
+                using (var update = Update.DelayNotifications())
+                {
+                    foreach (var lib in Library)
+                    {
+                        lib.LocalVersion = Github.LocalVersion(lib);
+
+                        if (File.Exists(Path.Combine(Settings.Default.LeagueSharpPath, "Assemblies", "System", lib.Name + ".dll")))
+                        {
+                            lib.State = "Installed";
+                            update.Add(lib);
+                        }
+                        else
+                        {
+                            lib.State = "Available";
+                        }
+
+                        Progress++;
+                        OverlayText = string.Format("{0}/{1} Loading", Progress, ProgressMax);
+                    }
+
+
+                    foreach (var util in Utility)
+                    {
+                        util.LocalVersion = Github.LocalVersion(util);
+
+                        if (File.Exists(Path.Combine(Settings.Default.LeagueSharpPath, "Assemblies", util.Name + ".exe")))
+                        {
+                            util.State = "Installed";
+                            update.Add(util);
+                        }
+                        else
+                        {
+                            util.State = "Available";
+                        }
+
+                        Progress++;
+                        OverlayText = string.Format("{0}/{1} Loading", Progress, ProgressMax);
+                    }
+
+                    foreach (var champ in Champion)
+                    {
+                        champ.LocalVersion = Github.LocalVersion(champ);
+
+                        if (File.Exists(Path.Combine(Settings.Default.LeagueSharpPath, "Assemblies", champ.Name + ".exe")))
+                        {
+                            champ.State = "Installed";
+                            update.Add(champ);
+                        }
+                        else
+                        {
+                            champ.State = "Available";
+                        }
+
+                        Progress++;
+                        OverlayText = string.Format("{0}/{1} Loading", Progress, ProgressMax);
+                    }
+                }
+
+                Update = new ObservableCollectionEx<AssemblyEntity>(Update.OrderBy(a => a.Name));
+                CollectionViewSource.GetDefaultView(Update).Refresh();
+                CollectionViewSource.GetDefaultView(Champion).Refresh();
+                CollectionViewSource.GetDefaultView(Utility).Refresh();
+                CollectionViewSource.GetDefaultView(Library).Refresh();
                 IsOverlay = false;
             });
         }
@@ -559,7 +561,7 @@ namespace LSharpAssemblyProvider.ViewModel
                 ProgressMax = 5;
                 OverlayText = string.Format("{0}/{1} Update Check", Progress, ProgressMax);
 
-                if(Directory.Exists("Update"))
+                if (Directory.Exists("Update"))
                     Directory.Delete("Update", true);
 
                 using (var client = new WebClient())
@@ -731,7 +733,6 @@ namespace LSharpAssemblyProvider.ViewModel
 
                     Progress++;
                     OverlayText = string.Format("{0}/{1} Compile", Progress, ProgressMax);
-
                 }
                 catch (Exception e)
                 {
@@ -790,22 +791,29 @@ namespace LSharpAssemblyProvider.ViewModel
 
         private void InstallAssembly(AssemblyEntity assembly)
         {
-            Task.Factory.StartNew(async () =>
+            Task.Factory.StartNew(() =>
             {
                 IsOverlay = true;
                 try
                 {
                     Download(new[] { assembly });
                     var complete = Compile(new[] { assembly });
-                    Copy(complete);
-                    assembly.State = "Installed";
 
-                    DispatcherHelper.CheckBeginInvokeOnUI(() => Update.Add(assembly));
+                    if (complete.Count > 0)
+                    {
+                        Copy(complete);
+                        assembly.State = "Installed";
 
-                    Progress = ProgressMax;
-                    OverlayText = "Complete";
-                    await DialogService.ShowMessage("Install", "Install Complete\n\n" + complete.Count + " Assemblies Installed.", MessageDialogStyle.Affirmative);
-                    OverlayText = "";
+                        DispatcherHelper.CheckBeginInvokeOnUI(() => Update.Add(assembly));
+
+                        Progress = ProgressMax;
+                        OverlayText = "Complete";
+                        DialogService.ShowMessage("Install", "Install Complete\n\n" + complete.Count + " Assemblies Installed.", MessageDialogStyle.Affirmative);
+                    }
+                    else
+                    {
+                        DialogService.ShowMessage("Install", "Install Failed - Compiler Error", MessageDialogStyle.Affirmative);
+                    }
                 }
                 catch (Exception e)
                 {
@@ -818,7 +826,7 @@ namespace LSharpAssemblyProvider.ViewModel
 
         private void UpdateAssembly()
         {
-            Task.Factory.StartNew(async () =>
+            Task.Factory.StartNew(() =>
             {
                 IsOverlay = true;
                 try
@@ -830,7 +838,7 @@ namespace LSharpAssemblyProvider.ViewModel
 
                     Progress = ProgressMax;
                     OverlayText = "Complete";
-                    await DialogService.ShowMessage("Update", "Update Complete\n\n" + updates.Count + " Assemblies Updated.", MessageDialogStyle.Affirmative);
+                    DialogService.ShowMessage("Update", "Update Complete\n\n" + updates.Count + " Assemblies Updated.", MessageDialogStyle.Affirmative);
                     OverlayText = "";
                 }
                 catch (Exception e)

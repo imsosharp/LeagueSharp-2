@@ -12,8 +12,9 @@
     	BorderThickness="1" 
         Height="740.75"
         Width="1033"
-        Title="L# Assembly Provider by h3h3"
-        SaveWindowPosition="True">
+        Title="L# Assembly Installer by h3h3"
+        SaveWindowPosition="True" 
+        Icon="icon.ico">
 
     <metro:MetroWindow.Resources>
         <ResourceDictionary>
@@ -84,28 +85,26 @@
                 </Grid>
             </TabItem>
         </TabControl>
-
-        <metro:ProgressRing
-            IsActive="{Binding IsOverlay}"
-            Visibility="{Binding IsOverlay, Converter={StaticResource OverlayVisibilityConverter}}"
-            Margin="50" 
-            VerticalAlignment="Stretch" 
-            HorizontalAlignment="Stretch" Width="150" Height="150"/>
-
         <metro:MetroProgressBar 
     		x:Name="UpdateProgressBar" 
     		VerticalAlignment="Top" 
     		Height="26" 
     		BorderBrush="{DynamicResource AccentColorBrush}"  
     		BorderThickness="1" 
-    		Margin="285,483,285,0" 
+    		Margin="285,495,285,0" 
             Visibility="{Binding IsOverlay, Converter={StaticResource OverlayVisibilityConverter}}"
     		Maximum="{Binding ProgressMax}" 
     		Value="{Binding Progress}"/>
+        <metro:ProgressRing
+            IsActive="{Binding IsOverlay}"
+            Visibility="{Binding IsOverlay, Converter={StaticResource OverlayVisibilityConverter}}"
+            Margin="50" 
+            VerticalAlignment="Stretch" 
+            HorizontalAlignment="Stretch" Width="150" Height="150"/>
         <Label
             Content="{Binding OverlayText}"
             Visibility="{Binding IsOverlay, Converter={StaticResource OverlayVisibilityConverter}}"
-            Margin="30,434,30,230" 
+            Margin="30,434,30,218" 
             VerticalAlignment="Stretch"  
             FontSize="26" 
             HorizontalContentAlignment="Center"/>
