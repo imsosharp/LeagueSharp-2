@@ -13,7 +13,6 @@ namespace LSharpAssemblyProvider
         static App()
         {
             DispatcherHelper.Initialize();
-            Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log"));
             Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Repositories"));
         }
     }

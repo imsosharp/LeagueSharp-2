@@ -51,7 +51,10 @@
                 		VerticalAlignment="Top" 
                 		HorizontalAlignment="Right" 
                 		Width="94" 
-                		Command="{Binding UpdateCommand, Mode=OneWay}" Margin="0,-38,0,0" Height="27" IsEnabled="{Binding IsLocked}"/>
+                		Command="{Binding UpdateCommand, Mode=OneWay}" 
+                        Margin="0,-38,0,0" 
+                        Height="27" 
+                        IsEnabled="{Binding IsOverlay, Converter={StaticResource BooleanInverterConverter}}"/>
                     <view:UpdateView DataContext="{Binding Update}"/>
                 </Grid>
             </TabItem>
@@ -89,14 +92,6 @@
             VerticalAlignment="Stretch" 
             HorizontalAlignment="Stretch" Width="150" Height="150"/>
 
-        <Label
-            Content="{Binding OverlayText}"
-            Visibility="{Binding IsOverlay, Converter={StaticResource OverlayVisibilityConverter}}"
-            Margin="285,434,285,230" 
-            VerticalAlignment="Stretch"  
-            FontSize="26" 
-            HorizontalContentAlignment="Center"/>
-
         <metro:MetroProgressBar 
     		x:Name="UpdateProgressBar" 
     		VerticalAlignment="Top" 
@@ -107,6 +102,13 @@
             Visibility="{Binding IsOverlay, Converter={StaticResource OverlayVisibilityConverter}}"
     		Maximum="{Binding ProgressMax}" 
     		Value="{Binding Progress}"/>
+        <Label
+            Content="{Binding OverlayText}"
+            Visibility="{Binding IsOverlay, Converter={StaticResource OverlayVisibilityConverter}}"
+            Margin="30,434,30,230" 
+            VerticalAlignment="Stretch"  
+            FontSize="26" 
+            HorizontalContentAlignment="Center"/>
 
     </Grid>
 </metro:MetroWindow>

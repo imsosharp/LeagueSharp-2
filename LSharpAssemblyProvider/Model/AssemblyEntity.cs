@@ -72,6 +72,9 @@ namespace LSharpAssemblyProvider.Model
         public ProjectFile GetProjectFile()
         {
             var file = Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Repositories", Developer, Repositroy, "trunk"), Name + ".csproj", SearchOption.AllDirectories).FirstOrDefault();
+            
+            if (file == null)
+                return null;
 
             return new ProjectFile(file)
             {

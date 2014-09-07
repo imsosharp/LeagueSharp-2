@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using ICSharpCode.SharpZipLib.Core;
+using ICSharpCode.SharpZipLib.Zip;
 using LSharpAssemblyProvider.Model;
 using SharpSvn;
 
@@ -82,6 +84,30 @@ namespace LSharpAssemblyProvider.Helpers
             {
                 Console.WriteLine("Compile: " + project.Project.FullPath + " - FAILED");
                 return null;
+            }
+        }
+
+        public static void UnzipStream(Stream zipStream, string outFolder)
+        {
+            var zipInputStream = new ZipInputStream(zipStream);
+            var zipEntry = zipInputStream.GetNextEntry();
+
+            while (zipEntry != null)
+            {
+                var entryFileName = zipEntry.Name;
+                var buffer = new byte[4096];
+                var fullZipToPath = Path.Combine(outFolder, entryFileName);
+                var directoryName = Path.GetDirectoryName(fullZipToPath);
+
+                if (!string.IsNullOrEmpty(directoryName))
+                    Directory.CreateDirectory(directoryName);
+
+                using (var streamWriter = File.Create(fullZipToPath))
+                {
+                    StreamUtils.Copy(zipInputStream, streamWriter, buffer);
+                }
+
+                zipEntry = zipInputStream.GetNextEntry();
             }
         }
     }
