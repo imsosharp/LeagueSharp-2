@@ -311,7 +311,7 @@
   },
   {
     "Name": "AutoIgnite",
-    "Description": "",
+    "Description": "Auto ignites to kill jungle.",
     "Points": 0,
     "Votes": 0,
     "Url": "https://github.com/trees-software/leaguesharp",
