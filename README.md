@@ -1,14 +1,24 @@
-LSharpAssemblyProvider
+Assembly Installer
 ======================
  - Easy Setup
  - OneClick Assembly Install
  - OneClick Update
  - 44  Repositories
  - 137 Assemblies
- 
-Beta Download
-https://github.com/h3h3/LSharpAssemblyProvider/releases
 
+Features
+======================
+Auto Download newest Installer Version
+
+Auto Download newest L# Version
+
+Beta Download https://github.com/h3h3/LSharpAssemblyProvider/releases
+
+Preview
+======================
+
+Update
+![Update](http://i.imgur.com/29dGPtt.png)
 
 Install
 ![Install](http://i.imgur.com/WaxOlP2.png)
