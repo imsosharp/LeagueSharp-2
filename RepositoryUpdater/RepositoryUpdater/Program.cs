@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -46,7 +47,23 @@ namespace LSharpRepoUpdater
                         var outputType = regexOutputType.Groups["OutputType"].Value;
 
                         var regexAssemblyName = Regex.Match(fileContent, @"<AssemblyName>(?'AssemblyName'.*?)</AssemblyName>");
-                        var assemblyName = regexAssemblyName.Groups["AssemblyName"].Value.Replace("%27", "'");
+                        var assemblyName = regexAssemblyName.Groups["AssemblyName"].Value;
+
+                        // MSBuild special chars
+                        while (assemblyName.Contains("%"))
+                        {
+                            var data = assemblyName.Split('%');
+                            var start = data[0];
+                            var value = ConvertHexToString(data[1].Substring(0, 2));
+                            var end = data[1].Substring(2);
+
+                            for (var i = 2; i < data.Length; i++)
+                            {
+                                end += "%" + data[i];
+                            }
+
+                            assemblyName = string.Concat(start, value, end);
+                        }
 
                         var old = server.FirstOrDefault(a => a.Developer == user && a.Repositroy == repo && a.Name == assemblyName);
 
@@ -104,6 +121,17 @@ namespace LSharpRepoUpdater
             }
 
             Console.ReadLine();
+        }
+
+        public static string ConvertHexToString(string hexValue)
+        {
+            var strValue = "";
+            while (hexValue.Length > 0)
+            {
+                strValue += Convert.ToChar(Convert.ToUInt32(hexValue.Substring(0, 2), 16)).ToString();
+                hexValue = hexValue.Substring(2, hexValue.Length - 2);
+            }
+            return strValue;
         }
 
         private static IEnumerable<string> UpdateRepo(string url)
