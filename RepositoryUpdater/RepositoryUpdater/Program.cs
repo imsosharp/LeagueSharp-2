@@ -19,7 +19,7 @@ namespace LSharpRepoUpdater
             Console.WindowHeight = 50;
             Directory.CreateDirectory("Cache");
 
-            Console.WriteLine("Starting Repositroy Update");
+            Console.WriteLine("Starting Repository Update");
 
             using (var client = new WebClient())
             {

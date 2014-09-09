@@ -42,3 +42,4 @@ https://github.com/trelli/LeagueSharp
 https://github.com/trus/L-
 https://github.com/Xionanx/Leaguesharp-Projects
 https://github.com/xQxCPMxQx/LeagueSharp2
+https://github.com/Jaskot/TritonSharp
