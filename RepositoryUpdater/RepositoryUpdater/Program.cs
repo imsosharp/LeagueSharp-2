@@ -87,13 +87,18 @@ namespace LSharpRepoUpdater
                             ass.Votes = old.Votes;
                         }
 
-                        list.Add(ass);
-                        Console.WriteLine(ass);
+                        if (ass.OutputType == "Exe" || ass.OutputType == "Library")
+                        {
+                            list.Add(ass);
+                            Console.WriteLine(ass);
+                        }
                     }
                 });
 
                 Console.WriteLine("Repo: " + repos.Length);
                 Console.WriteLine("Assemblies: " + list.Count);
+                Console.WriteLine("Type c for Champion");
+                Console.WriteLine("Type u for Utility");
 
                 foreach (var entity in list)
                 {
