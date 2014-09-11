@@ -29,35 +29,6 @@ namespace AssemblyInstaller.ViewModel
     public class MainViewModel : ViewModelBase
     {
         /// <summary>
-        /// The <see cref="LeagueSharpPath" /> property's name.
-        /// </summary>
-        public const string LeagueSharpPathPropertyName = "LeagueSharpPath";
-
-        /// <summary>
-        /// Sets and gets the LeagueSharpPath property.
-        /// Changes to that property's value raise the PropertyChanged event. 
-        /// </summary>
-        public string LeagueSharpPath
-        {
-            get
-            {
-                return Settings.Default.LeagueSharpPath;
-            }
-
-            set
-            {
-                if (Settings.Default.LeagueSharpPath == value)
-                {
-                    return;
-                }
-
-                RaisePropertyChanging(() => LeagueSharpPath);
-                Settings.Default.LeagueSharpPath = value;
-                RaisePropertyChanged(() => LeagueSharpPath);
-            }
-        }
-
-        /// <summary>
         /// The <see cref="StartPage" /> property's name.
         /// </summary>
         public const string StartPagePropertyName = "StartPage";
@@ -332,12 +303,15 @@ namespace AssemblyInstaller.ViewModel
                                                   switch (StartPage)
                                                   {
                                                       case 0:
-                                                          collection = Champion;
+                                                          collection = Injection;
                                                           break;
                                                       case 1:
-                                                          collection = Utility;
+                                                          collection = Champion;
                                                           break;
                                                       case 2:
+                                                          collection = Utility;
+                                                          break;
+                                                      case 3:
                                                           collection = Library;
                                                           break;
                                                   }
@@ -381,12 +355,15 @@ namespace AssemblyInstaller.ViewModel
                                                   switch (StartPage)
                                                   {
                                                       case 0:
-                                                          collection = Champion;
+                                                          collection = Injection;
                                                           break;
                                                       case 1:
-                                                          collection = Utility;
+                                                          collection = Champion;
                                                           break;
                                                       case 2:
+                                                          collection = Utility;
+                                                          break;
+                                                      case 3:
                                                           collection = Library;
                                                           break;
                                                   }
@@ -458,18 +435,7 @@ namespace AssemblyInstaller.ViewModel
                                           {
                                               if (SelectedAssembly != null)
                                               {
-                                                  var path = "";
-
-                                                  if (SelectedAssembly.OutputType == "Exe")
-                                                      path = Path.Combine(Settings.Default.LeagueSharpPath, "Assemblies", SelectedAssembly.Developer + "-" + SelectedAssembly.AssemblyName + ".exe");
-
-                                                  if (SelectedAssembly.OutputType == "Library")
-                                                      path = Path.Combine(Settings.Default.LeagueSharpPath, "Assemblies", "System", SelectedAssembly.AssemblyName + ".dll");
-
-                                                  if (File.Exists(path))
-                                                      File.Delete(path);
-
-                                                  SelectedAssembly.State = "";
+                                                  SelectedAssembly.Delete();
                                               }
                                           }));
             }
@@ -485,7 +451,7 @@ namespace AssemblyInstaller.ViewModel
             get
             {
                 return _updateCommand
-                       ?? (_updateCommand = new RelayCommand(UpdateAssembly));
+                       ?? (_updateCommand = new RelayCommand(UpdateAssemblies));
 
             }
         }
@@ -502,32 +468,13 @@ namespace AssemblyInstaller.ViewModel
                 return _saveCommand
                     ?? (_saveCommand = new RelayCommand(() =>
                                           {
-                                              var dia = new OpenFileDialog
-                                              {
-                                                  DefaultExt = ".exe",
-                                                  Filter = "LeagueSharp.Loader.exe|*.exe"
-                                              };
-                                              var result = dia.ShowDialog();
 
-                                              if (result == true)
-                                              {
-                                                  if (dia.FileName.EndsWith("LeagueSharp.Loader.exe"))
-                                                  {
-                                                      LeagueSharpPath = dia.FileName.Replace("LeagueSharp.Loader.exe", "");
-                                                      Cleanup();
-                                                      StartPage = 3;
-                                                      UpdateLoaderPath();
-                                                  }
-                                                  else
-                                                  {
-                                                      DialogService.ShowMessage("Error", "LeagueSharp.Loader.exe not found @ " + dia.FileName, MessageDialogStyle.Affirmative);
-                                                  }
-                                              }
                                           }));
             }
         }
 
         private ObservableCollectionEx<AssemblyEntity> _multiSelect = new ObservableCollectionEx<AssemblyEntity>();
+        private ObservableCollectionEx<AssemblyEntity> Injection = new ObservableCollectionEx<AssemblyEntity>();
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -536,12 +483,6 @@ namespace AssemblyInstaller.ViewModel
         {
             if (!IsInDesignMode)
                 IsOverlay = true;
-
-            if (string.IsNullOrEmpty(Settings.Default.LeagueSharpPath))
-            {
-                LeagueSharpPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LSharp");
-                Cleanup();
-            }
 
             Task.Factory.StartNew(() =>
             {
@@ -562,21 +503,28 @@ namespace AssemblyInstaller.ViewModel
                         Update = new ObservableCollectionEx<AssemblyEntity>();
 
                         var sort = new SortDescription("Name", ListSortDirection.Ascending);
+
                         var v = CollectionViewSource.GetDefaultView(Champion);
                         v.GroupDescriptions.Add(new PropertyGroupDescription("State"));
                         v.SortDescriptions.Add(sort);
+
                         v = CollectionViewSource.GetDefaultView(Utility);
                         v.GroupDescriptions.Add(new PropertyGroupDescription("State"));
                         v.SortDescriptions.Add(sort);
+
                         v = CollectionViewSource.GetDefaultView(Library);
                         v.GroupDescriptions.Add(new PropertyGroupDescription("State"));
                         v.SortDescriptions.Add(sort);
+
                         v = CollectionViewSource.GetDefaultView(Update);
                         v.GroupDescriptions.Add(new PropertyGroupDescription("Category"));
                         v.SortDescriptions.Add(sort);
                     });
 
                     UpdateLoaderPath();
+
+                    Injector.StateHandler += (sender, args) => Console.WriteLine(args.State);
+                    Injector.Start();
                 }
                 catch (Exception e)
                 {
@@ -671,13 +619,6 @@ namespace AssemblyInstaller.ViewModel
                 IsOverlay = false;
                 LogFile.Write("App", Update.Count + " Installed Assemblies found");
             });
-        }
-
-        public override void Cleanup()
-        {
-            Console.WriteLine("Save: " + LeagueSharpPath);
-            Settings.Default.LeagueSharpPath = LeagueSharpPath;
-            Settings.Default.Save();
         }
 
         private async void ApplicationUpdate()
@@ -1089,7 +1030,7 @@ namespace AssemblyInstaller.ViewModel
             });
         }
 
-        private void UpdateAssembly()
+        private void UpdateAssemblies()
         {
             Task.Factory.StartNew(async () =>
             {

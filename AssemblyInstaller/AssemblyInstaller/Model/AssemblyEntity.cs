@@ -63,7 +63,7 @@ namespace AssemblyInstaller.Model
         {
             get
             {
-                return Votes > 0 ? "/Images/star" + (Points/Votes) + ".png" : "/Images/star0.png";
+                return Votes > 0 ? "/Images/star" + (Points / Votes) + ".png" : "/Images/star0.png";
             }
         }
         [JsonIgnore]
@@ -87,7 +87,7 @@ namespace AssemblyInstaller.Model
         public ProjectFile GetProjectFile()
         {
             var file = Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Repositories", Developer, Repositroy, "trunk"), ProjectFile, SearchOption.AllDirectories).FirstOrDefault();
-            
+
             if (file == null)
                 return null;
 
@@ -100,6 +100,22 @@ namespace AssemblyInstaller.Model
                 PostbuildEvent = true,
                 PrebuildEvent = true
             };
+        }
+
+        public void Delete()
+        {
+            var path = "";
+
+            if (OutputType == "Exe")
+                path = Path.Combine(Config.AssembliesDirectory, AssemblyName + "-" + Developer + ".exe");
+
+            if (OutputType == "Library")
+                path = Path.Combine(Config.SystemDirectory, AssemblyName + "-" + Developer + ".dll");
+
+            if (File.Exists(path))
+                File.Delete(path);
+
+            State = "Uninstalled";
         }
 
         public override string ToString()

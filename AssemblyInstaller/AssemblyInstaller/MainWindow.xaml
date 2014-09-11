@@ -36,6 +36,9 @@
 			BorderBrush="{DynamicResource AccentColorBrush}" 
 			SelectedIndex="{Binding StartPage}" 
             IsEnabled="{Binding IsOverlay, Converter={StaticResource BooleanInverterConverter}}">
+            <TabItem Header="Injector">
+                <view:InjectorView DataContext="{Binding Update}"/>
+            </TabItem>
             <TabItem Header="Champion">
                 <view:AssemblyView DataContext="{Binding Champion}"/>
             </TabItem>
