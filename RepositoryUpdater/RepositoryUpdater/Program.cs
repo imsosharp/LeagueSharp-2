@@ -69,6 +69,7 @@ namespace LSharpRepoUpdater
 
                         var ass = new AssemblyEntity
                         {
+                            Id = Guid.NewGuid(),
                             Name = assemblyName,
                             Url = url,
                             Developer = user,
@@ -81,6 +82,7 @@ namespace LSharpRepoUpdater
 
                         if (old != null)
                         {
+                            ass.Id = old.Id;
                             ass.Category = old.Category;
                             ass.Description = old.Description;
                             ass.Points = old.Points;
@@ -178,6 +180,7 @@ namespace LSharpRepoUpdater
 
     public class AssemblyEntity
     {
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Repositroy { get; set; }
         public string Developer { get; set; }
