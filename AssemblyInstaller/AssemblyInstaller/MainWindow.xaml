@@ -6,6 +6,7 @@
         xmlns:ignore="http://www.ignore.com"
         xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:view="clr-namespace:AssemblyInstaller.View"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
         x:Class="AssemblyInstaller.MainWindow"
         mc:Ignorable="d ignore"
         BorderBrush="{DynamicResource AccentColorBrush}"  
@@ -35,9 +36,9 @@
 			Margin="10" 
 			BorderBrush="{DynamicResource AccentColorBrush}" 
 			SelectedIndex="{Binding StartPage}" 
-            IsEnabled="{Binding IsOverlay, Converter={StaticResource BooleanInverterConverter}}">
+			IsEnabled="{Binding IsOverlay, Converter={StaticResource BooleanInverterConverter}}">
             <TabItem Header="Injector">
-                <view:InjectorView DataContext="{Binding Update}"/>
+                <view:InjectorView DataContext="{Binding Injection}"/>
             </TabItem>
             <TabItem Header="Champion">
                 <view:AssemblyView DataContext="{Binding Champion}"/>
@@ -51,14 +52,14 @@
             <TabItem Header="Update">
                 <Grid>
                     <Button 
-                		Content="Update" 
-                		VerticalAlignment="Top" 
-                		HorizontalAlignment="Right" 
-                		Width="94" 
-                		Command="{Binding UpdateCommand, Mode=OneWay}" 
-                        Margin="0,-38,0,0" 
-                        Height="27" 
-                        IsEnabled="{Binding IsOverlay, Converter={StaticResource BooleanInverterConverter}}"/>
+						Content="Update" 
+						VerticalAlignment="Top" 
+						HorizontalAlignment="Right" 
+						Width="94" 
+						Command="{Binding UpdateCommand, Mode=OneWay}" 
+						Margin="0,-38,0,0" 
+						Height="27" 
+						IsEnabled="{Binding IsOverlay, Converter={StaticResource BooleanInverterConverter}}"/>
                     <view:UpdateView DataContext="{Binding Update}"/>
                 </Grid>
             </TabItem>
@@ -67,50 +68,48 @@
             </TabItem>
             <TabItem Header="Settings">
                 <Grid>
-                    <GroupBox 
-                        Header="L# Path" 
-                        Margin="10,10,10,0" 
-                        VerticalAlignment="Top">
-                        <Grid>
-                            <TextBox
-                                     Height="23"
-                                     Margin="10,10,106,0"
-                                     VerticalAlignment="Top"
-                                     Text="{Binding LeagueSharpPath}"
-                                     TextWrapping="Wrap" />
-                            <Button 
-                                Content="Choose" 
-                                Margin="0,11,10,0" 
-                                VerticalAlignment="Top" 
-                                Command="{Binding SaveCommand, Mode=OneWay}" HorizontalAlignment="Right" Width="75"/>
-                        </Grid>
+                    <GroupBox Header="Injector" Margin="10,10,10,0" VerticalAlignment="Top" Height="211">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Tower Range Display" Margin="10"/>
+                                <ComboBox HorizontalAlignment="Left" VerticalAlignment="Top" Width="142" Margin="10" SelectedItem="{Binding Tower}">
+                                    <System:String>None</System:String>
+                                    <System:String>Enemy</System:String>
+                                    <System:String>Ally</System:String>
+                                    <System:String>All</System:String>
+                                </ComboBox>
+                            </StackPanel>
+                            <CheckBox Content="Extended Zoom" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" IsChecked="{Binding Zoom}"/>
+                            <CheckBox Content="Anti AFK" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" IsChecked="{Binding Afk}"/>
+                            <CheckBox Content="Debug" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" IsChecked="{Binding Debug}"/>
+                        </StackPanel>
                     </GroupBox>
                 </Grid>
             </TabItem>
         </TabControl>
         <metro:MetroProgressBar 
-    		x:Name="UpdateProgressBar" 
-    		VerticalAlignment="Top" 
-    		Height="26" 
-    		BorderBrush="{DynamicResource AccentColorBrush}"  
-    		BorderThickness="1" 
-    		Margin="285,495,285,0" 
-            Visibility="{Binding IsOverlay, Converter={StaticResource OverlayVisibilityConverter}}"
-    		Maximum="{Binding ProgressMax}" 
-    		Value="{Binding Progress}"/>
+			x:Name="UpdateProgressBar" 
+			VerticalAlignment="Top" 
+			Height="26" 
+			BorderBrush="{DynamicResource AccentColorBrush}"  
+			BorderThickness="1" 
+			Margin="285,495,285,0" 
+			Visibility="{Binding IsOverlay, Converter={StaticResource OverlayVisibilityConverter}}"
+			Maximum="{Binding ProgressMax}" 
+			Value="{Binding Progress}"/>
         <metro:ProgressRing
-            IsActive="{Binding IsOverlay}"
-            Visibility="{Binding IsOverlay, Converter={StaticResource OverlayVisibilityConverter}}"
-            Margin="436,279,437,0" 
-            VerticalAlignment="Top" 
-            HorizontalAlignment="Stretch" Width="150" Height="150"/>
+			IsActive="{Binding IsOverlay}"
+			Visibility="{Binding IsOverlay, Converter={StaticResource OverlayVisibilityConverter}}"
+			Margin="436,279,437,0" 
+			VerticalAlignment="Top" 
+			HorizontalAlignment="Stretch" Width="150" Height="150"/>
         <Label
-            Content="{Binding OverlayText}"
-            Visibility="{Binding IsOverlay, Converter={StaticResource OverlayVisibilityConverter}}"
-            Margin="30,434,30,0" 
-            VerticalAlignment="Top"  
-            FontSize="30" 
-            HorizontalContentAlignment="Center" Height="56"/>
+			Content="{Binding OverlayText}"
+			Visibility="{Binding IsOverlay, Converter={StaticResource OverlayVisibilityConverter}}"
+			Margin="30,434,30,0" 
+			VerticalAlignment="Top"  
+			FontSize="30" 
+			HorizontalContentAlignment="Center" Height="56"/>
 
     </Grid>
 </metro:MetroWindow>

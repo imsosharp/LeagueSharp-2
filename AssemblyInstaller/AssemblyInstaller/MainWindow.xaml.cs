@@ -1,4 +1,6 @@
-﻿namespace AssemblyInstaller
+﻿using AssemblyInstaller.Helpers;
+
+namespace AssemblyInstaller
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -11,6 +13,7 @@
         public MainWindow()
         {
             InitializeComponent();
+            Closing += (sender, args) => Config.Save();
         }
     }
 }

@@ -107,10 +107,14 @@ namespace AssemblyInstaller.Helpers
                             break;
 
                         case InjectorState.Injecting:
+
+                            Thread.Sleep(100);
                             SendConfig(true, false, true, 0);
+
                             foreach (var assembly in Assemblies)
                             {
                                 LoadAssembly(assembly);
+                                Thread.Sleep(100);
                             }
                             break;
 
@@ -121,7 +125,6 @@ namespace AssemblyInstaller.Helpers
                             Assemblies.Clear();
                             break;
                     }
-
                     Thread.Sleep(1000);
                 }
             }) { IsBackground = true };

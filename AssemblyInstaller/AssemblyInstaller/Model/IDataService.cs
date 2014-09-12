@@ -4,10 +4,10 @@ namespace AssemblyInstaller.Model
 {
     public interface IDataService
     {
-        ObservableCollectionEx<AssemblyEntity> GetChampionData();
-        ObservableCollectionEx<AssemblyEntity> GetUtilityData();
-        ObservableCollectionEx<AssemblyEntity> GetLibraryData();
-        ObservableCollectionEx<LogEntity> GetLogData();
+        ObservableCollection<AssemblyEntity> GetChampionData();
+        ObservableCollection<AssemblyEntity> GetUtilityData();
+        ObservableCollection<AssemblyEntity> GetLibraryData();
+        ObservableCollection<LogEntity> GetLogData();
         bool IsInitComplete();
     }
 }

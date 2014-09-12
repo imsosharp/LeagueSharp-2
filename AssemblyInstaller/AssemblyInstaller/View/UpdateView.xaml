@@ -65,17 +65,12 @@
                     MinWidth="100"
 					Binding="{Binding State}" />
                 <DataGridTextColumn 
-					Width="SizeToCells" 
-					Header="Url" 
-                    MinWidth="150"
-					Binding="{Binding Url}" />
-                <DataGridTextColumn 
-                    Width="SizeToHeader" 
+                    Width="*" 
 					Header="Local Version" 
                     MinWidth="100"
 					Binding="{Binding LocalVersion}" />
                 <DataGridTextColumn 
-                    Width="SizeToHeader" 
+                    Width="*" 
 					Header="Repositroy Version" 
                     MinWidth="100"
 					Binding="{Binding RepositroyVersion}" />
