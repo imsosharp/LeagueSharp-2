@@ -99,23 +99,14 @@ namespace AssemblyInstaller.Helpers
             {
                 while (_inject)
                 {
+                    Thread.Sleep(1000);
                     State = Pulse();
 
                     switch (State)
                     {
-                        case InjectorState.Idle:
-                            break;
-
                         case InjectorState.Injecting:
-
-                            Thread.Sleep(100);
-                            SendConfig(true, false, true, 0);
-
-                            foreach (var assembly in Assemblies)
-                            {
-                                LoadAssembly(assembly);
-                                Thread.Sleep(100);
-                            }
+                            Thread.Sleep(1000);
+                            SendConfig(Config.LSharpConfig.Afk, Config.LSharpConfig.Zoom, Config.LSharpConfig.Debug, 2);
                             break;
 
                         case InjectorState.Injected:
@@ -125,7 +116,6 @@ namespace AssemblyInstaller.Helpers
                             Assemblies.Clear();
                             break;
                     }
-                    Thread.Sleep(1000);
                 }
             }) { IsBackground = true };
 
@@ -139,18 +129,17 @@ namespace AssemblyInstaller.Helpers
 
         private static void ResolveInjectDll()
         {
-            var dllToLoad = Path.Combine(Config.SystemDirectory, "LeagueSharp.Bootstrap.dll");
-            var intPtr = LoadLibrary(dllToLoad);
-
-            if (intPtr != IntPtr.Zero)
+            var hModule = LoadLibrary(Path.Combine(Config.SystemDirectory, "LeagueSharp.Bootstrap.dll"));
+            if (!(hModule != IntPtr.Zero))
             {
-                var procAddress = GetProcAddress(intPtr, "_InjectDLL@8");
-                if (procAddress != IntPtr.Zero)
-                {
-                    LogFile.Write("Injector", "Injecting LeagueSharp.Bootstrap.dll");
-                    _injectDll = (Marshal.GetDelegateForFunctionPointer(procAddress, typeof(InjectDllDelegate)) as InjectDllDelegate);
-                }
+                return;
             }
+            var procAddress = GetProcAddress(hModule, "_InjectDLL@8");
+            if (!(procAddress != IntPtr.Zero))
+            {
+                return;
+            }
+            _injectDll = Marshal.GetDelegateForFunctionPointer(procAddress, typeof(InjectDllDelegate)) as InjectDllDelegate;
         }
 
         public static IntPtr GetLeagueWnd()
@@ -214,13 +203,12 @@ namespace AssemblyInstaller.Helpers
 
         public static void SendConfig(bool afk, bool zoom, bool debug, int tower)
         {
-            var text = string.Format("{0}{1}{2}{3}", new object[]
-			{
-				afk ? "1" : "0",
-				zoom ? "1" : "0",
-				debug ? "1" : "0",
-				tower
-			});
+            var text = string.Format("{0}{1}{2}{3}",
+                afk ? "1" : "0",
+                zoom ? "1" : "0",
+                debug ? "1" : "0",
+                tower
+                );
 
             SendCommand(2, text);
         }
@@ -229,7 +217,7 @@ namespace AssemblyInstaller.Helpers
         {
             if (State == InjectorState.Injected || State == InjectorState.Injecting)
             {
-                var cOpydatastruct = new COPYDATASTRUCT
+                var lParam = new COPYDATASTRUCT
                 {
                     cbData = 1,
                     dwData = text.Length * 2 + 2,
@@ -237,7 +225,7 @@ namespace AssemblyInstaller.Helpers
                 };
 
                 LogFile.Write("Injector", text);
-                SendMessage(GetLeagueWnd(), 74u, IntPtr.Zero, ref cOpydatastruct);
+                SendMessage(GetLeagueWnd(), 74u, IntPtr.Zero, ref lParam);
             }
         }
     }

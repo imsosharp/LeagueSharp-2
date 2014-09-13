@@ -10,6 +10,7 @@ namespace AssemblyInstaller.Helpers
     {
         public static string BaseDirectory = AppDomain.CurrentDomain.BaseDirectory;
         public static string ConfigDirectory = Path.Combine(BaseDirectory, "Config");
+        public static string LogDirectory = Path.Combine(BaseDirectory, "Log");
         public static string UpdateDirectory = Path.Combine(BaseDirectory, "Update");
         public static string RepositoriesDirectory = Path.Combine(BaseDirectory, "Repositories");
         public static string AssembliesDirectory = Path.Combine(BaseDirectory, "Assemblies");
@@ -26,6 +27,9 @@ namespace AssemblyInstaller.Helpers
         {
             if (!Directory.Exists(ConfigDirectory))
                 Directory.CreateDirectory(ConfigDirectory);
+
+            if (!Directory.Exists(LogDirectory))
+                Directory.CreateDirectory(LogDirectory);
 
             if (!Directory.Exists(RepositoriesDirectory))
                 Directory.CreateDirectory(RepositoriesDirectory);
@@ -55,6 +59,8 @@ namespace AssemblyInstaller.Helpers
                 InstallerConfig = File.Exists(InstallerConfigFile) ?
                     JsonConvert.DeserializeObject<InstallerConfig>(File.ReadAllText(InstallerConfigFile)) :
                     new InstallerConfig();
+
+                Console.WriteLine(SystemDirectory);
             }
             catch (Exception e)
             {
@@ -82,5 +88,11 @@ namespace AssemblyInstaller.Helpers
     {
         public List<string> Injected { get; set; }
         public List<Guid> Installed { get; set; }
+
+        public InstallerConfig()
+        {
+            Injected = new List<string>();
+            Installed = new List<Guid>();
+        }
     }
 }

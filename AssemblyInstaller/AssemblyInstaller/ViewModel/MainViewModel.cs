@@ -30,7 +30,7 @@ namespace AssemblyInstaller.ViewModel
         /// </summary>
         public const string StartPagePropertyName = "StartPage";
 
-        private int _startPage = 3;
+        private int _startPage = 0;
 
         /// <summary>
         /// Sets and gets the StartPage property.
@@ -352,6 +352,62 @@ namespace AssemblyInstaller.ViewModel
         }
 
         /// <summary>
+        /// The <see cref="Search" /> property's name.
+        /// </summary>
+        public const string SearchPropertyName = "Search";
+
+        private string _search = "";
+
+        /// <summary>
+        /// Sets and gets the Search property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public string Search
+        {
+            get
+            {
+                return _search;
+            }
+            set
+            {
+                if (_search == value)
+                {
+                    return;
+                }
+
+                Console.WriteLine(value);
+
+                RaisePropertyChanging(() => Search);
+                _search = value;
+                RaisePropertyChanged(() => Search);
+
+                if (value.Length > 1 || value.Length == 0)
+                {
+                    CollectionViewSource.GetDefaultView(Injection).Filter = a =>
+                    {
+                        var assembly = (a as AssemblyEntity);
+                        return assembly == null || assembly.Name.Contains(Search, StringComparison.OrdinalIgnoreCase);
+                    };
+                    CollectionViewSource.GetDefaultView(Champion).Filter = a =>
+                    {
+                        var assembly = (a as AssemblyEntity);
+                        return assembly == null || assembly.Name.Contains(Search, StringComparison.OrdinalIgnoreCase);
+                    };
+                    CollectionViewSource.GetDefaultView(Utility).Filter = a =>
+                    {
+                        var assembly = (a as AssemblyEntity);
+                        return assembly == null || assembly.Name.Contains(Search, StringComparison.OrdinalIgnoreCase);
+                    };
+                    CollectionViewSource.GetDefaultView(Library).Filter = a =>
+                    {
+                        var assembly = (a as AssemblyEntity);
+                        return assembly == null || assembly.Name.Contains(Search, StringComparison.OrdinalIgnoreCase);
+                    };
+                }
+            }
+        }
+
+        /// <summary>
         /// The <see cref="Log" /> property's name.
         /// </summary>
         public const string LogPropertyName = "Log";
@@ -438,9 +494,6 @@ namespace AssemblyInstaller.ViewModel
                                                   var collection = new ObservableCollection<AssemblyEntity>();
                                                   switch (StartPage)
                                                   {
-                                                      case 0:
-                                                          collection = Injection;
-                                                          break;
                                                       case 1:
                                                           collection = Champion;
                                                           break;
@@ -460,6 +513,13 @@ namespace AssemblyInstaller.ViewModel
                                               }
                                               else
                                               {
+                                                  if (StartPage == 0)
+                                                  {
+                                                      p.IsInjected = true;
+                                                      Injector.LoadAssembly(p.AssemblyName + ".exe");
+                                                      return;
+                                                  }
+
                                                   if (!_multiSelect.Contains(p))
                                                   {
                                                       p.IsChecked = true;
@@ -506,14 +566,29 @@ namespace AssemblyInstaller.ViewModel
 
                                                   foreach (var c in collection)
                                                   {
-                                                      c.IsChecked = false;
+                                                      if (StartPage == 0)
+                                                          c.IsInjected = false;
+                                                      else
+                                                          c.IsChecked = false;
                                                       _multiSelect.Remove(c);
                                                   }
                                               }
                                               else
                                               {
+                                                  if (StartPage == 0)
+                                                  {
+                                                      p.IsInjected = false;
+                                                      Injector.UnloadAssembly(p.AssemblyName + ".exe");
+                                                      return;
+                                                  }
+
                                                   if (_multiSelect.Contains(p))
                                                       _multiSelect.Remove(p);
+
+                                                  if (StartPage == 0)
+                                                      p.IsInjected = false;
+                                                  else
+                                                      p.IsChecked = false;
                                               }
 
                                               _multiSelect = new ObservableCollection<AssemblyEntity>(_multiSelect.Distinct());
@@ -625,34 +700,90 @@ namespace AssemblyInstaller.ViewModel
                         {
                             var champ = Champion.FirstOrDefault(a => a.Id == guid);
                             var util = Utility.FirstOrDefault(a => a.Id == guid);
+                            var lib = Library.FirstOrDefault(a => a.Id == guid);
 
-                            if(champ != null)
+                            if (champ != null)
+                            {
+                                Update.Add(champ);
                                 Injection.Add(champ);
+                                champ.State = "Installed";
+                            }
 
                             if (util != null)
+                            {
+                                Update.Add(util);
                                 Injection.Add(util);
+                                util.State = "Installed";
+                            }
+
+                            if (lib != null)
+                            {
+                                Update.Add(lib);
+                                lib.State = "Installed";
+                            }
+                        }
+
+                        foreach (var a in Update)
+                        {
+                            a.LocalVersion = Github.LocalVersion(a);
                         }
 
                         var sort = new SortDescription("Name", ListSortDirection.Ascending);
-                        var v = CollectionViewSource.GetDefaultView(Champion);
+
+                        var v = CollectionViewSource.GetDefaultView(Injection);
+                        v.GroupDescriptions.Add(new PropertyGroupDescription("Category"));
+                        v.SortDescriptions.Add(sort);
+                        v.ActiveLiveSorting(new[] { "Name" });
+                        v.ActiveLiveGrouping(new[] { "Category" });
+                        v.ActiveLiveFiltering(new[] { "Name" });
+
+                        v = CollectionViewSource.GetDefaultView(Champion);
                         v.GroupDescriptions.Add(new PropertyGroupDescription("State"));
                         v.SortDescriptions.Add(sort);
+                        v.ActiveLiveSorting(new[] { "Name" });
+                        v.ActiveLiveGrouping(new[] { "State" });
+                        v.ActiveLiveFiltering(new[] { "Name" });
+
                         v = CollectionViewSource.GetDefaultView(Utility);
                         v.GroupDescriptions.Add(new PropertyGroupDescription("State"));
                         v.SortDescriptions.Add(sort);
+                        v.ActiveLiveSorting(new[] { "Name" });
+                        v.ActiveLiveGrouping(new[] { "State" });
+                        v.ActiveLiveFiltering(new[] { "Name" });
+
                         v = CollectionViewSource.GetDefaultView(Library);
                         v.GroupDescriptions.Add(new PropertyGroupDescription("State"));
                         v.SortDescriptions.Add(sort);
+                        v.ActiveLiveSorting(new[] { "Name" });
+                        v.ActiveLiveGrouping(new[] { "State" });
+                        v.ActiveLiveFiltering(new[] { "Name" });
+
                         v = CollectionViewSource.GetDefaultView(Update);
                         v.GroupDescriptions.Add(new PropertyGroupDescription("Category"));
                         v.SortDescriptions.Add(sort);
+                        v.ActiveLiveSorting(new[] { "Name" });
+                        v.ActiveLiveGrouping(new[] { "Category" });
+                        v.ActiveLiveFiltering(new[] { "Name" });
                     });
-
-                    Injector.StateHandler += (sender, args) => LogFile.Write("Injector", args.State.ToString());
-                    Injector.Start();
 
                     if (Injector.GetLeagueProcess() == null)
                         ApplicationUpdate();
+
+                    Injector.StateHandler += (sender, args) =>
+                    {
+                        switch (args.State)
+                        {
+                            case Injector.InjectorState.Injected:
+                                foreach (var assembly in Injection.Where(a => a.IsInjected))
+                                {
+                                    Thread.Sleep(100);
+                                    Injector.LoadAssembly(assembly.AssemblyName + ".exe");
+                                }
+                                break;
+                        }
+                    };
+
+                    Injector.Start();
                 }
                 catch (Exception e)
                 {
@@ -773,13 +904,30 @@ namespace AssemblyInstaller.ViewModel
                 IsOverlay = true;
                 try
                 {
+                    Progress = 0;
+                    ProgressMax = 3;
+                    OverlayText = string.Format("{0}/{1} Downloading", Progress, ProgressMax);
                     Github.Download(new[] { assembly });
-
+                    Progress++;
+                    OverlayText = string.Format("{0}/{1} Compile", Progress, ProgressMax);
                     if (assembly.Compile())
                     {
+                        Progress++;
+                        OverlayText = string.Format("{0}/{1} Copy", Progress, ProgressMax);
                         assembly.Copy();
+                        Progress++;
                         assembly.State = "Installed";
-                        DispatcherHelper.CheckBeginInvokeOnUI(() => Update.Add(assembly));
+                        OverlayText = string.Format("{0}/{1} Complete", Progress, ProgressMax);
+                        DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                        {
+                            if (assembly.OutputType == "Exe")
+                                Injection.Add(assembly);
+
+                            if (!Config.InstallerConfig.Installed.Contains(assembly.Id))
+                                Config.InstallerConfig.Installed.Add(assembly.Id);
+
+                            Update.Add(assembly);
+                        });
                         DialogService.ShowMessage("Install", "Install Complete", MessageDialogStyle.Affirmative);
                     }
                     else
@@ -794,21 +942,21 @@ namespace AssemblyInstaller.ViewModel
                     DialogService.ShowMessage("Error", e.ToString(), MessageDialogStyle.Affirmative);
                 }
 
-                DispatcherHelper.CheckBeginInvokeOnUI(() =>
-                {
-                    switch (StartPage)
-                    {
-                        case 1:
-                            CollectionViewSource.GetDefaultView(Champion).Refresh();
-                            break;
-                        case 2:
-                            CollectionViewSource.GetDefaultView(Utility).Refresh();
-                            break;
-                        case 3:
-                            CollectionViewSource.GetDefaultView(Library).Refresh();
-                            break;
-                    }
-                });
+                //DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                //{
+                //    switch (StartPage)
+                //    {
+                //        case 1:
+                //            CollectionViewSource.GetDefaultView(Champion).Refresh();
+                //            break;
+                //        case 2:
+                //            CollectionViewSource.GetDefaultView(Utility).Refresh();
+                //            break;
+                //        case 3:
+                //            CollectionViewSource.GetDefaultView(Library).Refresh();
+                //            break;
+                //    }
+                //});
 
                 IsOverlay = false;
             });
@@ -821,50 +969,68 @@ namespace AssemblyInstaller.ViewModel
                 IsOverlay = true;
                 try
                 {
-                    var updates = Github.VersionCheck(_multiSelect);
-                    Github.Download(updates);
+                    Progress = 0;
+                    ProgressMax = 1;
 
+                    OverlayText = string.Format("{0}/{1} Download", Progress, ProgressMax);
+                    Github.Download(_multiSelect);
+                    Progress++;
+
+                    var broken = 0;
                     var complete = 0;
-                    foreach (var assembly in updates)
+                    foreach (var assembly in _multiSelect)
                     {
+                        OverlayText = string.Format("{0}/{1} Compile", Progress, ProgressMax);
                         if (assembly.Compile())
                         {
+                            OverlayText = string.Format("{0}/{1} Copy", Progress, ProgressMax);
                             assembly.Copy();
+
                             assembly.State = "Installed";
                             AssemblyEntity assembly1 = assembly;
-                            DispatcherHelper.CheckBeginInvokeOnUI(() => Update.Add(assembly1));
+                            DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                            {
+                                if (assembly1.OutputType == "Exe")
+                                    Injection.Add(assembly1);
+
+                                if (!Config.InstallerConfig.Installed.Contains(assembly1.Id))
+                                    Config.InstallerConfig.Installed.Add(assembly1.Id);
+
+                                Update.Add(assembly1);
+                            });
                             complete++;
                         }
                         else
                         {
                             assembly.State = "Broken";
+                            broken++;
                         }
                     }
+                    Progress++;
+                    OverlayText = string.Format("{0}/{1} Complete", Progress, ProgressMax);
 
-                    DispatcherHelper.CheckBeginInvokeOnUI(() =>
-                    {
-                        lock (_multiSelect)
-                        {
-                            foreach (var entity in _multiSelect)
-                            {
-                                entity.IsChecked = false;
-                            }
-
-                            _multiSelect.Clear();
-                        }
-                    });
+                    //DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                    //{
+                    //    lock (_multiSelect)
+                    //    {
+                    //        foreach (var entity in _multiSelect)
+                    //        {
+                    //            entity.IsChecked = false;
+                    //        }
+                    //    }
+                    //    _multiSelect.Clear();
+                    //});
 
                     Progress = ProgressMax;
-                    OverlayText = "Complete";
-                    DialogService.ShowMessage("Install", "Install Complete\n\n" + complete + " Assemblies Installed.", MessageDialogStyle.Affirmative);
+                    DialogService.ShowMessage("Install", "Install Complete\n\n" + complete + " Assemblies Installed.\n" + broken + " Assemblies Broken.", MessageDialogStyle.Affirmative);
 
-                    DispatcherHelper.CheckBeginInvokeOnUI(() =>
-                    {
-                        CollectionViewSource.GetDefaultView(Champion).Refresh();
-                        CollectionViewSource.GetDefaultView(Utility).Refresh();
-                        CollectionViewSource.GetDefaultView(Library).Refresh();
-                        CollectionViewSource.GetDefaultView(Update).Refresh();
-                    });
+                    //DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                    //{
+                    //    CollectionViewSource.GetDefaultView(Champion).Refresh();
+                    //    CollectionViewSource.GetDefaultView(Utility).Refresh();
+                    //    CollectionViewSource.GetDefaultView(Library).Refresh();
+                    //    CollectionViewSource.GetDefaultView(Update).Refresh();
+                    //});
                 }
                 catch (Exception e)
                 {
@@ -912,24 +1078,24 @@ namespace AssemblyInstaller.ViewModel
                     DialogService.ShowMessage("Error", e.ToString(), MessageDialogStyle.Affirmative);
                 }
 
-                DispatcherHelper.CheckBeginInvokeOnUI(() =>
-                {
-                    switch (StartPage)
-                    {
-                        case 1:
-                            CollectionViewSource.GetDefaultView(Champion).Refresh();
-                            break;
-                        case 2:
-                            CollectionViewSource.GetDefaultView(Utility).Refresh();
-                            break;
-                        case 3:
-                            CollectionViewSource.GetDefaultView(Library).Refresh();
-                            break;
-                        case 4:
-                            CollectionViewSource.GetDefaultView(Update).Refresh();
-                            break;
-                    }
-                });
+                //DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                //{
+                //    switch (StartPage)
+                //    {
+                //        case 1:
+                //            CollectionViewSource.GetDefaultView(Champion).Refresh();
+                //            break;
+                //        case 2:
+                //            CollectionViewSource.GetDefaultView(Utility).Refresh();
+                //            break;
+                //        case 3:
+                //            CollectionViewSource.GetDefaultView(Library).Refresh();
+                //            break;
+                //        case 4:
+                //            CollectionViewSource.GetDefaultView(Update).Refresh();
+                //            break;
+                //    }
+                //});
 
                 IsOverlay = false;
             });

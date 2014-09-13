@@ -81,7 +81,20 @@ namespace AssemblyInstaller.Model
                 Set(() => IsChecked, ref _isChecked, value);
             }
         }
+        [JsonIgnore]
+        public bool IsInjected
+        {
+            get
+            {
+                return _isInjected;
+            }
+            set
+            {
+                Set(() => IsInjected, ref _isInjected, value);
+            }
+        }
 
+        private bool _isInjected;
         private bool _isChecked;
         private string _state;
         private long _repositroyVersion;
@@ -98,7 +111,7 @@ namespace AssemblyInstaller.Model
             {
                 Configuration = "Release",
                 PlatformTarget = "x86",
-                ReferencesPath = Path.Combine(Settings.Default.LeagueSharpPath, "Assemblies", "System"),
+                ReferencesPath = Config.SystemDirectory,
                 UpdateReferences = true,
                 PostbuildEvent = true,
                 PrebuildEvent = true
@@ -165,7 +178,10 @@ namespace AssemblyInstaller.Model
         {
             try
             {
-                var file = Directory.GetFiles(Path.Combine(Config.RepositoriesDirectory, Developer, Repositroy, "trunk"), AssemblyName, SearchOption.AllDirectories).FirstOrDefault();
+                var file =
+                    Directory.GetFiles(Path.Combine(Config.RepositoriesDirectory, Developer, Repositroy, "trunk"),
+                    AssemblyName + OutputType == "Exe" ? ".exe" : ".dll", SearchOption.AllDirectories).FirstOrDefault();
+
 
                 if (file != null && File.Exists(file))
                 {
@@ -182,7 +198,7 @@ namespace AssemblyInstaller.Model
 
                     if (OutputType == "Exe")
                     {
-                        var newFile = Path.Combine(Config.SystemDirectory, AssemblyName + ".exe");
+                        var newFile = Path.Combine(Config.AssembliesDirectory, AssemblyName + ".exe");
                         if (File.Exists(newFile))
                             File.Delete(newFile);
                         File.Move(file, newFile);

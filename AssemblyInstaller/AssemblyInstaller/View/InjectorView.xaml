@@ -5,7 +5,8 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
     xmlns:Custom="http://www.galasoft.ch/mvvmlight"
-	mc:Ignorable="d"
+    xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+    mc:Ignorable="d"
 	x:Class="AssemblyInstaller.View.InjectorView"
 	d:DesignWidth="993" d:DesignHeight="600.277">
 
@@ -28,8 +29,36 @@
 			FontSize="16" 
 			FontWeight="Medium" 
 			IsReadOnly="False"
-			SelectedItem="{Binding Main.SelectedAssembly, Source={StaticResource Locator}}">
+			SelectedItem="{Binding Main.SelectedAssembly, Source={StaticResource Locator}}" Margin="0,36,0,0" BorderThickness="0,1,0,0">
 
+            <DataGrid.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Name}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                    <GroupStyle.ContainerStyle>
+                        <Style TargetType="{x:Type GroupItem}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                                        <Expander IsExpanded="True">
+                                            <Expander.Header>
+                                                <TextBlock Text="{Binding Name}" />
+                                            </Expander.Header>
+                                            <ItemsPresenter />
+                                        </Expander>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </GroupStyle.ContainerStyle>
+                </GroupStyle>
+            </DataGrid.GroupStyle>
+            
             <DataGrid.Columns>
 
                 <DataGridTemplateColumn MinWidth="50" >
@@ -49,7 +78,7 @@
 					</DataGridTemplateColumn.HeaderTemplate>
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<CheckBox IsChecked="{Binding IsChecked}" Margin="10,0,0,0">
+							<CheckBox IsChecked="{Binding IsInjected}" Margin="10,0,0,0">
 								<i:Interaction.Triggers>
 									<i:EventTrigger EventName="Checked">
 										<Custom:EventToCommand Command="{Binding Main.CheckAssemblyCommand, Mode=OneWay, Source={StaticResource Locator}}" CommandParameter="{Binding Main.SelectedAssembly, Source={StaticResource Locator}}"/>
@@ -76,5 +105,13 @@
 					MinWidth="200" />
 			</DataGrid.Columns>
 		</DataGrid>
+        <TextBox 
+		    Text="{Binding Main.Search, UpdateSourceTrigger=PropertyChanged, Source={StaticResource Locator}}"
+		    HorizontalAlignment="Left" 
+		    Height="23" Margin="5,5,0,0" 
+		    TextWrapping="Wrap" 
+		    VerticalAlignment="Top" 
+		    Width="250" 
+		    controls:TextboxHelper.Watermark="Search"/>
 	</Grid>
 </UserControl>

@@ -3,8 +3,9 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 	xmlns:command="http://www.galasoft.ch/mvvmlight"
+	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+	xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
 	mc:Ignorable="d"
 	x:Class="AssemblyInstaller.View.AssemblyView"
 	d:DesignWidth="993" d:DesignHeight="600.277">
@@ -17,8 +18,8 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-	<Grid x:Name="LayoutRoot">
-		<DataGrid 
+    <Grid x:Name="LayoutRoot">
+        <DataGrid 
 			x:Name="DataGrid"
 			ItemsSource="{Binding}" 
 			AutoGenerateColumns="False" 
@@ -28,117 +29,113 @@
 			FontSize="16" 
 			FontWeight="Medium" 
 			IsReadOnly="False"
-			SelectedItem="{Binding Main.SelectedAssembly, Source={StaticResource Locator}}">
-			<DataGrid.RowDetailsTemplate>
-				<DataTemplate>
-					<TextBlock Text="{Binding Description}" Margin="10" />
-				</DataTemplate>
-			</DataGrid.RowDetailsTemplate>
-			<DataGrid.GroupStyle>
-				<GroupStyle>
-					<GroupStyle.HeaderTemplate>
-						<DataTemplate>
-							<StackPanel>
-								<TextBlock Text="{Binding Name}" />
-							</StackPanel>
-						</DataTemplate>
-					</GroupStyle.HeaderTemplate>
-					<GroupStyle.ContainerStyle>
-						<Style TargetType="{x:Type GroupItem}">
-							<Setter Property="Template">
-								<Setter.Value>
-									<ControlTemplate TargetType="{x:Type GroupItem}">
-										<Expander IsExpanded="True">
-											<Expander.Header>
-												<TextBlock Text="{Binding Name}" />
-											</Expander.Header>
-											<ItemsPresenter />
-										</Expander>
-									</ControlTemplate>
-								</Setter.Value>
-							</Setter>
-						</Style>
-					</GroupStyle.ContainerStyle>
-				</GroupStyle>
-			</DataGrid.GroupStyle>
-			<DataGrid.ContextMenu>
-				<ContextMenu>
-					<MenuItem 
+			SelectedItem="{Binding Main.SelectedAssembly, Source={StaticResource Locator}}" Margin="0,36,0,0" BorderThickness="0,1,0,0">
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Description}" Margin="10" />
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>
+            <DataGrid.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Name}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                    <GroupStyle.ContainerStyle>
+                        <Style TargetType="{x:Type GroupItem}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                                        <Expander IsExpanded="True">
+                                            <Expander.Header>
+                                                <TextBlock Text="{Binding Name}" />
+                                            </Expander.Header>
+                                            <ItemsPresenter />
+                                        </Expander>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </GroupStyle.ContainerStyle>
+                </GroupStyle>
+            </DataGrid.GroupStyle>
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem 
 						Header="Install" 
 						Command="{Binding Main.InstallCommand, Mode=OneWay, Source={StaticResource Locator}}"/>
-					<MenuItem 
+                    <MenuItem 
 						Header="Install Selected" 
 						Command="{Binding Main.InstallSelectedCommand, Mode=OneWay, Source={StaticResource Locator}}"/>
-					<MenuItem 
+                    <MenuItem 
 						Header="Delete" 
 						Command="{Binding Main.DeleteCommand, Mode=OneWay, Source={StaticResource Locator}}"/>
-				</ContextMenu>
-			</DataGrid.ContextMenu>
-			<DataGrid.Columns>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+            <DataGrid.Columns>
 
-				<DataGridTemplateColumn  
-					Header="Rating" 
-					MinWidth="170">
-					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate>
-							<Image 
-								Source="{Binding Rating}" 
-								Stretch="None" />
-						</DataTemplate>
-					</DataGridTemplateColumn.CellTemplate>
-				</DataGridTemplateColumn>
-
-				<DataGridTemplateColumn
+                <DataGridTemplateColumn
 					Width="SizeToCells" 
 					MinWidth="40" >
-					<DataGridTemplateColumn.HeaderTemplate>
-						<DataTemplate>
-							<CheckBox>
-								<i:Interaction.Triggers>
-									<i:EventTrigger EventName="Checked">
-										<command:EventToCommand Command="{Binding Main.CheckAssemblyCommand, Mode=OneWay, Source={StaticResource Locator}}"/>
-									</i:EventTrigger>
-									<i:EventTrigger EventName="Unchecked">
-										<command:EventToCommand Command="{Binding Main.UncheckAssemblyCommand, Mode=OneWay, Source={StaticResource Locator}}"/>
-									</i:EventTrigger>
-								</i:Interaction.Triggers>
-							</CheckBox>
-						</DataTemplate>
-					</DataGridTemplateColumn.HeaderTemplate>
-					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate>
-							<CheckBox IsChecked="{Binding IsChecked}">
-								<i:Interaction.Triggers>
-									<i:EventTrigger EventName="Checked">
-										<command:EventToCommand Command="{Binding Main.CheckAssemblyCommand, Mode=OneWay, Source={StaticResource Locator}}" CommandParameter="{Binding Main.SelectedAssembly, Source={StaticResource Locator}}"/>
-									</i:EventTrigger>
-									<i:EventTrigger EventName="Unchecked">
-										<command:EventToCommand Command="{Binding Main.UncheckAssemblyCommand, Mode=OneWay, Source={StaticResource Locator}}" CommandParameter="{Binding Main.SelectedAssembly, Source={StaticResource Locator}}"/>
-									</i:EventTrigger>
-								</i:Interaction.Triggers>
-							</CheckBox>
-						</DataTemplate>
-					</DataGridTemplateColumn.CellTemplate>
-				</DataGridTemplateColumn>
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <CheckBox>
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Checked">
+                                        <command:EventToCommand Command="{Binding Main.CheckAssemblyCommand, Mode=OneWay, Source={StaticResource Locator}}"/>
+                                    </i:EventTrigger>
+                                    <i:EventTrigger EventName="Unchecked">
+                                        <command:EventToCommand Command="{Binding Main.UncheckAssemblyCommand, Mode=OneWay, Source={StaticResource Locator}}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </CheckBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding IsChecked}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Checked">
+                                        <command:EventToCommand Command="{Binding Main.CheckAssemblyCommand, Mode=OneWay, Source={StaticResource Locator}}" CommandParameter="{Binding Main.SelectedAssembly, Source={StaticResource Locator}}"/>
+                                    </i:EventTrigger>
+                                    <i:EventTrigger EventName="Unchecked">
+                                        <command:EventToCommand Command="{Binding Main.UncheckAssemblyCommand, Mode=OneWay, Source={StaticResource Locator}}" CommandParameter="{Binding Main.SelectedAssembly, Source={StaticResource Locator}}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </CheckBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
 
-				<DataGridTextColumn 
+                <DataGridTextColumn 
 					Width="SizeToCells" 
 					Header="State" 
 					Binding="{Binding State}" 
 					MinWidth="150" />
-                
-				<DataGridTextColumn 
+
+                <DataGridTextColumn 
 					Width="SizeToCells" 
 					Header="Developer" 
 					Binding="{Binding Developer}" 
 					MinWidth="150" />
-                
-				<DataGridTextColumn 
+
+                <DataGridTextColumn 
 					Width="*" 
 					Header="Name" 
 					Binding="{Binding Name}" 
 					MinWidth="200" />
-			</DataGrid.Columns>
-		</DataGrid>
-	</Grid>
+            </DataGrid.Columns>
+        </DataGrid>
+        <TextBox 
+		    Text="{Binding Main.Search, UpdateSourceTrigger=PropertyChanged, Source={StaticResource Locator}}"
+		    HorizontalAlignment="Left" 
+		    Height="23" Margin="5,5,0,0" 
+		    TextWrapping="Wrap" 
+		    VerticalAlignment="Top" 
+		    Width="250" 
+		    controls:TextboxHelper.Watermark="Search"/>
+    </Grid>
 </UserControl>

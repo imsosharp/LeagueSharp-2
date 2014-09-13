@@ -22,17 +22,5 @@ namespace AssemblyInstaller.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string LeagueSharpPath {
-            get {
-                return ((string)(this["LeagueSharpPath"]));
-            }
-            set {
-                this["LeagueSharpPath"] = value;
-            }
-        }
     }
 }

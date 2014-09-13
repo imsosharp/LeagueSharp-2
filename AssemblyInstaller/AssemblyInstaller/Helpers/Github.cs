@@ -7,6 +7,8 @@ using AssemblyInstaller.Model;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using MahApps.Metro.Controls.Dialogs;
+using Microsoft.Build.Evaluation;
+using Microsoft.Build.Logging;
 using SharpSvn;
 
 namespace AssemblyInstaller.Helpers
@@ -151,14 +153,21 @@ namespace AssemblyInstaller.Helpers
         {
             project.Change();
 
+            var logFile = Path.Combine(Config.LogDirectory, "Compile.txt");
+            var fileLogger = new FileLogger { Parameters = @"logfile=" + logFile, ShowSummary = true };
+            ProjectCollection.GlobalProjectCollection.RegisterLogger(fileLogger);
+
+
             if (project.Project.Build())
             {
                 Console.WriteLine("Compile: " + project.Project.FullPath + " - OK");
+                ProjectCollection.GlobalProjectCollection.UnregisterAllLoggers();
                 return project.GetOutputFilePath();
             }
             else
             {
                 Console.WriteLine("Compile: " + project.Project.FullPath + " - FAILED");
+                ProjectCollection.GlobalProjectCollection.UnregisterAllLoggers();
                 return null;
             }
         }
