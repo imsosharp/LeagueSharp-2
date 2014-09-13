@@ -5,24 +5,24 @@ namespace AssemblyInstaller.Design
 {
     public class DesignDataService : IDataService
     {
-        public ObservableCollectionEx<AssemblyEntity> GetChampionData()
+        public ObservableCollection<AssemblyEntity> GetChampionData()
         {
-            return new ObservableCollectionEx<AssemblyEntity>();
+            return new ObservableCollection<AssemblyEntity>();
         }
 
-        public ObservableCollectionEx<AssemblyEntity> GetUtilityData()
+        public ObservableCollection<AssemblyEntity> GetUtilityData()
         {
-            return new ObservableCollectionEx<AssemblyEntity>();
+            return new ObservableCollection<AssemblyEntity>();
         }
 
-        public ObservableCollectionEx<AssemblyEntity> GetLibraryData()
+        public ObservableCollection<AssemblyEntity> GetLibraryData()
         {
-            return new ObservableCollectionEx<AssemblyEntity>();
+            return new ObservableCollection<AssemblyEntity>();
         }
 
-        public ObservableCollectionEx<LogEntity> GetLogData()
+        public ObservableCollection<LogEntity> GetLogData()
         {
-            return new ObservableCollectionEx<LogEntity>();
+            return new ObservableCollection<LogEntity>();
         }
 
 

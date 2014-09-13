@@ -1,16 +1,86 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using AssemblyInstaller.Model;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using MahApps.Metro.Controls.Dialogs;
+using Microsoft.Build.Evaluation;
+using Microsoft.Build.Logging;
 using SharpSvn;
 
 namespace AssemblyInstaller.Helpers
 {
     internal static class Github
     {
+        public static List<AssemblyEntity> VersionCheck(IList<AssemblyEntity> list)
+        {
+            var updates = new List<AssemblyEntity>();
+
+            Parallel.ForEach(list, assembly =>
+            {
+                try
+                {
+                    var old = assembly.State;
+                    LogFile.Write(assembly.Name, "Version Check");
+                    assembly.State = "Version Check";
+                    assembly.LocalVersion = LocalVersion(assembly);
+                    assembly.RepositroyVersion = RepositorieVersion(assembly);
+
+                    if (assembly.LocalVersion == 0 || assembly.LocalVersion != assembly.RepositroyVersion)
+                    {
+                        updates.Add(assembly);
+                    }
+
+                    assembly.State = old;
+                }
+                catch (Exception e)
+                {
+                    DialogService.ShowMessage("VersionCheck - " + assembly.Name, e.Message, MessageDialogStyle.Affirmative);
+                }
+            });
+
+            return updates;
+        }
+
+        public static void Download(IList<AssemblyEntity> list)
+        {
+            var complete = new List<String>();
+
+            Parallel.ForEach(list, repository =>
+            {
+                try
+                {
+                    var download = false;
+
+                    lock (complete)
+                    {
+                        if (!complete.Contains(repository.Url))
+                        {
+                            complete.Add(repository.Url);
+                            download = true;
+                        }
+                    }
+
+                    if (download)
+                    {
+                        var old = repository.State;
+                        LogFile.Write(repository.Name, "Downloading");
+                        repository.State = "Downloading";
+                        Update(repository.Url);
+                        repository.State = old;
+                        repository.LocalVersion = LocalVersion(repository);
+                    }
+                }
+                catch (Exception e)
+                {
+                    DialogService.ShowMessage("Download - " + repository.Name, e.Message, MessageDialogStyle.Affirmative);
+                }
+            });
+        }
+
         public static void Update(string url)
         {
             var match = Regex.Match(url, @"(?i:https://)(?<server>[^\s/]*)/(?<user>[^\s/]*)/(?<repo>[^\s/]*)");
@@ -83,14 +153,21 @@ namespace AssemblyInstaller.Helpers
         {
             project.Change();
 
+            var logFile = Path.Combine(Config.LogDirectory, "Compile.txt");
+            var fileLogger = new FileLogger { Parameters = @"logfile=" + logFile, ShowSummary = true };
+            ProjectCollection.GlobalProjectCollection.RegisterLogger(fileLogger);
+
+
             if (project.Project.Build())
             {
                 Console.WriteLine("Compile: " + project.Project.FullPath + " - OK");
+                ProjectCollection.GlobalProjectCollection.UnregisterAllLoggers();
                 return project.GetOutputFilePath();
             }
             else
             {
                 Console.WriteLine("Compile: " + project.Project.FullPath + " - FAILED");
+                ProjectCollection.GlobalProjectCollection.UnregisterAllLoggers();
                 return null;
             }
         }

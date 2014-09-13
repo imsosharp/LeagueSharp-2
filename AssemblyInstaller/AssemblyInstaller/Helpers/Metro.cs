@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,6 +15,50 @@ namespace AssemblyInstaller.Helpers
 {
     public static class Extensions
     {
+        public static void ActiveLiveSorting(this ICollectionView collectionView, IList<string> involvedProperties)
+        {
+            var collectionViewLiveShaping = collectionView as ICollectionViewLiveShaping;
+            if (collectionViewLiveShaping == null) return;
+            if (collectionViewLiveShaping.CanChangeLiveSorting)
+            {
+                collectionViewLiveShaping.LiveSortingProperties.Clear();
+                foreach (string propName in involvedProperties)
+                    collectionViewLiveShaping.LiveSortingProperties.Add(propName);
+                collectionViewLiveShaping.IsLiveSorting = true;
+            }
+        }
+
+        public static void ActiveLiveGrouping(this ICollectionView collectionView, IList<string> involvedProperties)
+        {
+            var collectionViewLiveShaping = collectionView as ICollectionViewLiveShaping;
+            if (collectionViewLiveShaping == null) return;
+            if (collectionViewLiveShaping.CanChangeLiveGrouping)
+            {
+                collectionViewLiveShaping.LiveGroupingProperties.Clear();
+                foreach (string propName in involvedProperties)
+                    collectionViewLiveShaping.LiveGroupingProperties.Add(propName);
+                collectionViewLiveShaping.IsLiveGrouping = true;
+            }
+        }
+
+        public static void ActiveLiveFiltering(this ICollectionView collectionView, IList<string> involvedProperties)
+        {
+            var collectionViewLiveShaping = collectionView as ICollectionViewLiveShaping;
+            if (collectionViewLiveShaping == null) return;
+            if (collectionViewLiveShaping.CanChangeLiveFiltering)
+            {
+                collectionViewLiveShaping.LiveFilteringProperties.Clear();
+                foreach (string propName in involvedProperties)
+                    collectionViewLiveShaping.LiveFilteringProperties.Add(propName);
+                collectionViewLiveShaping.IsLiveFiltering = true;
+            }
+        }
+
+        public static bool Contains(this string source, string toCheck, StringComparison comp)
+        {
+            return source.IndexOf(toCheck, comp) >= 0;
+        }
+
         public static void AutoResizeColumnWidths(this DataGrid dataGrid, params DataGridLength[] cols)
         {
             if (cols.Length > dataGrid.Columns.Count)
