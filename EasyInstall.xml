@@ -1,0 +1,1102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfLeagueSharpAssembly xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <LeagueSharpAssembly>
+        <DisplayName>Aatrox</DisplayName>
+        <Name>Aatrox</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\8BAD3F91\trunk\Aatrox\Aatrox.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Areidz/Leaguesharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>AttackDrawer</DisplayName>
+        <Name>AttackDrawer</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\8BAD3F91\trunk\AttackDrawer\AttackDrawer.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Areidz/Leaguesharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Blitzcrank</DisplayName>
+        <Name>Blitzcrank</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\8BAD3F91\trunk\Blitzcrank\Blitzcrank.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Areidz/Leaguesharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>SimpleUltLeveler</DisplayName>
+        <Name>SimpleUltLeveler</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\8BAD3F91\trunk\SimpleUltLeveler\SimpleUltLeveler.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Areidz/Leaguesharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Kassadin</DisplayName>
+        <Name>Kassadin</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\F5C6196D\trunk\Kassadin\Kassadin.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/DangerousMindLoL/league-sharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>UltimateCarry</DisplayName>
+        <Name>UltimateCarry</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\8E9B8FEB\trunk\LexxersAIOCarry\UltimateCarry.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/LXMedia1/UltimateCarry2</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>KarthusSharp</DisplayName>
+        <Name>KarthusSharp</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\367DEEFB\trunk\KarthusSharp\KarthusSharp.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Beaving/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Alistar</DisplayName>
+        <Name>Alistar</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\17C758A3\trunk\Alistar\Alistar.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/OnlyTheBest/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Leona</DisplayName>
+        <Name>Leona</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\17C758A3\trunk\Leona\Leona.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/OnlyTheBest/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>SigmaCass</DisplayName>
+        <Name>SigmaCass</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\6155DE2\trunk\SigmaCass\SigmaCass.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/fueledbyflux/LeagueSharp-Public</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>AutoPotion</DisplayName>
+        <Name>AutoPotion</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\81FEC7DB\trunk\AutoPotion\AutoPotion.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Lizzaran/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>CloneRevealer</DisplayName>
+        <Name>CloneRevealer</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\81FEC7DB\trunk\CloneRevealer\CloneRevealer.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Lizzaran/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Igniter</DisplayName>
+        <Name>Igniter</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\81FEC7DB\trunk\Igniter\Igniter.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Lizzaran/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>JungleTimers</DisplayName>
+        <Name>JungleTimers</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\81FEC7DB\trunk\JungleTimers\JungleTimers.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Lizzaran/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>LasthitMarker</DisplayName>
+        <Name>LasthitMarker</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\81FEC7DB\trunk\LasthitMarker\LasthitMarker.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Lizzaran/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>MapHack</DisplayName>
+        <Name>MapHack</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\81FEC7DB\trunk\MapHack\MapHack.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Lizzaran/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>PacketLogger</DisplayName>
+        <Name>PacketLogger</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\81FEC7DB\trunk\PacketLogger\PacketLogger.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Lizzaran/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>QuickSmite</DisplayName>
+        <Name>QuickSmite</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\81FEC7DB\trunk\QuickSmite\QuickSmite.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Lizzaran/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>SnakeSharp</DisplayName>
+        <Name>SnakeSharp</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\81FEC7DB\trunk\SnakeSharp\SnakeSharp.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Lizzaran/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>ToasterLoading</DisplayName>
+        <Name>ToasterLoading</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\81FEC7DB\trunk\ToasterLoading\ToasterLoading.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Lizzaran/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>UniversalLeveler</DisplayName>
+        <Name>UniversalLeveler</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\81FEC7DB\trunk\UniversalLeveler\UniversalLeveler.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Lizzaran/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>SigmaFizz</DisplayName>
+        <Name>SigmaFizz</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\6155DE2\trunk\SigmaFizz\SigmaFizz.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/fueledbyflux/LeagueSharp-Public</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>BankPlank</DisplayName>
+        <Name>BankPlank</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\46524C29\trunk\BankPlank\BankPlank\BankPlank.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/blm95/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>hi im gosu</DisplayName>
+        <Name>hi im gosu</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\46524C29\trunk\hi im gosu\hi im gosu\hi im gosu.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/blm95/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Nasus the doG</DisplayName>
+        <Name>Nasus the doG</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\46524C29\trunk\Nasus the doG\Nasus the doG\Nasus the doG.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/blm95/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Olaf</DisplayName>
+        <Name>Olaf</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\46524C29\trunk\Olaf\Olaf\Olaf.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/blm95/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>WardPlacer2</DisplayName>
+        <Name>WardPlacer2</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\46524C29\trunk\WardPlacer2\WardPlacer2\WardPlacer2.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/blm95/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Annie</DisplayName>
+        <Name>Annie</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\1E73E7BC\trunk\Annie\Annie.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/trus/L-</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Lib</DisplayName>
+        <Name>Lib</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\1E73E7BC\trunk\BuffManager\Lib.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/trus/L-</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Humanizer</DisplayName>
+        <Name>Humanizer</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\1E73E7BC\trunk\Humanizer\Humanizer.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/trus/L-</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>IHateCC</DisplayName>
+        <Name>IHateCC</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\1E73E7BC\trunk\IHateCC\IHateCC.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/trus/L-</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>IhateSkillshots</DisplayName>
+        <Name>IhateSkillshots</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\1E73E7BC\trunk\IHateSkillshots\IhateSkillshots.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/trus/L-</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>PerfectWard</DisplayName>
+        <Name>PerfectWard</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\1E73E7BC\trunk\mustached-octo-hipster(PerfectWard)\PerfectWard.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/trus/L-</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>ResetsAllTheWay</DisplayName>
+        <Name>ResetsAllTheWay</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\1E73E7BC\trunk\ResetsAllTheWay\ResetsAllTheWay.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/trus/L-</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>TRUSBot</DisplayName>
+        <Name>TRUSBot</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\1E73E7BC\trunk\TRUSBot\TRUSBot.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/trus/L-</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>TRUStInMyBombs</DisplayName>
+        <Name>TRUStInMyBombs</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\1E73E7BC\trunk\TRUSt in my Bombs\TRUStInMyBombs.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/trus/L-</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Vladimir</DisplayName>
+        <Name>Vladimir</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\1E73E7BC\trunk\Vladimir\Vladimir.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/trus/L-</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>HiddenObj</DisplayName>
+        <Name>HiddenObj</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\ACD2EC0F\trunk\HiddenObj\HiddenObj.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/detuks/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>JayceSharp</DisplayName>
+        <Name>JayceSharp</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\ACD2EC0F\trunk\JayceSharp\JayceSharp.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/detuks/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>KarmaSharp</DisplayName>
+        <Name>KarmaSharp</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\ACD2EC0F\trunk\KarmaSharp\KarmaSharp.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/detuks/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>RivenSharp</DisplayName>
+        <Name>RivenSharp</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\ACD2EC0F\trunk\RivenSharp\RivenSharp.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/detuks/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>TryndSharp</DisplayName>
+        <Name>TryndSharp</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\ACD2EC0F\trunk\TryndamereSharp\TryndSharp.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/detuks/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Yasuo-Sharpino</DisplayName>
+        <Name>Yasuo-Sharpino</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\ACD2EC0F\trunk\YasuoSharp\Yasuo-Sharpino.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/detuks/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>YasuoSharp</DisplayName>
+        <Name>YasuoSharp</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\ACD2EC0F\trunk\YasuoSharp\YasuoSharp.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/detuks/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>SFKatarina</DisplayName>
+        <Name>SFKatarina</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\F097F21D\trunk\SFKatarina\SFKatarina\SFKatarina.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Snorflake/SFScripts</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>SFMasterYi</DisplayName>
+        <Name>SFMasterYi</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\F097F21D\trunk\SFMasterYi\SFMasterYi\SFMasterYi.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Snorflake/SFScripts</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>SFTemplate</DisplayName>
+        <Name>SFTemplate</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\F097F21D\trunk\SFTemplate\SFTemplate\SFTemplate.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Snorflake/SFScripts</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>StonedAmumu</DisplayName>
+        <Name>StonedAmumu</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\9FDAC0AE\trunk\StonedAmumu\StonedAmumu.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/TheKushStyle/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>StonedVolibear</DisplayName>
+        <Name>StonedVolibear</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\9FDAC0AE\trunk\StonedVolibear\StonedVolibear.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/TheKushStyle/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>SephElise</DisplayName>
+        <Name>SephElise</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\454C8E6E\trunk\SephElise\SephElise.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/SephLeague/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>iVLee</DisplayName>
+        <Name>iVLee</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\4EA3199C\trunk\iVLee\iVLee.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/MobbyGFX96/LeagueSharp/</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>iVRiven</DisplayName>
+        <Name>iVRiven</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\4EA3199C\trunk\iVRiven\iVRiven.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/MobbyGFX96/LeagueSharp/</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Pantheon - The Artisan of War</DisplayName>
+        <Name>Pantheon - The Artisan of War</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\20DEF12F\trunk\Pantheon\Pantheon - The Artisan of War.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/RoachxD/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Akali</DisplayName>
+        <Name>Akali</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\EF6CE571\trunk\Akali v1\Akali.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Chogart/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>VayneWallTumbler</DisplayName>
+        <Name>VayneWallTumbler</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\EF6CE571\trunk\VayneWallTumbler\VayneWallTumbler\VayneWallTumbler.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Chogart/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>D-Kayle</DisplayName>
+        <Name>D-Kayle</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\1BB8B776\trunk\D-Kayle\D-Kayle.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/diabaths/sharperino</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>D-Udyr</DisplayName>
+        <Name>D-Udyr</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\1BB8B776\trunk\D-Udyr\D-Udyr.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/diabaths/sharperino</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>D_NIdalino</DisplayName>
+        <Name>D_NIdalino</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\1BB8B776\trunk\Nidalino\D_NIdalino.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/diabaths/sharperino</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Nidalino</DisplayName>
+        <Name>Nidalino</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\1BB8B776\trunk\Nidalino\Nidalino.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/diabaths/sharperino</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>kKayle2</DisplayName>
+        <Name>kKayle2</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\C2572256\trunk\kKayle2\kKayle2.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/lKk2/LeagueSharp/</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>kPoppy2</DisplayName>
+        <Name>kPoppy2</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\C2572256\trunk\kPoppy2\kPoppy2.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/lKk2/LeagueSharp/</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>kTalon2</DisplayName>
+        <Name>kTalon2</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\C2572256\trunk\kTalon2\kTalon2.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/lKk2/LeagueSharp/</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>ChewyMoonsIrelia</DisplayName>
+        <Name>ChewyMoonsIrelia</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\FDE57C9F\trunk\ChewyMoonsIrelia\ChewyMoonsIrelia.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/ChewyMoon/ChewyMoonScripts</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>ChewyMoonsLux</DisplayName>
+        <Name>ChewyMoonsLux</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\FDE57C9F\trunk\ChewyMoonsLux\ChewyMoonsLux.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/ChewyMoon/ChewyMoonScripts</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>iVJax</DisplayName>
+        <Name>iVJax</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\5B3B0460\trunk\iVJax\iVJax.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/TeamiV/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>iVKatarina</DisplayName>
+        <Name>iVKatarina</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\5B3B0460\trunk\iVKatarina\iVKatarina.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/TeamiV/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Braum</DisplayName>
+        <Name>Braum</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\A015E3BB\branches\Experimental\Frosty Braum\Braum\Braum.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/newchild/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Frosty Renekton</DisplayName>
+        <Name>Frosty Renekton</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\A015E3BB\branches\Experimental\Frosty Renekton\Frosty Renekton\Frosty Renekton.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/newchild/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Frosty Sejuani</DisplayName>
+        <Name>Frosty Sejuani</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\A015E3BB\branches\Experimental\Frosty Sejuani\Frosty Sejuani\Frosty Sejuani.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/newchild/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Frosty Twitch</DisplayName>
+        <Name>Frosty Twitch</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\A015E3BB\branches\Experimental\Frosty Twitch\Frosty Twitch\Frosty Twitch.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/newchild/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>SAwareness</DisplayName>
+        <Name>SAwareness</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\9A419DD\tags\0.8\SAwareness.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Screeder/SAwareness</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Cassio</DisplayName>
+        <Name>Cassio</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\AE72DDF8\trunk\Cassiopeia\Cassio.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/TC-Crew/L-Assemblies</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Cho'Gath</DisplayName>
+        <Name>Cho'Gath</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\AE72DDF8\trunk\Cho'Gath\Cho'Gath.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/TC-Crew/L-Assemblies</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Darius</DisplayName>
+        <Name>Darius</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\AE72DDF8\trunk\Darius\Darius.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/TC-Crew/L-Assemblies</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Evelynn</DisplayName>
+        <Name>Evelynn</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\AE72DDF8\trunk\Evelynn\Evelynn.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/TC-Crew/L-Assemblies</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Katarina</DisplayName>
+        <Name>Katarina</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\AE72DDF8\trunk\Katarina\Katarina.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/TC-Crew/L-Assemblies</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Tracker</DisplayName>
+        <Name>Tracker</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\AE72DDF8\trunk\Tracker\Tracker.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/TC-Crew/L-Assemblies</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>BaseUlt2</DisplayName>
+        <Name>BaseUlt2</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\5580F991\trunk\BaseUlt2\BaseUlt2.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/MadScripts/Beaving</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>AhriSharp</DisplayName>
+        <Name>AhriSharp</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\A220331B\trunk\Assembiles\AhriSharp\AhriSharp.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/JoKerr-/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>FishermanFizz</DisplayName>
+        <Name>FishermanFizz</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\A220331B\trunk\Assembiles\FishermanFizz\FishermanFizz.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/JoKerr-/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Nami</DisplayName>
+        <Name>Nami</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\65BC4922\trunk\Nami\Nami.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/madk/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Nidalee</DisplayName>
+        <Name>Nidalee</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\65BC4922\trunk\Nidalee\Nidalee.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/madk/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Surrender Tracker</DisplayName>
+        <Name>Surrender Tracker</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\65BC4922\trunk\Surrender Tracker\Surrender Tracker.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/madk/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Talon</DisplayName>
+        <Name>Talon</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\65BC4922\trunk\Talon\Talon.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/madk/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Yorick</DisplayName>
+        <Name>Yorick</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\65BC4922\trunk\Yorick\Yorick.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/madk/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Mechanics</DisplayName>
+        <Name>Mechanics</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\A8ABA2E9\trunk\Mechanics\Mechanics\Mechanics.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/gmlyra/LSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>FedDrMundo</DisplayName>
+        <Name>FedDrMundo</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\6C75101A\tags\Release\FedDrMundo\FedDrMundo.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/gFederal/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>FedJax</DisplayName>
+        <Name>FedJax</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\6C75101A\tags\Release\FedJax\FedJax.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/gFederal/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>FedLeblanc</DisplayName>
+        <Name>FedLeblanc</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\6C75101A\tags\Release\FedLeblanc\FedLeblanc.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/gFederal/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>FedMaokai</DisplayName>
+        <Name>FedMaokai</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\6C75101A\tags\Release\FedMaokai\FedMaokai.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/gFederal/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>FedLeona</DisplayName>
+        <Name>FedLeona</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\6C75101A\trunk\FedLeona\FedLeona.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/gFederal/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>DZRevealer</DisplayName>
+        <Name>DZRevealer</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\212EF0DE\trunk\DZRevealer\DZRevealer\DZRevealer.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/DZ191/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>FioraRaven</DisplayName>
+        <Name>FioraRaven</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\212EF0DE\trunk\FioraRaven\FioraRaven\FioraRaven.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/DZ191/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>NidaPouncer</DisplayName>
+        <Name>NidaPouncer</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\212EF0DE\trunk\NidaPouncer\NidaPouncer\NidaPouncer.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/DZ191/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>GXAutoPotion</DisplayName>
+        <Name>GXAutoPotion</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\3D50C5C5\trunk\GX-Auto-Potion\GX Auto Potion\GXAutoPotion.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Xionanx/Leaguesharp-Projects</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>GX Auto Shield</DisplayName>
+        <Name>GX Auto Shield</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\3D50C5C5\trunk\GX-Auto-Shield\GX Auto Shield\GX Auto Shield.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Xionanx/Leaguesharp-Projects</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>GX-Katarina</DisplayName>
+        <Name>GX-Katarina</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\3D50C5C5\trunk\GX-Katarina\GX-Katarina\GX-Katarina.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Xionanx/Leaguesharp-Projects</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>GX-Soraka</DisplayName>
+        <Name>GX-Soraka</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\3D50C5C5\trunk\GX-Soraka\GX-Soraka\GX-Soraka.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Xionanx/Leaguesharp-Projects</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>GX Zilean</DisplayName>
+        <Name>GX Zilean</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\3D50C5C5\trunk\GX-Zilean\GX Zilean\GX Zilean.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Xionanx/Leaguesharp-Projects</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>KurisuMorgana</DisplayName>
+        <Name>KurisuMorgana</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\871BD495\trunk\KurisuMorgana\KurisuMorgana.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Kurisu44/Leaguesharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>EasyAhri</DisplayName>
+        <Name>EasyAhri</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\36181ACE\trunk\EasyAhri\EasyAhri\EasyAhri.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/ikkeflikkeri/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>EasyCorki</DisplayName>
+        <Name>EasyCorki</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\36181ACE\trunk\EasyCorki\EasyCorki\EasyCorki.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/ikkeflikkeri/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>EasyEzreal</DisplayName>
+        <Name>EasyEzreal</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\36181ACE\trunk\EasyEzreal\EasyEzreal\EasyEzreal.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/ikkeflikkeri/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>EasyKogMaw</DisplayName>
+        <Name>EasyKogMaw</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\36181ACE\trunk\EasyKogMaw\EasyKogMaw\EasyKogMaw.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/ikkeflikkeri/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>EasyRyze</DisplayName>
+        <Name>EasyRyze</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\36181ACE\trunk\EasyRyze\EasyRyze\EasyRyze.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/ikkeflikkeri/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Irelia</DisplayName>
+        <Name>Irelia</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\548EFC24\trunk\Irelia\Irelia.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/xQxCPMxQx/LeagueSharp2</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Jax</DisplayName>
+        <Name>Jax</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\548EFC24\trunk\JaxQx\Jax.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/xQxCPMxQx/LeagueSharp2</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>JaxQx</DisplayName>
+        <Name>JaxQx</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\548EFC24\trunk\JaxQx\JaxQx.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/xQxCPMxQx/LeagueSharp2</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Leblanc</DisplayName>
+        <Name>Leblanc</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\548EFC24\trunk\Leblanc\Leblanc.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/xQxCPMxQx/LeagueSharp2</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Swain</DisplayName>
+        <Name>Swain</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\548EFC24\trunk\Swain\Swain.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/xQxCPMxQx/LeagueSharp2</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Vi</DisplayName>
+        <Name>Vi</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\548EFC24\trunk\Vi\Vi.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/xQxCPMxQx/LeagueSharp2</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>yol0Riven</DisplayName>
+        <Name>yol0Riven</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\71CB6085\trunk\yol0Riven\yol0Riven\yol0Riven.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/yol0swag/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Animator</DisplayName>
+        <Name>Animator</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\612A33\trunk\Animator\Animator.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/trees-software/leaguesharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>AutoIgnite</DisplayName>
+        <Name>AutoIgnite</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\612A33\trunk\AutoIgnite\AutoIgnite.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/trees-software/leaguesharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>AutoLantern</DisplayName>
+        <Name>AutoLantern</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\612A33\trunk\AutoLantern\AutoLantern.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/trees-software/leaguesharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>QuickTeleport</DisplayName>
+        <Name>QuickTeleport</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\612A33\trunk\QuickTeleport\QuickTeleport.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/trees-software/leaguesharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>QuickTimers</DisplayName>
+        <Name>QuickTimers</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\612A33\trunk\QuickTimers\QuickTimers.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/trees-software/leaguesharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Resizer</DisplayName>
+        <Name>Resizer</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\612A33\trunk\Resizer\Resizer.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/trees-software/leaguesharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>TUrgot</DisplayName>
+        <Name>TUrgot</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\612A33\trunk\TUrgot\TUrgot.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/trees-software/leaguesharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>LittleRedSharpie</DisplayName>
+        <Name>LittleRedSharpie</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\F03FA71D\trunk\LittleRedSharpie\LittleRedSharpie.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/LittleRedEye/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>MalphiteTheRock</DisplayName>
+        <Name>MalphiteTheRock</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\CFB1B437\trunk\MalphiteTheRock\MalphiteTheRock\MalphiteTheRock.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/xSalice/LSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>MalzaharSpaceAids</DisplayName>
+        <Name>MalzaharSpaceAids</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\CFB1B437\trunk\MalzaharSpaceAids\MalzaharSpaceAids\MalzaharSpaceAids.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/xSalice/LSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>YorickMILFDigger</DisplayName>
+        <Name>YorickMILFDigger</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\CFB1B437\trunk\YorickMILFDigger\YorickMILFDigger\YorickMILFDigger.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/xSalice/LSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>MasterActivator</DisplayName>
+        <Name>MasterActivator</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\B5AB2C6A\trunk\MasterActivator\MasterActivator.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Crisdmc/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>MasterYi</DisplayName>
+        <Name>MasterYi</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\B5AB2C6A\trunk\MasterYi\MasterYi.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Crisdmc/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Orianna</DisplayName>
+        <Name>Orianna</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\42AAE87C\trunk\Orianna\Orianna\Orianna.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/trelli/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Skin Changer</DisplayName>
+        <Name>Skin Changer</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\42AAE87C\trunk\Skin Changer\Skin Changer\Skin Changer.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/trelli/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Evade</DisplayName>
+        <Name>Evade</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\1BA0420E\trunk\Evade\Evade.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Esk0r/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Karma</DisplayName>
+        <Name>Karma</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\1BA0420E\trunk\Karma\Karma.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Esk0r/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Marksman</DisplayName>
+        <Name>Marksman</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\1BA0420E\trunk\Marksman\Marksman.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Esk0r/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Ryze</DisplayName>
+        <Name>Ryze</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\1BA0420E\trunk\Ryze\Ryze.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Esk0r/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Syndra</DisplayName>
+        <Name>Syndra</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\1BA0420E\trunk\Syndra\Syndra.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Esk0r/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>TwistedFate</DisplayName>
+        <Name>TwistedFate</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\1BA0420E\trunk\Twisted Fate\TwistedFate.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Esk0r/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Velkoz Assembly</DisplayName>
+        <Name>Velkoz Assembly</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\1BA0420E\trunk\Velkoz\Velkoz Assembly.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Esk0r/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Xerath</DisplayName>
+        <Name>Xerath</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\1BA0420E\trunk\Xerath\Xerath.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Esk0r/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Ziggs</DisplayName>
+        <Name>Ziggs</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\1BA0420E\trunk\Ziggs\Ziggs.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Esk0r/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>TriKatarina</DisplayName>
+        <Name>TriKatarina</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\3A14E1EF\trunk\TriKatarina\TriKatarina.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Jaskot/TritonSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Triton</DisplayName>
+        <Name>Triton</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\3A14E1EF\trunk\Triton\Triton.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Jaskot/TritonSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>SKO Ban Karma</DisplayName>
+        <Name>SKO Ban Karma</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\23CCA260\trunk\SKO Ban Karma\SKO Ban Karma.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/SKOBoL/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>SKO Galio</DisplayName>
+        <Name>SKO Galio</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\23CCA260\trunk\SKO Galio\SKO Galio.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/SKOBoL/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>SKOJarvanIV</DisplayName>
+        <Name>SKOJarvanIV</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\23CCA260\trunk\SKOJarvanIV\SKOJarvanIV.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/SKOBoL/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>SKONidalee</DisplayName>
+        <Name>SKONidalee</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\23CCA260\trunk\SKONidalee\SKONidalee.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/SKOBoL/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>SKORengar</DisplayName>
+        <Name>SKORengar</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\23CCA260\trunk\SKORengar\SKORengar.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/SKOBoL/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>ANSkarner</DisplayName>
+        <Name>ANSkarner</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\958CD676\trunk\Skarner AN\ANSkarner.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/AnimatedHF/Leaguesharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>WinZhao</DisplayName>
+        <Name>WinZhao</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\958CD676\trunk\WinZhao\WinZhao.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/AnimatedHF/Leaguesharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>recalltrackerLS</DisplayName>
+        <Name>recalltrackerLS</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\B5877AA5\trunk\recalltrackerLS\recalltrackerLS.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Irvinee/leaguesharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>WolfUrgot</DisplayName>
+        <Name>WolfUrgot</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\DED88AB1\trunk\WolfUrgot\WolfUrgot.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/GuiltyWolf/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>WolfZilean</DisplayName>
+        <Name>WolfZilean</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\DED88AB1\trunk\WolfZilean\WolfZilean.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/GuiltyWolf/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>LeeSin</DisplayName>
+        <Name>LeeSin</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\86E3F12D\trunk\LeeSin\LeeSin.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Quangcha/LSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>TongHop</DisplayName>
+        <Name>TongHop</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\86E3F12D\trunk\TongHop\TongHop.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Quangcha/LSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Ajumper</DisplayName>
+        <Name>Ajumper</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\86E3F12D\trunk\WardJump\Ajumper.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Quangcha/LSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>BrandSharp</DisplayName>
+        <Name>BrandSharp</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\9D4CA12F\trunk\BrandSharp\BrandSharp.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Hellsing/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>VeigarEndboss</DisplayName>
+        <Name>VeigarEndboss</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\9D4CA12F\trunk\VeigarEndboss\VeigarEndboss.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Hellsing/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>ViktorSharp</DisplayName>
+        <Name>ViktorSharp</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\9D4CA12F\trunk\ViktorSharp\ViktorSharp.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Hellsing/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>GroovyZilean</DisplayName>
+        <Name>GroovyZilean</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\1F41B64\trunk\GroovyZilean\GroovyZilean.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/blackyy/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>Support</DisplayName>
+        <Name>Support</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\42597B6E\trunk\Support\Support\Support.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/Dibes/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+    <LeagueSharpAssembly>
+        <DisplayName>AutoLevelup</DisplayName>
+        <Name>AutoLevelup</Name>
+        <PathToProjectFile>%AppData%\LeagueSharp\Repositories\34E7A10C\trunk\AutoLevelup\AutoLevelup.csproj</PathToProjectFile>
+        <Description />
+        <SvnUrl>https://github.com/DarkAzazel/LeagueSharp</SvnUrl>
+    </LeagueSharpAssembly>
+</ArrayOfLeagueSharpAssembly>
