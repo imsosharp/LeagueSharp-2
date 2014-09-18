@@ -4,7 +4,7 @@
         <DisplayName>Aatrox</DisplayName>
         <Name>Aatrox</Name>
         <PathToProjectFile>%AppData%\LeagueSharp\Repositories\8BAD3F91\trunk\Aatrox\Aatrox.csproj</PathToProjectFile>
-        <Description />
+        <Description>Test Description</Description>
         <SvnUrl>https://github.com/Areidz/Leaguesharp</SvnUrl>
     </LeagueSharpAssembly>
     <LeagueSharpAssembly>
