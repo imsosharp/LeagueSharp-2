@@ -21,6 +21,7 @@ namespace Killability
         private readonly List<Spell> _spells;
         private readonly List<Items.Item> _items;
         private readonly SpellDataInst _ignite;
+        private readonly Menu _config;
 
         public KillDrawer()
         {
@@ -44,6 +45,11 @@ namespace Killability
                 new Spell(SpellSlot.R)
             };
 
+            _config = new Menu("Killability", "Killability", true);
+            _config.AddItem(new MenuItem("color", "Color").SetValue(Color.Aqua));
+            _config.AddItem(new MenuItem("combo", "Show Combo").SetValue(true));
+            _config.AddToMainMenu();
+
             Drawing.OnDraw += Drawing_OnDraw;
             Game.PrintChat("Killability by h3h3 loaded.");
         }
@@ -51,8 +57,6 @@ namespace Killability
         private Tuple<double, List<Tuple<DamageLib.SpellType, DamageLib.StageType>>> GetComboDamage(Obj_AI_Hero target)
         {
             var combo = new List<Tuple<DamageLib.SpellType, DamageLib.StageType>>();
-
-            combo.Add(new Tuple<DamageLib.SpellType, DamageLib.StageType>(DamageLib.SpellType.Q, DamageLib.StageType.Default));
 
             foreach (var spell in _spells.Where(spell => spell.IsReady()))
             {
@@ -104,8 +108,10 @@ namespace Killability
                     var combo = string.Join("/", dmg.Item2.Select(d => d.Item1));
                     var comboOffset = Drawing.GetTextExtent(combo).Width / 2;
 
-                    Drawing.DrawText(pos.X - textOffset, pos.Y, Color.Red, text);
-                    Drawing.DrawText(pos.X - comboOffset, pos.Y + 15, Color.DarkGoldenrod, combo);
+                    Drawing.DrawText(pos.X - textOffset, pos.Y, _config.Item("color").GetValue<Color>(), text);
+
+                    if (_config.Item("combo").GetValue<bool>())
+                        Drawing.DrawText(pos.X - comboOffset, pos.Y + 15, _config.Item("color").GetValue<Color>(), combo);
                 }
             }
         }
