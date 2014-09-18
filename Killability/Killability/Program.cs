@@ -58,11 +58,6 @@ namespace Killability
         {
             var combo = new List<Tuple<DamageLib.SpellType, DamageLib.StageType>>();
 
-            if (_ignite != null && _ignite.State == SpellState.Ready)
-                combo.Add(new Tuple<DamageLib.SpellType, DamageLib.StageType>(
-                    DamageLib.SpellType.IGNITE,
-                    DamageLib.StageType.Default));
-
             foreach (var item in _items.Where(item => item.IsReady()))
             {
                 switch (item.Id)
@@ -121,6 +116,11 @@ namespace Killability
                     break;
             }
 
+            if (_ignite != null && _ignite.State == SpellState.Ready)
+                combo.Add(new Tuple<DamageLib.SpellType, DamageLib.StageType>(
+                    DamageLib.SpellType.IGNITE,
+                    DamageLib.StageType.Default));
+
             return new Tuple<double, List<Tuple<DamageLib.SpellType, DamageLib.StageType>>>(
                 DamageLib.GetComboDamage(target, combo), 
                 combo);
@@ -138,7 +138,7 @@ namespace Killability
             {
                 var dmg = GetComboDamage(target);
 
-                if (dmg.Item1 > 0 && dmg.Item1 > target.Health * 0.9)
+                if (dmg.Item1 > target.Health * 0.9)
                 {
                     var pos = Drawing.WorldToScreen(target.Position);
                     var text = "Killable";
