@@ -58,34 +58,72 @@ namespace Killability
         {
             var combo = new List<Tuple<DamageLib.SpellType, DamageLib.StageType>>();
 
-            foreach (var spell in _spells.Where(spell => spell.IsReady()))
-            {
-                switch (spell.Slot)
-                {
-                    case SpellSlot.Q: combo.Add(new Tuple<DamageLib.SpellType, DamageLib.StageType>(DamageLib.SpellType.Q, DamageLib.StageType.Default)); break;
-                    case SpellSlot.W: combo.Add(new Tuple<DamageLib.SpellType, DamageLib.StageType>(DamageLib.SpellType.W, DamageLib.StageType.Default)); break;
-                    case SpellSlot.E: combo.Add(new Tuple<DamageLib.SpellType, DamageLib.StageType>(DamageLib.SpellType.E, DamageLib.StageType.Default)); break;
-                    case SpellSlot.R: combo.Add(new Tuple<DamageLib.SpellType, DamageLib.StageType>(DamageLib.SpellType.R, DamageLib.StageType.Default)); break;
-                }
-            }
+            if (_ignite != null && _ignite.State == SpellState.Ready)
+                combo.Add(new Tuple<DamageLib.SpellType, DamageLib.StageType>(
+                    DamageLib.SpellType.IGNITE,
+                    DamageLib.StageType.Default));
 
             foreach (var item in _items.Where(item => item.IsReady()))
             {
                 switch (item.Id)
                 {
-                    case 3128: combo.Add(new Tuple<DamageLib.SpellType, DamageLib.StageType>(DamageLib.SpellType.DFG, DamageLib.StageType.FirstDamage)); break;
-                    case 3077: combo.Add(new Tuple<DamageLib.SpellType, DamageLib.StageType>(DamageLib.SpellType.TIAMAT, DamageLib.StageType.Default)); break;
-                    case 3074: combo.Add(new Tuple<DamageLib.SpellType, DamageLib.StageType>(DamageLib.SpellType.HYDRA, DamageLib.StageType.Default)); break;
-                    case 3146: combo.Add(new Tuple<DamageLib.SpellType, DamageLib.StageType>(DamageLib.SpellType.HEXGUN, DamageLib.StageType.Default)); break;
-                    case 3144: combo.Add(new Tuple<DamageLib.SpellType, DamageLib.StageType>(DamageLib.SpellType.BILGEWATER, DamageLib.StageType.Default)); break;
-                    case 3153: combo.Add(new Tuple<DamageLib.SpellType, DamageLib.StageType>(DamageLib.SpellType.BOTRK, DamageLib.StageType.Default)); break;
+                    case 3128: combo.Add(new Tuple<DamageLib.SpellType, DamageLib.StageType>(
+                        DamageLib.SpellType.DFG,
+                        DamageLib.StageType.FirstDamage)); break;
+
+                    case 3077: combo.Add(new Tuple<DamageLib.SpellType, DamageLib.StageType>(
+                        DamageLib.SpellType.TIAMAT,
+                        DamageLib.StageType.Default)); break;
+
+                    case 3074: combo.Add(new Tuple<DamageLib.SpellType, DamageLib.StageType>(
+                        DamageLib.SpellType.HYDRA,
+                        DamageLib.StageType.Default)); break;
+
+                    case 3146: combo.Add(new Tuple<DamageLib.SpellType, DamageLib.StageType>(
+                        DamageLib.SpellType.HEXGUN,
+                        DamageLib.StageType.Default)); break;
+
+                    case 3144: combo.Add(new Tuple<DamageLib.SpellType, DamageLib.StageType>(
+                        DamageLib.SpellType.BILGEWATER,
+                        DamageLib.StageType.Default)); break;
+
+                    case 3153: combo.Add(new Tuple<DamageLib.SpellType, DamageLib.StageType>(
+                        DamageLib.SpellType.BOTRK,
+                        DamageLib.StageType.Default)); break;
                 }
+
+                if (DamageLib.IsKillable(target, combo))
+                    break;
             }
 
-            if (_ignite != null && _ignite.State == SpellState.Ready)
-                combo.Add(new Tuple<DamageLib.SpellType, DamageLib.StageType>(DamageLib.SpellType.IGNITE, DamageLib.StageType.Default));
+            foreach (var spell in _spells.Where(spell => spell.IsReady()))
+            {
+                switch (spell.Slot)
+                {
+                    case SpellSlot.Q: combo.Add(new Tuple<DamageLib.SpellType, DamageLib.StageType>(
+                        DamageLib.SpellType.Q, 
+                        DamageLib.StageType.Default)); break;
 
-            return new Tuple<double, List<Tuple<DamageLib.SpellType, DamageLib.StageType>>>(DamageLib.GetComboDamage(target, combo), combo);
+                    case SpellSlot.W: combo.Add(new Tuple<DamageLib.SpellType, DamageLib.StageType>(
+                        DamageLib.SpellType.W, 
+                        DamageLib.StageType.Default)); break;
+
+                    case SpellSlot.E: combo.Add(new Tuple<DamageLib.SpellType, DamageLib.StageType>(
+                        DamageLib.SpellType.E, 
+                        DamageLib.StageType.Default)); break;
+
+                    case SpellSlot.R: combo.Add(new Tuple<DamageLib.SpellType, DamageLib.StageType>(
+                        DamageLib.SpellType.R, 
+                        DamageLib.StageType.Default)); break;
+                }
+
+                if(DamageLib.IsKillable(target, combo))
+                    break;
+            }
+
+            return new Tuple<double, List<Tuple<DamageLib.SpellType, DamageLib.StageType>>>(
+                DamageLib.GetComboDamage(target, combo), 
+                combo);
         }
 
         private bool IsOnScreen(Vector3 v)
