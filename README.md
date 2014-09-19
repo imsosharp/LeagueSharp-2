@@ -21,4 +21,4 @@ Display Combo Text
 
 Easy Install
 ======================
-[INSTALL](ls://project/h3h3/LeagueSharp/Killability/)
+[INSTALL](http://www.joduska.me/forum/viewtopic.php?f=16&t=41)
