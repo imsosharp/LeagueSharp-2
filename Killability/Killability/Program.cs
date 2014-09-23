@@ -74,86 +74,86 @@ namespace Killability
 
         private void InitDrawing()
         {
-            //foreach (var h in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsEnemy))
-            //{
-            //    var hero = h;
-            //    var sprite = new Render.Sprite(Resources.Skull, hero.HPBarPosition);
-            //    sprite.Scale = new Vector2(0.08f, 0.08f);
-            //    sprite.Add(0);
-            //    sprite.PositionUpdate += () => new Vector2(hero.HPBarPosition.X + 140, hero.HPBarPosition.Y + 10);
-            //    sprite.VisibleCondition += s =>
-            //        Render.OnScreen(Drawing.WorldToScreen(hero.Position)) &&
-            //        GetComboResult(hero).IsKillable &&
-            //        _config.Item("icon").GetValue<bool>();
-
-            //    var text = new Render.Text(hero.HPBarPosition, "-", 18, new ColorBGRA(255, 255, 255, 255));
-            //    text.Add(1);
-            //    text.OutLined = true;
-            //    text.PositionUpdate += () => new Vector2(hero.HPBarPosition.X + 20, hero.HPBarPosition.Y + 50);
-            //    text.VisibleCondition += s =>
-            //        Render.OnScreen(Drawing.WorldToScreen(hero.Position)) &&
-            //        _config.Item("text").GetValue<bool>();
-            //    text.TextUpdate += () => GetComboResult(hero).Text;
-            //}
-
-            var test = new Render.Text(new Vector2(100, 100), string.Empty, 20, new ColorBGRA(255, 255, 255, 255));
-            test.Add(1);
-            test.OutLined = true;
-            test.TextUpdate += () =>
+            foreach (var h in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsEnemy))
             {
-                var t = 0f;
-                var nextAD = 0f;
-                var nextQ = 0f;
-                var nextW = 0f;
-                var nextE = 0f;
-                var nextR = 0f;
-                var dmg = 0d;
-                var combo = new List<DamageLib.SpellType>();
-                var rota = new List<DamageLib.SpellType>();
+                var hero = h;
+                var sprite = new Render.Sprite(Resources.Skull, hero.HPBarPosition);
+                sprite.Scale = new Vector2(0.08f, 0.08f);
+                sprite.Add(0);
+                sprite.PositionUpdate += () => new Vector2(hero.HPBarPosition.X + 140, hero.HPBarPosition.Y + 10);
+                sprite.VisibleCondition += s =>
+                    Render.OnScreen(Drawing.WorldToScreen(hero.Position)) &&
+                    GetComboResult(hero).IsKillable &&
+                    _config.Item("icon").GetValue<bool>();
 
-                while (ObjectManager.Player.Health > dmg)
-                {
-                    if (t > nextAD)
-                    {
-                        nextAD = t + ObjectManager.Player.AttackDelay * 1000;
-                        combo.Add(DamageLib.SpellType.AD);
-                        dmg += DamageLib.GetComboDamage(ObjectManager.Player, combo);
-                    }
+                var text = new Render.Text(hero.HPBarPosition, "-", 18, new ColorBGRA(255, 255, 255, 255));
+                text.Add(1);
+                text.OutLined = true;
+                text.PositionUpdate += () => new Vector2(hero.HPBarPosition.X + 20, hero.HPBarPosition.Y + 50);
+                text.VisibleCondition += s =>
+                    Render.OnScreen(Drawing.WorldToScreen(hero.Position)) &&
+                    _config.Item("text").GetValue<bool>();
+                text.TextUpdate += () => GetComboResult(hero).Text;
+            }
 
-                    if (t > nextQ)
-                    {
-                        combo.Add(DamageLib.SpellType.Q);
-                        dmg += DamageLib.GetComboDamage(ObjectManager.Player, combo);
-                        nextQ = t + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).CooldownExpires;
-                    }
+            //var test = new Render.Text(new Vector2(100, 100), string.Empty, 20, new ColorBGRA(255, 255, 255, 255));
+            //test.Add(1);
+            //test.OutLined = true;
+            //test.TextUpdate += () =>
+            //{
+            //    var t = 0f;
+            //    var nextAD = 0f;
+            //    var nextQ = 0f;
+            //    var nextW = 0f;
+            //    var nextE = 0f;
+            //    var nextR = 0f;
+            //    var dmg = 0d;
+            //    var combo = new List<DamageLib.SpellType>();
+            //    var rota = new List<DamageLib.SpellType>();
 
-                    //if (t > nextW)
-                    //{
-                    //    combo.Add(DamageLib.SpellType.W);
-                    //    dmg += DamageLib.GetComboDamage(ObjectManager.Player, combo);
-                    //    nextW = t + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Cooldown;
-                    //}
+            //    while (ObjectManager.Player.Health > dmg)
+            //    {
+            //        if (t > nextAD)
+            //        {
+            //            nextAD = t + ObjectManager.Player.AttackDelay * 1000;
+            //            combo.Add(DamageLib.SpellType.AD);
+            //            dmg += DamageLib.GetComboDamage(ObjectManager.Player, combo);
+            //        }
 
-                    if (t > nextE)
-                    {
-                        combo.Add(DamageLib.SpellType.E);
-                        dmg += DamageLib.GetComboDamage(ObjectManager.Player, combo);
-                        nextE = t + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Cooldown;
-                    }
+            //        if (t > nextQ)
+            //        {
+            //            combo.Add(DamageLib.SpellType.Q);
+            //            dmg += DamageLib.GetComboDamage(ObjectManager.Player, combo);
+            //            nextQ = t + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).CooldownExpires;
+            //        }
 
-                    //if (t > nextR)
-                    //{
-                    //    combo.Add(DamageLib.SpellType.R);
-                    //    dmg += DamageLib.GetComboDamage(ObjectManager.Player, combo);
-                    //    nextR = t + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Cooldown;
-                    //}
+            //        //if (t > nextW)
+            //        //{
+            //        //    combo.Add(DamageLib.SpellType.W);
+            //        //    dmg += DamageLib.GetComboDamage(ObjectManager.Player, combo);
+            //        //    nextW = t + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Cooldown;
+            //        //}
+
+            //        if (t > nextE)
+            //        {
+            //            combo.Add(DamageLib.SpellType.E);
+            //            dmg += DamageLib.GetComboDamage(ObjectManager.Player, combo);
+            //            nextE = t + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Cooldown;
+            //        }
+
+            //        //if (t > nextR)
+            //        //{
+            //        //    combo.Add(DamageLib.SpellType.R);
+            //        //    dmg += DamageLib.GetComboDamage(ObjectManager.Player, combo);
+            //        //    nextR = t + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Cooldown;
+            //        //}
 
 
-                    t += 100;
-                }
+            //        t += 100;
+            //    }
 
-                return "Attacks: " + combo.Count + "\nDamage: " + dmg + "\nTime: " + t + "\nNext: " + nextAD + "\nCombo:\n" + string.Join("\n", combo);
-            };
+            //    return "Attacks: " + combo.Count + "\nDamage: " + dmg + "\nTime: " + t + "\nNext: " + nextAD + "\nCombo:\n" + string.Join("\n", combo);
+            //};
         }
 
         private class ComboResult
