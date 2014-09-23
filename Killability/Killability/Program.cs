@@ -1,4 +1,21 @@
-﻿using System;
+﻿/*
+    Copyright (C) 2014 h3h3
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Killability.Properties;
@@ -57,28 +74,86 @@ namespace Killability
 
         private void InitDrawing()
         {
+            //foreach (var h in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsEnemy))
+            //{
+            //    var hero = h;
+            //    var sprite = new Render.Sprite(Resources.Skull, hero.HPBarPosition);
+            //    sprite.Scale = new Vector2(0.08f, 0.08f);
+            //    sprite.Add(0);
+            //    sprite.PositionUpdate += () => new Vector2(hero.HPBarPosition.X + 140, hero.HPBarPosition.Y + 10);
+            //    sprite.VisibleCondition += s =>
+            //        Render.OnScreen(Drawing.WorldToScreen(hero.Position)) &&
+            //        GetComboResult(hero).IsKillable &&
+            //        _config.Item("icon").GetValue<bool>();
 
-            foreach (var h in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsEnemy))
+            //    var text = new Render.Text(hero.HPBarPosition, "-", 18, new ColorBGRA(255, 255, 255, 255));
+            //    text.Add(1);
+            //    text.OutLined = true;
+            //    text.PositionUpdate += () => new Vector2(hero.HPBarPosition.X + 20, hero.HPBarPosition.Y + 50);
+            //    text.VisibleCondition += s =>
+            //        Render.OnScreen(Drawing.WorldToScreen(hero.Position)) &&
+            //        _config.Item("text").GetValue<bool>();
+            //    text.TextUpdate += () => GetComboResult(hero).Text;
+            //}
+
+            var test = new Render.Text(new Vector2(100, 100), string.Empty, 20, new ColorBGRA(255, 255, 255, 255));
+            test.Add(1);
+            test.OutLined = true;
+            test.TextUpdate += () =>
             {
-                var hero = h;
-                var sprite = new Render.Sprite(Resources.Skull, hero.HPBarPosition);
-                sprite.Scale = new Vector2(0.08f, 0.08f);
-                sprite.Add(0);
-                sprite.PositionUpdate += () => new Vector2(hero.HPBarPosition.X + 140, hero.HPBarPosition.Y + 10);
-                sprite.VisibleCondition += s =>
-                    Render.OnScreen(Drawing.WorldToScreen(hero.Position)) &&
-                    GetComboResult(hero).IsKillable &&
-                    _config.Item("icon").GetValue<bool>();
+                var t = 0f;
+                var nextAD = 0f;
+                var nextQ = 0f;
+                var nextW = 0f;
+                var nextE = 0f;
+                var nextR = 0f;
+                var dmg = 0d;
+                var combo = new List<DamageLib.SpellType>();
+                var rota = new List<DamageLib.SpellType>();
 
-                var text = new Render.Text(hero.HPBarPosition, "-", 18, new ColorBGRA(255, 255, 255, 255));
-                text.Add(1);
-                text.OutLined = true;
-                text.PositionUpdate += () => new Vector2(hero.HPBarPosition.X + 20, hero.HPBarPosition.Y + 50);
-                text.VisibleCondition += s =>
-                    Render.OnScreen(Drawing.WorldToScreen(hero.Position)) &&
-                    _config.Item("text").GetValue<bool>();
-                text.TextUpdate += () => GetComboResult(hero).Text;
-            }
+                while (ObjectManager.Player.Health > dmg)
+                {
+                    if (t > nextAD)
+                    {
+                        nextAD = t + ObjectManager.Player.AttackDelay * 1000;
+                        combo.Add(DamageLib.SpellType.AD);
+                        dmg += DamageLib.GetComboDamage(ObjectManager.Player, combo);
+                    }
+
+                    if (t > nextQ)
+                    {
+                        combo.Add(DamageLib.SpellType.Q);
+                        dmg += DamageLib.GetComboDamage(ObjectManager.Player, combo);
+                        nextQ = t + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).CooldownExpires;
+                    }
+
+                    //if (t > nextW)
+                    //{
+                    //    combo.Add(DamageLib.SpellType.W);
+                    //    dmg += DamageLib.GetComboDamage(ObjectManager.Player, combo);
+                    //    nextW = t + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Cooldown;
+                    //}
+
+                    if (t > nextE)
+                    {
+                        combo.Add(DamageLib.SpellType.E);
+                        dmg += DamageLib.GetComboDamage(ObjectManager.Player, combo);
+                        nextE = t + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Cooldown;
+                    }
+
+                    //if (t > nextR)
+                    //{
+                    //    combo.Add(DamageLib.SpellType.R);
+                    //    dmg += DamageLib.GetComboDamage(ObjectManager.Player, combo);
+                    //    nextR = t + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Cooldown;
+                    //}
+
+
+                    t += 100;
+                }
+
+                return "Attacks: " + combo.Count + "\nDamage: " + dmg + "\nTime: " + t + "\nNext: " + nextAD + "\nCombo:\n" + string.Join("\n", combo);
+            };
         }
 
         private class ComboResult
