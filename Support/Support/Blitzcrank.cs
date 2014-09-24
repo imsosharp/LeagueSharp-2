@@ -9,8 +9,10 @@ using SharpDX;
 
 #endregion
 
-namespace Support {
-    internal class Blitzcrank : Champion {
+namespace Support
+{
+    internal class Blitzcrank : Champion
+    {
         //Internal version 0.1
 
         public Spell Q;
@@ -18,7 +20,8 @@ namespace Support {
         public Spell E;
         public Spell R;
 
-        public Blitzcrank() {
+        public Blitzcrank()
+        {
             Utils.PrintMessage("Blitzcrank Loaded");
 
             Q = new Spell(SpellSlot.Q, 1000f);
@@ -29,46 +32,58 @@ namespace Support {
             Q.SetSkillshot(0.5f, 70f, 1000f, true, SkillshotType.SkillshotLine);
         }
 
-        public override void Drawing_OnDraw(EventArgs args) {
+        public override void Drawing_OnDraw(EventArgs args)
+        {
             Spell[] spellList = { Q, R };
-            foreach (var spell in spellList) {
+            foreach (var spell in spellList)
+            {
                 var menuItem = GetValue<Circle>("Draw" + spell.Slot);
                 if (menuItem.Active)
                     Utility.DrawCircle(ObjectManager.Player.Position, spell.Range, menuItem.Color);
             }
         }
 
-        public override void Interrupter_OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell) {
+        public override void Interrupter_OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
+        {
             if (!GetValue<bool>("InterruptSpells")) return;
 
-            if (ObjectManager.Player.Distance(unit) < Q.Range && Q.IsReady()) {
+            if (ObjectManager.Player.Distance(unit) < Q.Range && Q.IsReady())
+            {
                 Q.Cast(unit);
 
-            } else if (ObjectManager.Player.Distance(unit) < R.Range && R.IsReady()) {
+            }
+            else if (ObjectManager.Player.Distance(unit) < R.Range && R.IsReady())
+            {
                 R.Cast();
             }
         }
 
-        public override void Game_OnGameUpdate(EventArgs args) {
+        public override void Game_OnGameUpdate(EventArgs args)
+        {
             var useQ = Config.Item("UseQCombo").GetValue<bool>();
             var useW = Config.Item("UseWCombo").GetValue<bool>();
             var useE = Config.Item("UseECombo").GetValue<bool>();
             var useR = Config.Item("UseRCombo").GetValue<bool>();
             var useRKS = Config.Item("UseRKSCombo").GetValue<bool>();
 
-            if (useQ && Q.IsReady()) {
-                if (ComboActive) {
+            if (useQ && Q.IsReady())
+            {
+                if (ComboActive)
+                {
                     var t = SimpleTs.GetTarget(Q.Range, SimpleTs.DamageType.Magical);
-                    if (t != null) {
+                    if (t != null)
+                    {
                         //Q.Cast(Q.GetPrediction(t).Position.To2D().Extend(ObjectManager.Player.ServerPosition.To2D(), -Vector3.Distance(ObjectManager.Player.Position, t.Position) + 30));
                         Q.Cast(t);
                     }
                 }
             }
 
-            if (useE && E.IsReady()) {
+            if (useE && E.IsReady())
+            {
                 var t = SimpleTs.GetTarget(125, SimpleTs.DamageType.Magical);
-                if (t != null) {
+                if (t != null)
+                {
                     E.Cast();
                     Orbwalking.ResetAutoAttackTimer();
                     ObjectManager.Player.IssueOrder(GameObjectOrder.AttackUnit, t);
@@ -77,15 +92,20 @@ namespace Support {
 
 
 
-            if (useR && R.IsReady() && Utils.EnemyInRange(Config.Item("UseRACombo").GetValue<Slider>().Value, R.Range)) {
+            if (useR && R.IsReady() && Utils.EnemyInRange(Config.Item("UseRACombo").GetValue<Slider>().Value, R.Range))
+            {
                 ObjectManager.Player.Spellbook.CastSpell(SpellSlot.R);
             }
 
-            if (useR && useRKS && R.IsReady()) {
-                foreach (Obj_AI_Hero enemy in ObjectManager.Get<Obj_AI_Hero>().Where(enemy => enemy.Team != ObjectManager.Player.Team && enemy.IsValidTarget() && enemy.IsVisible)) {
-                    if (enemy != null) {
+            if (useR && useRKS && R.IsReady())
+            {
+                foreach (Obj_AI_Hero enemy in ObjectManager.Get<Obj_AI_Hero>().Where(enemy => enemy.Team != ObjectManager.Player.Team && enemy.IsValidTarget() && enemy.IsVisible))
+                {
+                    if (enemy != null)
+                    {
                         var RDMG = DamageLib.getDmg(enemy, DamageLib.SpellType.Q) - 10;
-                        if (enemy.Health < RDMG) {
+                        if (enemy.Health < RDMG)
+                        {
                             R.Cast();
                         }
                     }
@@ -95,7 +115,8 @@ namespace Support {
 
 
 
-        public override void ComboMenu(Menu config) {
+        public override void ComboMenu(Menu config)
+        {
 
             Config.SubMenu("Combo").AddItem(new MenuItem("UseQCombo", "Use Q").SetValue(true));
             Config.SubMenu("Combo").AddItem(new MenuItem("UseWCombo", "Use W").SetValue(true));
@@ -107,7 +128,8 @@ namespace Support {
         }
 
 
-        public override void DrawingMenu(Menu config) {
+        public override void DrawingMenu(Menu config)
+        {
             config.AddItem(
                 new MenuItem("DrawQ" + Id, "Q range").SetValue(new Circle(true,
                     System.Drawing.Color.FromArgb(100, 255, 0, 255))));
@@ -122,7 +144,8 @@ namespace Support {
                     System.Drawing.Color.FromArgb(100, 255, 0, 255))));
         }
 
-        public override void MiscMenu(Menu config) {
+        public override void MiscMenu(Menu config)
+        {
             config.AddItem(new MenuItem("InterruptSpells" + Id, "Use E to Interrupt Spells").SetValue(true));
         }
     }

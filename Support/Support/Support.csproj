@@ -80,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Blitzcrank.cs" />
+    <Compile Include="Janna.cs" />
     <Compile Include="Champion.cs" />
     <Compile Include="Geometry.cs" />
     <Compile Include="Leona.cs" />

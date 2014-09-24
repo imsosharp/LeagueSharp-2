@@ -1,3 +1,24 @@
+Support - Description
+======================
+Support Bundle  
+
+
+Supported Champions
+======================
+Thresh  
+Morgana  
+Blitzcrank  
+Sona  
+Leona  
+Braum  
+Janna  
+
+Credits
+======================
+https://github.com/Dibes/LeagueSharp
+
+
+
 Killability - Description
 ======================
 Draws Killmarker/Combo if you can Kill the Champion.
