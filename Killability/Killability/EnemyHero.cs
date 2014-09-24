@@ -225,7 +225,7 @@ namespace Killability
                     break;
 
                 case GameEventId.OnItemRemoved:
-                    foreach (var item in Killability.Items.Where(item => LeagueSharp.Common.Items.HasItem(item.Id, Hero) && Items.Contains(item)))
+                    foreach (var item in Killability.Items.Where(item => !LeagueSharp.Common.Items.HasItem(item.Id, Hero) && Items.Contains(item)))
                         Items.Remove(item);
                     break;
             }
