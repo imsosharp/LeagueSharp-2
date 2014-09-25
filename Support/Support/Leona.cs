@@ -27,8 +27,8 @@ namespace LeagueSharp.OrbwalkerPlugins
         public Leona()
             : base("by h3h3", new Version(4, 16, 14))
         {
-            Q = new Spell(SpellSlot.Q, 0);
-            W = new Spell(SpellSlot.W, 0);
+            Q = new Spell(SpellSlot.Q, Player.AttackRange);
+            W = new Spell(SpellSlot.W, Player.AttackRange);
             E = new Spell(SpellSlot.E, 900);
             R = new Spell(SpellSlot.R, 1200);
 
@@ -44,19 +44,19 @@ namespace LeagueSharp.OrbwalkerPlugins
         {
             if (ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
-                if (Q.IsReady() && E.IsReady() && Target.IsValidTarget(Player.AttackRange) && GetValue<bool>("UseQC"))
+                if (Q.IsReady() && Target.IsValidTarget(Q.Range) && GetValue<bool>("UseQC"))
                 {
                     Q.Cast();
                     Orbwalking.ResetAutoAttackTimer();
                     Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
                 }
 
-                if (W.IsReady() && Target.IsValidTarget(Player.AttackRange) && GetValue<bool>("UseWC"))
+                if (W.IsReady() && Target.IsValidTarget(W.Range) && GetValue<bool>("UseWC"))
                 {
                     W.Cast();
                 }
 
-                if (E.IsReady() && Target.IsValidTarget(E.Range) && GetValue<bool>("UseEC"))
+                if (E.IsReady() && Q.IsReady() && Target.IsValidTarget(E.Range) && GetValue<bool>("UseEC"))
                 {
                     E.Cast(Target, true);
                 }
@@ -84,7 +84,7 @@ namespace LeagueSharp.OrbwalkerPlugins
 
         public override void AfterAttack(Obj_AI_Base unit, Obj_AI_Base target)
         {
-            if (Q.IsReady() && Target.IsValidTarget(Player.AttackRange) && GetValue<bool>("UseQA"))
+            if (Q.IsReady() && Target.IsValidTarget(Q.Range) && GetValue<bool>("UseQA"))
             {
                 Q.Cast();
                 Orbwalking.ResetAutoAttackTimer();
@@ -94,7 +94,7 @@ namespace LeagueSharp.OrbwalkerPlugins
 
         public override void OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (Q.IsReady() && gapcloser.Sender.IsValidTarget(Player.AttackRange) && GetValue<bool>("UseQG"))
+            if (Q.IsReady() && gapcloser.Sender.IsValidTarget(Q.Range) && GetValue<bool>("UseQG"))
             {
                 Q.Cast();
                 Orbwalking.ResetAutoAttackTimer();
@@ -107,7 +107,7 @@ namespace LeagueSharp.OrbwalkerPlugins
             if(spell.DangerLevel < InterruptableDangerLevel.High)
                 return;
 
-            if (Q.IsReady() && unit.IsValidTarget(Player.AttackRange) && GetValue<bool>("UseQI"))
+            if (Q.IsReady() && unit.IsValidTarget(Q.Range) && GetValue<bool>("UseQI"))
             {
                 Q.Cast();
                 Orbwalking.ResetAutoAttackTimer();
