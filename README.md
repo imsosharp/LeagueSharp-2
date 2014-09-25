@@ -4,13 +4,25 @@ Support Bundle
 
 
 Supported Champions  
-Thresh  
-Morgana  
-Blitzcrank  
-Sona  
-Leona  
-Braum  
-Janna  
+Morgana - WIP - Testing  
+Blitzcrank - WIP - Testing  
+Leona - WIP - Testing  
+Braum - WIP - Testing  
+  
+Nami - WIP - Disabled  
+Thresh - WIP - Disabled  
+Janna - WIP - Disabled  
+  
+Alistar - Disabled  
+Fiddlesticks - Disabled  
+Karma - Disabled  
+Kayle - Disabled  
+Sona - Disabled  
+Lulu - Disabled  
+Soraka - Disabled  
+Taric - Disabled  
+Zyra - Disabled  
+Zilean - Disabled  
 
 Credits  
 https://github.com/Dibes/LeagueSharp
