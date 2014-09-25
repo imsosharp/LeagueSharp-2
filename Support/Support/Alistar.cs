@@ -19,21 +19,18 @@
 using System;
 using LeagueSharp.Common;
 
+
 namespace LeagueSharp.OrbwalkerPlugins
 {
-    public class JannaDisabled : OrbwalkerPluginBase
+    public class AlistarDisabled : OrbwalkerPluginBase
     {
-        public JannaDisabled()
+        public AlistarDisabled()
             : base("by h3h3", new Version(4, 16, 14))
         {
-            Q = new Spell(SpellSlot.Q, 1100);
-            W = new Spell(SpellSlot.W, 600);
-            E = new Spell(SpellSlot.E, 800);
-            R = new Spell(SpellSlot.R, 725);
-
-            Q.SetSkillshot(0.5f, 200f, 900f, false, SkillshotType.SkillshotLine);
-            Q.SetCharged("", "", 1100, 1700, 1.5f);
-            W.SetTargetted(0.5f, 1000f);
+            Q = new Spell(SpellSlot.Q, 0);
+            W = new Spell(SpellSlot.W, 0);
+            E = new Spell(SpellSlot.E, 0);
+            R = new Spell(SpellSlot.R, 0);
         }
 
         public override void OnLoad(EventArgs args)
@@ -44,45 +41,42 @@ namespace LeagueSharp.OrbwalkerPlugins
         {
             if (ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
-                if (Q.IsReady() && Target.IsValidTarget(Q.ChargedMaxRange) && GetValue<bool>("UseQC"))
+                if (Q.IsReady() && Target.IsValidTarget(Q.Range) && GetValue<bool>("UseQC"))
                 {
-                    if (Q.IsCharging)
-                    {
-                        Q.Cast(Target, true);
-                    }
-                    else
-                    {
-                        Q.StartCharging();
-                    }
+
                 }
 
                 if (W.IsReady() && Target.IsValidTarget(W.Range) && GetValue<bool>("UseWC"))
                 {
-                    W.Cast(Target, true);
+
                 }
 
-                if (E.IsReady() && GetValue<bool>("UseEC"))
+                if (E.IsReady() && Target.IsValidTarget(E.Range) && GetValue<bool>("UseEC"))
                 {
-                    // TODO: shield ally
+
                 }
 
-                if (R.IsReady() && Utility.CountEnemysInRange(300) > GetValue<Slider>("CountR").Value && GetValue<bool>("UseRC"))
+                if (R.IsReady() && Target.IsValidTarget(R.Range) && GetValue<bool>("UseRC"))
                 {
-                    if (ObjectManager.Player.Health < ObjectManager.Player.MaxHealth * GetValue<Slider>("HealthR").Value / 100)
-                        R.Cast();
+
                 }
             }
 
             if (ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             {
-                if (W.IsReady() && Target.IsValidTarget(W.Range) && GetValue<bool>("UseWH"))
+                if (Q.IsReady() && Target.IsValidTarget(Q.Range) && GetValue<bool>("UseQH"))
                 {
-                    W.Cast(Target, true);
+
                 }
 
-                if (E.IsReady() && GetValue<bool>("UseEH"))
+                if (W.IsReady() && Target.IsValidTarget(W.Range) && GetValue<bool>("UseWH"))
                 {
-                    // TODO: shield ally
+
+                }
+
+                if (E.IsReady() && Target.IsValidTarget(E.Range) && GetValue<bool>("UseEH"))
+                {
+
                 }
             }
         }
@@ -101,17 +95,9 @@ namespace LeagueSharp.OrbwalkerPlugins
 
         public override void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
         {
-            if (GetValue<bool>("InterruptQ") && spell.DangerLevel == InterruptableDangerLevel.High && unit.IsValidTarget(Q.Range) && Q.IsReady())
-            {
-                Q.StartCharging();
-                Utility.DelayAction.Add(100, () => Q.Cast(unit, true));
+            if (spell.DangerLevel < InterruptableDangerLevel.High)
                 return;
-            }
 
-            if (GetValue<bool>("InterruptR") && spell.DangerLevel == InterruptableDangerLevel.High && unit.IsValidTarget(R.Range) && R.IsReady() && !Q.IsReady())
-            {
-                R.Cast();
-            }
         }
 
         public override void OnDraw(EventArgs args)
@@ -124,14 +110,15 @@ namespace LeagueSharp.OrbwalkerPlugins
             config.AddItem(new MenuItem("UseWC", "Use W").SetValue(true));
             config.AddItem(new MenuItem("UseEC", "Use E").SetValue(true));
             config.AddItem(new MenuItem("UseRC", "Use R").SetValue(true));
-            config.AddItem(new MenuItem("CountR", "Emergency Ult, enemys in Range").SetValue(new Slider(2, 1, 5)));
-            config.AddItem(new MenuItem("HealthR", "Emergency Ult, lower than % HP").SetValue(new Slider(30, 1, 100)));
+            config.AddItem(new MenuItem("CountR", "Num of Enemy in Range to Ult").SetValue(new Slider(2, 1, 5)));
         }
 
         public override void HarassMenu(Menu config)
         {
+            config.AddItem(new MenuItem("UseQH", "Use Q").SetValue(true));
             config.AddItem(new MenuItem("UseWH", "Use W").SetValue(true));
             config.AddItem(new MenuItem("UseEH", "Use E").SetValue(true));
+            config.AddItem(new MenuItem("UseRH", "Use R").SetValue(true));
         }
 
         public override void ItemMenu(Menu config)
@@ -140,8 +127,10 @@ namespace LeagueSharp.OrbwalkerPlugins
 
         public override void MiscMenu(Menu config)
         {
-            config.AddItem(new MenuItem("InterruptQ", "Use Q to Interrupt Spells").SetValue(true));
-            config.AddItem(new MenuItem("InterruptR", "Use R to Interrupt Spells").SetValue(true));
+            config.AddItem(new MenuItem("UseQA", "Use Q after Attack").SetValue(true));
+            config.AddItem(new MenuItem("UseQG", "Use Q to Interrupt Gapcloser").SetValue(true));
+            config.AddItem(new MenuItem("UseQI", "Use Q to Interrupt Spells").SetValue(true));
+            config.AddItem(new MenuItem("UseRI", "Use R to Interrupt Spells").SetValue(true));
         }
 
         public override void ManaMenu(Menu config)

@@ -1,160 +1,161 @@
-﻿using LeagueSharp;
-using LeagueSharp.Common;
+﻿/*
+    Copyright (C) 2014 h3h3
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using LeagueSharp.Common;
 
-namespace Support
+
+namespace LeagueSharp.OrbwalkerPlugins
 {
-    class Leona : Champion
+    public class Leona : OrbwalkerPluginBase
     {
-
-        public Spell Q;
-        public Spell W;
-        public Spell E;
-        public Spell R;
-        // Items Consants.
-        public const int FrostQueen = 3092;
-
         public Leona()
+            : base("by h3h3", new Version(4, 16, 14))
         {
-            Utils.PrintMessage("Leona Loaded");
+            Q = new Spell(SpellSlot.Q, 0);
+            W = new Spell(SpellSlot.W, 0);
+            E = new Spell(SpellSlot.E, 900);
+            R = new Spell(SpellSlot.R, 1200);
 
-            Q = new Spell(SpellSlot.Q, 0f);
-            W = new Spell(SpellSlot.W, 0f);
-            E = new Spell(SpellSlot.E, 900f);
-            R = new Spell(SpellSlot.R, 1200f);
-
-            E.SetSkillshot(0f, 100f, 2000f, false, SkillshotType.SkillshotLine);
+            E.SetSkillshot(0f, 100, 2000, false, SkillshotType.SkillshotLine);
             R.SetSkillshot(0.7f, 315, float.MaxValue, false, SkillshotType.SkillshotCircle);
-
         }
 
-        public override void Drawing_OnDraw(EventArgs args)
+        public override void OnLoad(EventArgs args)
         {
-            Spell[] spellList = { Q, E, R };
-            foreach (var spell in spellList)
-            {
-                var menuItem = GetValue<Circle>("Draw" + spell.Slot);
-                if (menuItem.Active)
-                    Utility.DrawCircle(ObjectManager.Player.Position, spell.Range, menuItem.Color);
-            }
         }
 
-        public override void Game_OnGameUpdate(EventArgs args)
+        public override void OnUpdate(EventArgs args)
         {
-            if ((!ComboActive && !HarassActive) || (!Orbwalking.CanMove(100)))
-                return;
-
-            var useQ = GetValue<bool>("UseQ" + (ComboActive ? "C" : "H"));
-            var useW = GetValue<bool>("UseW" + (ComboActive ? "C" : "H"));
-            var useE = GetValue<bool>("UseE" + (ComboActive ? "C" : "H"));
-            var useR = GetValue<bool>("UseRC");
-
-            if (GetValue<bool>("UseQE"))
+            if (ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
-                if (useQ && Q.IsReady() && E.IsReady())
+                if (Q.IsReady() && E.IsReady() && Target.IsValidTarget(Player.AttackRange) && GetValue<bool>("UseQC"))
                 {
-                    var t = SimpleTs.GetTarget(E.Range, SimpleTs.DamageType.Physical);
-                    if (t.IsValidTarget())
-                    {
-                        Q.Cast();
-                    }
+                    Q.Cast();
+                    Orbwalking.ResetAutoAttackTimer();
+                    Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
                 }
-            }
-            else
-            {
-                if (useQ && Q.IsReady())
-                {
-                    var t = SimpleTs.GetTarget(E.Range, SimpleTs.DamageType.Physical);
-                    if (t.IsValidTarget())
-                    {
-                        Q.Cast();
-                    }
-                }
-            }
 
-            if (useW && W.IsReady())
-            {
-                var t = SimpleTs.GetTarget(E.Range, SimpleTs.DamageType.Physical);
-                if (t.IsValidTarget())
+                if (W.IsReady() && Target.IsValidTarget(Player.AttackRange) && GetValue<bool>("UseWC"))
                 {
                     W.Cast();
                 }
-            }
 
-            if (useE && E.IsReady())
-            {
-                var t = SimpleTs.GetTarget(E.Range, SimpleTs.DamageType.Physical);
-                E.Cast(t, GetValue<bool>("Packets"));
-            }
-
-            if (useR && R.IsReady())
-            {
-                var t = SimpleTs.GetTarget(R.Range, SimpleTs.DamageType.Physical);
-                var predOut = Prediction.GetPrediction(t, R.Delay, R.Width, R.Speed);
-                if (predOut.AoeTargetsHitCount <= GetValue<Slider>("CountR").Value)
+                if (E.IsReady() && Target.IsValidTarget(E.Range) && GetValue<bool>("UseEC"))
                 {
-                    R.Cast(predOut.CastPosition, GetValue<bool>("Packets"));
+                    E.Cast(Target, true);
+                }
+
+                if (R.IsReady() && Target.IsValidTarget(R.Range) && GetValue<bool>("UseRC"))
+                {
+                    R.CastIfWillHit(Target, GetValue<Slider>("CountR").Value, true);
+                }
+
+                if (FrostQueen.IsReady() && Target.IsValidTarget(FrostQueen.Range) && GetValue<bool>("UseFrostQueen"))
+                {
+                    FrostQueen.Cast(Target);
                 }
             }
 
-            // Item menu
-            if (ComboActive)
+            if (ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             {
-                // Gets the target within frostQueens range (850).
-                var target = SimpleTs.GetTarget(840, SimpleTs.DamageType.Physical);
-                if (Items.HasItem(FrostQueen) && Items.CanUseItem(FrostQueen))
-                {
-                    // Grab the prediction based on arbitrary values ^.^
-                    var pred = Prediction.GetPrediction(target, 0.5f, 50f, 1200f);
-                    foreach (var slot in ObjectManager.Player.InventoryItems.Where(slot => slot.Id == (ItemId)FrostQueen))
-                    {
-                        if (pred.Hitchance >= HitChance.Low)
-                        {
-                            slot.UseItem(pred.CastPosition);
-                        }
-                    }
-                }
+
+            }
+        }
+
+        public override void BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
+        {
+        }
+
+        public override void AfterAttack(Obj_AI_Base unit, Obj_AI_Base target)
+        {
+            if (Q.IsReady() && Target.IsValidTarget(Player.AttackRange) && GetValue<bool>("UseQA"))
+            {
+                Q.Cast();
+                Orbwalking.ResetAutoAttackTimer();
+                Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
+            }
+        }
+
+        public override void OnEnemyGapcloser(ActiveGapcloser gapcloser)
+        {
+            if (Q.IsReady() && gapcloser.Sender.IsValidTarget(Player.AttackRange) && GetValue<bool>("UseQG"))
+            {
+                Q.Cast();
+                Orbwalking.ResetAutoAttackTimer();
+                Player.IssueOrder(GameObjectOrder.AttackUnit, gapcloser.Sender);
+            }
+        }
+
+        public override void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
+        {
+            if(spell.DangerLevel < InterruptableDangerLevel.High)
+                return;
+
+            if (Q.IsReady() && unit.IsValidTarget(Player.AttackRange) && GetValue<bool>("UseQI"))
+            {
+                Q.Cast();
+                Orbwalking.ResetAutoAttackTimer();
+                Player.IssueOrder(GameObjectOrder.AttackUnit, unit);
             }
 
+            if (R.IsReady() && !Q.IsReady() && Target.IsValidTarget(R.Range) && GetValue<bool>("UseRI"))
+            {
+                R.Cast(Target, true);
+            }
+        }
 
+        public override void OnDraw(EventArgs args)
+        {
         }
 
         public override void ComboMenu(Menu config)
         {
-            config.AddItem(new MenuItem("UseQC" + Id, "Use Q").SetValue(true));
-            config.AddItem(new MenuItem("UseWC" + Id, "Use W").SetValue(true));
-            config.AddItem(new MenuItem("UseEC" + Id, "Use E").SetValue(true));
-            config.AddItem(new MenuItem("UseRC" + Id, "Use R").SetValue(true));
-            config.AddItem(new MenuItem("spacer", "--- Options ---"));
-            config.AddItem(new MenuItem("CountR" + Id, "Num of Enemy in Range to Ult").SetValue(new Slider(1, 5, 0)));
+            config.AddItem(new MenuItem("UseQC", "Use Q").SetValue(true));
+            config.AddItem(new MenuItem("UseWC", "Use W").SetValue(true));
+            config.AddItem(new MenuItem("UseEC", "Use E").SetValue(true));
+            config.AddItem(new MenuItem("UseRC", "Use R").SetValue(true));
+            config.AddItem(new MenuItem("CountR", "Num of Enemy in Range to Ult").SetValue(new Slider(2, 1, 5)));
         }
 
         public override void HarassMenu(Menu config)
         {
-            config.AddItem(new MenuItem("UseQH" + Id, "Use Q").SetValue(true));
-            config.AddItem(new MenuItem("UseWH" + Id, "Use W").SetValue(true));
-            config.AddItem(new MenuItem("UseEH" + Id, "Use E").SetValue(true));
         }
 
-        public override void DrawingMenu(Menu config)
+        public override void ItemMenu(Menu config)
         {
-            config.AddItem(
-                new MenuItem("DrawE" + Id, "E range").SetValue(new Circle(true,
-                    System.Drawing.Color.FromArgb(100, 255, 0, 255))));
-            config.AddItem(
-                new MenuItem("DrawR" + Id, "R range").SetValue(new Circle(false,
-                    System.Drawing.Color.FromArgb(100, 255, 0, 255))));
+            config.AddItem(new MenuItem("UseFrostQueen", "Use FrostQueen").SetValue(true));
         }
 
         public override void MiscMenu(Menu config)
         {
-            config.AddItem(new MenuItem("UseQE" + Id, "Use Q only with E").SetValue(true));
-            config.AddItem(new MenuItem("Packets" + Id, "Use Packets").SetValue(true));
+            config.AddItem(new MenuItem("UseQA", "Use Q after Attack").SetValue(true));
+            config.AddItem(new MenuItem("UseQG", "Use Q to Interrupt Gapcloser").SetValue(true));
+            config.AddItem(new MenuItem("UseQI", "Use Q to Interrupt Spells").SetValue(true));
+            config.AddItem(new MenuItem("UseRI", "Use R to Interrupt Spells").SetValue(true));
         }
 
+        public override void ManaMenu(Menu config)
+        {
+        }
+
+        public override void DrawingMenu(Menu config)
+        {
+        }
     }
 }

@@ -15,7 +15,7 @@ namespace Support
 
         public static void PrintMessage(string message)
         {
-            Game.PrintChat("<font color='#1600DB'>Support:</font> <font color='#FFFFFF'>" + message + "</font>");
+            Game.PrintChat("<font color='#15C3AC'>Support:</font> <font color='#FFFFFF'>" + message + "</font>");
         }
 
         public static bool HasBuff(Obj_AI_Hero target, string buffName)

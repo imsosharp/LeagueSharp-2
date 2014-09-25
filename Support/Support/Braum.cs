@@ -17,110 +17,110 @@
 
 
 using System;
-using LeagueSharp;
 using LeagueSharp.Common;
 
-
-namespace Support
+namespace LeagueSharp.OrbwalkerPlugins
 {
-    internal class Braum : Champion
+    public class Braum : OrbwalkerPluginBase
     {
-        public Spell Q;
-        public Spell W;
-        public Spell E;
-        public Spell R;
-
-        public Braum()
+        public Braum() 
+            : base("by h3h3", new Version(4, 16, 14))
         {
-            Utils.PrintMessage("Braum Loaded");
-
             Q = new Spell(SpellSlot.Q, 1000);
             W = new Spell(SpellSlot.W, 650);
-            E = new Spell(SpellSlot.E, 25000);
+            E = new Spell(SpellSlot.E, 0);
             R = new Spell(SpellSlot.R, 1250);
 
             Q.SetSkillshot(0.3333f, 70f, 1200f, true, SkillshotType.SkillshotLine);
             R.SetSkillshot(0.5f, 80f, 1200f, false, SkillshotType.SkillshotLine);
         }
 
-        public override void Drawing_OnDraw(EventArgs args)
+        public override void OnLoad(EventArgs args)
         {
-            Spell[] spellList = { Q, W, E, R };
-            foreach (var spell in spellList)
+        }
+
+        public override void OnUpdate(EventArgs args)
+        {
+            if (ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
-                var menuItem = GetValue<Circle>("Draw" + spell.Slot);
-                if (menuItem.Active)
-                    Utility.DrawCircle(ObjectManager.Player.Position, spell.Range, menuItem.Color);
+                if (Q.IsReady() && Target.IsValidTarget(Q.Range) && GetValue<bool>("UseQC"))
+                {
+                    Q.Cast(Target, true);
+                }
+
+                if (R.IsReady() && Target.IsValidTarget(R.Range) && GetValue<bool>("UseRC"))
+                {
+                    R.CastIfWillHit(Target, GetValue<Slider>("CountR").Value, true);
+                }
+            }
+
+            if (ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+            {
+                if (Q.IsReady() && Target.IsValidTarget(Q.Range) && GetValue<bool>("UseQH"))
+                {
+                    Q.Cast(Target, true);
+                }
             }
         }
 
-        public override void Interrupter_OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
+        public override void BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
-            if (!GetValue<bool>("InterruptSpells")) return;
+        }
 
-            if (spell.DangerLevel == InterruptableDangerLevel.High && unit.IsValidTarget(R.Range) && R.IsReady())
+        public override void AfterAttack(Obj_AI_Base unit, Obj_AI_Base target)
+        {
+        }
+
+        public override void OnEnemyGapcloser(ActiveGapcloser gapcloser)
+        {
+            if (gapcloser.Sender.IsValidTarget(Q.Range) && Q.IsReady())
+            {
+                Q.Cast(gapcloser.Sender, true);
+            }
+        }
+
+        public override void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
+        {
+            if (spell.DangerLevel < InterruptableDangerLevel.High)
+                return;
+
+            if (unit.IsValidTarget(R.Range) && R.IsReady())
             {
                 R.Cast(unit, true);
             }
         }
 
-        public override void Game_OnGameUpdate(EventArgs args)
+        public override void OnDraw(EventArgs args)
         {
-            var target = SimpleTs.GetTarget(Q.Range, SimpleTs.DamageType.Magical);
-
-            if (ComboActive)
-            {
-                if (Q.IsReady() && target.IsValidTarget(Q.Range) && GetValue<bool>("UseQC"))
-                {
-                    Q.Cast(target, true);
-                }
-
-                if (R.IsReady() && target.IsValidTarget(R.Range) && R.GetPrediction(target, true).AoeTargetsHitCount > GetValue<Slider>("CountR").Value)
-                {
-                    R.Cast(target, true);
-                }
-            }
-
-            if (HarassActive)
-            {
-                if (Q.IsReady() && target.IsValidTarget(Q.Range) && GetValue<bool>("UseQH"))
-                {
-                    Q.Cast(target, true);
-                }
-            }
         }
-
 
         public override void ComboMenu(Menu config)
         {
-            config.AddItem(new MenuItem("UseQC" + Id, "Use Q").SetValue(true));
-            config.AddItem(new MenuItem("CountR" + Id, "Num of Enemy in Range to Ult").SetValue(new Slider(2, 1, 5)));
+            config.AddItem(new MenuItem("UseQC", "Use Q").SetValue(true));
+            config.AddItem(new MenuItem("UseRC", "Use R").SetValue(true));
+            config.AddItem(new MenuItem("CountR", "Num of Enemy in Range to Ult").SetValue(new Slider(2, 1, 5)));
         }
 
         public override void HarassMenu(Menu config)
         {
-            config.AddItem(new MenuItem("UseQH" + Id, "Use Q").SetValue(false));
+            config.AddItem(new MenuItem("UseQH", "Use Q").SetValue(true));
         }
 
-        public override void DrawingMenu(Menu config)
+        public override void ItemMenu(Menu config)
         {
-            config.AddItem(
-                new MenuItem("DrawQ" + Id, "Q range").SetValue(new Circle(true,
-                    System.Drawing.Color.FromArgb(100, 255, 0, 255))));
-            config.AddItem(
-                new MenuItem("DrawW" + Id, "W range").SetValue(new Circle(true,
-                    System.Drawing.Color.FromArgb(100, 255, 0, 255))));
-            config.AddItem(
-                new MenuItem("DrawE" + Id, "E range").SetValue(new Circle(false,
-                    System.Drawing.Color.FromArgb(100, 255, 0, 255))));
-            config.AddItem(
-                new MenuItem("DrawR" + Id, "R range").SetValue(new Circle(false,
-                    System.Drawing.Color.FromArgb(100, 255, 0, 255))));
         }
 
         public override void MiscMenu(Menu config)
         {
-            config.AddItem(new MenuItem("InterruptSpells" + Id, "Use R to Interrupt Spells").SetValue(true));
+            config.AddItem(new MenuItem("InterruptR", "Use R to Interrupt Spells").SetValue(true));
+        }
+
+        public override void ManaMenu(Menu config)
+        {
+        }
+
+        public override void DrawingMenu(Menu config)
+        {
         }
     }
 }
