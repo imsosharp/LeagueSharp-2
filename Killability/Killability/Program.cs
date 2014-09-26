@@ -18,7 +18,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Killability.Properties;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
@@ -77,20 +76,24 @@ namespace Killability
             foreach (var h in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsEnemy))
             {
                 var hero = h;
-                var sprite = new Render.Sprite(Resources.Skull, hero.HPBarPosition);
-                sprite.Scale = new Vector2(0.08f, 0.08f);
-                sprite.Add(0);
-                sprite.PositionUpdate += () => new Vector2(hero.HPBarPosition.X + 140, hero.HPBarPosition.Y + 10);
-                sprite.VisibleCondition += s =>
-                    Render.OnScreen(Drawing.WorldToScreen(hero.Position)) &&
-                    GetComboResult(hero).IsKillable &&
-                    _config.Item("icon").GetValue<bool>();
+                //var sprite = new Render.Sprite(Resources.Skull, hero.HPBarPosition);
+                //sprite.Scale = new Vector2(0.08f, 0.08f);
+                //sprite.Add(0);
+                //sprite.PositionUpdate += () => new Vector2(hero.HPBarPosition.X + 140, hero.HPBarPosition.Y + 10);
+                //sprite.VisibleCondition += s =>
+                //    Render.OnScreen(Drawing.WorldToScreen(hero.Position)) &&
+                //    GetComboResult(hero).IsKillable &&
+                //    _config.Item("icon").GetValue<bool>();
 
                 var text = new Render.Text("", hero, new Vector2(20, 50), 18, new ColorBGRA(255, 255, 255, 255));
                 text.VisibleCondition += s =>
                     Render.OnScreen(Drawing.WorldToScreen(hero.Position)) &&
                     _config.Item("text").GetValue<bool>();
-                text.TextUpdate += () => GetComboResult(hero).Text;
+                text.TextUpdate += () =>
+                {
+                    var result = GetComboResult(hero);
+                    return (result.IsKillable ? "Kill HIM " : "") + result.Text;
+                };
                 text.OutLined = true;
                 text.Add();
             }
