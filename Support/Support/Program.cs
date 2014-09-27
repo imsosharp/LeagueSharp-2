@@ -17,6 +17,8 @@
 
 
 using System;
+using System.Threading.Tasks;
+using LeagueSharp.Common;
 using Utils = Support.Utils;
 
 namespace LeagueSharp.OrbwalkerPlugins
@@ -25,16 +27,26 @@ namespace LeagueSharp.OrbwalkerPlugins
     {
         static void Main(string[] args)
         {
-            var type = Type.GetType(typeof(Program).Namespace + "." + ObjectManager.Player.ChampionName);
-
-            if (type != null)
+            CustomEvents.Game.OnGameLoad += a => 
             {
-                Console.WriteLine("Loading: " + type);
-                Activator.CreateInstance(type);
-                return;
-            }
+                try
+                {
+                    var type = Type.GetType(typeof (Program).Namespace + "." + ObjectManager.Player.ChampionName);
 
-            Utils.PrintMessage(ObjectManager.Player.ChampionName + " not supported");
+                    if (type != null)
+                    {
+                        Console.WriteLine("Loading: " + type);
+                        Activator.CreateInstance(type);
+                        return;
+                    }
+
+                    Utils.PrintMessage(ObjectManager.Player.ChampionName + " not supported");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+            };
         }
     }
 }

@@ -24,7 +24,7 @@ namespace LeagueSharp.OrbwalkerPlugins
     public class Blitzcrank : OrbwalkerPluginBase
     {
         public Blitzcrank()
-            : base("by h3h3", new Version(4, 16, 14))
+            : base("by h3h3", new Version(4, 17, 14))
         {
             Q = new Spell(SpellSlot.Q, 1000);
             W = new Spell(SpellSlot.W, 0);

@@ -23,8 +23,8 @@ namespace LeagueSharp.OrbwalkerPlugins
 {
     public class Braum : OrbwalkerPluginBase
     {
-        public Braum() 
-            : base("by h3h3", new Version(4, 16, 14))
+        public Braum()
+            : base("by h3h3", new Version(4, 17, 14))
         {
             Q = new Spell(SpellSlot.Q, 1000);
             W = new Spell(SpellSlot.W, 650);
@@ -84,7 +84,7 @@ namespace LeagueSharp.OrbwalkerPlugins
             if (spell.DangerLevel < InterruptableDangerLevel.High)
                 return;
 
-            if (unit.IsValidTarget(R.Range) && R.IsReady())
+            if (unit.IsValidTarget(R.Range) && R.IsReady() && GetValue<bool>("InterruptR"))
             {
                 R.Cast(unit, true);
             }
@@ -98,7 +98,7 @@ namespace LeagueSharp.OrbwalkerPlugins
         {
             config.AddItem(new MenuItem("UseQC", "Use Q").SetValue(true));
             config.AddItem(new MenuItem("UseRC", "Use R").SetValue(true));
-            config.AddItem(new MenuItem("CountR", "Num of Enemy in Range to Ult").SetValue(new Slider(2, 1, 5)));
+            config.AddItem(new MenuItem("CountR", "Num of Enemy in Range to Ult").SetValue(new Slider(2, 0, 5)));
         }
 
         public override void HarassMenu(Menu config)

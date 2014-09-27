@@ -72,9 +72,14 @@ namespace LeagueSharp.OrbwalkerPlugins
         public Obj_AI_Hero Player { get { return ObjectManager.Player; } }
 
         /// <summary>
+        /// TargetSelector
+        /// </summary>
+        public TargetSelector TargetSelector { get; set; }
+
+        /// <summary>
         /// Target
         /// </summary>
-        public Obj_AI_Hero Target { get; set; }
+        public Obj_AI_Hero Target { get { return TargetSelector.Target; } }
 
         /// <summary>
         /// OrbwalkerTarget
@@ -101,15 +106,14 @@ namespace LeagueSharp.OrbwalkerPlugins
         /// </summary>
         public Spell R { get; set; }
 
-        public readonly Items.Item Zhonyas = new Items.Item(3157, float.MaxValue);
-        public readonly Items.Item FrostQueen = new Items.Item(3092, 850);
-        public readonly Items.Item TwinShadows = new Items.Item(3023, 1500);
-        public readonly Items.Item Locket = new Items.Item(3190, 600);
-        public readonly Items.Item Talisman = new Items.Item(3069, 600);
-        public readonly Items.Item Mikael = new Items.Item(3222, float.MaxValue);
+        public Items.Item Zhonyas { get; set; }
+        public Items.Item FrostQueen { get; set; }
+        public Items.Item TwinShadows { get; set; }
+        public Items.Item Locket { get; set; }
+        public Items.Item Talisman { get; set; }
+        public Items.Item Mikael { get; set; }
 
         private readonly List<Spell> _spells = new List<Spell>();
-
 
         /// <summary>
         /// Init BaseClass
@@ -122,49 +126,72 @@ namespace LeagueSharp.OrbwalkerPlugins
 
             InitConfig();
             InitOrbwalker();
-            InitSpells();
             InitTargetSelector();
-            InitDrawing();
-            InitPrivateEvents();
+            InitItems();
             InitPluginEvents();
+            InitPrivateEvents();
+
+            Utils.PrintMessage(string.Format("{0} {1} {2} loaded!", ChampionName, Description, Version));
         }
 
         #region Private Stuff
+
+        private void InitTargetSelector()
+        {
+            TargetSelector = new TargetSelector(float.MaxValue, TargetSelector.TargetingMode.AutoPriority);
+            TargetSelector.SetDrawCircleOfTarget(true);
+            Utility.DelayAction.Add(300, () => TargetSelector.SetRange(_spells.Select(s => s.Range).Max()));
+        }
+
+        private void InitItems()
+        {
+            Zhonyas = new Items.Item(3157, float.MaxValue);
+            FrostQueen = new Items.Item(3092, 850);
+            TwinShadows = new Items.Item(3023, 1500);
+            Locket = new Items.Item(3190, 600);
+            Talisman = new Items.Item(3069, 600);
+            Mikael = new Items.Item(3222, float.MaxValue);
+        }
 
         /// <summary>
         /// PluginEvents Initialization
         /// </summary>
         private void InitPluginEvents()
         {
-            CustomEvents.Game.OnGameLoad += OnLoad;
-            CustomEvents.Game.OnGameEnd += OnUnload;
+            Console.WriteLine("Init Events");
             Game.OnGameUpdate += OnUpdate;
             Drawing.OnDraw += OnDraw;
             Orbwalking.BeforeAttack += BeforeAttack;
             Orbwalking.AfterAttack += AfterAttack;
             AntiGapcloser.OnEnemyGapcloser += OnEnemyGapcloser;
             Interrupter.OnPossibleToInterrupt += OnPossibleToInterrupt;
+            OnLoad(new EventArgs());
         }
 
         private void InitPrivateEvents()
         {
-            CustomEvents.Game.OnGameLoad += args => Utils.PrintMessage(string.Format("{0} {1} {2} loaded!", ChampionName, Description, Version));
+            Utility.DelayAction.Add(250, () =>
+            {
+                _spells.Add(Q);
+                _spells.Add(W);
+                _spells.Add(E);
+                _spells.Add(R);
+            });
 
             Orbwalking.BeforeAttack += args =>
             {
                 if (args.Target.IsMinion && !Config.Item("AttMin").GetValue<bool>())
                     args.Process = false;
             };
-        }
 
-        /// <summary>
-        /// TargetSelector Initialization
-        /// </summary>
-        private void InitTargetSelector()
-        {
-            Game.OnGameUpdate += args =>
+            Drawing.OnDraw += args =>
             {
-                Target = SimpleTs.GetTarget(_spells.Select(s => s.Range).Max(), SimpleTs.DamageType.Magical);
+                foreach (var spell in _spells.Where(s => s != null))
+                {
+                    var menuItem = Config.Item(spell.Slot + "Range").GetValue<Circle>();
+                    if (menuItem.Active && spell.Level > 0 && spell.IsReady())
+                        Utility.DrawCircle(Player.Position, spell.Range, menuItem.Color);
+                }
             };
         }
 
@@ -210,30 +237,6 @@ namespace LeagueSharp.OrbwalkerPlugins
         private void InitOrbwalker()
         {
             Orbwalker = new Orbwalking.Orbwalker(Config.SubMenu("Orbwalking"));
-        }
-
-        private void InitDrawing()
-        {
-            Drawing.OnDraw += args =>
-            {
-                foreach (var spell in _spells.Where(s => s != null))
-                {
-                    var menuItem = Config.Item(spell.Slot + "Range").GetValue<Circle>();
-                    if (menuItem.Active && spell.Level > 0 && spell.IsReady())
-                        Utility.DrawCircle(Player.Position, spell.Range, menuItem.Color);
-                }
-            };
-        }
-
-        private void InitSpells()
-        {
-            CustomEvents.Game.OnGameLoad += args =>
-            {
-                _spells.Add(Q);
-                _spells.Add(W);
-                _spells.Add(E);
-                _spells.Add(R);
-            };
         }
 
         #endregion
@@ -318,23 +321,6 @@ namespace LeagueSharp.OrbwalkerPlugins
         /// <param name="args">args</param>
         public virtual void OnLoad(EventArgs args)
         {
-        }
-
-        /// <summary>
-        /// OnUnload
-        /// </summary>
-        /// <remarks>
-        /// override to Implement Cleanup
-        /// </remarks>
-        /// <param name="args">args</param>
-        public virtual void OnUnload(EventArgs args)
-        {
-            CustomEvents.Game.OnGameLoad -= OnLoad;
-            CustomEvents.Game.OnGameEnd -= OnUnload;
-            Game.OnGameUpdate -= OnUpdate;
-            Drawing.OnDraw -= OnDraw;
-            AntiGapcloser.OnEnemyGapcloser -= OnEnemyGapcloser;
-            Interrupter.OnPossibleToInterrupt -= OnPossibleToInterrupt;
         }
 
         /// <summary>

@@ -25,7 +25,7 @@ namespace LeagueSharp.OrbwalkerPlugins
     public class ThreshDisabled : OrbwalkerPluginBase
     {
         public ThreshDisabled()
-            : base("by h3h3", new Version(4, 16, 14))
+            : base("by h3h3", new Version(4, 17, 14))
         {
             Q = new Spell(SpellSlot.Q, 0);
             W = new Spell(SpellSlot.W, 0);

@@ -24,7 +24,7 @@ namespace LeagueSharp.OrbwalkerPlugins
     public class Morgana : OrbwalkerPluginBase
     {
         public Morgana()
-            : base("by h3h3", new Version(4, 16, 14))
+            : base("by h3h3", new Version(4, 17, 14))
         {
             Q = new Spell(SpellSlot.Q, 1300);
             W = new Spell(SpellSlot.W, 900);
@@ -33,7 +33,6 @@ namespace LeagueSharp.OrbwalkerPlugins
 
             Q.SetSkillshot(0.5f, 80, 1200, true, SkillshotType.SkillshotLine);
             W.SetTargetted(0.5f, float.MaxValue);
-            R.SetTargetted(0.5f, float.MaxValue);
         }
 
         public override void OnLoad(EventArgs args)
@@ -108,7 +107,7 @@ namespace LeagueSharp.OrbwalkerPlugins
             config.AddItem(new MenuItem("UseQC", "Use Q").SetValue(true));
             config.AddItem(new MenuItem("UseWC", "Use W").SetValue(true));
             config.AddItem(new MenuItem("UseRC", "Use R").SetValue(true));
-            config.AddItem(new MenuItem("CountR", "Num of Enemy in Range to Ult").SetValue(new Slider(2, 1, 5)));
+            config.AddItem(new MenuItem("CountR", "Num of Enemy in Range to Ult").SetValue(new Slider(2, 0, 5)));
         }
 
         public override void HarassMenu(Menu config)

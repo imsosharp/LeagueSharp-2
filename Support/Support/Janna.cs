@@ -17,6 +17,10 @@
 
 
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
 using LeagueSharp.Common;
 
 namespace LeagueSharp.OrbwalkerPlugins
@@ -24,15 +28,15 @@ namespace LeagueSharp.OrbwalkerPlugins
     public class JannaDisabled : OrbwalkerPluginBase
     {
         public JannaDisabled()
-            : base("by h3h3", new Version(4, 16, 14))
+            : base("by h3h3", new Version(4, 17, 14))
         {
-            Q = new Spell(SpellSlot.Q, 1100);
+            Q = new Spell(SpellSlot.Q, 1700);
             W = new Spell(SpellSlot.W, 600);
             E = new Spell(SpellSlot.E, 800);
             R = new Spell(SpellSlot.R, 725);
 
             Q.SetSkillshot(0.5f, 200f, 900f, false, SkillshotType.SkillshotLine);
-            Q.SetCharged("", "", 1100, 1700, 1.5f);
+            Q.SetCharged("HowlingGale", "HowlingGale", 1100, 1700, 1.5f);
             W.SetTargetted(0.5f, 1000f);
         }
 
@@ -42,48 +46,50 @@ namespace LeagueSharp.OrbwalkerPlugins
 
         public override void OnUpdate(EventArgs args)
         {
-            if (ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+            try
             {
-                if (Q.IsReady() && Target.IsValidTarget(Q.ChargedMaxRange) && GetValue<bool>("UseQC"))
+                if (ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                 {
-                    if (Q.IsCharging)
+                    if (Q.IsReady() && Target.IsValidTarget(Q.ChargedMaxRange))
                     {
+                        Console.WriteLine("Cast: Q " + Target.Name);
                         Q.Cast(Target, true);
+                        Utility.DelayAction.Add(100, () => Q.Cast(Target, true));
                     }
-                    else
+
+                    if (W.IsReady() && Target.IsValidTarget(W.Range))
                     {
-                        Q.StartCharging();
+                        W.Cast(Target, true);
+                        Console.WriteLine("Cast: W " + Target.Name);
                     }
+
+                    //if (R.IsReady() && Utility.CountEnemysInRange((int)Player.AttackRange) > GetValue<Slider>("CountR").Value)
+                    //{
+                    //    if (ObjectManager.Player.Health < ObjectManager.Player.MaxHealth*GetValue<Slider>("HealthR").Value/100)
+                    //    {
+                    //        R.Cast();
+                    //        Console.WriteLine("Cast: R " + Target.Name);
+                    //    }
+                    //}
                 }
 
-                if (W.IsReady() && Target.IsValidTarget(W.Range) && GetValue<bool>("UseWC"))
+                if (ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
                 {
-                    W.Cast(Target, true);
-                }
+                    if (W.IsReady() && Target.IsValidTarget(W.Range))
+                    {
+                        W.Cast(Target, true);
+                        Console.WriteLine("Cast: W " + Target.Name);
+                    }
 
-                if (E.IsReady() && GetValue<bool>("UseEC"))
-                {
-                    // TODO: shield ally
-                }
-
-                if (R.IsReady() && Utility.CountEnemysInRange(300) > GetValue<Slider>("CountR").Value && GetValue<bool>("UseRC"))
-                {
-                    if (ObjectManager.Player.Health < ObjectManager.Player.MaxHealth * GetValue<Slider>("HealthR").Value / 100)
-                        R.Cast();
+                    if (E.IsReady() && GetValue<bool>("UseEH"))
+                    {
+                        // TODO: shield ally
+                    }
                 }
             }
-
-            if (ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+            catch (Exception e)
             {
-                if (W.IsReady() && Target.IsValidTarget(W.Range) && GetValue<bool>("UseWH"))
-                {
-                    W.Cast(Target, true);
-                }
-
-                if (E.IsReady() && GetValue<bool>("UseEH"))
-                {
-                    // TODO: shield ally
-                }
+                Console.WriteLine(e);
             }
         }
 
@@ -101,14 +107,17 @@ namespace LeagueSharp.OrbwalkerPlugins
 
         public override void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
         {
-            if (GetValue<bool>("InterruptQ") && spell.DangerLevel == InterruptableDangerLevel.High && unit.IsValidTarget(Q.Range) && Q.IsReady())
+            if (spell.DangerLevel < InterruptableDangerLevel.High)
+                return;
+
+            if (GetValue<bool>("InterruptQ") && unit.IsValidTarget(Q.Range) && Q.IsReady())
             {
                 Q.StartCharging();
                 Utility.DelayAction.Add(100, () => Q.Cast(unit, true));
                 return;
             }
 
-            if (GetValue<bool>("InterruptR") && spell.DangerLevel == InterruptableDangerLevel.High && unit.IsValidTarget(R.Range) && R.IsReady() && !Q.IsReady())
+            if (GetValue<bool>("InterruptR") && unit.IsValidTarget(R.Range) && R.IsReady() && !Q.IsReady())
             {
                 R.Cast();
             }
@@ -124,8 +133,8 @@ namespace LeagueSharp.OrbwalkerPlugins
             config.AddItem(new MenuItem("UseWC", "Use W").SetValue(true));
             config.AddItem(new MenuItem("UseEC", "Use E").SetValue(true));
             config.AddItem(new MenuItem("UseRC", "Use R").SetValue(true));
-            config.AddItem(new MenuItem("CountR", "Emergency Ult, enemys in Range").SetValue(new Slider(2, 1, 5)));
-            config.AddItem(new MenuItem("HealthR", "Emergency Ult, lower than % HP").SetValue(new Slider(30, 1, 100)));
+            config.AddItem(new MenuItem("CountR", "Ult enemys in Range").SetValue(new Slider(2, 1, 5)));
+            config.AddItem(new MenuItem("HealthR", "Ult lower than % HP").SetValue(new Slider(30, 1, 100)));
         }
 
         public override void HarassMenu(Menu config)
