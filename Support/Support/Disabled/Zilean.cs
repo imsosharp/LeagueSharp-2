@@ -17,20 +17,20 @@
 
 
 using System;
+using LeagueSharp;
 using LeagueSharp.Common;
 
-
-namespace LeagueSharp.OrbwalkerPlugins
+namespace Support.Disabled
 {
-    public class TaricDisabled : OrbwalkerPluginBase
+    public class Zilean : PluginBase
     {
-        public TaricDisabled()
-            : base("by h3h3", new Version(4, 17, 14))
+        public Zilean()
+            : base("h3h3", new Version(4, 17, 14))
         {
-            Q = new Spell(SpellSlot.Q, 0);
+            Q = new Spell(SpellSlot.Q, 700);
             W = new Spell(SpellSlot.W, 0);
-            E = new Spell(SpellSlot.E, 0);
-            R = new Spell(SpellSlot.R, 0);
+            E = new Spell(SpellSlot.E, 700);
+            R = new Spell(SpellSlot.R, 900);
         }
 
         public override void OnLoad(EventArgs args)
@@ -39,7 +39,7 @@ namespace LeagueSharp.OrbwalkerPlugins
 
         public override void OnUpdate(EventArgs args)
         {
-            if (ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+            if (ComboMode)
             {
                 if (Q.IsReady() && Target.IsValidTarget(Q.Range) && GetValue<bool>("UseQC"))
                 {
@@ -62,7 +62,7 @@ namespace LeagueSharp.OrbwalkerPlugins
                 }
             }
 
-            if (ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+            if (HarassMode)
             {
                 if (Q.IsReady() && Target.IsValidTarget(Q.Range) && GetValue<bool>("UseQH"))
                 {
@@ -95,7 +95,7 @@ namespace LeagueSharp.OrbwalkerPlugins
 
         public override void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
         {
-            if (spell.DangerLevel < InterruptableDangerLevel.High)
+            if (spell.DangerLevel < InterruptableDangerLevel.High || unit.IsAlly)
                 return;
 
         }

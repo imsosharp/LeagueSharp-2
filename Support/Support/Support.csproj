@@ -7,7 +7,7 @@
     <ProjectGuid>{8F5D0C5E-5809-412A-BCDE-747A5521110A}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LeagueSharp.OrbwalkerPlugins</RootNamespace>
+    <RootNamespace>Support</RootNamespace>
     <AssemblyName>Support</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -36,7 +36,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Debug\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
@@ -55,9 +55,6 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="clipper_library">
-      <HintPath>D:\Spiele\LeagueSharp\System\clipper_library.dll</HintPath>
-    </Reference>
     <Reference Include="LeagueSharp">
       <HintPath>D:\Spiele\LeagueSharp\System\LeagueSharp.dll</HintPath>
     </Reference>
@@ -67,45 +64,40 @@
     <Reference Include="SharpDX">
       <HintPath>D:\Spiele\LeagueSharp\System\SharpDX.dll</HintPath>
     </Reference>
-    <Reference Include="SharpDX.Direct3D9">
-      <HintPath>D:\Spiele\LeagueSharp\System\SharpDX.Direct3D9.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Alistar.cs" />
-    <Compile Include="Blitzcrank.cs" />
-    <Compile Include="Braum.cs" />
-    <Compile Include="Fiddlesticks.cs" />
-    <Compile Include="Janna.cs" />
-    <Compile Include="Geometry.cs" />
-    <Compile Include="Karma.cs" />
-    <Compile Include="Kayle.cs" />
-    <Compile Include="Leona.cs" />
-    <Compile Include="Lulu.cs" />
-    <Compile Include="Morgana.cs" />
-    <Compile Include="Nami.cs" />
-    <Compile Include="OrbwalkerPluginBase.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Plugins\Alistar.cs" />
+    <Compile Include="Plugins\Blitzcrank.cs" />
+    <Compile Include="Plugins\Braum.cs" />
+    <Compile Include="Plugins\Fiddlesticks.cs" />
+    <Compile Include="Plugins\Janna.cs" />
+    <Compile Include="Plugins\Karma.cs" />
+    <Compile Include="Disabled\Kayle.cs" />
+    <Compile Include="Plugins\Leona.cs" />
+    <Compile Include="Plugins\Lulu.cs" />
+    <Compile Include="Plugins\Morgana.cs" />
+    <Compile Include="Plugins\Nami.cs" />
+    <Compile Include="PluginBase.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sona.cs" />
-    <Compile Include="Soraka.cs" />
-    <Compile Include="Taric.cs" />
-    <Compile Include="Thresh.cs" />
+    <Compile Include="Plugins\Sona.cs" />
+    <Compile Include="Disabled\Soraka.cs" />
+    <Compile Include="SupportTargetSelector.cs" />
+    <Compile Include="Plugins\Taric.cs" />
+    <Compile Include="Disabled\Thresh.cs" />
+    <Compile Include="Template.cs" />
     <Compile Include="Utils.cs" />
-    <Compile Include="Zilean.cs" />
-    <Compile Include="Zyra.cs" />
+    <Compile Include="Disabled\Zilean.cs" />
+    <Compile Include="Disabled\Zyra.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

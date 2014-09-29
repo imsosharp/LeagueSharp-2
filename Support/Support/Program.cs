@@ -17,25 +17,23 @@
 
 
 using System;
-using System.Threading.Tasks;
+using LeagueSharp;
 using LeagueSharp.Common;
-using Utils = Support.Utils;
 
-namespace LeagueSharp.OrbwalkerPlugins
+namespace Support
 {
     internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            CustomEvents.Game.OnGameLoad += a => 
+            CustomEvents.Game.OnGameLoad += a =>
             {
                 try
                 {
-                    var type = Type.GetType(typeof (Program).Namespace + "." + ObjectManager.Player.ChampionName);
+                    var type = Type.GetType("Support.Plugins." + ObjectManager.Player.ChampionName);
 
                     if (type != null)
                     {
-                        Console.WriteLine("Loading: " + type);
                         Activator.CreateInstance(type);
                         return;
                     }

@@ -20,23 +20,23 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using LeagueSharp;
 using LeagueSharp.Common;
-using Utils = Support.Utils;
 
-namespace LeagueSharp.OrbwalkerPlugins
+namespace Support
 {
     /// <summary>
-    /// OrbwalkerPluginBase class
+    /// PluginBase class
     /// </summary>
-    public abstract class OrbwalkerPluginBase
+    public abstract class PluginBase
     {
         /// <summary>
         /// Plugin display name
         /// </summary>
-        public string Description { get; set; }
+        public string Author { get; set; }
 
         /// <summary>
-        /// Champion Description
+        /// Champion Author
         /// </summary>
         public string ChampionName { get; set; }
 
@@ -46,25 +46,34 @@ namespace LeagueSharp.OrbwalkerPlugins
         public Version Version { get; set; }
 
         /// <summary>
-        /// Config
-        /// </summary>
-        public Menu Config { get; set; }
-        public Menu ComboConfig { get; set; }
-        public Menu HarassConfig { get; set; }
-        public Menu ItemsConfig { get; set; }
-        public Menu MiscConfig { get; set; }
-        public Menu ManaConfig { get; set; }
-        public Menu DrawingConfig { get; set; }
-
-        /// <summary>
         /// Orbwalker
         /// </summary>
         public Orbwalking.Orbwalker Orbwalker { get; set; }
 
         /// <summary>
-        /// ActiveMode
+        /// SupportTargetSelector
         /// </summary>
-        public Orbwalking.OrbwalkingMode ActiveMode { get { return Orbwalker.ActiveMode; } }
+        public SupportTargetSelector SupportTargetSelector { get; set; }
+
+        /// <summary>
+        /// ComboMode
+        /// </summary>
+        public bool ComboMode { get { return Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && ComboMana; } }
+
+        /// <summary>
+        /// HarassMode
+        /// </summary>
+        public bool HarassMode { get { return Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && HarassMana; } }
+
+        /// <summary>
+        /// ComboMana
+        /// </summary>
+        public bool ComboMana { get { return ObjectManager.Player.Mana > ObjectManager.Player.MaxMana * GetValue<Slider>("ComboMana").Value / 100; } }
+
+        /// <summary>
+        /// HarassMana
+        /// </summary>
+        public bool HarassMana { get { return ObjectManager.Player.Mana > ObjectManager.Player.MaxMana * GetValue<Slider>("HarassMana").Value / 100; } }
 
         /// <summary>
         /// Player Object
@@ -72,14 +81,9 @@ namespace LeagueSharp.OrbwalkerPlugins
         public Obj_AI_Hero Player { get { return ObjectManager.Player; } }
 
         /// <summary>
-        /// TargetSelector
-        /// </summary>
-        public TargetSelector TargetSelector { get; set; }
-
-        /// <summary>
         /// Target
         /// </summary>
-        public Obj_AI_Hero Target { get { return TargetSelector.Target; } }
+        public Obj_AI_Hero Target { get { return SupportTargetSelector.Target; } }
 
         /// <summary>
         /// OrbwalkerTarget
@@ -106,11 +110,69 @@ namespace LeagueSharp.OrbwalkerPlugins
         /// </summary>
         public Spell R { get; set; }
 
+        /// <summary>
+        /// Config
+        /// </summary>
+        public static Menu Config { get; set; }
+
+        /// <summary>
+        /// ComboConfig
+        /// </summary>
+        public Menu ComboConfig { get; set; }
+
+        /// <summary>
+        /// HarassConfig
+        /// </summary>
+        public Menu HarassConfig { get; set; }
+
+        /// <summary>
+        /// ItemsConfig
+        /// </summary>
+        public Menu ItemsConfig { get; set; }
+
+        /// <summary>
+        /// MiscConfig
+        /// </summary>
+        public Menu MiscConfig { get; set; }
+
+        /// <summary>
+        /// ManaConfig
+        /// </summary>
+        public Menu ManaConfig { get; set; }
+
+        /// <summary>
+        /// DrawingConfig
+        /// </summary>
+        public Menu DrawingConfig { get; set; }
+
+        /// <summary>
+        /// Zhonyas
+        /// </summary>
         public Items.Item Zhonyas { get; set; }
+
+        /// <summary>
+        /// FrostQueen
+        /// </summary>
         public Items.Item FrostQueen { get; set; }
+
+        /// <summary>
+        /// TwinShadows
+        /// </summary>
         public Items.Item TwinShadows { get; set; }
+
+        /// <summary>
+        /// Locket
+        /// </summary>
         public Items.Item Locket { get; set; }
+
+        /// <summary>
+        /// Talisman
+        /// </summary>
         public Items.Item Talisman { get; set; }
+
+        /// <summary>
+        /// Mikael
+        /// </summary>
         public Items.Item Mikael { get; set; }
 
         private readonly List<Spell> _spells = new List<Spell>();
@@ -118,9 +180,9 @@ namespace LeagueSharp.OrbwalkerPlugins
         /// <summary>
         /// Init BaseClass
         /// </summary>
-        protected OrbwalkerPluginBase(string description, Version version)
+        protected PluginBase(string author, Version version)
         {
-            Description = description;
+            Author = author;
             ChampionName = ObjectManager.Player.ChampionName;
             Version = version;
 
@@ -131,18 +193,22 @@ namespace LeagueSharp.OrbwalkerPlugins
             InitPluginEvents();
             InitPrivateEvents();
 
-            Utils.PrintMessage(string.Format("{0} {1} {2} loaded!", ChampionName, Description, Version));
+            Utils.PrintMessage(string.Format("{0} by {1} v.{2} loaded!", ChampionName, Author, Version));
         }
 
         #region Private Stuff
 
+        /// <summary>
+        /// SupportTargetSelector Initialization
+        /// </summary>
         private void InitTargetSelector()
         {
-            TargetSelector = new TargetSelector(float.MaxValue, TargetSelector.TargetingMode.AutoPriority);
-            TargetSelector.SetDrawCircleOfTarget(true);
-            Utility.DelayAction.Add(300, () => TargetSelector.SetRange(_spells.Select(s => s.Range).Max()));
+            SupportTargetSelector = new SupportTargetSelector(float.MaxValue) { DrawSelectedTarget = true };
         }
 
+        /// <summary>
+        /// Items Initialization
+        /// </summary>
         private void InitItems()
         {
             Zhonyas = new Items.Item(3157, float.MaxValue);
@@ -158,7 +224,6 @@ namespace LeagueSharp.OrbwalkerPlugins
         /// </summary>
         private void InitPluginEvents()
         {
-            Console.WriteLine("Init Events");
             Game.OnGameUpdate += OnUpdate;
             Drawing.OnDraw += OnDraw;
             Orbwalking.BeforeAttack += BeforeAttack;
@@ -168,6 +233,9 @@ namespace LeagueSharp.OrbwalkerPlugins
             OnLoad(new EventArgs());
         }
 
+        /// <summary>
+        /// PrivateEvents Initialization
+        /// </summary>
         private void InitPrivateEvents()
         {
             Utility.DelayAction.Add(250, () =>
@@ -176,11 +244,13 @@ namespace LeagueSharp.OrbwalkerPlugins
                 _spells.Add(W);
                 _spells.Add(E);
                 _spells.Add(R);
+
+                SupportTargetSelector.Range = _spells.Select(s => s.Range).Max();
             });
 
             Orbwalking.BeforeAttack += args =>
             {
-                if (args.Target.IsMinion && !Config.Item("AttMin").GetValue<bool>())
+                if (args.Target.IsMinion && !GetValue<bool>("AttackMinions"))
                     args.Process = false;
             };
 
@@ -188,38 +258,37 @@ namespace LeagueSharp.OrbwalkerPlugins
             {
                 foreach (var spell in _spells.Where(s => s != null))
                 {
-                    var menuItem = Config.Item(spell.Slot + "Range").GetValue<Circle>();
+                    var menuItem = Config.Item(spell.Slot + "Range" + ChampionName).GetValue<Circle>();
                     if (menuItem.Active && spell.Level > 0 && spell.IsReady())
                         Utility.DrawCircle(Player.Position, spell.Range, menuItem.Color);
                 }
             };
         }
 
+        /// <summary>
+        /// Config Initialization
+        /// </summary>
         private void InitConfig()
         {
             Config = new Menu(Player.ChampionName, Player.ChampionName, true);
             Config.AddSubMenu(new Menu("Orbwalking", "Orbwalking"));
-
-            var targetSelectorMenu = new Menu("Target Selector", "Target Selector");
-            SimpleTs.AddToMenu(targetSelectorMenu);
-            Config.AddSubMenu(targetSelectorMenu);
 
             ComboConfig = Config.AddSubMenu(new Menu("Combo", "Combo"));
             HarassConfig = Config.AddSubMenu(new Menu("Harass", "Harass"));
             ItemsConfig = Config.AddSubMenu(new Menu("Items", "Items"));
 
             ManaConfig = Config.AddSubMenu(new Menu("Mana Limiter", "Mana Limiter"));
-            ManaConfig.AddItem(new MenuItem("ComboMana", "Combo Mana %").SetValue(new Slider(1, 100, 0)));
-            ManaConfig.AddItem(new MenuItem("HarassMana", "Harass Mana %").SetValue(new Slider(30, 100, 0)));
+            ManaConfig.AddSlider("ComboMana", "Combo Mana %", 1, 1, 100);
+            ManaConfig.AddSlider("HarassMana", "Harass Mana %", 1, 1, 100);
 
             MiscConfig = Config.AddSubMenu(new Menu("Misc", "Misc"));
-            MiscConfig.AddItem(new MenuItem("AttMin", "Attack Minions?").SetValue(true));
+            MiscConfig.AddBool("AttackMinions", "Attack Minions?", true);
 
             DrawingConfig = Config.AddSubMenu(new Menu("Drawings", "Drawings"));
-            DrawingConfig.AddItem(new MenuItem("QRange", "Q range").SetValue(new Circle(true, Color.FromArgb(150, Color.DodgerBlue))));
-            DrawingConfig.AddItem(new MenuItem("WRange", "W range").SetValue(new Circle(true, Color.FromArgb(150, Color.DodgerBlue))));
-            DrawingConfig.AddItem(new MenuItem("ERange", "E range").SetValue(new Circle(false, Color.FromArgb(150, Color.DodgerBlue))));
-            DrawingConfig.AddItem(new MenuItem("RRange", "R range").SetValue(new Circle(false, Color.FromArgb(150, Color.DodgerBlue))));
+            DrawingConfig.AddItem(new MenuItem("QRange" + ChampionName, "Q Range").SetValue(new Circle(false, Color.FromArgb(150, Color.DodgerBlue))));
+            DrawingConfig.AddItem(new MenuItem("WRange" + ChampionName, "W Range").SetValue(new Circle(false, Color.FromArgb(150, Color.DodgerBlue))));
+            DrawingConfig.AddItem(new MenuItem("ERange" + ChampionName, "E Range").SetValue(new Circle(false, Color.FromArgb(150, Color.DodgerBlue))));
+            DrawingConfig.AddItem(new MenuItem("RRange" + ChampionName, "R Range").SetValue(new Circle(false, Color.FromArgb(150, Color.DodgerBlue))));
 
             ComboMenu(ComboConfig);
             HarassMenu(HarassConfig);
@@ -245,14 +314,14 @@ namespace LeagueSharp.OrbwalkerPlugins
         /// GetValue
         /// </summary>
         /// <typeparam name="T">Type</typeparam>
-        /// <param name="item">Item Name</param>
+        /// <param name="item">string</param>
         /// <remarks>
         /// Helper for 
         /// </remarks>
         /// <returns></returns>
         public T GetValue<T>(string item)
         {
-            return Config.Item(item).GetValue<T>();
+            return Config.Item(item + ObjectManager.Player.ChampionName).GetValue<T>();
         }
 
         /// <summary>
@@ -261,8 +330,8 @@ namespace LeagueSharp.OrbwalkerPlugins
         /// <remarks>
         /// override to Implement SpellsInterrupt logic
         /// </remarks>
-        /// <param name="unit">unit</param>
-        /// <param name="spell">spell</param>
+        /// <param name="unit">Obj_AI_Base</param>
+        /// <param name="spell">InterruptableSpell</param>
         public virtual void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
         {
         }
@@ -273,7 +342,7 @@ namespace LeagueSharp.OrbwalkerPlugins
         /// <remarks>
         /// override to Implement AntiGapcloser logic
         /// </remarks>
-        /// <param name="gapcloser">args</param>
+        /// <param name="gapcloser">ActiveGapcloser</param>
         public virtual void OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
         }
@@ -284,7 +353,7 @@ namespace LeagueSharp.OrbwalkerPlugins
         /// <remarks>
         /// override to Implement Update logic
         /// </remarks>
-        /// <param name="args">args</param>
+        /// <param name="args">EventArgs</param>
         public virtual void OnUpdate(EventArgs args)
         {
         }
@@ -295,7 +364,7 @@ namespace LeagueSharp.OrbwalkerPlugins
         /// <remarks>
         /// override to Implement BeforeAttack logic
         /// </remarks>
-        /// <param name="args">args</param>
+        /// <param name="args">Orbwalking.BeforeAttackEventArgs</param>
         public virtual void BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
         }
@@ -318,7 +387,7 @@ namespace LeagueSharp.OrbwalkerPlugins
         /// <remarks>
         /// override to Implement class Initialization
         /// </remarks>
-        /// <param name="args">args</param>
+        /// <param name="args">EventArgs</param>
         public virtual void OnLoad(EventArgs args)
         {
         }
@@ -329,31 +398,73 @@ namespace LeagueSharp.OrbwalkerPlugins
         /// <remarks>
         /// override to Implement Drawing
         /// </remarks>
-        /// <param name="args">args</param>
+        /// <param name="args">EventArgs</param>
         public virtual void OnDraw(EventArgs args)
         {
         }
 
+        /// <summary>
+        /// ComboMenu
+        /// </summary>
+        /// <remarks>
+        /// override to Implement ComboMenu Config
+        /// </remarks>
+        /// <param name="config">Menu</param>
         public virtual void ComboMenu(Menu config)
         {
         }
 
+        /// <summary>
+        /// HarassMenu
+        /// </summary>
+        /// <remarks>
+        /// override to Implement HarassMenu Config
+        /// </remarks>
+        /// <param name="config">Menu</param>
         public virtual void HarassMenu(Menu config)
         {
         }
 
+        /// <summary>
+        /// ItemMenu
+        /// </summary>
+        /// <remarks>
+        /// override to Implement ItemMenu Config
+        /// </remarks>
+        /// <param name="config">Menu</param>
         public virtual void ItemMenu(Menu config)
         {
         }
 
+        /// <summary>
+        /// ManaMenu
+        /// </summary>
+        /// <remarks>
+        /// override to Implement ManaMenu Config
+        /// </remarks>
+        /// <param name="config">Menu</param>
         public virtual void ManaMenu(Menu config)
         {
         }
 
+        /// <summary>
+        /// MiscMenu
+        /// </summary>
+        /// <remarks>
+        /// override to Implement MiscMenu Config
+        /// </remarks>
+        /// <param name="config">Menu</param>
         public virtual void MiscMenu(Menu config)
         {
         }
 
+        /// <summary>
+        /// DrawingMenu
+        /// </summary>
+        /// <remarks>
+        /// override to Implement DrawingMenu Config
+        /// </remarks>
+        /// <param name="config">Menu</param>
         public virtual void DrawingMenu(Menu config)
         {
         }

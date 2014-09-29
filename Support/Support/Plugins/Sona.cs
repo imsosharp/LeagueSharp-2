@@ -1,34 +1,16 @@
-﻿/*
-    Copyright (C) 2014 h3h3
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
-
-using System;
+﻿using System;
 using System.Linq;
+using LeagueSharp;
 using LeagueSharp.Common;
 
-
-namespace LeagueSharp.OrbwalkerPlugins
+namespace Support.Plugins
 {
-    public class SonaDisabled : OrbwalkerPluginBase
+    public class Sona : PluginBase
     {
-        public SonaDisabled()
-            : base("by h3h3", new Version(4, 17, 14))
+        public Sona()
+            : base("h3h3", new Version(4, 17, 14))
         {
-            Q = new Spell(SpellSlot.Q, 650);
+            Q = new Spell(SpellSlot.Q, 850);
             W = new Spell(SpellSlot.W, 1000);
             E = new Spell(SpellSlot.E, 350);
             R = new Spell(SpellSlot.R, 1000);
@@ -36,135 +18,151 @@ namespace LeagueSharp.OrbwalkerPlugins
             R.SetSkillshot(0.5f, 125, float.MaxValue, false, SkillshotType.SkillshotLine);
         }
 
-        public override void OnLoad(EventArgs args)
-        {
-        }
-
         public override void OnUpdate(EventArgs args)
         {
-
-
-            if (ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+            if (ComboMode)
             {
-                if (Q.IsReady() && Target.IsValidTarget(Q.Range) && GetValue<bool>("UseQC"))
+                if (Q.IsValidTarget(Target, "ComboQ"))
                 {
-                    var check = ObjectManager.Get<Obj_AI_Base>().Where(h => h.IsValidTarget() && (h is Obj_AI_Hero || h is Obj_AI_Minion)).OrderBy(h => Player.Distance(h)).ToList();
+                    // TODO: Testing
+                    try
+                    {
+                        var check = ObjectManager
+                            .Get<Obj_AI_Base>()
+                            .Where(h => h.IsValidTarget(Q.Range) && (h is Obj_AI_Hero || h is Obj_AI_Minion))
+                            .OrderBy(h => Player.Distance(h))
+                            .ToList();
 
-                    if (check.Count >= 2 && !check[0].IsMinion && !check[1].IsMinion)
-                        Q.Cast();
+                        if (check.Count >= 2)
+                        {
+                            if (!check[0].IsMinion && !check[1].IsMinion)
+                                Q.Cast();
+                        }
+                        else
+                        {
+                            Q.Cast();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
                 }
 
-                if (W.IsReady() && Target.IsValidTarget(Player.AttackRange) && GetValue<bool>("UseWC"))
+                var allyW = Utils.AllyBelowHp(GetValue<Slider>("ComboHealthW").Value, W.Range);
+                if (W.IsValidTarget(allyW, "ComboW", true, false))
                 {
                     W.Cast();
                 }
 
-                if (E.IsReady() && Target.IsValidTarget(E.Range) && GetValue<bool>("UseEC"))
+                var allyE = Utils.AllyInRange(E.Range);
+                if (E.IsValidTarget(allyE.FirstOrDefault(), "ComboE", true, false))
                 {
-                    E.Cast(Target, true);
+                    E.Cast();
                 }
 
-                if (R.IsReady() && Target.IsValidTarget(R.Range) && GetValue<bool>("UseRC"))
+                if (R.IsValidTarget(Target, "ComboR"))
                 {
-                    R.CastIfWillHit(Target, GetValue<Slider>("CountR").Value, true);
-                }
-
-                if (FrostQueen.IsReady() && Target.IsValidTarget(FrostQueen.Range) && GetValue<bool>("UseFrostQueen"))
-                {
-                    FrostQueen.Cast(Target);
+                    R.CastIfWillHit(Target, GetValue<Slider>("ComboCountR").Value, true);
                 }
             }
 
-            if (ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+            if (HarassMode)
             {
-                if (Q.IsReady() && Target.IsValidTarget(Q.Range) && GetValue<bool>("UseQH"))
+                if (Q.IsValidTarget(Target, "HarassQ"))
                 {
-                    var check = ObjectManager.Get<Obj_AI_Base>().Where(h => h.IsValidTarget() && (h is Obj_AI_Hero || h is Obj_AI_Minion)).OrderBy(h => Player.Distance(h)).ToList();
+                    // TODO: Testing
+                    try
+                    {
+                        var check = ObjectManager
+                            .Get<Obj_AI_Base>()
+                            .Where(h => h.IsValidTarget(Q.Range) && (h is Obj_AI_Hero || h is Obj_AI_Minion))
+                            .OrderBy(h => Player.Distance(h))
+                            .ToList();
 
-                    if (check.Count >= 2 && !check[0].IsMinion && !check[1].IsMinion)
-                        Q.Cast();
+                        if (check.Count >= 2)
+                        {
+                            if (!check[0].IsMinion && !check[1].IsMinion)
+                                Q.Cast();
+                        }
+                        else
+                        {
+                            Q.Cast();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
                 }
-            }
-        }
 
-        public override void BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
-        {
-        }
+                var allyW = Utils.AllyBelowHp(GetValue<Slider>("HarassHealthW").Value, W.Range);
+                if (W.IsValidTarget(allyW, "HarassW", true, false))
+                {
+                    W.Cast();
+                }
 
-        public override void AfterAttack(Obj_AI_Base unit, Obj_AI_Base target)
-        {
-            if (Q.IsReady() && Target.IsValidTarget(Player.AttackRange) && GetValue<bool>("UseQA"))
-            {
-                Q.Cast();
-                Orbwalking.ResetAutoAttackTimer();
-                Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
+                var allyE = Utils.AllyInRange(E.Range);
+                if (E.IsValidTarget(allyE.FirstOrDefault(), "HarassE", true, false))
+                {
+                    E.Cast();
+                }
             }
         }
 
         public override void OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (Q.IsReady() && gapcloser.Sender.IsValidTarget(Player.AttackRange) && GetValue<bool>("UseQG"))
-            {
-                Q.Cast();
-                Orbwalking.ResetAutoAttackTimer();
-                Player.IssueOrder(GameObjectOrder.AttackUnit, gapcloser.Sender);
-            }
-        }
-
-        public override void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
-        {
-            if (spell.DangerLevel < InterruptableDangerLevel.High)
+            if (gapcloser.Sender.IsAlly)
                 return;
 
-            if (Q.IsReady() && unit.IsValidTarget(Player.AttackRange) && GetValue<bool>("UseQI"))
-            {
-                Q.Cast();
-                Orbwalking.ResetAutoAttackTimer();
-                Player.IssueOrder(GameObjectOrder.AttackUnit, unit);
-            }
-
-            if (R.IsReady() && !Q.IsReady() && Target.IsValidTarget(R.Range) && GetValue<bool>("UseRI"))
+            if (R.IsValidTarget(gapcloser.Sender, "GapcloserR"))
             {
                 R.Cast(Target, true);
             }
         }
 
-        public override void OnDraw(EventArgs args)
+        public override void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
         {
+            if (spell.DangerLevel < InterruptableDangerLevel.High || unit.IsAlly)
+                return;
+
+            if (R.IsValidTarget(unit, "InterruptR"))
+            {
+                R.Cast(Target, true);
+            }
         }
 
         public override void ComboMenu(Menu config)
         {
-            config.AddItem(new MenuItem("UseQC", "Use Q").SetValue(true));
-            config.AddItem(new MenuItem("UseWC", "Use W").SetValue(true));
-            config.AddItem(new MenuItem("UseEC", "Use E").SetValue(true));
-            config.AddItem(new MenuItem("UseRC", "Use R").SetValue(true));
-            config.AddItem(new MenuItem("CountR", "Num of Enemy in Range to Ult").SetValue(new Slider(2, 1, 5)));
+            config.AddBool("ComboQ", "Use Q", true);
+            config.AddBool("ComboW", "Use W", true);
+            config.AddBool("ComboE", "Use E", true);
+            config.AddBool("ComboR", "Use R", true);
+            config.AddSlider("ComboCountR", "Targets in range to Ult", 2, 1, 5);
+            config.AddSlider("ComboHealthW", "Health to Heal", 20, 1, 100);
         }
 
         public override void HarassMenu(Menu config)
         {
+            config.AddBool("HarassQ", "Use Q", true);
+            config.AddBool("HarassW", "Use W", true);
+            config.AddBool("HarassE", "Use E", true);
+            config.AddSlider("HarassHealthW", "Health to Heal", 20, 1, 100);
         }
 
         public override void ItemMenu(Menu config)
         {
-            config.AddItem(new MenuItem("UseFrostQueen", "Use FrostQueen").SetValue(true));
+            //config.AddBool("FrostQueen", "Use Frost Queen", true);
+            //config.AddBool("Locket", "Use Locket", true);
+            //config.AddBool("Talisman", "Use Talisman", true);
+            //config.AddBool("Mikael", "Use Mikael", true);
         }
 
         public override void MiscMenu(Menu config)
         {
-            config.AddItem(new MenuItem("UseQA", "Use Q after Attack").SetValue(true));
-            config.AddItem(new MenuItem("UseQG", "Use Q to Interrupt Gapcloser").SetValue(true));
-            config.AddItem(new MenuItem("UseQI", "Use Q to Interrupt Spells").SetValue(true));
-            config.AddItem(new MenuItem("UseRI", "Use R to Interrupt Spells").SetValue(true));
-        }
+            config.AddBool("GapcloserR", "Use R to Interrupt Gapcloser", false);
 
-        public override void ManaMenu(Menu config)
-        {
-        }
-
-        public override void DrawingMenu(Menu config)
-        {
+            config.AddBool("InterruptR", "Use R to Interrupt Spells", true);
         }
     }
 }
