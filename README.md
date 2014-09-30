@@ -2,31 +2,30 @@ Support
 ======================
 Support Bundle  
 
+http://www.joduska.me/forum/viewtopic.php?f=15&t=185
+
 
 Supported Champions  
-Morgana - WIP - Testing  
-Blitzcrank - WIP - Testing  
-Leona - WIP - Testing  
-Braum - WIP - Testing  
-  
-Nami - WIP - Disabled  
-Thresh - WIP - Disabled  
-Janna - WIP - Disabled  
-  
-Alistar - Disabled  
-Fiddlesticks - Disabled  
-Karma - Disabled  
-Kayle - Disabled  
-Sona - Disabled  
-Lulu - Disabled  
-Soraka - Disabled  
-Taric - Disabled  
-Zyra - Disabled  
-Zilean - Disabled  
+Alistar  
+Blitzcrank  
+Braum  
+Fiddlesticks  
+Janna  
+Karma  
+Leona  
+Lulu   
+Morgana  
+Nami  
+Sona  
+Taric  
+Kayle  
+Soraka  
+Thresh  
+Zilean  
+Zyra  
 
-Credits  
-https://github.com/Dibes/LeagueSharp
-
+Credits 
+https://github.com/Dibes/LeagueSharp  
 
 
 
