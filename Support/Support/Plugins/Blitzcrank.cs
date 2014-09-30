@@ -61,6 +61,9 @@ namespace Support.Plugins
 
         public override void AfterAttack(Obj_AI_Base unit, Obj_AI_Base target)
         {
+            if (!unit.IsMe && !(unit is Obj_AI_Hero))
+                return;
+
             if (E.IsValidTarget(target, "AfterAttackE"))
             {
                 if (E.Cast())
