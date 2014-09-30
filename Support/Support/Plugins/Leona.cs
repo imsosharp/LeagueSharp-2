@@ -54,7 +54,7 @@ namespace Support.Plugins
             if (!unit.IsMe)
                 return;
 
-            if (!(target is Obj_AI_Hero) && !target.Name.Contains("Ward")) 
+            if (!(target is Obj_AI_Hero) && !target.Name.ToLower().Contains("ward"))
                 return;
 
             if (Q.Cast())

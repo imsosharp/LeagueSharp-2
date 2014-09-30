@@ -4,6 +4,12 @@ using LeagueSharp.Common;
 
 namespace Support.Plugins
 {
+    /// <summary>
+    /// TODO:
+    /// Shild Towers if enemys get tower aggro
+    /// Boost Allies Dmg Output
+    /// Evade intergration
+    /// </summary>
     public class Janna : PluginBase
     {
         public Janna()
@@ -77,7 +83,7 @@ namespace Support.Plugins
                 return;
             }
 
-            if (R.IsValidTarget(unit, "InterruptR"))
+            if (!Q.IsReady() && R.IsValidTarget(unit, "InterruptR"))
             {
                 R.Cast();
             }
@@ -88,7 +94,7 @@ namespace Support.Plugins
             config.AddBool("ComboQ", "Use Q", true);
             config.AddBool("ComboW", "Use W", true);
             config.AddBool("ComboR", "Use R", true);
-            config.AddSlider("ComboHealthR", "Health to Ult", 20, 1, 100);
+            config.AddSlider("ComboHealthR", "Health to Ult", 15, 1, 100);
         }
 
         public override void HarassMenu(Menu config)
