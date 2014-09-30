@@ -42,10 +42,10 @@ namespace Support.Plugins
                         Utility.DelayAction.Add(100, () => W.Cast());
                 }
 
-                if (R.IsValidTarget(Target, "ComboR"))
-                {
-                    R.CastIfWillHit(Target, GetValue<Slider>("ComboCountR").Value, true);
-                }
+                //if (R.IsValidTarget(Target, "ComboR"))
+                //{
+                //    R.CastIfWillHit(Target, GetValue<Slider>("ComboCountR").Value, true);
+                //}
             }
         }
 
