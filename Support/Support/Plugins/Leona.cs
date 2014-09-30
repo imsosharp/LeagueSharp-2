@@ -36,9 +36,10 @@ namespace Support.Plugins
                     W.Cast();
                 }
 
-                if (E.IsValidTarget(Target, "ComboE"))
+                if (E.IsValidTarget(Target, "ComboE") && Q.IsReady())
                 {
-                    E.Cast(Target, true);
+                    if (E.Cast(Target, true) == Spell.CastStates.SuccessfullyCasted)
+                        Utility.DelayAction.Add(100, () => W.Cast());
                 }
 
                 if (R.IsValidTarget(Target, "ComboR"))
@@ -50,7 +51,7 @@ namespace Support.Plugins
 
         public override void AfterAttack(Obj_AI_Base unit, Obj_AI_Base target)
         {
-            if(!unit.IsMe && !(unit is Obj_AI_Hero))
+            if (!unit.IsMe && !(unit is Obj_AI_Hero))
                 return;
 
             if (Q.Cast())

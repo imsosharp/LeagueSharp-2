@@ -14,7 +14,7 @@ namespace Support.Plugins
             E = new Spell(SpellSlot.E, Player.AttackRange);
             R = new Spell(SpellSlot.R, 600);
 
-            Q.SetSkillshot(0.5f, 70f, 1000f, true, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(0.25f, 70f, 1800f, true, SkillshotType.SkillshotLine);
         }
 
         public override void OnUpdate(EventArgs args)
