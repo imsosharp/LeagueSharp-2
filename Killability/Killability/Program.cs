@@ -120,7 +120,7 @@ namespace Killability
                 text.TextUpdate += () =>
                 {
                     var result = GetComboResult(hero);
-                    return (result.IsKillable ? "Kill HIM " : "") + result.Text;
+                    return result.Text;
                 };
                 text.OutLined = true;
                 text.Add();
