@@ -1,26 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
 
 namespace Support.Plugins
 {
-    /// <summary>
-    /// TODO:
-    /// Shild Towers if enemys get tower aggro
-    /// Boost Allies Dmg Output
-    /// Evade intergration
-    /// </summary>
     public class Janna : PluginBase
     {
-        private readonly string[] _attackBoost =
-        {
-            ""
-        };
-
         public Janna()
             : base("h3h3", new Version(4, 17, 14))
         {
