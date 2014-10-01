@@ -21,8 +21,6 @@ namespace Support.Plugins
             ""
         };
 
-        private List<string> _special = new List<string>();
-
         public Janna()
             : base("h3h3", new Version(4, 17, 14))
         {
@@ -37,7 +35,7 @@ namespace Support.Plugins
 
         private void GameObjectOnOnCreate(GameObject sender, EventArgs args)
         {
-            if(!E.IsReady())
+            if (!E.IsReady() || Player.Mana < Player.MaxMana * GetValue<Slider>("ManaE").Value / 100)
                 return;
 
             // TODO: change to events + move to util
@@ -49,9 +47,9 @@ namespace Support.Plugins
                 if (missile.SpellCaster is Obj_AI_Turret && missile.SpellCaster.IsValid && missile.SpellCaster.IsAlly &&
                     missile.Target is Obj_AI_Hero && missile.Target.IsValid && missile.Target.IsEnemy)
                 {
-                    var turret = (Obj_AI_Turret) missile.SpellCaster;
+                    var turret = (Obj_AI_Turret)missile.SpellCaster;
 
-                    if (Player.Distance(turret) < E.Range && Player.Mana > Player.MaxMana * GetValue<Slider>("ManaE").Value / 100)
+                    if (Player.Distance(turret) < E.Range)
                     {
                         E.Cast(turret, true);
                     }
@@ -64,7 +62,7 @@ namespace Support.Plugins
                 {
                     var ally = (Obj_AI_Hero)missile.Target;
 
-                    if (Player.Distance(ally) < E.Range && Player.Mana > Player.MaxMana * GetValue<Slider>("ManaE").Value / 100)
+                    if (Player.Distance(ally) < E.Range)
                     {
                         E.Cast(ally, true);
                     }
@@ -73,12 +71,6 @@ namespace Support.Plugins
                 //// Ally Hero special attack
                 //if (missile.SpellCaster is Obj_AI_Hero && missile.SpellCaster.IsValid && missile.SpellCaster.IsAlly)
                 //{
-                //    if (!_special.Contains(missile.SData.Name))
-                //    {
-                //        _special.Add(missile.SData.Name);
-                //        File.AppendAllText("D:/Obj_SpellMissile.txt", string.Format("{0,-10} {1}\n", missile.SpellCaster.BaseSkinName, missile.SData.Name));
-                //        Console.WriteLine("Special: " + string.Format("{0,-10} {1}", missile.SpellCaster.BaseSkinName, missile.SData.Name));
-                //    }
                 //}
             }
         }
