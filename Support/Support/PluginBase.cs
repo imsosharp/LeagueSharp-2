@@ -68,12 +68,12 @@ namespace Support
         /// <summary>
         /// ComboMana
         /// </summary>
-        public bool ComboMana { get { return ObjectManager.Player.Mana > ObjectManager.Player.MaxMana * GetValue<Slider>("ComboMana").Value / 100; } }
+        public bool ComboMana { get { return Player.Mana > Player.MaxMana * GetValue<Slider>("ComboMana").Value / 100; } }
 
         /// <summary>
         /// HarassMana
         /// </summary>
-        public bool HarassMana { get { return ObjectManager.Player.Mana > ObjectManager.Player.MaxMana * GetValue<Slider>("HarassMana").Value / 100; } }
+        public bool HarassMana { get { return Player.Mana > Player.MaxMana * GetValue<Slider>("HarassMana").Value / 100; } }
 
         /// <summary>
         /// Player Object

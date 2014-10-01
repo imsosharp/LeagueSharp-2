@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
 
@@ -12,6 +16,13 @@ namespace Support.Plugins
     /// </summary>
     public class Janna : PluginBase
     {
+        private readonly string[] _attackBoost =
+        {
+            ""
+        };
+
+        private List<string> _special = new List<string>();
+
         public Janna()
             : base("h3h3", new Version(4, 17, 14))
         {
@@ -21,6 +32,55 @@ namespace Support.Plugins
             R = new Spell(SpellSlot.R, 725);
 
             Q.SetSkillshot(0.5f, 200f, 900f, false, SkillshotType.SkillshotLine);
+            GameObject.OnCreate += GameObjectOnOnCreate;
+        }
+
+        private void GameObjectOnOnCreate(GameObject sender, EventArgs args)
+        {
+            if(!E.IsReady())
+                return;
+
+            // TODO: change to events + move to util
+            if (sender is Obj_SpellMissile && sender.IsValid)
+            {
+                var missile = (Obj_SpellMissile)sender;
+
+                // Ally Turret -> Enemy Hero
+                if (missile.SpellCaster is Obj_AI_Turret && missile.SpellCaster.IsValid && missile.SpellCaster.IsAlly &&
+                    missile.Target is Obj_AI_Hero && missile.Target.IsValid && missile.Target.IsEnemy)
+                {
+                    var turret = (Obj_AI_Turret) missile.SpellCaster;
+
+                    if (Player.Distance(turret) < E.Range && Player.Mana > Player.MaxMana * GetValue<Slider>("ManaE").Value / 100)
+                    {
+                        E.Cast(turret, true);
+                    }
+                }
+
+                // Enemy Hero -> Ally Hero AA
+                if (missile.SpellCaster is Obj_AI_Hero && missile.SpellCaster.IsValid && missile.SpellCaster.IsEnemy &&
+                    missile.Target is Obj_AI_Hero && missile.Target.IsValid && missile.Target.IsAlly &&
+                    Orbwalking.IsAutoAttack(missile.SData.Name))
+                {
+                    var ally = (Obj_AI_Hero)missile.Target;
+
+                    if (Player.Distance(ally) < E.Range && Player.Mana > Player.MaxMana * GetValue<Slider>("ManaE").Value / 100)
+                    {
+                        E.Cast(ally, true);
+                    }
+                }
+
+                //// Ally Hero special attack
+                //if (missile.SpellCaster is Obj_AI_Hero && missile.SpellCaster.IsValid && missile.SpellCaster.IsAlly)
+                //{
+                //    if (!_special.Contains(missile.SData.Name))
+                //    {
+                //        _special.Add(missile.SData.Name);
+                //        File.AppendAllText("D:/Obj_SpellMissile.txt", string.Format("{0,-10} {1}\n", missile.SpellCaster.BaseSkinName, missile.SData.Name));
+                //        Console.WriteLine("Special: " + string.Format("{0,-10} {1}", missile.SpellCaster.BaseSkinName, missile.SData.Name));
+                //    }
+                //}
+            }
         }
 
         public override void OnUpdate(EventArgs args)
@@ -109,6 +169,11 @@ namespace Support.Plugins
             //config.AddBool("Locket", "Use Locket", true);
             //config.AddBool("Talisman", "Use Talisman", true);
             //config.AddBool("Mikael", "Use Mikael", true);
+        }
+
+        public override void ManaMenu(Menu config)
+        {
+            config.AddSlider("ManaE", "Shield Attacks", 30, 1, 100);
         }
 
         public override void MiscMenu(Menu config)
