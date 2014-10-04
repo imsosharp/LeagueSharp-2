@@ -86,7 +86,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Plugins\Sona.cs" />
     <Compile Include="Disabled\Soraka.cs" />
-    <Compile Include="SupportTargetSelector.cs" />
     <Compile Include="Plugins\Taric.cs" />
     <Compile Include="Disabled\Thresh.cs" />
     <Compile Include="Template.cs" />

@@ -53,7 +53,7 @@ namespace Support
         /// <summary>
         /// SupportTargetSelector
         /// </summary>
-        public SupportTargetSelector SupportTargetSelector { get; set; }
+        public TargetSelector TargetSelector { get; set; }
 
         /// <summary>
         /// ComboMode
@@ -83,7 +83,7 @@ namespace Support
         /// <summary>
         /// Target
         /// </summary>
-        public Obj_AI_Hero Target { get { return SupportTargetSelector.Target; } }
+        public Obj_AI_Hero Target { get { return TargetSelector.Target; } }
 
         /// <summary>
         /// OrbwalkerTarget
@@ -203,7 +203,7 @@ namespace Support
         /// </summary>
         private void InitTargetSelector()
         {
-            SupportTargetSelector = new SupportTargetSelector(float.MaxValue) { DrawSelectedTarget = true };
+            TargetSelector = new TargetSelector(float.MaxValue, TargetSelector.TargetingMode.AutoPriority);
         }
 
         /// <summary>
@@ -245,7 +245,7 @@ namespace Support
                 _spells.Add(E);
                 _spells.Add(R);
 
-                SupportTargetSelector.Range = _spells.Select(s => s.Range).Max();
+                TargetSelector.SetRange(_spells.Select(s => s.Range).Max());
             });
 
             Orbwalking.BeforeAttack += args =>

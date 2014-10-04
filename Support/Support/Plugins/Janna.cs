@@ -14,7 +14,7 @@ namespace Support.Plugins
             E = new Spell(SpellSlot.E, 800);
             R = new Spell(SpellSlot.R, 725);
 
-            Q.SetSkillshot(0.5f, 200f, 900f, false, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(0.5f, 150f, 900f, false, SkillshotType.SkillshotLine);
             GameObject.OnCreate += GameObjectOnOnCreate;
         }
 
@@ -67,7 +67,7 @@ namespace Support.Plugins
                 if (Q.IsValidTarget(Target, "ComboQ"))
                 {
                     if (Q.Cast(Target, true) == Spell.CastStates.SuccessfullyCasted)
-                        Utility.DelayAction.Add(100, () => Q.Cast());
+                        Q.Cast();
                 }
 
                 if (W.IsValidTarget(Target, "ComboW"))
@@ -98,8 +98,8 @@ namespace Support.Plugins
 
             if (Q.IsValidTarget(gapcloser.Sender, "GapcloserQ"))
             {
-                if (Q.Cast(Target, true) == Spell.CastStates.SuccessfullyCasted)
-                    Utility.DelayAction.Add(100, () => Q.Cast());
+                Q.Cast(gapcloser.End, true);
+                Q.Cast();
             }
 
             if (W.IsValidTarget(gapcloser.Sender, "GapcloserW"))
@@ -116,7 +116,7 @@ namespace Support.Plugins
             if (Q.IsValidTarget(unit, "InterruptQ"))
             {
                 if (Q.Cast(Target, true) == Spell.CastStates.SuccessfullyCasted)
-                    Utility.DelayAction.Add(100, () => Q.Cast());
+                    Q.Cast();
                 return;
             }
 
