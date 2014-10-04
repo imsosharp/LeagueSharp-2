@@ -71,7 +71,7 @@
   <ItemGroup>
     <Compile Include="Extensions.cs" />
     <Compile Include="Plugins\Alistar.cs" />
-    <Compile Include="Plugins\Blitzcrank.cs" />
+    <Compile Include="Disabled\Blitzcrank.cs" />
     <Compile Include="Plugins\Braum.cs" />
     <Compile Include="Plugins\Fiddlesticks.cs" />
     <Compile Include="Plugins\Janna.cs" />

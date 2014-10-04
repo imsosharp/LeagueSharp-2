@@ -2,7 +2,7 @@
 using LeagueSharp;
 using LeagueSharp.Common;
 
-namespace Support.Plugins
+namespace Support.Disabled
 {
     public class Blitzcrank : PluginBase
     {
