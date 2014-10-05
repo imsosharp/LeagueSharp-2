@@ -203,7 +203,7 @@ namespace Support
         /// </summary>
         private void InitTargetSelector()
         {
-            TargetSelector = new TargetSelector(float.MaxValue, TargetSelector.TargetingMode.AutoPriority);
+            TargetSelector = new TargetSelector(Player.AttackRange, TargetSelector.TargetingMode.AutoPriority);
         }
 
         /// <summary>
@@ -245,7 +245,7 @@ namespace Support
                 _spells.Add(E);
                 _spells.Add(R);
 
-                TargetSelector.SetRange(_spells.Select(s => s.Range).Max());
+                TargetSelector.SetRange(_spells.Where(s => s.Range != float.MaxValue).Select(s => s.Range).Max());
             });
 
             Orbwalking.BeforeAttack += args =>
@@ -272,6 +272,7 @@ namespace Support
         {
             Config = new Menu(Player.ChampionName, Player.ChampionName, true);
             Config.AddSubMenu(new Menu("Orbwalking", "Orbwalking"));
+            SimpleTs.AddToMenu(Config.AddSubMenu(new Menu("Target Selector", "Target Selector")));
 
             ComboConfig = Config.AddSubMenu(new Menu("Combo", "Combo"));
             HarassConfig = Config.AddSubMenu(new Menu("Harass", "Harass"));

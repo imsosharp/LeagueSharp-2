@@ -20,7 +20,7 @@ using System;
 using LeagueSharp;
 using LeagueSharp.Common;
 
-namespace Support.Disabled
+namespace Support.Plugins
 {
     public class Zilean : PluginBase
     {
@@ -31,11 +31,34 @@ namespace Support.Disabled
             W = new Spell(SpellSlot.W, 0);
             E = new Spell(SpellSlot.E, 700);
             R = new Spell(SpellSlot.R, 900);
+
+            Obj_SpellMissile.OnCreate += Obj_SpellMissile_OnCreate;
         }
 
-        public override void OnLoad(EventArgs args)
+        private void Obj_SpellMissile_OnCreate(GameObject sender, EventArgs args)
         {
+            var missile = (Obj_SpellMissile)sender;
+
+            if (!missile.IsValid || !missile.SpellCaster.IsValid || missile.SpellCaster.IsAlly || !(missile.SpellCaster is Obj_AI_Hero))
+                return;
+
+            var caster = (Obj_AI_Hero)missile.SpellCaster;
+
+            // Target
+            if (missile.Target is Obj_AI_Hero && missile.Target.IsAlly && !missile.Target.IsDead)
+            {
+                var target = (Obj_AI_Hero)missile.Target;
+                var dmg = caster.GetSpellDamage(target, missile.SData.Name);
+
+                Console.WriteLine("{0} {1} {2} {3} {4}", missile.SData.Name, caster.Name, target.Name, target.Health, dmg);
+
+                if (dmg > target.Health)
+                    R.Cast(target, true);
+
+                return;
+            }
         }
+
 
         public override void OnUpdate(EventArgs args)
         {

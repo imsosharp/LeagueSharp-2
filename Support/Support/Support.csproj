@@ -55,6 +55,9 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="clipper_library">
+      <HintPath>D:\Spiele\LeagueSharp\System\clipper_library.dll</HintPath>
+    </Reference>
     <Reference Include="LeagueSharp">
       <HintPath>D:\Spiele\LeagueSharp\System\LeagueSharp.dll</HintPath>
     </Reference>
@@ -69,6 +72,17 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Evade\Collision.cs" />
+    <Compile Include="Evade\Config.cs" />
+    <Compile Include="Protector.cs" />
+    <Compile Include="Evade\EvadeSpellData.cs" />
+    <Compile Include="Evade\EvadeSpellDatabase.cs" />
+    <Compile Include="Evade\Geometry.cs" />
+    <Compile Include="Evade\Skillshot.cs" />
+    <Compile Include="Evade\SkillshotDetector.cs" />
+    <Compile Include="Evade\SpellData.cs" />
+    <Compile Include="Evade\SpellDatabase.cs" />
+    <Compile Include="Evade\Utils.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Plugins\Alistar.cs" />
     <Compile Include="Disabled\Blitzcrank.cs" />
@@ -90,7 +104,7 @@
     <Compile Include="Disabled\Thresh.cs" />
     <Compile Include="Template.cs" />
     <Compile Include="Utils.cs" />
-    <Compile Include="Disabled\Zilean.cs" />
+    <Compile Include="Plugins\Zilean.cs" />
     <Compile Include="Disabled\Zyra.cs" />
   </ItemGroup>
   <ItemGroup>

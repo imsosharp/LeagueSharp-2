@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Evade;
 using LeagueSharp;
 using LeagueSharp.Common;
+using SpellData = LeagueSharp.SpellData;
 
 namespace Support.Plugins
 {
@@ -15,7 +19,23 @@ namespace Support.Plugins
             R = new Spell(SpellSlot.R, 725);
 
             Q.SetSkillshot(0.5f, 150f, 900f, false, SkillshotType.SkillshotLine);
-            GameObject.OnCreate += GameObjectOnOnCreate;
+            //GameObject.OnCreate += GameObjectOnOnCreate;
+
+            Protector.OnSkillshotProtection += Protector_OnSkillshotProtection;
+            Protector.OnTargetedProtection += Protector_OnTargetedProtection;
+        }
+
+        private void Protector_OnTargetedProtection(Obj_AI_Base caster, Obj_AI_Hero target, SpellData missile)
+        {
+            Console.WriteLine("Target: {0} {1} {2}", caster.Name, target.Name, missile.Name);
+        }
+
+        private void Protector_OnSkillshotProtection(Obj_AI_Hero target, List<Skillshot> skillshots)
+        {
+            foreach (var skillshot in skillshots)
+            {
+                Console.WriteLine("Skill: {0} {1} {2}", skillshot.Unit.Name, target.Name, skillshot.SpellData.SpellName);
+            }
         }
 
         private void GameObjectOnOnCreate(GameObject sender, EventArgs args)
