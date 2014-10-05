@@ -17,6 +17,7 @@
 
 
 using System;
+using System.Collections.Generic;
 using LeagueSharp;
 using LeagueSharp.Common;
 
@@ -45,6 +46,30 @@ namespace Support
                     Console.WriteLine(e);
                 }
             };
+
+            Protector.OnSkillshotProtection += Protector_OnSkillshotProtection;
+            Protector.OnTargetedProtection += Protector_OnTargetedProtection;
+        }
+
+        static void Protector_OnTargetedProtection(Obj_AI_Base caster, Obj_AI_Hero target, SpellData spell)
+        {
+            Console.WriteLine("{0} -> {1} - {2} {3}",
+                caster.Name,
+                target.Name,
+                spell.Name,
+                Math.Round(caster.GetSpellDamage(target, spell.Name)));
+        }
+
+        static void Protector_OnSkillshotProtection(Obj_AI_Hero target, List<Evade.Skillshot> skillshots)
+        {
+            foreach (var skillshot in skillshots)
+            {
+                Console.WriteLine("{0} -> {1} - {2} {3}",
+                    skillshot.Unit.Name,
+                    target.Name,
+                    skillshot.SpellData.SpellName,
+                    Math.Round(skillshot.Unit.GetSpellDamage(target, skillshot.SpellData.SpellName)));
+            }
         }
     }
 }

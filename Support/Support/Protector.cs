@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Evade;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
-using Collision = Evade.Collision;
+using Support.Evade;
+using Collision = Support.Evade.Collision;
 using SpellData = LeagueSharp.SpellData;
 
 namespace Support
@@ -18,10 +18,10 @@ namespace Support
         public delegate void OnSkillshotProtectionH(Obj_AI_Hero target, List<Skillshot> skillshots);
         public static event OnSkillshotProtectionH OnSkillshotProtection;
 
-        public delegate void OnTargetedProtectionH(Obj_AI_Base caster, Obj_AI_Hero target, SpellData missile);
+        public delegate void OnTargetedProtectionH(Obj_AI_Base caster, Obj_AI_Hero target, SpellData spell);
         public static event OnTargetedProtectionH OnTargetedProtection;
 
-        static Protector()
+        public static void Init()
         {
             Game.OnGameUpdate += OnGameUpdate;
             SkillshotDetector.OnDetectSkillshot += OnDetectSkillshot;
@@ -35,18 +35,15 @@ namespace Support
         {
             Menu = new Menu("Protector", "Protector", true);
 
-            var skillshots = Menu.AddSubMenu(new Menu("ProtectSkillshot", "Protect Skillshot"));
-            skillshots.AddItem(new MenuItem("SkillshotActive", "Active").SetValue(true));
-            foreach (var ally in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsAlly))
-            {
-                skillshots.AddItem(new MenuItem("skillshot" + ally.ChampionName, "Protect " + ally.ChampionName).SetValue(true));
-            }
-
-            var targeted = Menu.AddSubMenu(new Menu("ProtectTargeted", "Protect Targeted"));
+            var targeted = Menu.AddSubMenu(new Menu("Protect Targeted", "ProtectTargeted"));
+            var skillshots = Menu.AddSubMenu(new Menu("Protect Skillshot", "ProtectSkillshot"));
             targeted.AddItem(new MenuItem("TargetedActive", "Active").SetValue(true));
+            skillshots.AddItem(new MenuItem("SkillshotActive", "Active").SetValue(true));
+
             foreach (var ally in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsAlly))
             {
                 targeted.AddItem(new MenuItem("targeted" + ally.ChampionName, "Protect " + ally.ChampionName).SetValue(true));
+                skillshots.AddItem(new MenuItem("skillshot" + ally.ChampionName, "Protect " + ally.ChampionName).SetValue(true));
             }
 
             Menu.AddToMainMenu();

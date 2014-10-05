@@ -22,12 +22,10 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using Color = System.Drawing.Color;
-using Path = System.Collections.Generic.List<ClipperLib.IntPoint>;
-using Paths = System.Collections.Generic.List<System.Collections.Generic.List<ClipperLib.IntPoint>>;
 
 #endregion
 
-namespace Evade
+namespace Support.Evade
 {
     public static class Utils
     {

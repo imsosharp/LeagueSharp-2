@@ -22,13 +22,10 @@ using ClipperLib;
 using LeagueSharp.Common;
 using SharpDX;
 using Color = System.Drawing.Color;
-using Path = System.Collections.Generic.List<ClipperLib.IntPoint>;
-using Paths = System.Collections.Generic.List<System.Collections.Generic.List<ClipperLib.IntPoint>>;
-using GamePath = System.Collections.Generic.List<SharpDX.Vector2>;
 
 #endregion
 
-namespace Evade
+namespace Support.Evade
 {
     /// <summary>
     /// Class that contains the geometry related methods.
@@ -43,7 +40,7 @@ namespace Evade
         }
 
         //Clipper
-        public static List<Polygon> ToPolygons(this Paths v)
+        public static List<Polygon> ToPolygons(this List<List<IntPoint>> v)
         {
             var result = new List<Polygon>();
 
@@ -58,7 +55,7 @@ namespace Evade
         /// <summary>
         /// Returns the position on the path after t milliseconds at speed speed.
         /// </summary>
-        public static Vector2 PositionAfter(this GamePath self, int t, int speed, int delay = 0)
+        public static Vector2 PositionAfter(this List<Vector2> self, int t, int speed, int delay = 0)
         {
             var distance = Math.Max(0, t - delay) * speed / 1000;
             for (var i = 0; i <= self.Count - 2; i++)
@@ -75,7 +72,7 @@ namespace Evade
             return self[self.Count - 1];
         }
 
-        public static Polygon ToPolygon(this Path v)
+        public static Polygon ToPolygon(this List<IntPoint> v)
         {
             var polygon = new Polygon();
             foreach (var point in v)
@@ -86,10 +83,10 @@ namespace Evade
         }
 
 
-        public static Paths ClipPolygons(List<Polygon> polygons)
+        public static List<List<IntPoint>> ClipPolygons(List<Polygon> polygons)
         {
-            var subj = new Paths(polygons.Count);
-            var clip = new Paths(polygons.Count);
+            var subj = new List<List<IntPoint>>(polygons.Count);
+            var clip = new List<List<IntPoint>>(polygons.Count);
 
             foreach (var polygon in polygons)
             {
@@ -97,7 +94,7 @@ namespace Evade
                 clip.Add(polygon.ToClipperPath());
             }
 
-            var solution = new Paths();
+            var solution = new List<List<IntPoint>>();
             var c = new Clipper();
             c.AddPaths(subj, PolyType.ptSubject, true);
             c.AddPaths(clip, PolyType.ptClip, true);
@@ -146,9 +143,9 @@ namespace Evade
                 Points.Add(point);
             }
 
-            public Path ToClipperPath()
+            public List<IntPoint> ToClipperPath()
             {
-                var result = new Path(Points.Count);
+                var result = new List<IntPoint>(Points.Count);
 
                 foreach (var point in Points)
                 {

@@ -17,6 +17,7 @@
 
 
 using System;
+using System.Collections.Generic;
 using LeagueSharp;
 using LeagueSharp.Common;
 
@@ -32,33 +33,31 @@ namespace Support.Plugins
             E = new Spell(SpellSlot.E, 700);
             R = new Spell(SpellSlot.R, 900);
 
-            Obj_SpellMissile.OnCreate += Obj_SpellMissile_OnCreate;
+            Protector.Init();
+            Protector.OnSkillshotProtection += Protector_OnSkillshotProtection;
+            Protector.OnTargetedProtection += Protector_OnTargetedProtection;
         }
 
-        private void Obj_SpellMissile_OnCreate(GameObject sender, EventArgs args)
+        private void Protector_OnTargetedProtection(Obj_AI_Base caster, Obj_AI_Hero target, SpellData spell)
         {
-            var missile = (Obj_SpellMissile)sender;
-
-            if (!missile.IsValid || !missile.SpellCaster.IsValid || missile.SpellCaster.IsAlly || !(missile.SpellCaster is Obj_AI_Hero))
+            if(!R.IsReady() || Player.Distance(target) > R.Range)
                 return;
 
-            var caster = (Obj_AI_Hero)missile.SpellCaster;
+            if (caster.GetSpellDamage(target, spell.Name) >= target.Health)
+                R.Cast(target, true);
+        }
 
-            // Target
-            if (missile.Target is Obj_AI_Hero && missile.Target.IsAlly && !missile.Target.IsDead)
+        private void Protector_OnSkillshotProtection(Obj_AI_Hero target, List<Evade.Skillshot> skillshots)
+        {
+            if (!R.IsReady() || Player.Distance(target) > R.Range)
+                return;
+
+            foreach (var skillshot in skillshots)
             {
-                var target = (Obj_AI_Hero)missile.Target;
-                var dmg = caster.GetSpellDamage(target, missile.SData.Name);
-
-                Console.WriteLine("{0} {1} {2} {3} {4}", missile.SData.Name, caster.Name, target.Name, target.Health, dmg);
-
-                if (dmg > target.Health)
+                if (skillshot.Unit.GetSpellDamage(target, skillshot.SpellData.SpellName) >= target.Health)
                     R.Cast(target, true);
-
-                return;
             }
         }
-
 
         public override void OnUpdate(EventArgs args)
         {

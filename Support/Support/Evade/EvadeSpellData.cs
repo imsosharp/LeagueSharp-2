@@ -17,11 +17,10 @@
 #region
 
 using LeagueSharp;
-using LeagueSharp.Common;
 
 #endregion
 
-namespace Evade
+namespace Support.Evade
 {
     public enum SpellValidTargets
     {

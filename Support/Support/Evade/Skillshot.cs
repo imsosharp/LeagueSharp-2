@@ -22,12 +22,10 @@ using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
-using Color = System.Drawing.Color;
-using GamePath = System.Collections.Generic.List<SharpDX.Vector2>;
 
 #endregion
 
-namespace Evade
+namespace Support.Evade
 {
     public enum SkillShotType
     {
@@ -388,7 +386,7 @@ namespace Evade
         /// <summary>
         /// Returns if the skillshot will hit the unit if the unit follows the path.
         /// </summary>
-        public SafePathResult IsSafePath(GamePath path,
+        public SafePathResult IsSafePath(List<Vector2> path,
             int timeOffset,
             int speed = -1,
             int delay = 0,

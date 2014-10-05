@@ -308,7 +308,6 @@ namespace Support
         {
             Orbwalker = new Orbwalking.Orbwalker(Config.SubMenu("Orbwalking"));
         }
-
         #endregion
 
         /// <summary>

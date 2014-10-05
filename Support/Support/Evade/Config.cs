@@ -16,14 +16,11 @@
 
 #region
 
-using System.Drawing;
-using System.Linq;
-using LeagueSharp;
-using LeagueSharp.Common;
+
 
 #endregion
 
-namespace Evade
+namespace Support.Evade
 {
     internal static class Config
     {

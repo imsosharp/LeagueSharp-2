@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Evade;
 using LeagueSharp;
 using LeagueSharp.Common;
+using Support.Evade;
 using SpellData = LeagueSharp.SpellData;
 
 namespace Support.Plugins
@@ -16,25 +16,35 @@ namespace Support.Plugins
             Q = new Spell(SpellSlot.Q, 1100);
             W = new Spell(SpellSlot.W, 600);
             E = new Spell(SpellSlot.E, 800);
-            R = new Spell(SpellSlot.R, 725);
+            R = new Spell(SpellSlot.R, 700);
 
             Q.SetSkillshot(0.5f, 150f, 900f, false, SkillshotType.SkillshotLine);
-            //GameObject.OnCreate += GameObjectOnOnCreate;
 
+            Protector.Init();
             Protector.OnSkillshotProtection += Protector_OnSkillshotProtection;
             Protector.OnTargetedProtection += Protector_OnTargetedProtection;
+            GameObject.OnCreate += GameObjectOnOnCreate;
         }
 
         private void Protector_OnTargetedProtection(Obj_AI_Base caster, Obj_AI_Hero target, SpellData missile)
         {
-            Console.WriteLine("Target: {0} {1} {2}", caster.Name, target.Name, missile.Name);
+            if (Player.Mana < Player.MaxMana * GetValue<Slider>("ManaE").Value / 100)
+                return;
+
+            if (Player.Distance(target) < E.Range)
+            {
+                E.Cast(target, true);
+            }
         }
 
         private void Protector_OnSkillshotProtection(Obj_AI_Hero target, List<Skillshot> skillshots)
         {
-            foreach (var skillshot in skillshots)
+            if (Player.Mana < Player.MaxMana * GetValue<Slider>("ManaE").Value / 100)
+                return;
+
+            if (Player.Distance(target) < E.Range)
             {
-                Console.WriteLine("Skill: {0} {1} {2}", skillshot.Unit.Name, target.Name, skillshot.SpellData.SpellName);
+                E.Cast(target, true);
             }
         }
 
@@ -43,7 +53,6 @@ namespace Support.Plugins
             if (!E.IsReady() || Player.Mana < Player.MaxMana * GetValue<Slider>("ManaE").Value / 100)
                 return;
 
-            // TODO: change to events + move to util
             if (sender is Obj_SpellMissile && sender.IsValid)
             {
                 var missile = (Obj_SpellMissile)sender;
@@ -57,19 +66,6 @@ namespace Support.Plugins
                     if (Player.Distance(turret) < E.Range)
                     {
                         E.Cast(turret, true);
-                    }
-                }
-
-                // Enemy Hero -> Ally Hero AA
-                if (missile.SpellCaster is Obj_AI_Hero && missile.SpellCaster.IsValid && missile.SpellCaster.IsEnemy &&
-                    missile.Target is Obj_AI_Hero && missile.Target.IsValid && missile.Target.IsAlly &&
-                    Orbwalking.IsAutoAttack(missile.SData.Name))
-                {
-                    var ally = (Obj_AI_Hero)missile.Target;
-
-                    if (Player.Distance(ally) < E.Range)
-                    {
-                        E.Cast(ally, true);
                     }
                 }
 

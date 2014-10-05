@@ -21,11 +21,10 @@ using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
-using Support;
 
 #endregion
 
-namespace Evade
+namespace Support.Evade
 {
     internal static class SkillshotDetector
     {
