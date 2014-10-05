@@ -32,24 +32,20 @@ namespace Support.Plugins
             W = new Spell(SpellSlot.W, 0);
             E = new Spell(SpellSlot.E, 700);
             R = new Spell(SpellSlot.R, 900);
-
-            Protector.Init();
-            Protector.OnSkillshotProtection += Protector_OnSkillshotProtection;
-            Protector.OnTargetedProtection += Protector_OnTargetedProtection;
         }
 
-        private void Protector_OnTargetedProtection(Obj_AI_Base caster, Obj_AI_Hero target, SpellData spell)
+        public override void OnTargetedProtection(Obj_AI_Base caster, Obj_AI_Hero target, SpellData spell)
         {
-            if(!R.IsReady() || Player.Distance(target) > R.Range)
+            if(!R.IsValidTarget(target, true, false))
                 return;
 
             if (caster.GetSpellDamage(target, spell.Name) >= target.Health)
                 R.Cast(target, true);
         }
 
-        private void Protector_OnSkillshotProtection(Obj_AI_Hero target, List<Evade.Skillshot> skillshots)
+        public override void OnSkillshotProtection(Obj_AI_Hero target, List<Evade.Skillshot> skillshots)
         {
-            if (!R.IsReady() || Player.Distance(target) > R.Range)
+            if (!R.IsValidTarget(target, true, false))
                 return;
 
             foreach (var skillshot in skillshots)

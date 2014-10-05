@@ -18,6 +18,13 @@ namespace Support
                 PluginBase.Config.Item(menu + ObjectManager.Player.ChampionName).GetValue<bool>();
         }
 
+        public static bool IsValidTarget(this Spell spell, Obj_AI_Base target, bool range = true, bool team = true)
+        {
+            return
+                spell.IsReady() &&
+                target.IsValidTarget(range ? spell.Range : float.MaxValue, team);
+        }
+
         public static void AddBool(this Menu menu, string name, string displayName, bool value)
         {
             menu.AddItem(new MenuItem(name + ObjectManager.Player.ChampionName, displayName).SetValue(value));

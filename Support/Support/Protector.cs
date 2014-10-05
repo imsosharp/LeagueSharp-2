@@ -23,11 +23,15 @@ namespace Support
 
         public static void Init()
         {
+            CreateMenu();
+            Collision.Init();
+
             Game.OnGameUpdate += OnGameUpdate;
             SkillshotDetector.OnDetectSkillshot += OnDetectSkillshot;
+            Obj_AI_Hero.OnProcessSpellCast += HeroOnProcessSpellCast;
+            Obj_AI_Turret.OnProcessSpellCast += TurretOnProcessSpellCast;
             Obj_SpellMissile.OnCreate += SpellMissile_OnCreate;
-            Collision.Init();
-            CreateMenu();
+
             Console.WriteLine("Protector Init Complete");
         }
 
@@ -49,14 +53,71 @@ namespace Support
             Menu.AddToMainMenu();
         }
 
+        private static void TurretOnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (ObjectManager.Player.IsDead)
+                return;
+
+            if (!Menu.Item("TargetedActive").GetValue<bool>())
+                return;
+
+            if (!sender.IsValid || sender.IsAlly)
+                return;
+
+            if (!args.Target.IsValid || !(args.Target is Obj_AI_Hero))
+                return;
+
+            var caster = (Obj_AI_Turret)sender;
+            var target = (Obj_AI_Hero)args.Target;
+
+            var protectAlly = Menu.Item("targeted" + target.ChampionName);
+            if (protectAlly != null && protectAlly.GetValue<bool>())
+            {
+                if (OnTargetedProtection != null)
+                {
+                    OnTargetedProtection(caster, target, args.SData);
+                }
+            }
+        }
+
+        private static void HeroOnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (ObjectManager.Player.IsDead)
+                return;
+
+            if (!Menu.Item("TargetedActive").GetValue<bool>())
+                return;
+
+            if (!sender.IsValid || sender.IsAlly || !sender.IsMelee())
+                return;
+
+            if (!args.Target.IsValid || !(args.Target is Obj_AI_Hero))
+                return;
+
+            var caster = (Obj_AI_Hero)sender;
+            var target = (Obj_AI_Hero)args.Target;
+
+            var protectAlly = Menu.Item("targeted" + target.ChampionName);
+            if (protectAlly != null && protectAlly.GetValue<bool>())
+            {
+                if (OnTargetedProtection != null)
+                {
+                    OnTargetedProtection(caster, target, args.SData);
+                }
+            }
+        }
+
         private static void SpellMissile_OnCreate(GameObject sender, EventArgs args)
         {
+            if (ObjectManager.Player.IsDead)
+                return;
+
             if (!Menu.Item("TargetedActive").GetValue<bool>())
                 return;
 
             var missile = (Obj_SpellMissile)sender;
 
-            if (!(missile.SpellCaster is Obj_AI_Hero) || !missile.SpellCaster.IsValid || !missile.SpellCaster.IsEnemy)
+            if (!(missile.SpellCaster is Obj_AI_Hero) || !missile.SpellCaster.IsValid || missile.SpellCaster.IsAlly)
                 return;
 
             if (!(missile.Target is Obj_AI_Hero) || !missile.Target.IsValid || !missile.Target.IsAlly)
@@ -98,21 +159,20 @@ namespace Support
             }
 
             // Protect
-            foreach (var ally in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsAlly).OrderByDescending(h => h.Health))
+            foreach (var ally in ObjectManager.Get<Obj_AI_Hero>()
+                .Where(h => h.IsAlly && h.IsValidTarget(2000, false))
+                .OrderByDescending(h => h.Health))
             {
-                if (ally.IsValidTarget(2000, false))
+                var protectAlly = Menu.Item("skillshot" + ally.ChampionName);
+                if (protectAlly != null && protectAlly.GetValue<bool>())
                 {
-                    var protectAlly = Menu.Item("skillshot" + ally.ChampionName);
-                    if (protectAlly != null && protectAlly.GetValue<bool>())
-                    {
-                        var allySafeResult = IsSafe(ally.ServerPosition.To2D());
+                    var allySafeResult = IsSafe(ally.ServerPosition.To2D());
 
-                        if (!allySafeResult.IsSafe && IsAboutToHit(ally, 100))
+                    if (!allySafeResult.IsSafe && IsAboutToHit(ally, 100))
+                    {
+                        if (OnSkillshotProtection != null)
                         {
-                            if (OnSkillshotProtection != null)
-                            {
-                                OnSkillshotProtection(ally, allySafeResult.SkillshotList);
-                            }
+                            OnSkillshotProtection(ally, allySafeResult.SkillshotList);
                         }
                     }
                 }

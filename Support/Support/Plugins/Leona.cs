@@ -106,7 +106,7 @@ namespace Support.Plugins
             config.AddBool("ComboQ", "Use Q", true);
             config.AddBool("ComboW", "Use W", true);
             config.AddBool("ComboE", "Use E", true);
-            config.AddBool("ComboR", "Use R", true);
+            //config.AddBool("ComboR", "Use R", true);
             config.AddSlider("ComboCountR", "Targets in range to Ult", 2, 1, 5);
         }
 

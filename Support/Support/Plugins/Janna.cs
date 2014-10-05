@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using Support.Evade;
@@ -19,16 +18,12 @@ namespace Support.Plugins
             R = new Spell(SpellSlot.R, 700);
 
             Q.SetSkillshot(0.5f, 150f, 900f, false, SkillshotType.SkillshotLine);
-
-            Protector.Init();
-            Protector.OnSkillshotProtection += Protector_OnSkillshotProtection;
-            Protector.OnTargetedProtection += Protector_OnTargetedProtection;
             GameObject.OnCreate += GameObjectOnOnCreate;
         }
 
-        private void Protector_OnTargetedProtection(Obj_AI_Base caster, Obj_AI_Hero target, SpellData missile)
+        public override void OnSkillshotProtection(Obj_AI_Hero target, List<Skillshot> skillshots)
         {
-            if (Player.Mana < Player.MaxMana * GetValue<Slider>("ManaE").Value / 100)
+            if (!ProtectionMana || !E.IsReady())
                 return;
 
             if (Player.Distance(target) < E.Range)
@@ -37,9 +32,9 @@ namespace Support.Plugins
             }
         }
 
-        private void Protector_OnSkillshotProtection(Obj_AI_Hero target, List<Skillshot> skillshots)
+        public override void OnTargetedProtection(Obj_AI_Base caster, Obj_AI_Hero target, SpellData spell)
         {
-            if (Player.Mana < Player.MaxMana * GetValue<Slider>("ManaE").Value / 100)
+            if (!ProtectionMana || !E.IsReady())
                 return;
 
             if (Player.Distance(target) < E.Range)

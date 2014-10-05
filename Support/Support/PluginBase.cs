@@ -76,6 +76,11 @@ namespace Support
         public bool HarassMana { get { return Player.Mana > Player.MaxMana * GetValue<Slider>("HarassMana").Value / 100; } }
 
         /// <summary>
+        /// ProtectionMana
+        /// </summary>
+        public bool ProtectionMana { get { return Player.Mana > Player.MaxMana * GetValue<Slider>("ProtectionMana").Value / 100; } }
+
+        /// <summary>
         /// Player Object
         /// </summary>
         public Obj_AI_Hero Player { get { return ObjectManager.Player; } }
@@ -224,6 +229,9 @@ namespace Support
         /// </summary>
         private void InitPluginEvents()
         {
+            Protector.Init();
+            Protector.OnSkillshotProtection += OnSkillshotProtection;
+            Protector.OnTargetedProtection += OnTargetedProtection;
             Game.OnGameUpdate += OnUpdate;
             Drawing.OnDraw += OnDraw;
             Orbwalking.BeforeAttack += BeforeAttack;
@@ -281,6 +289,7 @@ namespace Support
             ManaConfig = Config.AddSubMenu(new Menu("Mana Limiter", "Mana Limiter"));
             ManaConfig.AddSlider("ComboMana", "Combo Mana %", 1, 1, 100);
             ManaConfig.AddSlider("HarassMana", "Harass Mana %", 1, 1, 100);
+            ManaConfig.AddSlider("ProtectionMana", "Protectio Mana %", 1, 1, 100);
 
             MiscConfig = Config.AddSubMenu(new Menu("Misc", "Misc"));
             MiscConfig.AddBool("AttackMinions", "Attack Minions?", true);
@@ -322,6 +331,15 @@ namespace Support
         public T GetValue<T>(string item)
         {
             return Config.Item(item + ObjectManager.Player.ChampionName).GetValue<T>();
+        }
+
+
+        public virtual void OnTargetedProtection(Obj_AI_Base caster, Obj_AI_Hero target, SpellData spell)
+        {
+        }
+
+        public virtual void OnSkillshotProtection(Obj_AI_Hero target, List<Evade.Skillshot> skillshots)
+        {
         }
 
         /// <summary>
