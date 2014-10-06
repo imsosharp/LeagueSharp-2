@@ -12,6 +12,7 @@ namespace Support.Plugins
         private int _qTick;
         private const int QFollowTime = 3000;
 
+        private bool FollowQ { get { return Environment.TickCount <= _qTick + QFollowTime; } }
         private bool FollowQBlock { get { return Environment.TickCount - _qTick >= QFollowTime; } }
 
         public Thresh()
@@ -43,7 +44,7 @@ namespace Support.Plugins
                 }
                 if (Q.IsValidTarget(_qTarget, "ComboQFollow"))
                 {
-                    if (Environment.TickCount <= _qTick + QFollowTime)
+                    if (FollowQ)
                         Q.Cast();
                 }
 
