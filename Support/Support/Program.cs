@@ -28,9 +28,9 @@ namespace Support
     {
         private static void Main(string[] args)
         {
-            Protector.Init();
-            Protector.OnSkillshotProtection += Protector_OnSkillshotProtection;
-            Protector.OnTargetedProtection += Protector_OnTargetedProtection;
+            //Protector.Init();
+            //Protector.OnSkillshotProtection += Protector_OnSkillshotProtection;
+            //Protector.OnTargetedProtection += Protector_OnTargetedProtection;
 
             CustomEvents.Game.OnGameLoad += a =>
             {
