@@ -19,56 +19,7 @@ namespace Support.Plugins
 
             Q.SetSkillshot(0.5f, 150f, 900f, false, SkillshotType.SkillshotLine);
             GameObject.OnCreate += GameObjectOnOnCreate;
-        }
-
-        public override void OnSkillshotProtection(Obj_AI_Hero target, List<Skillshot> skillshots)
-        {
-            if (!ProtectionMana || !E.IsReady())
-                return;
-
-            if (Player.Distance(target) < E.Range)
-            {
-                E.Cast(target, true);
-            }
-        }
-
-        public override void OnTargetedProtection(Obj_AI_Base caster, Obj_AI_Hero target, SpellData spell)
-        {
-            if (!ProtectionMana || !E.IsReady())
-                return;
-
-            if (Player.Distance(target) < E.Range)
-            {
-                E.Cast(target, true);
-            }
-        }
-
-        private void GameObjectOnOnCreate(GameObject sender, EventArgs args)
-        {
-            if (!E.IsReady() || Player.Mana < Player.MaxMana * GetValue<Slider>("ManaE").Value / 100)
-                return;
-
-            if (sender is Obj_SpellMissile && sender.IsValid)
-            {
-                var missile = (Obj_SpellMissile)sender;
-
-                // Ally Turret -> Enemy Hero
-                if (missile.SpellCaster is Obj_AI_Turret && missile.SpellCaster.IsValid && missile.SpellCaster.IsAlly &&
-                    missile.Target is Obj_AI_Hero && missile.Target.IsValid && missile.Target.IsEnemy)
-                {
-                    var turret = (Obj_AI_Turret)missile.SpellCaster;
-
-                    if (Player.Distance(turret) < E.Range)
-                    {
-                        E.Cast(turret, true);
-                    }
-                }
-
-                //// Ally Hero special attack
-                //if (missile.SpellCaster is Obj_AI_Hero && missile.SpellCaster.IsValid && missile.SpellCaster.IsAlly)
-                //{
-                //}
-            }
+            Protector.Init();
         }
 
         public override void OnUpdate(EventArgs args)
@@ -102,6 +53,56 @@ namespace Support.Plugins
             }
         }
 
+        private void GameObjectOnOnCreate(GameObject sender, EventArgs args)
+        {
+            if (sender is Obj_SpellMissile && sender.IsValid)
+            {
+                var missile = (Obj_SpellMissile)sender;
+
+                // Ally Turret -> Enemy Hero
+                if (missile.SpellCaster is Obj_AI_Turret && missile.SpellCaster.IsValid && missile.SpellCaster.IsAlly &&
+                    missile.Target is Obj_AI_Hero && missile.Target.IsValid && missile.Target.IsEnemy)
+                {
+                    var turret = (Obj_AI_Turret)missile.SpellCaster;
+
+                    if (ProtectionMana && E.IsReady())
+                    {
+                        if (E.IsInRange(turret))
+                        {
+                            E.Cast(turret, true);
+                        }
+                    }
+                }
+
+                //// Ally Hero special attack
+                //if (missile.SpellCaster is Obj_AI_Hero && missile.SpellCaster.IsValid && missile.SpellCaster.IsAlly)
+                //{
+                //}
+            }
+        }
+
+        public override void OnSkillshotProtection(Obj_AI_Hero target, List<Skillshot> skillshots)
+        {
+            if (ProtectionMana && E.IsReady())
+            {
+                if (E.IsInRange(target))
+                {
+                    E.Cast(target, true);
+                }
+            }
+        }
+
+        public override void OnTargetedProtection(Obj_AI_Base caster, Obj_AI_Hero target, SpellData spell)
+        {
+            if (ProtectionMana && E.IsReady())
+            {
+                if (E.IsInRange(target))
+                {
+                    E.Cast(target, true);
+                }
+            }
+        }
+
         public override void OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             if (gapcloser.Sender.IsAlly)
@@ -109,7 +110,7 @@ namespace Support.Plugins
 
             if (Q.IsValidTarget(gapcloser.Sender, "GapcloserQ"))
             {
-                Q.Cast(gapcloser.End, true);
+                Q.Cast(gapcloser.Start, true);
                 Q.Cast();
             }
 
@@ -148,20 +149,6 @@ namespace Support.Plugins
         public override void HarassMenu(Menu config)
         {
             config.AddBool("HarassW", "Use W", true);
-        }
-
-        public override void ItemMenu(Menu config)
-        {
-            //config.AddBool("FrostQueen", "Use Frost Queen", true);
-            //config.AddBool("TwinShadows", "Use Twin Shadows", true);
-            //config.AddBool("Locket", "Use Locket", true);
-            //config.AddBool("Talisman", "Use Talisman", true);
-            //config.AddBool("Mikael", "Use Mikael", true);
-        }
-
-        public override void ManaMenu(Menu config)
-        {
-            config.AddSlider("ManaE", "Shield Attacks", 30, 1, 100);
         }
 
         public override void MiscMenu(Menu config)

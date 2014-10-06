@@ -121,10 +121,6 @@ namespace Support.Disabled
             config.AddItem(new MenuItem("UseRH", "Use R").SetValue(true));
         }
 
-        public override void ItemMenu(Menu config)
-        {
-        }
-
         public override void MiscMenu(Menu config)
         {
             config.AddItem(new MenuItem("UseQA", "Use Q after Attack").SetValue(true));

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using LeagueSharp;
 using LeagueSharp.Common;
 
@@ -13,6 +14,7 @@ namespace Support.Plugins
             W = new Spell(SpellSlot.W, 200);
             E = new Spell(SpellSlot.E, 625);
             R = new Spell(SpellSlot.R, 200);
+            Protector.Init();
         }
 
         public override void OnUpdate(EventArgs args)
@@ -56,6 +58,28 @@ namespace Support.Plugins
             }
         }
 
+        public override void OnTargetedProtection(Obj_AI_Base caster, Obj_AI_Hero target, SpellData spell)
+        {
+            if (!Q.IsValidTarget(target, true, false))
+                return;
+
+            if (caster.WillKill(target, spell))
+                Q.Cast(target, true);
+        }
+
+        public override void OnSkillshotProtection(Obj_AI_Hero target, List<Evade.Skillshot> skillshots)
+        {
+            if (!Q.IsValidTarget(target, true, false))
+                return;
+
+            foreach (var skillshot in skillshots)
+            {
+                if (skillshot.Unit.WillKill(target, skillshot.SpellData))
+                    Q.Cast(target, true);
+            }
+        }
+
+
         public override void OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             if (gapcloser.Sender.IsAlly)
@@ -92,13 +116,6 @@ namespace Support.Plugins
             config.AddBool("HarassQ", "Use Q", true);
             config.AddBool("HarassE", "Use E", true);
             config.AddSlider("HarassHealthQ", "Health to Heal", 20, 1, 100);
-        }
-
-        public override void ItemMenu(Menu config)
-        {
-            //config.AddBool("Locket", "Use Locket", true);
-            //config.AddBool("Talisman", "Use Talisman", true);
-            //config.AddBool("Mikael", "Use Mikael", true);
         }
 
         public override void MiscMenu(Menu config)

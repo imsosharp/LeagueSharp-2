@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
-using System.Collections;
 
 
 namespace Support
@@ -31,16 +28,9 @@ namespace Support
             Game.PrintChat("<font color='#15C3AC'>Support:</font> <font color='#FFFFFF'>" + message + "</font>");
         }
 
-        public static bool HasBuff(Obj_AI_Hero target, string buffName)
-        {
-            return target.Buffs.Any(buff => String.Equals(buff.Name, buffName, StringComparison.CurrentCultureIgnoreCase));
-        }
-
         public static bool EnemyInRange(int numOfEnemy, float range)
         {
-            return ObjectManager
-                .Get<Obj_AI_Hero>()
-                .Count(enemy => ObjectManager.Player.Distance(enemy) < range && enemy.IsEnemy) >= numOfEnemy;
+            return Utility.CountEnemysInRange((int)range) >= numOfEnemy;
         }
 
         public static List<Obj_AI_Hero> AllyInRange(float range)

@@ -3,7 +3,7 @@ using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 
-namespace Support.Plugins
+namespace Support.Disabled
 {
     public class Sona : PluginBase
     {
@@ -148,14 +148,6 @@ namespace Support.Plugins
             config.AddBool("HarassW", "Use W", true);
             config.AddBool("HarassE", "Use E", true);
             config.AddSlider("HarassHealthW", "Health to Heal", 20, 1, 100);
-        }
-
-        public override void ItemMenu(Menu config)
-        {
-            //config.AddBool("FrostQueen", "Use Frost Queen", true);
-            //config.AddBool("Locket", "Use Locket", true);
-            //config.AddBool("Talisman", "Use Talisman", true);
-            //config.AddBool("Mikael", "Use Mikael", true);
         }
 
         public override void MiscMenu(Menu config)

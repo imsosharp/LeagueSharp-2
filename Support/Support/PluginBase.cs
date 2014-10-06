@@ -85,6 +85,8 @@ namespace Support
         /// </summary>
         public Obj_AI_Hero Player { get { return ObjectManager.Player; } }
 
+        public float AttackRange { get { return Orbwalking.GetRealAutoAttackRange(null) + 65; } }
+
         /// <summary>
         /// Target
         /// </summary>
@@ -131,11 +133,6 @@ namespace Support
         public Menu HarassConfig { get; set; }
 
         /// <summary>
-        /// ItemsConfig
-        /// </summary>
-        public Menu ItemsConfig { get; set; }
-
-        /// <summary>
         /// MiscConfig
         /// </summary>
         public Menu MiscConfig { get; set; }
@@ -156,29 +153,15 @@ namespace Support
         public Items.Item Zhonyas { get; set; }
 
         /// <summary>
-        /// FrostQueen
-        /// </summary>
-        public Items.Item FrostQueen { get; set; }
-
-        /// <summary>
-        /// TwinShadows
-        /// </summary>
-        public Items.Item TwinShadows { get; set; }
-
-        /// <summary>
         /// Locket
         /// </summary>
         public Items.Item Locket { get; set; }
 
         /// <summary>
-        /// Talisman
-        /// </summary>
-        public Items.Item Talisman { get; set; }
-
-        /// <summary>
         /// Mikael
         /// </summary>
         public Items.Item Mikael { get; set; }
+
 
         private readonly List<Spell> _spells = new List<Spell>();
 
@@ -217,10 +200,7 @@ namespace Support
         private void InitItems()
         {
             Zhonyas = new Items.Item(3157, float.MaxValue);
-            FrostQueen = new Items.Item(3092, 850);
-            TwinShadows = new Items.Item(3023, 1500);
             Locket = new Items.Item(3190, 600);
-            Talisman = new Items.Item(3069, 600);
             Mikael = new Items.Item(3222, float.MaxValue);
         }
 
@@ -229,7 +209,6 @@ namespace Support
         /// </summary>
         private void InitPluginEvents()
         {
-            Protector.Init();
             Protector.OnSkillshotProtection += OnSkillshotProtection;
             Protector.OnTargetedProtection += OnTargetedProtection;
             Game.OnGameUpdate += OnUpdate;
@@ -284,12 +263,11 @@ namespace Support
 
             ComboConfig = Config.AddSubMenu(new Menu("Combo", "Combo"));
             HarassConfig = Config.AddSubMenu(new Menu("Harass", "Harass"));
-            ItemsConfig = Config.AddSubMenu(new Menu("Items", "Items"));
 
             ManaConfig = Config.AddSubMenu(new Menu("Mana Limiter", "Mana Limiter"));
             ManaConfig.AddSlider("ComboMana", "Combo Mana %", 1, 1, 100);
             ManaConfig.AddSlider("HarassMana", "Harass Mana %", 1, 1, 100);
-            ManaConfig.AddSlider("ProtectionMana", "Protectio Mana %", 1, 1, 100);
+            ManaConfig.AddSlider("ProtectionMana", "Protector Mana %", 1, 1, 100);
 
             MiscConfig = Config.AddSubMenu(new Menu("Misc", "Misc"));
             MiscConfig.AddBool("AttackMinions", "Attack Minions?", true);
@@ -302,7 +280,6 @@ namespace Support
 
             ComboMenu(ComboConfig);
             HarassMenu(HarassConfig);
-            ItemMenu(ItemsConfig);
             ManaMenu(ManaConfig);
             MiscMenu(MiscConfig);
             DrawingMenu(DrawingConfig);
@@ -440,17 +417,6 @@ namespace Support
         /// </remarks>
         /// <param name="config">Menu</param>
         public virtual void HarassMenu(Menu config)
-        {
-        }
-
-        /// <summary>
-        /// ItemMenu
-        /// </summary>
-        /// <remarks>
-        /// override to Implement ItemMenu Config
-        /// </remarks>
-        /// <param name="config">Menu</param>
-        public virtual void ItemMenu(Menu config)
         {
         }
 

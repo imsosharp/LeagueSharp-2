@@ -32,14 +32,49 @@ namespace Support.Plugins
             W = new Spell(SpellSlot.W, 0);
             E = new Spell(SpellSlot.E, 700);
             R = new Spell(SpellSlot.R, 900);
+            Protector.Init();
+        }
+
+        public override void OnUpdate(EventArgs args)
+        {
+            if (ComboMode)
+            {
+                if (Q.IsValidTarget(Target, "ComboQ"))
+                {
+                    Q.Cast(Target);
+                }
+
+                if (W.IsReady() && !Q.IsReady() && GetValue<bool>("ComboW"))
+                {
+                    W.Cast();
+                }
+
+                if (E.IsValidTarget(Target, "ComboE"))
+                {
+                    // TODO: speed adc/jungler/engage
+                }
+            }
+
+            if (HarassMode)
+            {
+                if (Q.IsValidTarget(Target, "HarassQ"))
+                {
+                    Q.Cast(Target);
+                }
+
+                if (W.IsReady() && !Q.IsReady() && GetValue<bool>("HarassW"))
+                {
+                    W.Cast();
+                }
+            }
         }
 
         public override void OnTargetedProtection(Obj_AI_Base caster, Obj_AI_Hero target, SpellData spell)
         {
-            if(!R.IsValidTarget(target, true, false))
+            if (!R.IsValidTarget(target, true, false))
                 return;
 
-            if (caster.GetSpellDamage(target, spell.Name) >= target.Health)
+            if (caster.WillKill(target, spell))
                 R.Cast(target, true);
         }
 
@@ -50,113 +85,38 @@ namespace Support.Plugins
 
             foreach (var skillshot in skillshots)
             {
-                if (skillshot.Unit.GetSpellDamage(target, skillshot.SpellData.SpellName) >= target.Health)
+                if (skillshot.Unit.WillKill(target, skillshot.SpellData))
                     R.Cast(target, true);
             }
         }
 
-        public override void OnUpdate(EventArgs args)
-        {
-            if (ComboMode)
-            {
-                if (Q.IsReady() && Target.IsValidTarget(Q.Range) && GetValue<bool>("UseQC"))
-                {
-
-                }
-
-                if (W.IsReady() && Target.IsValidTarget(W.Range) && GetValue<bool>("UseWC"))
-                {
-
-                }
-
-                if (E.IsReady() && Target.IsValidTarget(E.Range) && GetValue<bool>("UseEC"))
-                {
-
-                }
-
-                if (R.IsReady() && Target.IsValidTarget(R.Range) && GetValue<bool>("UseRC"))
-                {
-
-                }
-            }
-
-            if (HarassMode)
-            {
-                if (Q.IsReady() && Target.IsValidTarget(Q.Range) && GetValue<bool>("UseQH"))
-                {
-
-                }
-
-                if (W.IsReady() && Target.IsValidTarget(W.Range) && GetValue<bool>("UseWH"))
-                {
-
-                }
-
-                if (E.IsReady() && Target.IsValidTarget(E.Range) && GetValue<bool>("UseEH"))
-                {
-
-                }
-            }
-        }
-
-        public override void BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
-        {
-        }
-
-        public override void AfterAttack(Obj_AI_Base unit, Obj_AI_Base target)
-        {
-        }
-
         public override void OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-        }
-
-        public override void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
-        {
-            if (spell.DangerLevel < InterruptableDangerLevel.High || unit.IsAlly)
+            if (gapcloser.Sender.IsAlly)
                 return;
 
-        }
-
-        public override void OnDraw(EventArgs args)
-        {
+            if (E.IsValidTarget(gapcloser.Sender, "GapcloserE"))
+            {
+                E.Cast(gapcloser.Sender);
+            }
         }
 
         public override void ComboMenu(Menu config)
         {
-            config.AddItem(new MenuItem("UseQC", "Use Q").SetValue(true));
-            config.AddItem(new MenuItem("UseWC", "Use W").SetValue(true));
-            config.AddItem(new MenuItem("UseEC", "Use E").SetValue(true));
-            config.AddItem(new MenuItem("UseRC", "Use R").SetValue(true));
-            config.AddItem(new MenuItem("CountR", "Num of Enemy in Range to Ult").SetValue(new Slider(2, 1, 5)));
+            config.AddBool("ComboQ", "Use Q", true);
+            config.AddBool("ComboW", "Use W", true);
+            //config.AddBool("ComboE", "Use E", true);
         }
 
         public override void HarassMenu(Menu config)
         {
-            config.AddItem(new MenuItem("UseQH", "Use Q").SetValue(true));
-            config.AddItem(new MenuItem("UseWH", "Use W").SetValue(true));
-            config.AddItem(new MenuItem("UseEH", "Use E").SetValue(true));
-            config.AddItem(new MenuItem("UseRH", "Use R").SetValue(true));
-        }
-
-        public override void ItemMenu(Menu config)
-        {
+            config.AddBool("HarassQ", "Use Q", true);
+            config.AddBool("HarassW", "Use W", true);
         }
 
         public override void MiscMenu(Menu config)
         {
-            config.AddItem(new MenuItem("UseQA", "Use Q after Attack").SetValue(true));
-            config.AddItem(new MenuItem("UseQG", "Use Q to Interrupt Gapcloser").SetValue(true));
-            config.AddItem(new MenuItem("UseQI", "Use Q to Interrupt Spells").SetValue(true));
-            config.AddItem(new MenuItem("UseRI", "Use R to Interrupt Spells").SetValue(true));
-        }
-
-        public override void ManaMenu(Menu config)
-        {
-        }
-
-        public override void DrawingMenu(Menu config)
-        {
+            config.AddBool("GapcloserE", "Use E to Interrupt Gapcloser", true);
         }
     }
 }

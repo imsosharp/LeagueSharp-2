@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using LeagueSharp;
 using LeagueSharp.Common;
 
@@ -27,6 +28,10 @@ namespace Support
     {
         private static void Main(string[] args)
         {
+            Protector.Init();
+            Protector.OnSkillshotProtection += Protector_OnSkillshotProtection;
+            Protector.OnTargetedProtection += Protector_OnTargetedProtection;
+
             CustomEvents.Game.OnGameLoad += a =>
             {
                 try
@@ -46,29 +51,46 @@ namespace Support
                     Console.WriteLine(e);
                 }
             };
-
-            Protector.OnSkillshotProtection += Protector_OnSkillshotProtection;
-            Protector.OnTargetedProtection += Protector_OnTargetedProtection;
         }
 
         static void Protector_OnTargetedProtection(Obj_AI_Base caster, Obj_AI_Hero target, SpellData spell)
         {
-            Console.WriteLine("{0} -> {1} - {2} {3}",
-                caster.Name,
-                target.Name,
-                spell.Name,
-                Math.Round(caster.GetSpellDamage(target, spell.Name)));
+            try
+            {
+                var text = string.Format("{0} -> {1} - {2} {3}",
+                    caster.BaseSkinName,
+                    target.BaseSkinName,
+                    spell.Name,
+                    Math.Round(caster.GetSpellDamage(target, spell.Name)));
+
+                File.AppendAllText("D:\\Targeted.txt", text + "\n");
+                Console.WriteLine(text);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
 
         static void Protector_OnSkillshotProtection(Obj_AI_Hero target, List<Evade.Skillshot> skillshots)
         {
-            foreach (var skillshot in skillshots)
+            try
             {
-                Console.WriteLine("{0} -> {1} - {2} {3}",
-                    skillshot.Unit.Name,
-                    target.Name,
-                    skillshot.SpellData.SpellName,
-                    Math.Round(skillshot.Unit.GetSpellDamage(target, skillshot.SpellData.SpellName)));
+                foreach (var skillshot in skillshots)
+                {
+                    var text = string.Format("{0} -> {1} - {2} {3}",
+                        skillshot.Unit.BaseSkinName,
+                        target.BaseSkinName,
+                        skillshot.SpellData.SpellName,
+                        Math.Round(skillshot.Unit.GetSpellDamage(target, skillshot.SpellData.SpellName)));
+
+                    File.AppendAllText("D:\\Skillshot.txt", text + "\n");
+                    Console.WriteLine(text);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
             }
         }
     }

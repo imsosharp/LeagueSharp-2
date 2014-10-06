@@ -15,7 +15,7 @@ namespace Support.Plugins
             R = new Spell(SpellSlot.R, 600);
 
             Q.SetSkillshot(0.5f, 80, 1200, true, SkillshotType.SkillshotLine);
-            W.SetTargetted(0.5f, float.MaxValue);
+            Protector.Init();
         }
 
         public override void OnUpdate(EventArgs args)
@@ -76,15 +76,6 @@ namespace Support.Plugins
         {
             config.AddBool("HarassQ", "Use Q", true);
             config.AddBool("HarassW", "Use W", true);
-        }
-
-        public override void ItemMenu(Menu config)
-        {
-            //config.AddBool("Zhonyas", "Use Zhonyas", true);
-            //config.AddBool("FrostQueen", "Use Frost Queen", true);
-            //config.AddBool("Locket", "Use Locket", true);
-            //config.AddBool("Talisman", "Use Talisman", true);
-            //config.AddBool("Mikael", "Use Mikael", true);
         }
 
         public override void MiscMenu(Menu config)

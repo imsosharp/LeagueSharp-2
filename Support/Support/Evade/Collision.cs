@@ -141,8 +141,7 @@ namespace Support.Evade
                             ObjectManager.Get<Obj_AI_Hero>()
                                 .Where(
                                     h =>
-                                        (h.IsValidTarget(1200, false) && h.Team == ObjectManager.Player.Team && !h.IsMe ||
-                                         Config.TestOnAllies && h.Team != ObjectManager.Player.Team)))
+                                        (h.IsValidTarget(1200, false) && h.Team == ObjectManager.Player.Team && !h.IsMe || h.Team != ObjectManager.Player.Team)))
                         {
                             var pred = FastPrediction(
                                 from, hero,

@@ -2,7 +2,7 @@
 using LeagueSharp;
 using LeagueSharp.Common;
 
-namespace Support.Disabled
+namespace Support.Plugins
 {
     public class Blitzcrank : PluginBase
     {
@@ -11,7 +11,7 @@ namespace Support.Disabled
         {
             Q = new Spell(SpellSlot.Q, 925);
             W = new Spell(SpellSlot.W, 0);
-            E = new Spell(SpellSlot.E, Player.AttackRange);
+            E = new Spell(SpellSlot.E, AttackRange);
             R = new Spell(SpellSlot.R, 600);
 
             Q.SetSkillshot(0.25f, 70f, 1800f, true, SkillshotType.SkillshotLine);
@@ -26,17 +26,28 @@ namespace Support.Disabled
                     Q.Cast(Target, true);
                 }
 
-                if (E.IsValidTarget(Target, "ComboE"))
+                if (E.IsValidTarget(Target))
                 {
                     if (E.Cast())
                     {
                         Orbwalking.ResetAutoAttackTimer();
+                        Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
+                    }
+                }
+
+                if (E.IsReady() && Target.IsValidTarget() && Target.HasBuff("RocketGrab"))
+                {
+                    if (E.Cast())
+                    {
+                        Orbwalking.ResetAutoAttackTimer();
+                        Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
                     }
                 }
 
                 if (R.IsValidTarget(Target, "ComboR"))
                 {
-                    R.CastIfWillHit(Target, GetValue<Slider>("ComboCountR").Value, true);
+                    if(Utils.EnemyInRange(GetValue<Slider>("ComboCountR").Value, R.Range))
+                        R.Cast();
                 }
             }
 
@@ -47,11 +58,21 @@ namespace Support.Disabled
                     Q.Cast(Target, true);
                 }
 
-                if (E.IsValidTarget(Target, "HarassE"))
+                if (E.IsValidTarget(Target))
                 {
                     if (E.Cast())
                     {
                         Orbwalking.ResetAutoAttackTimer();
+                        Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
+                    }
+                }
+
+                if (E.IsReady() && Target.IsValidTarget() && Target.HasBuff("RocketGrab"))
+                {
+                    if (E.Cast())
+                    {
+                        Orbwalking.ResetAutoAttackTimer();
+                        Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
                     }
                 }
             }
@@ -59,15 +80,19 @@ namespace Support.Disabled
 
         public override void AfterAttack(Obj_AI_Base unit, Obj_AI_Base target)
         {
-            if (!unit.IsMe && !(target is Obj_AI_Hero))
+            if (!unit.IsMe)
                 return;
 
-            if (E.IsValidTarget(target, "AfterAttackE"))
+            if (!(target is Obj_AI_Hero) && !target.Name.ToLower().Contains("ward"))
+                return;
+
+            if (!E.IsReady())
+                return;
+
+            if (E.Cast())
             {
-                if (E.Cast())
-                {
-                    Orbwalking.ResetAutoAttackTimer();
-                }
+                Orbwalking.ResetAutoAttackTimer();
+                Player.IssueOrder(GameObjectOrder.AttackUnit, target);
             }
         }
 
@@ -81,6 +106,7 @@ namespace Support.Disabled
                 if (E.Cast())
                 {
                     Orbwalking.ResetAutoAttackTimer();
+                    Player.IssueOrder(GameObjectOrder.AttackUnit, gapcloser.Sender);
                 }
             }
 
@@ -100,6 +126,7 @@ namespace Support.Disabled
                 if (E.Cast())
                 {
                     Orbwalking.ResetAutoAttackTimer();
+                    Player.IssueOrder(GameObjectOrder.AttackUnit, unit);
                 }
             }
 
@@ -111,23 +138,14 @@ namespace Support.Disabled
 
         public override void ComboMenu(Menu config)
         {
-            config.AddBool("ComboQ", "Use Q", true);
-            config.AddBool("ComboE", "Use E", true);
+            config.AddBool("ComboQ", "Use Q/E", true);
             config.AddBool("ComboR", "Use R", true);
             config.AddSlider("ComboCountR", "Targets in range to Ult", 2, 1, 5);
         }
 
         public override void HarassMenu(Menu config)
         {
-            config.AddBool("HarassQ", "Use Q", true);
-            config.AddBool("HarassE", "Use E", true);
-        }
-
-        public override void ItemMenu(Menu config)
-        {
-            //config.AddBool("Locket", "Use Locket", true);
-            //config.AddBool("Talisman", "Use Talisman", true);
-            //config.AddBool("Mikael", "Use Mikael", true);
+            config.AddBool("HarassQ", "Use Q/E", true);
         }
 
         public override void MiscMenu(Menu config)
@@ -137,8 +155,6 @@ namespace Support.Disabled
 
             config.AddBool("InterruptE", "Use E to Interrupt Spells", true);
             config.AddBool("InterruptR", "Use R to Interrupt Spells", true);
-
-            config.AddBool("AfterAttackE", "Use E After Attack", true);
         }
     }
 }

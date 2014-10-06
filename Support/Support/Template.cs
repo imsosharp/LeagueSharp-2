@@ -133,16 +133,6 @@ namespace Support
             config.AddBool("HarassE", "Use E", true);
         }
 
-        public override void ItemMenu(Menu config)
-        {
-            config.AddBool("Zhonyas", "Use Zhonyas", true);
-            config.AddBool("FrostQueen", "Use Frost Queen", true);
-            config.AddBool("TwinShadows", "Use Twin Shadows", true);
-            config.AddBool("Locket", "Use Locket", true);
-            config.AddBool("Talisman", "Use Talisman", true);
-            config.AddBool("Mikael", "Use Mikael", true);
-        }
-
         public override void MiscMenu(Menu config)
         {
             config.AddBool("GapcloserQ", "Use Q to Interrupt Gapcloser", true);

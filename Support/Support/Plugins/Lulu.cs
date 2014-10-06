@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using LeagueSharp;
 using LeagueSharp.Common;
+using Support.Evade;
+using SpellData = LeagueSharp.SpellData;
 
 namespace Support.Plugins
 {
@@ -11,10 +14,11 @@ namespace Support.Plugins
         {
             Q = new Spell(SpellSlot.Q, 925);
             W = new Spell(SpellSlot.W, 650);
-            E = new Spell(SpellSlot.E, 650);
+            E = new Spell(SpellSlot.E, 650); //shield
             R = new Spell(SpellSlot.R, 900);
 
-            Q.SetSkillshot(0, 0, 0, false, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(0.25f, 50, 1450, false, SkillshotType.SkillshotLine);
+            Protector.Init();
         }
 
         public override void OnUpdate(EventArgs args)
@@ -30,17 +34,6 @@ namespace Support.Plugins
                 {
                     W.Cast(Target, true);
                 }
-
-                if (E.IsValidTarget(Target, "ComboE"))
-                {
-                    E.Cast(Target, true);
-                }
-
-                var ally = Utils.AllyBelowHp(GetValue<Slider>("ComboHealthR").Value, R.Range);
-                if (R.IsValidTarget(ally, "ComboR", true, false))
-                {
-                    R.Cast(ally, true);
-                }
             }
 
             if (HarassMode)
@@ -48,6 +41,43 @@ namespace Support.Plugins
                 if (Q.IsValidTarget(Target, "HarassQ"))
                 {
                     Q.Cast(Target, true);
+                }
+            }
+        }
+
+        public override void OnSkillshotProtection(Obj_AI_Hero target, List<Skillshot> skillshots)
+        {
+            if (R.IsReady())
+            {
+                foreach (var skillshot in skillshots)
+                {
+                    if (skillshot.Unit.WillKill(target, skillshot.SpellData))
+                        R.Cast(target, true);
+                }
+            }
+
+            if (ProtectionMana && E.IsReady())
+            {
+                if (E.IsInRange(target))
+                {
+                    E.Cast(target, true);
+                }
+            }
+        }
+
+        public override void OnTargetedProtection(Obj_AI_Base caster, Obj_AI_Hero target, SpellData spell)
+        {
+            if (R.IsReady())
+            {
+                if (caster.WillKill(target, spell))
+                    R.Cast(target, true);
+            }
+
+            if (ProtectionMana && E.IsReady())
+            {
+                if (E.IsInRange(target))
+                {
+                    E.Cast(target, true);
                 }
             }
         }
@@ -78,9 +108,6 @@ namespace Support.Plugins
         {
             config.AddBool("ComboQ", "Use Q", true);
             config.AddBool("ComboW", "Use W", true);
-            config.AddBool("ComboE", "Use E", true);
-            config.AddBool("ComboR", "Use R", true);
-            config.AddSlider("ComboHealthR", "Health to Ult", 20, 1, 100);
         }
 
         public override void HarassMenu(Menu config)
@@ -88,21 +115,11 @@ namespace Support.Plugins
             config.AddBool("HarassQ", "Use Q", true);
         }
 
-        public override void ItemMenu(Menu config)
-        {
-            //config.AddBool("FrostQueen", "Use Frost Queen", true);
-            //config.AddBool("Locket", "Use Locket", true);
-            //config.AddBool("Talisman", "Use Talisman", true);
-            //config.AddBool("Mikael", "Use Mikael", true);
-        }
-
         public override void MiscMenu(Menu config)
         {
             config.AddBool("GapcloserW", "Use W to Interrupt Gapcloser", true);
-            config.AddBool("GapcloserE", "Use E to Interrupt Gapcloser", true);
 
             config.AddBool("InterruptW", "Use W to Interrupt Spells", true);
-            config.AddBool("InterruptE", "Use E to Interrupt Spells", true);
         }
     }
 }

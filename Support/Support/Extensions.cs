@@ -5,6 +5,11 @@ namespace Support
 {
     public static class Extensions
     {
+        public static double HealthBuffer(this Obj_AI_Base hero, int buffer)
+        {
+            return ObjectManager.Player.Health * (1 - buffer / 100);
+        }
+
         public static bool IsValidTarget(this Items.Item item, Obj_AI_Base target)
         {
             return item != null && item.IsReady() && target.IsValidTarget(item.Range);
@@ -13,8 +18,8 @@ namespace Support
         public static bool IsValidTarget(this Spell spell, Obj_AI_Base target, string menu, bool range = true, bool team = true)
         {
             return
-                spell.IsReady() && 
-                target.IsValidTarget(range ? spell.Range : float.MaxValue, team) && 
+                spell.IsReady() &&
+                target.IsValidTarget(range ? spell.Range : float.MaxValue, team) &&
                 PluginBase.Config.Item(menu + ObjectManager.Player.ChampionName).GetValue<bool>();
         }
 
@@ -23,6 +28,21 @@ namespace Support
             return
                 spell.IsReady() &&
                 target.IsValidTarget(range ? spell.Range : float.MaxValue, team);
+        }
+
+        public static bool IsInRange(this Spell spell, Obj_AI_Base target)
+        {
+            return ObjectManager.Player.Distance(target) < spell.Range;
+        }
+
+        public static bool WillKill(this Obj_AI_Base caster, Obj_AI_Base target, SpellData spell, int buffer = 10)
+        {
+            return caster.GetSpellDamage(target, spell.Name) >= target.HealthBuffer(buffer);
+        }
+
+        public static bool WillKill(this Obj_AI_Base caster, Obj_AI_Base target, Evade.SpellData spell, int buffer = 10)
+        {
+            return caster.GetSpellDamage(target, spell.SpellName) >= target.HealthBuffer(buffer);
         }
 
         public static void AddBool(this Menu menu, string name, string displayName, bool value)

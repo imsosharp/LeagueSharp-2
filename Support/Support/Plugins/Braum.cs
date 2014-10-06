@@ -78,13 +78,6 @@ namespace Support.Plugins
             config.AddBool("HarassQ", "Use Q", true);
         }
 
-        public override void ItemMenu(Menu config)
-        {
-            //config.AddBool("Locket", "Use Locket", true);
-            //config.AddBool("Talisman", "Use Talisman", true);
-            //config.AddBool("Mikael", "Use Mikael", true);
-        }
-
         public override void MiscMenu(Menu config)
         {
             config.AddBool("GapcloserQ", "Use Q to Interrupt Gapcloser", true);

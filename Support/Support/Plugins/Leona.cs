@@ -9,43 +9,45 @@ namespace Support.Plugins
         public Leona()
             : base("h3h3", new Version(4, 17, 14))
         {
-            Q = new Spell(SpellSlot.Q, Player.AttackRange);
-            W = new Spell(SpellSlot.W, Player.AttackRange);
+            Q = new Spell(SpellSlot.Q, AttackRange);
+            W = new Spell(SpellSlot.W, AttackRange);
             E = new Spell(SpellSlot.E, 875);
             R = new Spell(SpellSlot.R, 1200);
 
-            E.SetSkillshot(0f, 100, 2000, false, SkillshotType.SkillshotLine);
-            R.SetSkillshot(0.7f, 315, float.MaxValue, false, SkillshotType.SkillshotCircle);
+            E.SetSkillshot(0.25f, 85f, 2000f, false, SkillshotType.SkillshotLine);
+            R.SetSkillshot(0.625f, 315f, float.MaxValue, false, SkillshotType.SkillshotCircle);
         }
 
         public override void OnUpdate(EventArgs args)
         {
             if (ComboMode)
             {
-                if (Q.IsValidTarget(Target, "ComboQ"))
+                if (Q.IsValidTarget(Target))
                 {
-                    if (Q.Cast())
-                    {
-                        Orbwalking.ResetAutoAttackTimer();
-                        Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
-                    }
+                    Orbwalking.ResetAutoAttackTimer();
+                    Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
                 }
 
-                if (W.IsValidTarget(Target, "ComboW"))
+                if (W.IsValidTarget(Target, "ComboQWE"))
                 {
                     W.Cast();
                 }
 
-                if (E.IsValidTarget(Target, "ComboE") && Q.IsReady())
+                if (E.IsValidTarget(Target, "ComboQWE") && Q.IsReady())
                 {
                     if (E.Cast(Target, true) == Spell.CastStates.SuccessfullyCasted)
-                        Utility.DelayAction.Add(100, () => W.Cast());
+                        W.Cast();
                 }
 
-                //if (R.IsValidTarget(Target, "ComboR"))
-                //{
-                //    R.CastIfWillHit(Target, GetValue<Slider>("ComboCountR").Value, true);
-                //}
+                if (E.IsValidTarget(Target, "ComboE"))
+                {
+                    E.Cast(Target);
+                }
+
+                if (R.IsValidTarget(Target, "ComboR"))
+                {
+                    R.CastIfHitchanceEquals(Target, HitChance.Immobile, true);
+                }
             }
         }
 
@@ -55,6 +57,9 @@ namespace Support.Plugins
                 return;
 
             if (!(target is Obj_AI_Hero) && !target.Name.ToLower().Contains("ward"))
+                return;
+
+            if (!Q.IsReady())
                 return;
 
             if (Q.Cast())
@@ -74,7 +79,7 @@ namespace Support.Plugins
                 if (Q.Cast())
                 {
                     Orbwalking.ResetAutoAttackTimer();
-                    Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
+                    Player.IssueOrder(GameObjectOrder.AttackUnit, gapcloser.Sender);
                 }
             }
         }
@@ -103,18 +108,9 @@ namespace Support.Plugins
 
         public override void ComboMenu(Menu config)
         {
-            config.AddBool("ComboQ", "Use Q", true);
-            config.AddBool("ComboW", "Use W", true);
-            config.AddBool("ComboE", "Use E", true);
-            //config.AddBool("ComboR", "Use R", true);
-            config.AddSlider("ComboCountR", "Targets in range to Ult", 2, 1, 5);
-        }
-
-        public override void ItemMenu(Menu config)
-        {
-            //config.AddBool("Locket", "Use Locket", true);
-            //config.AddBool("Talisman", "Use Talisman", true);
-            //config.AddBool("Mikael", "Use Mikael", true);
+            config.AddBool("ComboE", "Use E without Q", false);
+            config.AddBool("ComboQWE", "Use Q/W/E", true);
+            config.AddBool("ComboR", "Use R", true);
         }
 
         public override void MiscMenu(Menu config)

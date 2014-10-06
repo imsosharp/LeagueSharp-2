@@ -85,7 +85,7 @@
     <Compile Include="Evade\Utils.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Plugins\Alistar.cs" />
-    <Compile Include="Disabled\Blitzcrank.cs" />
+    <Compile Include="Plugins\Blitzcrank.cs" />
     <Compile Include="Plugins\Braum.cs" />
     <Compile Include="Plugins\Fiddlesticks.cs" />
     <Compile Include="Plugins\Janna.cs" />
@@ -98,10 +98,10 @@
     <Compile Include="PluginBase.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Plugins\Sona.cs" />
+    <Compile Include="Disabled\Sona.cs" />
     <Compile Include="Disabled\Soraka.cs" />
     <Compile Include="Plugins\Taric.cs" />
-    <Compile Include="Disabled\Thresh.cs" />
+    <Compile Include="Plugins\Thresh.cs" />
     <Compile Include="Template.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Plugins\Zilean.cs" />

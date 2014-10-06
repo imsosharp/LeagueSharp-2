@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using LeagueSharp;
 using LeagueSharp.Common;
+using Support.Evade;
+using SpellData = LeagueSharp.SpellData;
 
 namespace Support.Plugins
 {
@@ -20,8 +23,7 @@ namespace Support.Plugins
             R = new Spell(SpellSlot.R, 0);
 
             Q.SetSkillshot(0.25f, 60f, 1700f, true, SkillshotType.SkillshotLine);
-            W.SetTargetted(0.25f, 2200f);
-            E.SetTargetted(0.25f, float.MaxValue);
+            Protector.Init();
         }
 
         public override void OnUpdate(EventArgs args)
@@ -37,12 +39,6 @@ namespace Support.Plugins
                 {
                     W.Cast(Target, true);
                 }
-
-                var ally = Utils.AllyBelowHp(GetValue<Slider>("ComboHealthE").Value, E.Range);
-                if (E.IsValidTarget(ally, "ComboE", true, false))
-                {
-                    E.Cast(ally, true);
-                }
             }
 
             if (HarassMode)
@@ -50,6 +46,28 @@ namespace Support.Plugins
                 if (Q.IsValidTarget(Target, "HarassQ"))
                 {
                     Q.Cast(Target, true);
+                }
+            }
+        }
+
+        public override void OnSkillshotProtection(Obj_AI_Hero target, List<Skillshot> skillshots)
+        {
+            if (ProtectionMana && E.IsReady())
+            {
+                if (E.IsInRange(target))
+                {
+                    E.Cast(target, true);
+                }
+            }
+        }
+
+        public override void OnTargetedProtection(Obj_AI_Base caster, Obj_AI_Hero target, SpellData spell)
+        {
+            if (ProtectionMana && E.IsReady())
+            {
+                if (E.IsInRange(target))
+                {
+                    E.Cast(target, true);
                 }
             }
         }
@@ -76,14 +94,6 @@ namespace Support.Plugins
         public override void HarassMenu(Menu config)
         {
             config.AddBool("HarassQ", "Use Q", true);
-        }
-
-        public override void ItemMenu(Menu config)
-        {
-            //config.AddBool("FrostQueen", "Use Frost Queen", true);
-            //config.AddBool("Locket", "Use Locket", true);
-            //config.AddBool("Talisman", "Use Talisman", true);
-            //config.AddBool("Mikael", "Use Mikael", true);
         }
 
         public override void MiscMenu(Menu config)

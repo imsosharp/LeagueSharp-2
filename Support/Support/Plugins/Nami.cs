@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using LeagueSharp;
 using LeagueSharp.Common;
+using Support.Evade;
+using SpellData = LeagueSharp.SpellData;
 
 namespace Support.Plugins
 {
@@ -16,6 +19,7 @@ namespace Support.Plugins
 
             Q.SetSkillshot(1.0f, 200f, Int32.MaxValue, false, SkillshotType.SkillshotCircle);
             R.SetSkillshot(0.5f, 325f, 1200f, false, SkillshotType.SkillshotLine);
+            Protector.Init();
         }
 
         public override void OnUpdate(EventArgs args)
@@ -38,10 +42,10 @@ namespace Support.Plugins
                     W.Cast(Target, true);
                 }
 
-                if (E.IsValidTarget(Target, "ComboE"))
-                {
-                    // TODO: Buff ally
-                }
+                //if (E.IsValidTarget(Target, "ComboE"))
+                //{
+                //    // TODO: Buff ally
+                //}
 
                 if (R.IsValidTarget(Target, "ComboR"))
                 {
@@ -69,8 +73,32 @@ namespace Support.Plugins
             }
         }
 
+        public override void OnTargetedProtection(Obj_AI_Base caster, Obj_AI_Hero target, SpellData spell)
+        {
+            if (!W.IsReady())
+                return;
+
+            if (W.IsReady() && W.IsInRange(target) && caster.WillKill(target, spell))
+                W.Cast(target, true);
+        }
+
+        public override void OnSkillshotProtection(Obj_AI_Hero target, List<Skillshot> skillshots)
+        {
+            if (!W.IsValidTarget(target, true, false))
+                return;
+
+            foreach (var skillshot in skillshots)
+            {
+                if (skillshot.Unit.WillKill(target, skillshot.SpellData))
+                    W.Cast(target, true);
+            }
+        }
+
         public override void OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
+            if (gapcloser.Sender.IsAlly)
+                return;
+
             if (R.IsValidTarget(gapcloser.Sender, "GapcloserR"))
             {
                 R.Cast(gapcloser.Sender, true);
@@ -97,7 +125,7 @@ namespace Support.Plugins
         {
             config.AddBool("ComboQ", "Use Q", true);
             config.AddBool("ComboW", "Use W", true);
-            config.AddBool("ComboE", "Use E", true);
+            //config.AddBool("ComboE", "Use E", true);
             config.AddBool("ComboR", "Use R", true);
             config.AddSlider("ComboCountR", "Targets in range to Ult", 2, 1, 5);
             config.AddSlider("ComboHealthW", "Health to Heal", 20, 1, 100);
@@ -108,14 +136,6 @@ namespace Support.Plugins
             config.AddBool("HarassQ", "Use Q", true);
             config.AddBool("HarassW", "Use W", true);
             config.AddSlider("HarassHealthW", "Health to Heal", 20, 1, 100);
-        }
-
-        public override void ItemMenu(Menu config)
-        {
-            //config.AddBool("FrostQueen", "Use Frost Queen", true);
-            //config.AddBool("Locket", "Use Locket", true);
-            //config.AddBool("Talisman", "Use Talisman", true);
-            //config.AddBool("Mikael", "Use Mikael", true);
         }
 
         public override void MiscMenu(Menu config)

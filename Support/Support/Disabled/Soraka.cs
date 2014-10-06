@@ -33,30 +33,26 @@ namespace Support.Disabled
             R = new Spell(SpellSlot.R);
         }
 
-        public override void OnLoad(EventArgs args)
-        {
-        }
-
         public override void OnUpdate(EventArgs args)
         {
             if (ComboMode)
             {
-                if (Q.IsReady() && Target.IsValidTarget(Q.Range) && GetValue<bool>("UseQC"))
+                if (Q.IsValidTarget(Target, "ComboQ"))
                 {
 
                 }
 
-                if (W.IsReady() && Target.IsValidTarget(W.Range) && GetValue<bool>("UseWC"))
+                if (W.IsValidTarget(Target, "ComboW"))
                 {
 
                 }
 
-                if (E.IsReady() && Target.IsValidTarget(E.Range) && GetValue<bool>("UseEC"))
+                if (E.IsValidTarget(Target, "ComboE"))
                 {
 
                 }
 
-                if (R.IsReady() && Target.IsValidTarget(R.Range) && GetValue<bool>("UseRC"))
+                if (R.IsValidTarget(Target, "ComboR"))
                 {
 
                 }
@@ -64,17 +60,17 @@ namespace Support.Disabled
 
             if (HarassMode)
             {
-                if (Q.IsReady() && Target.IsValidTarget(Q.Range) && GetValue<bool>("UseQH"))
+                if (Q.IsValidTarget(Target, "HarassQ"))
                 {
 
                 }
 
-                if (W.IsReady() && Target.IsValidTarget(W.Range) && GetValue<bool>("UseWH"))
+                if (W.IsValidTarget(Target, "HarassW"))
                 {
 
                 }
 
-                if (E.IsReady() && Target.IsValidTarget(E.Range) && GetValue<bool>("UseEH"))
+                if (E.IsValidTarget(Target, "HarassE"))
                 {
 
                 }
@@ -91,6 +87,25 @@ namespace Support.Disabled
 
         public override void OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
+            if (Q.IsValidTarget(gapcloser.Sender, "GapcloserQ"))
+            {
+
+            }
+
+            if (W.IsValidTarget(gapcloser.Sender, "GapcloserW"))
+            {
+
+            }
+
+            if (E.IsValidTarget(gapcloser.Sender, "GapcloserE"))
+            {
+
+            }
+
+            if (R.IsValidTarget(gapcloser.Sender, "GapcloserR"))
+            {
+
+            }
         }
 
         public override void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
@@ -98,47 +113,55 @@ namespace Support.Disabled
             if (spell.DangerLevel < InterruptableDangerLevel.High || unit.IsAlly)
                 return;
 
-        }
+            if (Q.IsValidTarget(unit, "InterruptQ"))
+            {
 
-        public override void OnDraw(EventArgs args)
-        {
+            }
+
+            if (W.IsValidTarget(unit, "InterruptW"))
+            {
+
+            }
+
+            if (E.IsValidTarget(unit, "InterruptE"))
+            {
+
+            }
+
+            if (R.IsValidTarget(unit, "InterruptR"))
+            {
+
+            }
         }
 
         public override void ComboMenu(Menu config)
         {
-            config.AddItem(new MenuItem("UseQC", "Use Q").SetValue(true));
-            config.AddItem(new MenuItem("UseWC", "Use W").SetValue(true));
-            config.AddItem(new MenuItem("UseEC", "Use E").SetValue(true));
-            config.AddItem(new MenuItem("UseRC", "Use R").SetValue(true));
-            config.AddItem(new MenuItem("CountR", "Num of Enemy in Range to Ult").SetValue(new Slider(2, 1, 5)));
+            config.AddBool("ComboQ", "Use Q", true);
+            config.AddBool("ComboW", "Use W", true);
+            config.AddBool("ComboE", "Use E", true);
+            config.AddBool("ComboR", "Use R", true);
+            config.AddSlider("ComboCountR", "Targets in range to Ult", 2, 0, 5);
+            config.AddSlider("ComboHealthR", "Health to Ult", 20, 1, 100);
         }
 
         public override void HarassMenu(Menu config)
         {
-            config.AddItem(new MenuItem("UseQH", "Use Q").SetValue(true));
-            config.AddItem(new MenuItem("UseWH", "Use W").SetValue(true));
-            config.AddItem(new MenuItem("UseEH", "Use E").SetValue(true));
-            config.AddItem(new MenuItem("UseRH", "Use R").SetValue(true));
-        }
-
-        public override void ItemMenu(Menu config)
-        {
+            config.AddBool("HarassQ", "Use Q", true);
+            config.AddBool("HarassW", "Use W", true);
+            config.AddBool("HarassE", "Use E", true);
         }
 
         public override void MiscMenu(Menu config)
         {
-            config.AddItem(new MenuItem("UseQA", "Use Q after Attack").SetValue(true));
-            config.AddItem(new MenuItem("UseQG", "Use Q to Interrupt Gapcloser").SetValue(true));
-            config.AddItem(new MenuItem("UseQI", "Use Q to Interrupt Spells").SetValue(true));
-            config.AddItem(new MenuItem("UseRI", "Use R to Interrupt Spells").SetValue(true));
-        }
+            config.AddBool("GapcloserQ", "Use Q to Interrupt Gapcloser", true);
+            config.AddBool("GapcloserW", "Use W to Interrupt Gapcloser", true);
+            config.AddBool("GapcloserE", "Use E to Interrupt Gapcloser", true);
+            config.AddBool("GapcloserR", "Use R to Interrupt Gapcloser", true);
 
-        public override void ManaMenu(Menu config)
-        {
-        }
-
-        public override void DrawingMenu(Menu config)
-        {
+            config.AddBool("InterruptQ", "Use Q to Interrupt Spells", true);
+            config.AddBool("InterruptW", "Use W to Interrupt Spells", true);
+            config.AddBool("InterruptE", "Use E to Interrupt Spells", true);
+            config.AddBool("InterruptR", "Use R to Interrupt Spells", true);
         }
     }
 }
