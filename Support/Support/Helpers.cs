@@ -7,7 +7,7 @@ using SharpDX;
 
 namespace Support
 {
-    internal static class Utils
+    internal static class Helpers
     {
         /// <summary>
         /// ReversePosition

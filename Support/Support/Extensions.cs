@@ -35,12 +35,22 @@ namespace Support
             return ObjectManager.Player.Distance(target) < spell.Range;
         }
 
-        public static bool WillKill(this Obj_AI_Base caster, Obj_AI_Base target, SpellData spell, int buffer = 10)
+        public static bool IsInRange(this Items.Item item, Obj_AI_Base target)
+        {
+            return ObjectManager.Player.Distance(target) < item.Range;
+        }
+
+        public static bool WillKill(this Obj_AI_Base caster, Obj_AI_Base target, string spell, int buffer = 20)
+        {
+            return caster.GetSpellDamage(target, spell) >= target.HealthBuffer(buffer);
+        }
+
+        public static bool WillKill(this Obj_AI_Base caster, Obj_AI_Base target, SpellData spell, int buffer = 20)
         {
             return caster.GetSpellDamage(target, spell.Name) >= target.HealthBuffer(buffer);
         }
 
-        public static bool WillKill(this Obj_AI_Base caster, Obj_AI_Base target, Evade.SpellData spell, int buffer = 10)
+        public static bool WillKill(this Obj_AI_Base caster, Obj_AI_Base target, Evade.SpellData spell, int buffer = 20)
         {
             return caster.GetSpellDamage(target, spell.SpellName) >= target.HealthBuffer(buffer);
         }

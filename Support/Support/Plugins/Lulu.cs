@@ -18,7 +18,6 @@ namespace Support.Plugins
             R = new Spell(SpellSlot.R, 900);
 
             Q.SetSkillshot(0.25f, 50, 1450, false, SkillshotType.SkillshotLine);
-            Protector.Init();
         }
 
         public override void OnUpdate(EventArgs args)

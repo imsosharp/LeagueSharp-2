@@ -19,7 +19,6 @@ namespace Support.Plugins
 
             Q.SetSkillshot(0.5f, 150f, 900f, false, SkillshotType.SkillshotLine);
             GameObject.OnCreate += GameObjectOnOnCreate;
-            Protector.Init();
         }
 
         public override void OnUpdate(EventArgs args)
@@ -28,7 +27,7 @@ namespace Support.Plugins
             {
                 if (Q.IsValidTarget(Target, "ComboQ"))
                 {
-                    if (Q.Cast(Target, true) == Spell.CastStates.SuccessfullyCasted)
+                    if (Q.Cast(Target) == Spell.CastStates.SuccessfullyCasted)
                         Q.Cast();
                 }
 
@@ -37,7 +36,7 @@ namespace Support.Plugins
                     W.Cast(Target, true);
                 }
 
-                var ally = Utils.AllyBelowHp(GetValue<Slider>("ComboHealthR").Value, R.Range);
+                var ally = Helpers.AllyBelowHp(GetValue<Slider>("ComboHealthR").Value, R.Range);
                 if (R.IsValidTarget(ally, "ComboR", true, false))
                 {
                     R.Cast();
@@ -110,7 +109,7 @@ namespace Support.Plugins
 
             if (Q.IsValidTarget(gapcloser.Sender, "GapcloserQ"))
             {
-                Q.Cast(gapcloser.Start, true);
+                Q.Cast(gapcloser.Sender);
                 Q.Cast();
             }
 
@@ -122,13 +121,13 @@ namespace Support.Plugins
 
         public override void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
         {
-            if (spell.DangerLevel < InterruptableDangerLevel.High || unit.IsAlly)
+            if ((spell.DangerLevel < InterruptableDangerLevel.High && !unit.BaseSkinName.Contains("Thresh")) || unit.IsAlly)
                 return;
 
             if (Q.IsValidTarget(unit, "InterruptQ"))
             {
-                if (Q.Cast(Target, true) == Spell.CastStates.SuccessfullyCasted)
-                    Q.Cast();
+                Q.Cast(Target);
+                Q.Cast();
                 return;
             }
 

@@ -14,14 +14,13 @@ namespace Support.Plugins
             W = new Spell(SpellSlot.W, 200);
             E = new Spell(SpellSlot.E, 625);
             R = new Spell(SpellSlot.R, 200);
-            Protector.Init();
         }
 
         public override void OnUpdate(EventArgs args)
         {
             if (ComboMode)
             {
-                var ally = Utils.AllyBelowHp(GetValue<Slider>("ComboHealthQ").Value, Q.Range);
+                var ally = Helpers.AllyBelowHp(GetValue<Slider>("ComboHealthQ").Value, Q.Range);
                 if (Q.IsValidTarget(ally, "ComboQ", true, false))
                 {
                     Q.Cast(ally, true);
@@ -45,7 +44,7 @@ namespace Support.Plugins
 
             if (HarassMode)
             {
-                var ally = Utils.AllyBelowHp(GetValue<Slider>("HarassHealthQ").Value, Q.Range);
+                var ally = Helpers.AllyBelowHp(GetValue<Slider>("HarassHealthQ").Value, Q.Range);
                 if (Q.IsValidTarget(ally, "HarassQ", true, false))
                 {
                     Q.Cast(ally, true);

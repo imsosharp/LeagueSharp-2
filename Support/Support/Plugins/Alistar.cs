@@ -16,7 +16,6 @@ namespace Support.Plugins
             W = new Spell(SpellSlot.W, 650);
             E = new Spell(SpellSlot.E, 575);
             R = new Spell(SpellSlot.R, 0);
-            Protector.Init();
         }
 
         public override void OnUpdate(EventArgs args)
@@ -34,7 +33,7 @@ namespace Support.Plugins
                         Utility.DelayAction.Add(100, () => Q.Cast()); // TODO: calc timing
                 }
 
-                var ally = Utils.AllyBelowHp(GetValue<Slider>("ComboHealthE").Value, E.Range);
+                var ally = Helpers.AllyBelowHp(GetValue<Slider>("ComboHealthE").Value, E.Range);
                 if (E.IsValidTarget(ally, "ComboE", true, false))
                 {
                     E.Cast();
@@ -48,7 +47,7 @@ namespace Support.Plugins
                     Q.Cast();
                 }
 
-                var ally = Utils.AllyBelowHp(GetValue<Slider>("HarassHealthR").Value, E.Range);
+                var ally = Helpers.AllyBelowHp(GetValue<Slider>("HarassHealthR").Value, E.Range);
                 if (E.IsValidTarget(ally, "HarassE", true, false))
                 {
                     E.Cast();

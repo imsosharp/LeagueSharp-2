@@ -19,7 +19,6 @@ namespace Support.Plugins
 
             Q.SetSkillshot(1.0f, 200f, Int32.MaxValue, false, SkillshotType.SkillshotCircle);
             R.SetSkillshot(0.5f, 325f, 1200f, false, SkillshotType.SkillshotLine);
-            Protector.Init();
         }
 
         public override void OnUpdate(EventArgs args)
@@ -31,7 +30,7 @@ namespace Support.Plugins
                     Q.Cast(Target, true);
                 }
 
-                var ally = Utils.AllyBelowHp(GetValue<Slider>("ComboHealthW").Value, W.Range);
+                var ally = Helpers.AllyBelowHp(GetValue<Slider>("ComboHealthW").Value, W.Range);
                 if (W.IsValidTarget(ally, "ComboR", true, false))
                 {
                     W.Cast(ally, true);
@@ -60,7 +59,7 @@ namespace Support.Plugins
                     Q.Cast(Target, true);
                 }
 
-                var ally = Utils.AllyBelowHp(GetValue<Slider>("HarassHealthW").Value, W.Range);
+                var ally = Helpers.AllyBelowHp(GetValue<Slider>("HarassHealthW").Value, W.Range);
                 if (W.IsValidTarget(ally, "HarassW", true, false))
                 {
                     W.Cast(ally, true);

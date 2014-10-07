@@ -85,6 +85,9 @@ namespace Support
         /// </summary>
         public Obj_AI_Hero Player { get { return ObjectManager.Player; } }
 
+        /// <summary>
+        /// AttackRange
+        /// </summary>
         public float AttackRange { get { return Orbwalking.GetRealAutoAttackRange(null) + 65; } }
 
         /// <summary>
@@ -147,21 +150,6 @@ namespace Support
         /// </summary>
         public Menu DrawingConfig { get; set; }
 
-        /// <summary>
-        /// Zhonyas
-        /// </summary>
-        public Items.Item Zhonyas { get; set; }
-
-        /// <summary>
-        /// Locket
-        /// </summary>
-        public Items.Item Locket { get; set; }
-
-        /// <summary>
-        /// Mikael
-        /// </summary>
-        public Items.Item Mikael { get; set; }
-
 
         private readonly List<Spell> _spells = new List<Spell>();
 
@@ -177,11 +165,10 @@ namespace Support
             InitConfig();
             InitOrbwalker();
             InitTargetSelector();
-            InitItems();
             InitPluginEvents();
             InitPrivateEvents();
 
-            Utils.PrintMessage(string.Format("{0} by {1} v.{2} loaded!", ChampionName, Author, Version));
+            Helpers.PrintMessage(string.Format("{0} by {1} v.{2} loaded!", ChampionName, Author, Version));
         }
 
         #region Private Stuff
@@ -192,16 +179,6 @@ namespace Support
         private void InitTargetSelector()
         {
             TargetSelector = new TargetSelector(Player.AttackRange, TargetSelector.TargetingMode.AutoPriority);
-        }
-
-        /// <summary>
-        /// Items Initialization
-        /// </summary>
-        private void InitItems()
-        {
-            Zhonyas = new Items.Item(3157, float.MaxValue);
-            Locket = new Items.Item(3190, 600);
-            Mikael = new Items.Item(3222, float.MaxValue);
         }
 
         /// <summary>
@@ -239,6 +216,9 @@ namespace Support
             {
                 if (args.Target.IsMinion && !GetValue<bool>("AttackMinions"))
                     args.Process = false;
+
+                if (args.Target is Obj_AI_Hero && !GetValue<bool>("AttackChampions"))
+                    args.Process = false;
             };
 
             Drawing.OnDraw += args =>
@@ -263,21 +243,26 @@ namespace Support
 
             ComboConfig = Config.AddSubMenu(new Menu("Combo", "Combo"));
             HarassConfig = Config.AddSubMenu(new Menu("Harass", "Harass"));
-
             ManaConfig = Config.AddSubMenu(new Menu("Mana Limiter", "Mana Limiter"));
+            MiscConfig = Config.AddSubMenu(new Menu("Misc", "Misc"));
+            DrawingConfig = Config.AddSubMenu(new Menu("Drawings", "Drawings"));
+
+            // mana
             ManaConfig.AddSlider("ComboMana", "Combo Mana %", 1, 1, 100);
             ManaConfig.AddSlider("HarassMana", "Harass Mana %", 1, 1, 100);
             ManaConfig.AddSlider("ProtectionMana", "Protector Mana %", 1, 1, 100);
-
-            MiscConfig = Config.AddSubMenu(new Menu("Misc", "Misc"));
+            
+            // misc
             MiscConfig.AddBool("AttackMinions", "Attack Minions?", true);
-
-            DrawingConfig = Config.AddSubMenu(new Menu("Drawings", "Drawings"));
+            MiscConfig.AddBool("AttackChampions", "Attack Champions?", true);
+            
+            // drawing
             DrawingConfig.AddItem(new MenuItem("QRange" + ChampionName, "Q Range").SetValue(new Circle(false, Color.FromArgb(150, Color.DodgerBlue))));
             DrawingConfig.AddItem(new MenuItem("WRange" + ChampionName, "W Range").SetValue(new Circle(false, Color.FromArgb(150, Color.DodgerBlue))));
             DrawingConfig.AddItem(new MenuItem("ERange" + ChampionName, "E Range").SetValue(new Circle(false, Color.FromArgb(150, Color.DodgerBlue))));
             DrawingConfig.AddItem(new MenuItem("RRange" + ChampionName, "R Range").SetValue(new Circle(false, Color.FromArgb(150, Color.DodgerBlue))));
 
+            // plugins
             ComboMenu(ComboConfig);
             HarassMenu(HarassConfig);
             ManaMenu(ManaConfig);
@@ -309,7 +294,6 @@ namespace Support
         {
             return Config.Item(item + ObjectManager.Player.ChampionName).GetValue<T>();
         }
-
 
         public virtual void OnTargetedProtection(Obj_AI_Base caster, Obj_AI_Hero target, SpellData spell)
         {

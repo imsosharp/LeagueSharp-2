@@ -32,7 +32,6 @@ namespace Support.Plugins
             W = new Spell(SpellSlot.W, 0);
             E = new Spell(SpellSlot.E, 700);
             R = new Spell(SpellSlot.R, 900);
-            Protector.Init();
         }
 
         public override void OnUpdate(EventArgs args)
@@ -80,11 +79,11 @@ namespace Support.Plugins
 
         public override void OnSkillshotProtection(Obj_AI_Hero target, List<Evade.Skillshot> skillshots)
         {
-            if (!R.IsValidTarget(target, true, false))
-                return;
-
             foreach (var skillshot in skillshots)
             {
+                if (!R.IsValidTarget(target, true, false))
+                    continue;
+
                 if (skillshot.Unit.WillKill(target, skillshot.SpellData))
                     R.Cast(target, true);
             }

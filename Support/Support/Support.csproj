@@ -103,7 +103,7 @@
     <Compile Include="Plugins\Taric.cs" />
     <Compile Include="Plugins\Thresh.cs" />
     <Compile Include="Template.cs" />
-    <Compile Include="Utils.cs" />
+    <Compile Include="Helpers.cs" />
     <Compile Include="Plugins\Zilean.cs" />
     <Compile Include="Disabled\Zyra.cs" />
   </ItemGroup>

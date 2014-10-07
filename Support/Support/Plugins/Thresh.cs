@@ -55,19 +55,19 @@ namespace Support.Plugins
 
                 if (E.IsValidTarget(Target, "ComboE"))
                 {
-                    if (Utils.AllyBelowHp(GetValue<Slider>("ComboHealthE").Value, E.Range) != null)
+                    if (Helpers.AllyBelowHp(GetValue<Slider>("ComboHealthE").Value, E.Range) != null)
                     {
                         E.Cast(Target.Position, true);
                     }
                     else
                     {
-                        E.Cast(Utils.ReversePosition(ObjectManager.Player.Position, Target.Position), true);
+                        E.Cast(Helpers.ReversePosition(ObjectManager.Player.Position, Target.Position), true);
                     }
                 }
 
                 if (R.IsValidTarget(Target, "ComboR"))
                 {
-                    if (Utils.EnemyInRange(GetValue<Slider>("ComboCountR").Value, R.Range))
+                    if (Helpers.EnemyInRange(GetValue<Slider>("ComboCountR").Value, R.Range))
                         R.Cast();
                 }
             }
@@ -86,13 +86,13 @@ namespace Support.Plugins
 
                 if (E.IsValidTarget(Target, "HarassE"))
                 {
-                    if (Utils.AllyBelowHp(GetValue<Slider>("HarassHealthE").Value, E.Range) != null)
+                    if (Helpers.AllyBelowHp(GetValue<Slider>("HarassHealthE").Value, E.Range) != null)
                     {
                         E.Cast(Target.Position, true);
                     }
                     else
                     {
-                        E.Cast(Utils.ReversePosition(ObjectManager.Player.Position, Target.Position), true);
+                        E.Cast(Helpers.ReversePosition(ObjectManager.Player.Position, Target.Position), true);
                     }
                 }
             }

@@ -9,7 +9,7 @@ namespace Support.Plugins
         public Blitzcrank()
             : base("h3h3", new Version(4, 17, 14))
         {
-            Q = new Spell(SpellSlot.Q, 925);
+            Q = new Spell(SpellSlot.Q, 950);
             W = new Spell(SpellSlot.W, 0);
             E = new Spell(SpellSlot.E, AttackRange);
             R = new Spell(SpellSlot.R, 600);
@@ -46,7 +46,7 @@ namespace Support.Plugins
 
                 if (R.IsValidTarget(Target, "ComboR"))
                 {
-                    if(Utils.EnemyInRange(GetValue<Slider>("ComboCountR").Value, R.Range))
+                    if(Helpers.EnemyInRange(GetValue<Slider>("ComboCountR").Value, R.Range))
                         R.Cast();
                 }
             }

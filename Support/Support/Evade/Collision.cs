@@ -85,6 +85,15 @@ namespace Support.Evade
                     PredictedPos = path.CutPath((int) d)[0],
                 };
             }
+            if (path.Count == 0)
+            {
+                return new FastPredResult
+                {
+                    IsMoving = false,
+                    CurrentPos = unit.ServerPosition.To2D(),
+                    PredictedPos = unit.ServerPosition.To2D(),
+                };
+            }
             return new FastPredResult
             {
                 IsMoving = false,

@@ -28,9 +28,7 @@ namespace Support
     {
         private static void Main(string[] args)
         {
-            //Protector.Init();
-            //Protector.OnSkillshotProtection += Protector_OnSkillshotProtection;
-            //Protector.OnTargetedProtection += Protector_OnTargetedProtection;
+            Protector.Init();
 
             CustomEvents.Game.OnGameLoad += a =>
             {
@@ -44,54 +42,13 @@ namespace Support
                         return;
                     }
 
-                    Utils.PrintMessage(ObjectManager.Player.ChampionName + " not supported");
+                    Helpers.PrintMessage(ObjectManager.Player.ChampionName + " not supported");
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
                 }
             };
-        }
-
-        static void Protector_OnTargetedProtection(Obj_AI_Base caster, Obj_AI_Hero target, SpellData spell)
-        {
-            try
-            {
-                var text = string.Format("{0} -> {1} - {2} {3}",
-                    caster.BaseSkinName,
-                    target.BaseSkinName,
-                    spell.Name,
-                    Math.Round(caster.GetSpellDamage(target, spell.Name)));
-
-                File.AppendAllText("D:\\Targeted.txt", text + "\n");
-                Console.WriteLine(text);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-        }
-
-        static void Protector_OnSkillshotProtection(Obj_AI_Hero target, List<Evade.Skillshot> skillshots)
-        {
-            try
-            {
-                foreach (var skillshot in skillshots)
-                {
-                    var text = string.Format("{0} -> {1} - {2} {3}",
-                        skillshot.Unit.BaseSkinName,
-                        target.BaseSkinName,
-                        skillshot.SpellData.SpellName,
-                        Math.Round(skillshot.Unit.GetSpellDamage(target, skillshot.SpellData.SpellName)));
-
-                    File.AppendAllText("D:\\Skillshot.txt", text + "\n");
-                    Console.WriteLine(text);
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
         }
     }
 }
