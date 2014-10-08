@@ -12,7 +12,7 @@ namespace Support.Plugins
             Q = new Spell(SpellSlot.Q, 1175);
             W = new Spell(SpellSlot.W, 900);
             E = new Spell(SpellSlot.E, 750);
-            R = new Spell(SpellSlot.R, 600);
+            R = new Spell(SpellSlot.R, 550);
 
             Q.SetSkillshot(0.5f, 80, 1200, true, SkillshotType.SkillshotLine);
         }
@@ -23,17 +23,17 @@ namespace Support.Plugins
             {
                 if (Q.IsValidTarget(Target, "ComboQ"))
                 {
-                    Q.Cast(Target, true);
+                    Q.Cast(Target, UsePackets);
                 }
 
                 if (W.IsValidTarget(Target, "ComboW"))
                 {
-                    W.Cast(Target, true);
+                    W.Cast(Target, UsePackets);
                 }
 
                 if (R.IsValidTarget(Target, "ComboR"))
                 {
-                    R.CastIfWillHit(Target, GetValue<Slider>("ComboCountR").Value, true);
+                    R.CastIfWillHit(Target, GetValue<Slider>("ComboCountR").Value, UsePackets);
                 }
             }
 
@@ -41,12 +41,12 @@ namespace Support.Plugins
             {
                 if (Q.IsValidTarget(Target, "HarassQ"))
                 {
-                    Q.Cast(Target, true);
+                    Q.Cast(Target, UsePackets);
                 }
 
                 if (W.IsValidTarget(Target, "HarassW"))
                 {
-                    W.Cast(Target, true);
+                    W.Cast(Target, UsePackets);
                 }
             }
         }
@@ -58,7 +58,7 @@ namespace Support.Plugins
 
             if (Q.IsValidTarget(gapcloser.Sender, "GapcloserQ"))
             {
-                Q.Cast(gapcloser.Sender, true);
+                Q.Cast(gapcloser.Sender, UsePackets);
             }
         }
 

@@ -36,7 +36,7 @@ namespace Support.Plugins
             {
                 if (Q.IsValidTarget(Target, "ComboQ") && FollowQBlock)
                 {
-                    if (Q.Cast(Target, true) == Spell.CastStates.SuccessfullyCasted)
+                    if (Q.Cast(Target, UsePackets) == Spell.CastStates.SuccessfullyCasted)
                     {
                         _qTick = Environment.TickCount;
                         _qTarget = Target;
@@ -57,11 +57,11 @@ namespace Support.Plugins
                 {
                     if (Helpers.AllyBelowHp(GetValue<Slider>("ComboHealthE").Value, E.Range) != null)
                     {
-                        E.Cast(Target.Position, true);
+                        E.Cast(Target.Position, UsePackets);
                     }
                     else
                     {
-                        E.Cast(Helpers.ReversePosition(ObjectManager.Player.Position, Target.Position), true);
+                        E.Cast(Helpers.ReversePosition(ObjectManager.Player.Position, Target.Position), UsePackets);
                     }
                 }
 
@@ -76,7 +76,7 @@ namespace Support.Plugins
             {
                 if (Q.IsValidTarget(Target, "HarassQ") && FollowQBlock)
                 {
-                    Q.Cast(Target, true);
+                    Q.Cast(Target, UsePackets);
                 }
 
                 if (W.IsValidTarget(Target, "HarassW"))
@@ -88,11 +88,11 @@ namespace Support.Plugins
                 {
                     if (Helpers.AllyBelowHp(GetValue<Slider>("HarassHealthE").Value, E.Range) != null)
                     {
-                        E.Cast(Target.Position, true);
+                        E.Cast(Target.Position, UsePackets);
                     }
                     else
                     {
-                        E.Cast(Helpers.ReversePosition(ObjectManager.Player.Position, Target.Position), true);
+                        E.Cast(Helpers.ReversePosition(ObjectManager.Player.Position, Target.Position), UsePackets);
                     }
                 }
             }
@@ -105,7 +105,7 @@ namespace Support.Plugins
 
             if (E.IsValidTarget(gapcloser.Sender, "GapcloserE"))
             {
-                E.Cast(gapcloser.Start, true);
+                E.Cast(gapcloser.Start, UsePackets);
             }
         }
 
@@ -116,7 +116,7 @@ namespace Support.Plugins
 
             if (E.IsValidTarget(unit, "InterruptE"))
             {
-                E.Cast(unit.Position, true);
+                E.Cast(unit.Position, UsePackets);
             }
         }
 

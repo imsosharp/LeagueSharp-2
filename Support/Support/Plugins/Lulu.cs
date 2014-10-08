@@ -26,12 +26,12 @@ namespace Support.Plugins
             {
                 if (Q.IsValidTarget(Target, "ComboQ"))
                 {
-                    Q.Cast(Target, true);
+                    Q.Cast(Target, UsePackets);
                 }
 
                 if (W.IsValidTarget(Target, "ComboW"))
                 {
-                    W.Cast(Target, true);
+                    W.Cast(Target, UsePackets);
                 }
             }
 
@@ -39,7 +39,7 @@ namespace Support.Plugins
             {
                 if (Q.IsValidTarget(Target, "HarassQ"))
                 {
-                    Q.Cast(Target, true);
+                    Q.Cast(Target, UsePackets);
                 }
             }
         }
@@ -51,7 +51,7 @@ namespace Support.Plugins
                 foreach (var skillshot in skillshots)
                 {
                     if (skillshot.Unit.WillKill(target, skillshot.SpellData))
-                        R.Cast(target, true);
+                        R.Cast(target, UsePackets);
                 }
             }
 
@@ -59,7 +59,7 @@ namespace Support.Plugins
             {
                 if (E.IsInRange(target))
                 {
-                    E.Cast(target, true);
+                    E.Cast(target, UsePackets);
                 }
             }
         }
@@ -69,14 +69,14 @@ namespace Support.Plugins
             if (R.IsReady())
             {
                 if (caster.WillKill(target, spell))
-                    R.Cast(target, true);
+                    R.Cast(target, UsePackets);
             }
 
             if (ProtectionMana && E.IsReady())
             {
                 if (E.IsInRange(target))
                 {
-                    E.Cast(target, true);
+                    E.Cast(target, UsePackets);
                 }
             }
         }
@@ -88,7 +88,7 @@ namespace Support.Plugins
 
             if (W.IsValidTarget(gapcloser.Sender, "GapcloserW"))
             {
-                W.Cast(gapcloser.Sender, true);
+                W.Cast(gapcloser.Sender, UsePackets);
             }
         }
 
@@ -99,7 +99,7 @@ namespace Support.Plugins
 
             if (W.IsValidTarget(unit, "InterruptW"))
             {
-                W.Cast(unit, true);
+                W.Cast(unit, UsePackets);
             }
         }
 

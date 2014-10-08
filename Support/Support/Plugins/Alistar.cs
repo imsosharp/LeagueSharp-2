@@ -29,7 +29,7 @@ namespace Support.Plugins
 
                 if (Q.IsReady() && W.IsValidTarget(Target, "ComboW"))
                 {
-                    if (W.Cast(Target, true) == Spell.CastStates.SuccessfullyCasted)
+                    if (W.Cast(Target, UsePackets) == Spell.CastStates.SuccessfullyCasted)
                         Utility.DelayAction.Add(100, () => Q.Cast()); // TODO: calc timing
                 }
 
@@ -88,7 +88,7 @@ namespace Support.Plugins
 
             if (W.IsValidTarget(gapcloser.Sender, "GapcloserW"))
             {
-                W.Cast(gapcloser.Sender, true);
+                W.Cast(gapcloser.Sender, UsePackets);
             }
         }
 
@@ -104,7 +104,7 @@ namespace Support.Plugins
 
             if (W.IsValidTarget(unit, "InterruptW"))
             {
-                W.Cast(unit, true);
+                W.Cast(unit, UsePackets);
             }
         }
 

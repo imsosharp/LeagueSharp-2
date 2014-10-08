@@ -23,7 +23,7 @@ namespace Support.Plugins
                 var ally = Helpers.AllyBelowHp(GetValue<Slider>("ComboHealthQ").Value, Q.Range);
                 if (Q.IsValidTarget(ally, "ComboQ", true, false))
                 {
-                    Q.Cast(ally, true);
+                    Q.Cast(ally, UsePackets);
                 }
 
                 if (W.IsValidTarget(Target, "ComboW"))
@@ -33,7 +33,7 @@ namespace Support.Plugins
 
                 if (E.IsValidTarget(Target, "ComboE"))
                 {
-                    E.Cast(Target, true);
+                    E.Cast(Target, UsePackets);
                 }
 
                 if (R.IsValidTarget(Target, "ComboR"))
@@ -47,12 +47,12 @@ namespace Support.Plugins
                 var ally = Helpers.AllyBelowHp(GetValue<Slider>("HarassHealthQ").Value, Q.Range);
                 if (Q.IsValidTarget(ally, "HarassQ", true, false))
                 {
-                    Q.Cast(ally, true);
+                    Q.Cast(ally, UsePackets);
                 }
 
                 if (E.IsValidTarget(Target, "HarassE"))
                 {
-                    E.Cast(Target, true);
+                    E.Cast(Target, UsePackets);
                 }
             }
         }
@@ -63,7 +63,7 @@ namespace Support.Plugins
                 return;
 
             if (caster.WillKill(target, spell))
-                Q.Cast(target, true);
+                Q.Cast(target, UsePackets);
         }
 
         public override void OnSkillshotProtection(Obj_AI_Hero target, List<Evade.Skillshot> skillshots)
@@ -74,7 +74,7 @@ namespace Support.Plugins
             foreach (var skillshot in skillshots)
             {
                 if (skillshot.Unit.WillKill(target, skillshot.SpellData))
-                    Q.Cast(target, true);
+                    Q.Cast(target, UsePackets);
             }
         }
 
@@ -86,7 +86,7 @@ namespace Support.Plugins
 
             if (E.IsValidTarget(gapcloser.Sender, "GapcloserE"))
             {
-                E.Cast(gapcloser.Sender, true);
+                E.Cast(gapcloser.Sender, UsePackets);
             }
         }
 
@@ -97,7 +97,7 @@ namespace Support.Plugins
 
             if (E.IsValidTarget(unit, "InterruptE"))
             {
-                E.Cast(unit, true);
+                E.Cast(unit, UsePackets);
             }
         }
 

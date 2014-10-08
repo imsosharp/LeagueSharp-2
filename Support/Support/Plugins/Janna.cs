@@ -27,13 +27,13 @@ namespace Support.Plugins
             {
                 if (Q.IsValidTarget(Target, "ComboQ"))
                 {
-                    if (Q.Cast(Target) == Spell.CastStates.SuccessfullyCasted)
+                    if (Q.Cast(Target, UsePackets) == Spell.CastStates.SuccessfullyCasted)
                         Q.Cast();
                 }
 
                 if (W.IsValidTarget(Target, "ComboW"))
                 {
-                    W.Cast(Target, true);
+                    W.Cast(Target, UsePackets);
                 }
 
                 var ally = Helpers.AllyBelowHp(GetValue<Slider>("ComboHealthR").Value, R.Range);
@@ -47,7 +47,7 @@ namespace Support.Plugins
             {
                 if (W.IsValidTarget(Target, "HarassW"))
                 {
-                    W.Cast(Target, true);
+                    W.Cast(Target, UsePackets);
                 }
             }
         }
@@ -68,7 +68,7 @@ namespace Support.Plugins
                     {
                         if (E.IsInRange(turret))
                         {
-                            E.Cast(turret, true);
+                            E.Cast(turret, UsePackets);
                         }
                     }
                 }
@@ -86,7 +86,7 @@ namespace Support.Plugins
             {
                 if (E.IsInRange(target))
                 {
-                    E.Cast(target, true);
+                    E.Cast(target, UsePackets);
                 }
             }
         }
@@ -97,7 +97,7 @@ namespace Support.Plugins
             {
                 if (E.IsInRange(target))
                 {
-                    E.Cast(target, true);
+                    E.Cast(target, UsePackets);
                 }
             }
         }
@@ -109,13 +109,13 @@ namespace Support.Plugins
 
             if (Q.IsValidTarget(gapcloser.Sender, "GapcloserQ"))
             {
-                Q.Cast(gapcloser.Sender);
+                Q.Cast(gapcloser.Sender, UsePackets);
                 Q.Cast();
             }
 
             if (W.IsValidTarget(gapcloser.Sender, "GapcloserW"))
             {
-                W.Cast(gapcloser.Sender, true);
+                W.Cast(gapcloser.Sender, UsePackets);
             }
         }
 
@@ -126,7 +126,7 @@ namespace Support.Plugins
 
             if (Q.IsValidTarget(unit, "InterruptQ"))
             {
-                Q.Cast(Target);
+                Q.Cast(Target, UsePackets);
                 Q.Cast();
                 return;
             }

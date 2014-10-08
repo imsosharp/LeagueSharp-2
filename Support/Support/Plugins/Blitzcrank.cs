@@ -23,7 +23,7 @@ namespace Support.Plugins
             {
                 if (Q.IsValidTarget(Target, "ComboQ"))
                 {
-                    Q.Cast(Target, true);
+                    Q.Cast(Target, UsePackets);
                 }
 
                 if (E.IsValidTarget(Target))
@@ -55,7 +55,7 @@ namespace Support.Plugins
             {
                 if (Q.IsValidTarget(Target, "HarassQ"))
                 {
-                    Q.Cast(Target, true);
+                    Q.Cast(Target, UsePackets);
                 }
 
                 if (E.IsValidTarget(Target))

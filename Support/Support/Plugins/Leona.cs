@@ -35,7 +35,7 @@ namespace Support.Plugins
 
                 if (E.IsValidTarget(Target, "ComboQWE") && Q.IsReady())
                 {
-                    if (E.Cast(Target, true) == Spell.CastStates.SuccessfullyCasted)
+                    if (E.Cast(Target, UsePackets) == Spell.CastStates.SuccessfullyCasted)
                         W.Cast();
                 }
 
@@ -46,7 +46,7 @@ namespace Support.Plugins
 
                 if (R.IsValidTarget(Target, "ComboR"))
                 {
-                    R.CastIfHitchanceEquals(Target, HitChance.Immobile, true);
+                    R.CastIfHitchanceEquals(Target, HitChance.Immobile, UsePackets);
                 }
             }
         }
@@ -102,7 +102,7 @@ namespace Support.Plugins
 
             if (R.IsValidTarget(unit, "InterruptR"))
             {
-                R.Cast(unit, true);
+                R.Cast(unit, UsePackets);
             }
         }
 

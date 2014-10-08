@@ -27,18 +27,18 @@ namespace Support.Plugins
             {
                 if (Q.IsValidTarget(Target, "ComboQ"))
                 {
-                    Q.Cast(Target, true);
+                    Q.Cast(Target, UsePackets);
                 }
 
                 var ally = Helpers.AllyBelowHp(GetValue<Slider>("ComboHealthW").Value, W.Range);
                 if (W.IsValidTarget(ally, "ComboR", true, false))
                 {
-                    W.Cast(ally, true);
+                    W.Cast(ally, UsePackets);
                 }
 
                 if (W.IsValidTarget(Target, "ComboW"))
                 {
-                    W.Cast(Target, true);
+                    W.Cast(Target, UsePackets);
                 }
 
                 //if (E.IsValidTarget(Target, "ComboE"))
@@ -48,7 +48,7 @@ namespace Support.Plugins
 
                 if (R.IsValidTarget(Target, "ComboR"))
                 {
-                    R.CastIfWillHit(Target, GetValue<Slider>("ComboCountR").Value, true);
+                    R.CastIfWillHit(Target, GetValue<Slider>("ComboCountR").Value, UsePackets);
                 }
             }
 
@@ -56,18 +56,18 @@ namespace Support.Plugins
             {
                 if (Q.IsValidTarget(Target, "HarassQ"))
                 {
-                    Q.Cast(Target, true);
+                    Q.Cast(Target, UsePackets);
                 }
 
                 var ally = Helpers.AllyBelowHp(GetValue<Slider>("HarassHealthW").Value, W.Range);
                 if (W.IsValidTarget(ally, "HarassW", true, false))
                 {
-                    W.Cast(ally, true);
+                    W.Cast(ally, UsePackets);
                 }
 
                 if (W.IsValidTarget(Target, "HarassW"))
                 {
-                    W.Cast(Target, true);
+                    W.Cast(Target, UsePackets);
                 }
             }
         }
@@ -78,7 +78,7 @@ namespace Support.Plugins
                 return;
 
             if (W.IsReady() && W.IsInRange(target) && caster.WillKill(target, spell))
-                W.Cast(target, true);
+                W.Cast(target, UsePackets);
         }
 
         public override void OnSkillshotProtection(Obj_AI_Hero target, List<Skillshot> skillshots)
@@ -89,7 +89,7 @@ namespace Support.Plugins
             foreach (var skillshot in skillshots)
             {
                 if (skillshot.Unit.WillKill(target, skillshot.SpellData))
-                    W.Cast(target, true);
+                    W.Cast(target, UsePackets);
             }
         }
 
@@ -100,7 +100,7 @@ namespace Support.Plugins
 
             if (R.IsValidTarget(gapcloser.Sender, "GapcloserR"))
             {
-                R.Cast(gapcloser.Sender, true);
+                R.Cast(gapcloser.Sender, UsePackets);
             }
         }
 
@@ -111,12 +111,12 @@ namespace Support.Plugins
 
             if (Q.IsValidTarget(unit, "InterruptQ"))
             {
-                Q.Cast(unit, true);
+                Q.Cast(unit, UsePackets);
             }
 
             if (R.IsValidTarget(unit, "InterruptR"))
             {
-                R.Cast(unit, true);
+                R.Cast(unit, UsePackets);
             }
         }
 

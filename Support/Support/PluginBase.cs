@@ -81,6 +81,11 @@ namespace Support
         public bool ProtectionMana { get { return Player.Mana > Player.MaxMana * GetValue<Slider>("ProtectionMana").Value / 100; } }
 
         /// <summary>
+        /// UsePackets
+        /// </summary>
+        public bool UsePackets { get { return GetValue<bool>("UsePackets"); } }
+
+        /// <summary>
         /// Player Object
         /// </summary>
         public Obj_AI_Hero Player { get { return ObjectManager.Player; } }
@@ -253,6 +258,7 @@ namespace Support
             ManaConfig.AddSlider("ProtectionMana", "Protector Mana %", 1, 1, 100);
             
             // misc
+            MiscConfig.AddBool("UsePackets", "Use Packets?", true);
             MiscConfig.AddBool("AttackMinions", "Attack Minions?", true);
             MiscConfig.AddBool("AttackChampions", "Attack Champions?", true);
             

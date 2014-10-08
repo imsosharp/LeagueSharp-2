@@ -21,12 +21,12 @@ namespace Support.Plugins
             {
                 if (Q.IsValidTarget(Target, "ComboQ"))
                 {
-                    Q.Cast(Target, true);
+                    Q.Cast(Target, UsePackets);
                 }
 
                 if (E.IsValidTarget(Target, "ComboE"))
                 {
-                    E.Cast(Target, true);
+                    E.Cast(Target, UsePackets);
                 }
             }
 
@@ -34,7 +34,7 @@ namespace Support.Plugins
             {
                 if (E.IsValidTarget(Target, "HarassE"))
                 {
-                    E.Cast(Target, true);
+                    E.Cast(Target, UsePackets);
                 }
             }
         }
@@ -46,7 +46,7 @@ namespace Support.Plugins
 
             if (Q.IsValidTarget(gapcloser.Sender, "GapcloserQ"))
             {
-                Q.Cast(gapcloser.Sender, true);
+                Q.Cast(gapcloser.Sender, UsePackets);
             }
         }
 
@@ -57,12 +57,12 @@ namespace Support.Plugins
 
             if (Q.IsValidTarget(unit, "InterruptQ"))
             {
-                Q.Cast(unit, true);
+                Q.Cast(unit, UsePackets);
             }
 
             if (E.IsValidTarget(unit, "InterruptE"))
             {
-                E.Cast(unit, true);
+                E.Cast(unit, UsePackets);
             }
         }
 

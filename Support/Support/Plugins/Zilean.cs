@@ -40,7 +40,7 @@ namespace Support.Plugins
             {
                 if (Q.IsValidTarget(Target, "ComboQ"))
                 {
-                    Q.Cast(Target);
+                    Q.Cast(Target, UsePackets);
                 }
 
                 if (W.IsReady() && !Q.IsReady() && GetValue<bool>("ComboW"))
@@ -58,7 +58,7 @@ namespace Support.Plugins
             {
                 if (Q.IsValidTarget(Target, "HarassQ"))
                 {
-                    Q.Cast(Target);
+                    Q.Cast(Target, UsePackets);
                 }
 
                 if (W.IsReady() && !Q.IsReady() && GetValue<bool>("HarassW"))
@@ -74,7 +74,7 @@ namespace Support.Plugins
                 return;
 
             if (caster.WillKill(target, spell))
-                R.Cast(target, true);
+                R.Cast(target, UsePackets);
         }
 
         public override void OnSkillshotProtection(Obj_AI_Hero target, List<Evade.Skillshot> skillshots)
@@ -85,7 +85,7 @@ namespace Support.Plugins
                     continue;
 
                 if (skillshot.Unit.WillKill(target, skillshot.SpellData))
-                    R.Cast(target, true);
+                    R.Cast(target, UsePackets);
             }
         }
 
