@@ -1,18 +1,22 @@
-﻿// Copyright 2014 - 2014 Esk0r
-// SpellData.cs is part of Evade.
-// 
-// Evade is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// Evade is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with Evade. If not, see <http://www.gnu.org/licenses/>.
+﻿#region LICENSE
+
+//  Copyright 2014 - 2014 Support
+//  SpellData.cs is part of Support.
+//  
+//  Support is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//  
+//  Support is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+//  GNU General Public License for more details.
+//  
+//  You should have received a copy of the GNU General Public License
+//  along with Support. If not, see <http://www.gnu.org/licenses/>.
+
+#endregion
 
 #region
 
@@ -28,7 +32,7 @@ namespace Support.Evade
         public bool CanBeRemoved = false;
         public bool Centered;
         public string ChampionName;
-        public CollisionObjectTypes[] CollisionObjects = { };
+        public CollisionObjectTypes[] CollisionObjects = {};
         public int DangerValue;
         public int Delay;
         public bool DisableFowDetection = false;
@@ -36,13 +40,13 @@ namespace Support.Evade
         public bool DontCross = false;
         public bool DontRemove = false;
         public int ExtraDuration;
-        public string[] ExtraMissileNames = { };
+        public string[] ExtraMissileNames = {};
         public int ExtraRange = -1;
-        public string[] ExtraSpellNames = { };
+        public string[] ExtraSpellNames = {};
         public bool FixedRange;
         public bool ForceRemove = false;
         public string FromObject = "";
-        public string[] FromObjects = { };
+        public string[] FromObjects = {};
         public int Id = -1;
         public bool Invert;
         public bool IsDangerous = false;
@@ -63,7 +67,9 @@ namespace Support.Evade
         private int _radius;
         private int _range;
 
-        public SpellData() { }
+        public SpellData()
+        {
+        }
 
         public SpellData(string championName,
             string spellName,
@@ -118,10 +124,7 @@ namespace Support.Evade
 
         public int Range
         {
-            get
-            {
-                return _range;
-            }
+            get { return _range; }
             set { _range = value; }
         }
     }

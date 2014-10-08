@@ -1,18 +1,22 @@
-﻿// Copyright 2014 - 2014 Esk0r
-// EvadeSpellData.cs is part of Evade.
-// 
-// Evade is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// Evade is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with Evade. If not, see <http://www.gnu.org/licenses/>.
+﻿#region LICENSE
+
+//  Copyright 2014 - 2014 Support
+//  EvadeSpellData.cs is part of Support.
+//  
+//  Support is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//  
+//  Support is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+//  GNU General Public License for more details.
+//  
+//  You should have received a copy of the GNU General Public License
+//  along with Support. If not, see <http://www.gnu.org/licenses/>.
+
+#endregion
 
 #region
 
@@ -35,7 +39,7 @@ namespace Support.Evade
     }
 
     /// <summary>
-    /// Class containing the needed info about the evading spells.
+    ///     Class containing the needed info about the evading spells.
     /// </summary>
     internal class EvadeSpellData
     {
@@ -67,7 +71,9 @@ namespace Support.Evade
 
         public int _dangerLevel;
 
-        public EvadeSpellData() { }
+        public EvadeSpellData()
+        {
+        }
 
         public EvadeSpellData(string name, int dangerLevel)
         {

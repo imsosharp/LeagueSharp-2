@@ -1,16 +1,39 @@
-﻿using System.Collections.Generic;
+﻿#region LICENSE
+
+//  Copyright 2014 - 2014 Support
+//  Helpers.cs is part of Support.
+//  
+//  Support is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//  
+//  Support is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+//  GNU General Public License for more details.
+//  
+//  You should have received a copy of the GNU General Public License
+//  along with Support. If not, see <http://www.gnu.org/licenses/>.
+
+#endregion
+
+#region
+
+using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
+#endregion
 
 namespace Support
 {
     internal static class Helpers
     {
         /// <summary>
-        /// ReversePosition
+        ///     ReversePosition
         /// </summary>
         /// <param name="positionMe"></param>
         /// <param name="positionEnemy"></param>
@@ -30,16 +53,16 @@ namespace Support
 
         public static bool EnemyInRange(int numOfEnemy, float range)
         {
-            return Utility.CountEnemysInRange((int)range) >= numOfEnemy;
+            return Utility.CountEnemysInRange((int) range) >= numOfEnemy;
         }
 
         public static List<Obj_AI_Hero> AllyInRange(float range)
         {
             return ObjectManager
-                 .Get<Obj_AI_Hero>()
-                 .Where(h => ObjectManager.Player.Distance(h.Position) < range && h.IsEnemy)
-                 .OrderBy(h => ObjectManager.Player.Distance(h.Position))
-                 .ToList();
+                .Get<Obj_AI_Hero>()
+                .Where(h => ObjectManager.Player.Distance(h.Position) < range && h.IsEnemy)
+                .OrderBy(h => ObjectManager.Player.Distance(h.Position))
+                .ToList();
         }
 
         public static Obj_AI_Hero AllyBelowHp(int percentHp, float range)
@@ -48,14 +71,15 @@ namespace Support
             {
                 if (ally.IsMe)
                 {
-                    if (((ObjectManager.Player.Health / ObjectManager.Player.MaxHealth) * 100) < percentHp)
+                    if (((ObjectManager.Player.Health/ObjectManager.Player.MaxHealth)*100) < percentHp)
                     {
                         return ally;
                     }
                 }
                 else if (ally.IsAlly)
                 {
-                    if (Vector3.Distance(ObjectManager.Player.Position, ally.Position) < range && ((ally.Health / ally.MaxHealth) * 100) < percentHp)
+                    if (Vector3.Distance(ObjectManager.Player.Position, ally.Position) < range &&
+                        ((ally.Health/ally.MaxHealth)*100) < percentHp)
                     {
                         return ally;
                     }

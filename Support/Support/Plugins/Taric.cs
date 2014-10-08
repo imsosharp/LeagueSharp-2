@@ -1,7 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
+﻿#region LICENSE
+
+//  Copyright 2014 - 2014 Support
+//  Taric.cs is part of Support.
+//  
+//  Support is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//  
+//  Support is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+//  GNU General Public License for more details.
+//  
+//  You should have received a copy of the GNU General Public License
+//  along with Support. If not, see <http://www.gnu.org/licenses/>.
+
+#endregion
+
+#region
+
+using System;
 using LeagueSharp;
 using LeagueSharp.Common;
+
+#endregion
 
 namespace Support.Plugins
 {
@@ -56,28 +79,6 @@ namespace Support.Plugins
                 }
             }
         }
-
-        public override void OnTargetedProtection(Obj_AI_Base caster, Obj_AI_Hero target, SpellData spell)
-        {
-            if (!Q.IsValidTarget(target, true, false))
-                return;
-
-            if (caster.WillKill(target, spell))
-                Q.Cast(target, UsePackets);
-        }
-
-        public override void OnSkillshotProtection(Obj_AI_Hero target, List<Evade.Skillshot> skillshots)
-        {
-            if (!Q.IsValidTarget(target, true, false))
-                return;
-
-            foreach (var skillshot in skillshots)
-            {
-                if (skillshot.Unit.WillKill(target, skillshot.SpellData))
-                    Q.Cast(target, UsePackets);
-            }
-        }
-
 
         public override void OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {

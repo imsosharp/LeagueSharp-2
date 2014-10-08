@@ -1,9 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
+﻿#region LICENSE
+
+//  Copyright 2014 - 2014 Support
+//  Janna.cs is part of Support.
+//  
+//  Support is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//  
+//  Support is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+//  GNU General Public License for more details.
+//  
+//  You should have received a copy of the GNU General Public License
+//  along with Support. If not, see <http://www.gnu.org/licenses/>.
+
+#endregion
+
+#region
+
+using System;
 using LeagueSharp;
 using LeagueSharp.Common;
-using Support.Evade;
-using SpellData = LeagueSharp.SpellData;
+
+#endregion
 
 namespace Support.Plugins
 {
@@ -27,8 +48,12 @@ namespace Support.Plugins
             {
                 if (Q.IsValidTarget(Target, "ComboQ"))
                 {
-                    if (Q.Cast(Target, UsePackets) == Spell.CastStates.SuccessfullyCasted)
-                        Q.Cast();
+                    var pred = Q.GetPrediction(Target);
+                    if (pred.Hitchance > HitChance.Medium)
+                    {
+                        Q.Cast(pred.CastPosition, UsePackets);
+                        Q.Cast(pred.CastPosition, UsePackets);
+                    }
                 }
 
                 if (W.IsValidTarget(Target, "ComboW"))
@@ -56,13 +81,13 @@ namespace Support.Plugins
         {
             if (sender is Obj_SpellMissile && sender.IsValid)
             {
-                var missile = (Obj_SpellMissile)sender;
+                var missile = (Obj_SpellMissile) sender;
 
                 // Ally Turret -> Enemy Hero
                 if (missile.SpellCaster is Obj_AI_Turret && missile.SpellCaster.IsValid && missile.SpellCaster.IsAlly &&
                     missile.Target is Obj_AI_Hero && missile.Target.IsValid && missile.Target.IsEnemy)
                 {
-                    var turret = (Obj_AI_Turret)missile.SpellCaster;
+                    var turret = (Obj_AI_Turret) missile.SpellCaster;
 
                     if (ProtectionMana && E.IsReady())
                     {
@@ -80,28 +105,6 @@ namespace Support.Plugins
             }
         }
 
-        public override void OnSkillshotProtection(Obj_AI_Hero target, List<Skillshot> skillshots)
-        {
-            if (ProtectionMana && E.IsReady())
-            {
-                if (E.IsInRange(target))
-                {
-                    E.Cast(target, UsePackets);
-                }
-            }
-        }
-
-        public override void OnTargetedProtection(Obj_AI_Base caster, Obj_AI_Hero target, SpellData spell)
-        {
-            if (ProtectionMana && E.IsReady())
-            {
-                if (E.IsInRange(target))
-                {
-                    E.Cast(target, UsePackets);
-                }
-            }
-        }
-
         public override void OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             if (gapcloser.Sender.IsAlly)
@@ -109,8 +112,12 @@ namespace Support.Plugins
 
             if (Q.IsValidTarget(gapcloser.Sender, "GapcloserQ"))
             {
-                Q.Cast(gapcloser.Sender, UsePackets);
-                Q.Cast();
+                var pred = Q.GetPrediction(gapcloser.Sender);
+                if (pred.Hitchance > HitChance.Medium)
+                {
+                    Q.Cast(pred.CastPosition, UsePackets);
+                    Q.Cast(pred.CastPosition, UsePackets);
+                }
             }
 
             if (W.IsValidTarget(gapcloser.Sender, "GapcloserW"))
@@ -121,14 +128,18 @@ namespace Support.Plugins
 
         public override void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
         {
-            if ((spell.DangerLevel < InterruptableDangerLevel.High && !unit.BaseSkinName.Contains("Thresh")) || unit.IsAlly)
+            if ((spell.DangerLevel < InterruptableDangerLevel.High && !unit.BaseSkinName.Contains("Thresh")) ||
+                unit.IsAlly)
                 return;
 
             if (Q.IsValidTarget(unit, "InterruptQ"))
             {
-                Q.Cast(Target, UsePackets);
-                Q.Cast();
-                return;
+                var pred = Q.GetPrediction(unit);
+                if (pred.Hitchance > HitChance.Medium)
+                {
+                    Q.Cast(pred.CastPosition, UsePackets);
+                    Q.Cast(pred.CastPosition, UsePackets);
+                }
             }
 
             if (!Q.IsReady() && R.IsValidTarget(unit, "InterruptR"))
@@ -158,5 +169,21 @@ namespace Support.Plugins
             config.AddBool("InterruptQ", "Use Q to Interrupt Spells", true);
             config.AddBool("InterruptR", "Use R to Interrupt Spells", true);
         }
+
+        //public override void OnDraw(EventArgs args)
+        //{
+        //    try
+        //    {
+        //        if (!Target.IsValidTarget())
+        //            return;
+        //        var pred = Q.GetPrediction(Target);
+        //        Utility.DrawCircle(pred.CastPosition, 100, Color.Green);
+        //        Utility.DrawCircle(pred.UnitPosition, 100, Color.Red);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine(e);
+        //    }
+        //}
     }
 }

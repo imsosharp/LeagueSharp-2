@@ -1,19 +1,40 @@
-﻿using System;
+﻿#region LICENSE
+
+//  Copyright 2014 - 2014 Support
+//  Thresh.cs is part of Support.
+//  
+//  Support is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//  
+//  Support is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+//  GNU General Public License for more details.
+//  
+//  You should have received a copy of the GNU General Public License
+//  along with Support. If not, see <http://www.gnu.org/licenses/>.
+
+#endregion
+
+#region
+
+using System;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
+#endregion
+
 namespace Support.Plugins
 {
     public class Thresh : PluginBase
     {
+        private const int QFollowTime = 3000;
         private Obj_AI_Hero _qTarget;
         private int _qTick;
-        private const int QFollowTime = 3000;
-
-        private bool FollowQ { get { return Environment.TickCount <= _qTick + QFollowTime; } }
-        private bool FollowQBlock { get { return Environment.TickCount - _qTick >= QFollowTime; } }
 
         public Thresh()
             : base("h3h3", new Version(4, 17, 14))
@@ -24,6 +45,16 @@ namespace Support.Plugins
             R = new Spell(SpellSlot.R, 400);
 
             Q.SetSkillshot(0.5f, 50f, 1900, true, SkillshotType.SkillshotCircle);
+        }
+
+        private bool FollowQ
+        {
+            get { return Environment.TickCount <= _qTick + QFollowTime; }
+        }
+
+        private bool FollowQBlock
+        {
+            get { return Environment.TickCount - _qTick >= QFollowTime; }
         }
 
         public override void OnUpdate(EventArgs args)
@@ -129,7 +160,6 @@ namespace Support.Plugins
             config.AddSlider("ComboHealthE", "Push Targets away if low HP", 20, 1, 100);
             config.AddBool("ComboR", "Use R", true);
             config.AddSlider("ComboCountR", "Targets in range to Ult", 2, 1, 5);
-
         }
 
         public override void HarassMenu(Menu config)
@@ -148,8 +178,8 @@ namespace Support.Plugins
         }
 
         /// <summary>
-        /// Credit
-        /// https://github.com/LXMedia1/UltimateCarry2/blob/master/LexxersAIOCarry/Thresh.cs
+        ///     Credit
+        ///     https://github.com/LXMedia1/UltimateCarry2/blob/master/LexxersAIOCarry/Thresh.cs
         /// </summary>
         private void EngageFriendLatern()
         {
@@ -160,19 +190,19 @@ namespace Support.Plugins
 
             foreach (var friend in ObjectManager.Get<Obj_AI_Hero>()
                 .Where(hero => hero.IsAlly && !hero.IsMe && hero.Distance(Player) <= W.Range + 300 &&
-                hero.Distance(Player) <= W.Range - 300 && hero.Health / hero.MaxHealth * 100 >= 20 &&
-                Utility.CountEnemysInRange(150) >= 1))
+                               hero.Distance(Player) <= W.Range - 300 && hero.Health/hero.MaxHealth*100 >= 20 &&
+                               Utility.CountEnemysInRange(150) >= 1))
             {
                 var center = Player.Position;
                 const int points = 36;
                 var radius = W.Range;
-                const double slice = 2 * Math.PI / points;
+                const double slice = 2*Math.PI/points;
 
                 for (var i = 0; i < points; i++)
                 {
-                    var angle = slice * i;
-                    var newX = (int)(center.X + radius * Math.Cos(angle));
-                    var newY = (int)(center.Y + radius * Math.Sin(angle));
+                    var angle = slice*i;
+                    var newX = (int) (center.X + radius*Math.Cos(angle));
+                    var newY = (int) (center.Y + radius*Math.Sin(angle));
                     var p = new Vector3(newX, newY, 0);
                     if (p.Distance(friend.Position) <= bestcastposition.Distance(friend.Position))
                         bestcastposition = p;
@@ -190,8 +220,8 @@ namespace Support.Plugins
         }
 
         /// <summary>
-        /// Credit
-        /// https://github.com/LXMedia1/UltimateCarry2/blob/master/LexxersAIOCarry/Thresh.cs
+        ///     Credit
+        ///     https://github.com/LXMedia1/UltimateCarry2/blob/master/LexxersAIOCarry/Thresh.cs
         /// </summary>
         private void SafeFriendLatern()
         {
@@ -201,8 +231,9 @@ namespace Support.Plugins
             var bestcastposition = new Vector3(0f, 0f, 0f);
 
             foreach (var friend in ObjectManager.Get<Obj_AI_Hero>()
-            .Where(hero =>hero.IsAlly && !hero.IsMe && hero.Distance(ObjectManager.Player) <= W.Range + 300 &&
-            hero.Distance(ObjectManager.Player) <= W.Range - 200 && hero.Health / hero.MaxHealth * 100 >= 20 && !hero.IsDead))
+                .Where(hero => hero.IsAlly && !hero.IsMe && hero.Distance(ObjectManager.Player) <= W.Range + 300 &&
+                               hero.Distance(ObjectManager.Player) <= W.Range - 200 &&
+                               hero.Health/hero.MaxHealth*100 >= 20 && !hero.IsDead))
             {
                 foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsEnemy))
                 {
@@ -212,13 +243,13 @@ namespace Support.Plugins
                     var center = ObjectManager.Player.Position;
                     const int points = 36;
                     var radius = W.Range;
-                    const double slice = 2 * Math.PI / points;
+                    const double slice = 2*Math.PI/points;
 
                     for (var i = 0; i < points; i++)
                     {
-                        var angle = slice * i;
-                        var newX = (int)(center.X + radius * Math.Cos(angle));
-                        var newY = (int)(center.Y + radius * Math.Sin(angle));
+                        var angle = slice*i;
+                        var newX = (int) (center.X + radius*Math.Cos(angle));
+                        var newY = (int) (center.Y + radius*Math.Sin(angle));
                         var p = new Vector3(newX, newY, 0);
                         if (p.Distance(friend.Position) <= bestcastposition.Distance(friend.Position))
                             bestcastposition = p;

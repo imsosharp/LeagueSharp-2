@@ -1,6 +1,30 @@
-﻿using System;
+﻿#region LICENSE
+
+//  Copyright 2014 - 2014 Support
+//  Kayle.cs is part of Support.
+//  
+//  Support is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//  
+//  Support is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+//  GNU General Public License for more details.
+//  
+//  You should have received a copy of the GNU General Public License
+//  along with Support. If not, see <http://www.gnu.org/licenses/>.
+
+#endregion
+
+#region
+
+using System;
 using LeagueSharp;
 using LeagueSharp.Common;
+
+#endregion
 
 namespace Support.Disabled
 {
@@ -21,22 +45,18 @@ namespace Support.Disabled
             {
                 if (Q.IsValidTarget(Target, "ComboQ"))
                 {
-
                 }
 
                 if (W.IsValidTarget(Target, "ComboW"))
                 {
-
                 }
 
                 if (E.IsValidTarget(Target, "ComboE"))
                 {
-
                 }
 
                 if (R.IsValidTarget(Target, "ComboR"))
                 {
-
                 }
             }
 
@@ -44,17 +64,14 @@ namespace Support.Disabled
             {
                 if (Q.IsValidTarget(Target, "HarassQ"))
                 {
-
                 }
 
                 if (W.IsValidTarget(Target, "HarassW"))
                 {
-
                 }
 
                 if (E.IsValidTarget(Target, "HarassE"))
                 {
-
                 }
             }
         }
@@ -71,22 +88,18 @@ namespace Support.Disabled
         {
             if (Q.IsValidTarget(gapcloser.Sender, "GapcloserQ"))
             {
-
             }
 
             if (W.IsValidTarget(gapcloser.Sender, "GapcloserW"))
             {
-
             }
 
             if (E.IsValidTarget(gapcloser.Sender, "GapcloserE"))
             {
-
             }
 
             if (R.IsValidTarget(gapcloser.Sender, "GapcloserR"))
             {
-
             }
         }
 
@@ -97,22 +110,18 @@ namespace Support.Disabled
 
             if (Q.IsValidTarget(unit, "InterruptQ"))
             {
-
             }
 
             if (W.IsValidTarget(unit, "InterruptW"))
             {
-
             }
 
             if (E.IsValidTarget(unit, "InterruptE"))
             {
-
             }
 
             if (R.IsValidTarget(unit, "InterruptR"))
             {
-
             }
         }
 

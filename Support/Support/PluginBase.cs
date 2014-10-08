@@ -1,20 +1,24 @@
-﻿/*
-    Copyright (C) 2014 h3h3
+﻿#region LICENSE
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+//  Copyright 2014 - 2014 Support
+//  PluginBase.cs is part of Support.
+//  
+//  Support is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//  
+//  Support is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+//  GNU General Public License for more details.
+//  
+//  You should have received a copy of the GNU General Public License
+//  along with Support. If not, see <http://www.gnu.org/licenses/>.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+#endregion
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
+#region
 
 using System;
 using System.Collections.Generic;
@@ -23,143 +27,19 @@ using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 
+#endregion
+
 namespace Support
 {
     /// <summary>
-    /// PluginBase class
+    ///     PluginBase class
     /// </summary>
     public abstract class PluginBase
     {
-        /// <summary>
-        /// Plugin display name
-        /// </summary>
-        public string Author { get; set; }
-
-        /// <summary>
-        /// Champion Author
-        /// </summary>
-        public string ChampionName { get; set; }
-
-        /// <summary>
-        /// Plugin Version
-        /// </summary>
-        public Version Version { get; set; }
-
-        /// <summary>
-        /// Orbwalker
-        /// </summary>
-        public Orbwalking.Orbwalker Orbwalker { get; set; }
-
-        /// <summary>
-        /// SupportTargetSelector
-        /// </summary>
-        public TargetSelector TargetSelector { get; set; }
-
-        /// <summary>
-        /// ComboMode
-        /// </summary>
-        public bool ComboMode { get { return Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && ComboMana; } }
-
-        /// <summary>
-        /// HarassMode
-        /// </summary>
-        public bool HarassMode { get { return Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && HarassMana; } }
-
-        /// <summary>
-        /// ComboMana
-        /// </summary>
-        public bool ComboMana { get { return Player.Mana > Player.MaxMana * GetValue<Slider>("ComboMana").Value / 100; } }
-
-        /// <summary>
-        /// HarassMana
-        /// </summary>
-        public bool HarassMana { get { return Player.Mana > Player.MaxMana * GetValue<Slider>("HarassMana").Value / 100; } }
-
-        /// <summary>
-        /// ProtectionMana
-        /// </summary>
-        public bool ProtectionMana { get { return Player.Mana > Player.MaxMana * GetValue<Slider>("ProtectionMana").Value / 100; } }
-
-        /// <summary>
-        /// UsePackets
-        /// </summary>
-        public bool UsePackets { get { return GetValue<bool>("UsePackets"); } }
-
-        /// <summary>
-        /// Player Object
-        /// </summary>
-        public Obj_AI_Hero Player { get { return ObjectManager.Player; } }
-
-        /// <summary>
-        /// AttackRange
-        /// </summary>
-        public float AttackRange { get { return Orbwalking.GetRealAutoAttackRange(null) + 65; } }
-
-        /// <summary>
-        /// Target
-        /// </summary>
-        public Obj_AI_Hero Target { get { return TargetSelector.Target; } }
-
-        /// <summary>
-        /// OrbwalkerTarget
-        /// </summary>
-        public Obj_AI_Base OrbwalkerTarget { get { return Orbwalker.GetTarget(); } }
-
-        /// <summary>
-        /// Q
-        /// </summary>
-        public Spell Q { get; set; }
-
-        /// <summary>
-        /// W
-        /// </summary>
-        public Spell W { get; set; }
-
-        /// <summary>
-        /// E
-        /// </summary>
-        public Spell E { get; set; }
-
-        /// <summary>
-        /// R
-        /// </summary>
-        public Spell R { get; set; }
-
-        /// <summary>
-        /// Config
-        /// </summary>
-        public static Menu Config { get; set; }
-
-        /// <summary>
-        /// ComboConfig
-        /// </summary>
-        public Menu ComboConfig { get; set; }
-
-        /// <summary>
-        /// HarassConfig
-        /// </summary>
-        public Menu HarassConfig { get; set; }
-
-        /// <summary>
-        /// MiscConfig
-        /// </summary>
-        public Menu MiscConfig { get; set; }
-
-        /// <summary>
-        /// ManaConfig
-        /// </summary>
-        public Menu ManaConfig { get; set; }
-
-        /// <summary>
-        /// DrawingConfig
-        /// </summary>
-        public Menu DrawingConfig { get; set; }
-
-
         private readonly List<Spell> _spells = new List<Spell>();
 
         /// <summary>
-        /// Init BaseClass
+        ///     Init BaseClass
         /// </summary>
         protected PluginBase(string author, Version version)
         {
@@ -179,7 +59,7 @@ namespace Support
         #region Private Stuff
 
         /// <summary>
-        /// SupportTargetSelector Initialization
+        ///     SupportTargetSelector Initialization
         /// </summary>
         private void InitTargetSelector()
         {
@@ -187,12 +67,10 @@ namespace Support
         }
 
         /// <summary>
-        /// PluginEvents Initialization
+        ///     PluginEvents Initialization
         /// </summary>
         private void InitPluginEvents()
         {
-            Protector.OnSkillshotProtection += OnSkillshotProtection;
-            Protector.OnTargetedProtection += OnTargetedProtection;
             Game.OnGameUpdate += OnUpdate;
             Drawing.OnDraw += OnDraw;
             Orbwalking.BeforeAttack += BeforeAttack;
@@ -203,7 +81,7 @@ namespace Support
         }
 
         /// <summary>
-        /// PrivateEvents Initialization
+        ///     PrivateEvents Initialization
         /// </summary>
         private void InitPrivateEvents()
         {
@@ -238,7 +116,7 @@ namespace Support
         }
 
         /// <summary>
-        /// Config Initialization
+        ///     Config Initialization
         /// </summary>
         private void InitConfig()
         {
@@ -256,17 +134,25 @@ namespace Support
             ManaConfig.AddSlider("ComboMana", "Combo Mana %", 1, 1, 100);
             ManaConfig.AddSlider("HarassMana", "Harass Mana %", 1, 1, 100);
             ManaConfig.AddSlider("ProtectionMana", "Protector Mana %", 1, 1, 100);
-            
+
             // misc
             MiscConfig.AddBool("UsePackets", "Use Packets?", true);
             MiscConfig.AddBool("AttackMinions", "Attack Minions?", true);
             MiscConfig.AddBool("AttackChampions", "Attack Champions?", true);
-            
+
             // drawing
-            DrawingConfig.AddItem(new MenuItem("QRange" + ChampionName, "Q Range").SetValue(new Circle(false, Color.FromArgb(150, Color.DodgerBlue))));
-            DrawingConfig.AddItem(new MenuItem("WRange" + ChampionName, "W Range").SetValue(new Circle(false, Color.FromArgb(150, Color.DodgerBlue))));
-            DrawingConfig.AddItem(new MenuItem("ERange" + ChampionName, "E Range").SetValue(new Circle(false, Color.FromArgb(150, Color.DodgerBlue))));
-            DrawingConfig.AddItem(new MenuItem("RRange" + ChampionName, "R Range").SetValue(new Circle(false, Color.FromArgb(150, Color.DodgerBlue))));
+            DrawingConfig.AddItem(
+                new MenuItem("QRange" + ChampionName, "Q Range").SetValue(new Circle(false,
+                    Color.FromArgb(150, Color.DodgerBlue))));
+            DrawingConfig.AddItem(
+                new MenuItem("WRange" + ChampionName, "W Range").SetValue(new Circle(false,
+                    Color.FromArgb(150, Color.DodgerBlue))));
+            DrawingConfig.AddItem(
+                new MenuItem("ERange" + ChampionName, "E Range").SetValue(new Circle(false,
+                    Color.FromArgb(150, Color.DodgerBlue))));
+            DrawingConfig.AddItem(
+                new MenuItem("RRange" + ChampionName, "R Range").SetValue(new Circle(false,
+                    Color.FromArgb(150, Color.DodgerBlue))));
 
             // plugins
             ComboMenu(ComboConfig);
@@ -279,21 +165,178 @@ namespace Support
         }
 
         /// <summary>
-        /// Orbwalker Initialization
+        ///     Orbwalker Initialization
         /// </summary>
         private void InitOrbwalker()
         {
             Orbwalker = new Orbwalking.Orbwalker(Config.SubMenu("Orbwalking"));
         }
+
         #endregion
 
         /// <summary>
-        /// GetValue
+        ///     Plugin display name
+        /// </summary>
+        public string Author { get; set; }
+
+        /// <summary>
+        ///     Champion Author
+        /// </summary>
+        public string ChampionName { get; set; }
+
+        /// <summary>
+        ///     Plugin Version
+        /// </summary>
+        public Version Version { get; set; }
+
+        /// <summary>
+        ///     Orbwalker
+        /// </summary>
+        public Orbwalking.Orbwalker Orbwalker { get; set; }
+
+        /// <summary>
+        ///     SupportTargetSelector
+        /// </summary>
+        public TargetSelector TargetSelector { get; set; }
+
+        /// <summary>
+        ///     ComboMode
+        /// </summary>
+        public bool ComboMode
+        {
+            get { return Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && ComboMana; }
+        }
+
+        /// <summary>
+        ///     HarassMode
+        /// </summary>
+        public bool HarassMode
+        {
+            get { return Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && HarassMana; }
+        }
+
+        /// <summary>
+        ///     ComboMana
+        /// </summary>
+        public bool ComboMana
+        {
+            get { return Player.Mana > Player.MaxMana*GetValue<Slider>("ComboMana").Value/100; }
+        }
+
+        /// <summary>
+        ///     HarassMana
+        /// </summary>
+        public bool HarassMana
+        {
+            get { return Player.Mana > Player.MaxMana*GetValue<Slider>("HarassMana").Value/100; }
+        }
+
+        /// <summary>
+        ///     ProtectionMana
+        /// </summary>
+        public bool ProtectionMana
+        {
+            get { return Player.Mana > Player.MaxMana*GetValue<Slider>("ProtectionMana").Value/100; }
+        }
+
+        /// <summary>
+        ///     UsePackets
+        /// </summary>
+        public bool UsePackets
+        {
+            get { return GetValue<bool>("UsePackets"); }
+        }
+
+        /// <summary>
+        ///     Player Object
+        /// </summary>
+        public Obj_AI_Hero Player
+        {
+            get { return ObjectManager.Player; }
+        }
+
+        /// <summary>
+        ///     AttackRange
+        /// </summary>
+        public float AttackRange
+        {
+            get { return Orbwalking.GetRealAutoAttackRange(null) + 65; }
+        }
+
+        /// <summary>
+        ///     Target
+        /// </summary>
+        public Obj_AI_Hero Target
+        {
+            get { return TargetSelector.Target; }
+        }
+
+        /// <summary>
+        ///     OrbwalkerTarget
+        /// </summary>
+        public Obj_AI_Base OrbwalkerTarget
+        {
+            get { return Orbwalker.GetTarget(); }
+        }
+
+        /// <summary>
+        ///     Q
+        /// </summary>
+        public Spell Q { get; set; }
+
+        /// <summary>
+        ///     W
+        /// </summary>
+        public Spell W { get; set; }
+
+        /// <summary>
+        ///     E
+        /// </summary>
+        public Spell E { get; set; }
+
+        /// <summary>
+        ///     R
+        /// </summary>
+        public Spell R { get; set; }
+
+        /// <summary>
+        ///     Config
+        /// </summary>
+        public static Menu Config { get; set; }
+
+        /// <summary>
+        ///     ComboConfig
+        /// </summary>
+        public Menu ComboConfig { get; set; }
+
+        /// <summary>
+        ///     HarassConfig
+        /// </summary>
+        public Menu HarassConfig { get; set; }
+
+        /// <summary>
+        ///     MiscConfig
+        /// </summary>
+        public Menu MiscConfig { get; set; }
+
+        /// <summary>
+        ///     ManaConfig
+        /// </summary>
+        public Menu ManaConfig { get; set; }
+
+        /// <summary>
+        ///     DrawingConfig
+        /// </summary>
+        public Menu DrawingConfig { get; set; }
+
+
+        /// <summary>
+        ///     GetValue
         /// </summary>
         /// <typeparam name="T">Type</typeparam>
         /// <param name="item">string</param>
         /// <remarks>
-        /// Helper for 
+        ///     Helper for
         /// </remarks>
         /// <returns></returns>
         public T GetValue<T>(string item)
@@ -301,19 +344,11 @@ namespace Support
             return Config.Item(item + ObjectManager.Player.ChampionName).GetValue<T>();
         }
 
-        public virtual void OnTargetedProtection(Obj_AI_Base caster, Obj_AI_Hero target, SpellData spell)
-        {
-        }
-
-        public virtual void OnSkillshotProtection(Obj_AI_Hero target, List<Evade.Skillshot> skillshots)
-        {
-        }
-
         /// <summary>
-        /// OnPossibleToInterrupt
+        ///     OnPossibleToInterrupt
         /// </summary>
         /// <remarks>
-        /// override to Implement SpellsInterrupt logic
+        ///     override to Implement SpellsInterrupt logic
         /// </remarks>
         /// <param name="unit">Obj_AI_Base</param>
         /// <param name="spell">InterruptableSpell</param>
@@ -322,10 +357,10 @@ namespace Support
         }
 
         /// <summary>
-        /// OnEnemyGapcloser
+        ///     OnEnemyGapcloser
         /// </summary>
         /// <remarks>
-        /// override to Implement AntiGapcloser logic
+        ///     override to Implement AntiGapcloser logic
         /// </remarks>
         /// <param name="gapcloser">ActiveGapcloser</param>
         public virtual void OnEnemyGapcloser(ActiveGapcloser gapcloser)
@@ -333,10 +368,10 @@ namespace Support
         }
 
         /// <summary>
-        /// OnUpdate
+        ///     OnUpdate
         /// </summary>
         /// <remarks>
-        /// override to Implement Update logic
+        ///     override to Implement Update logic
         /// </remarks>
         /// <param name="args">EventArgs</param>
         public virtual void OnUpdate(EventArgs args)
@@ -344,10 +379,10 @@ namespace Support
         }
 
         /// <summary>
-        /// BeforeAttack
+        ///     BeforeAttack
         /// </summary>
         /// <remarks>
-        /// override to Implement BeforeAttack logic
+        ///     override to Implement BeforeAttack logic
         /// </remarks>
         /// <param name="args">Orbwalking.BeforeAttackEventArgs</param>
         public virtual void BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
@@ -355,10 +390,10 @@ namespace Support
         }
 
         /// <summary>
-        /// AfterAttack
+        ///     AfterAttack
         /// </summary>
         /// <remarks>
-        /// override to Implement AfterAttack logic
+        ///     override to Implement AfterAttack logic
         /// </remarks>
         /// <param name="unit">unit</param>
         /// <param name="target">target</param>
@@ -367,10 +402,10 @@ namespace Support
         }
 
         /// <summary>
-        /// OnLoad
+        ///     OnLoad
         /// </summary>
         /// <remarks>
-        /// override to Implement class Initialization
+        ///     override to Implement class Initialization
         /// </remarks>
         /// <param name="args">EventArgs</param>
         public virtual void OnLoad(EventArgs args)
@@ -378,10 +413,10 @@ namespace Support
         }
 
         /// <summary>
-        /// OnDraw
+        ///     OnDraw
         /// </summary>
         /// <remarks>
-        /// override to Implement Drawing
+        ///     override to Implement Drawing
         /// </remarks>
         /// <param name="args">EventArgs</param>
         public virtual void OnDraw(EventArgs args)
@@ -389,10 +424,10 @@ namespace Support
         }
 
         /// <summary>
-        /// ComboMenu
+        ///     ComboMenu
         /// </summary>
         /// <remarks>
-        /// override to Implement ComboMenu Config
+        ///     override to Implement ComboMenu Config
         /// </remarks>
         /// <param name="config">Menu</param>
         public virtual void ComboMenu(Menu config)
@@ -400,10 +435,10 @@ namespace Support
         }
 
         /// <summary>
-        /// HarassMenu
+        ///     HarassMenu
         /// </summary>
         /// <remarks>
-        /// override to Implement HarassMenu Config
+        ///     override to Implement HarassMenu Config
         /// </remarks>
         /// <param name="config">Menu</param>
         public virtual void HarassMenu(Menu config)
@@ -411,10 +446,10 @@ namespace Support
         }
 
         /// <summary>
-        /// ManaMenu
+        ///     ManaMenu
         /// </summary>
         /// <remarks>
-        /// override to Implement ManaMenu Config
+        ///     override to Implement ManaMenu Config
         /// </remarks>
         /// <param name="config">Menu</param>
         public virtual void ManaMenu(Menu config)
@@ -422,10 +457,10 @@ namespace Support
         }
 
         /// <summary>
-        /// MiscMenu
+        ///     MiscMenu
         /// </summary>
         /// <remarks>
-        /// override to Implement MiscMenu Config
+        ///     override to Implement MiscMenu Config
         /// </remarks>
         /// <param name="config">Menu</param>
         public virtual void MiscMenu(Menu config)
@@ -433,10 +468,10 @@ namespace Support
         }
 
         /// <summary>
-        /// DrawingMenu
+        ///     DrawingMenu
         /// </summary>
         /// <remarks>
-        /// override to Implement DrawingMenu Config
+        ///     override to Implement DrawingMenu Config
         /// </remarks>
         /// <param name="config">Menu</param>
         public virtual void DrawingMenu(Menu config)

@@ -1,24 +1,30 @@
-﻿/*
-    Copyright (C) 2014 h3h3
+﻿#region LICENSE
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+//  Copyright 2014 - 2014 Support
+//  Zyra.cs is part of Support.
+//  
+//  Support is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//  
+//  Support is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+//  GNU General Public License for more details.
+//  
+//  You should have received a copy of the GNU General Public License
+//  along with Support. If not, see <http://www.gnu.org/licenses/>.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+#endregion
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
+#region
 
 using System;
 using LeagueSharp;
 using LeagueSharp.Common;
+
+#endregion
 
 namespace Support.Disabled
 {
@@ -43,22 +49,18 @@ namespace Support.Disabled
             {
                 if (Q.IsReady() && Target.IsValidTarget(Q.Range) && GetValue<bool>("UseQC"))
                 {
-
                 }
 
                 if (W.IsReady() && Target.IsValidTarget(W.Range) && GetValue<bool>("UseWC"))
                 {
-
                 }
 
                 if (E.IsReady() && Target.IsValidTarget(E.Range) && GetValue<bool>("UseEC"))
                 {
-
                 }
 
                 if (R.IsReady() && Target.IsValidTarget(R.Range) && GetValue<bool>("UseRC"))
                 {
-
                 }
             }
 
@@ -66,17 +68,14 @@ namespace Support.Disabled
             {
                 if (Q.IsReady() && Target.IsValidTarget(Q.Range) && GetValue<bool>("UseQH"))
                 {
-
                 }
 
                 if (W.IsReady() && Target.IsValidTarget(W.Range) && GetValue<bool>("UseWH"))
                 {
-
                 }
 
                 if (E.IsReady() && Target.IsValidTarget(E.Range) && GetValue<bool>("UseEH"))
                 {
-
                 }
             }
         }
@@ -97,7 +96,6 @@ namespace Support.Disabled
         {
             if (spell.DangerLevel < InterruptableDangerLevel.High || unit.IsAlly)
                 return;
-
         }
 
         public override void OnDraw(EventArgs args)

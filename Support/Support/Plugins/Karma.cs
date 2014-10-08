@@ -1,19 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
+﻿#region LICENSE
+
+//  Copyright 2014 - 2014 Support
+//  Karma.cs is part of Support.
+//  
+//  Support is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//  
+//  Support is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+//  GNU General Public License for more details.
+//  
+//  You should have received a copy of the GNU General Public License
+//  along with Support. If not, see <http://www.gnu.org/licenses/>.
+
+#endregion
+
+#region
+
+using System;
 using LeagueSharp;
 using LeagueSharp.Common;
-using Support.Evade;
-using SpellData = LeagueSharp.SpellData;
+
+#endregion
 
 namespace Support.Plugins
 {
     public class Karma : PluginBase
     {
-        private bool MantraIsActive
-        {
-            get { return Player.HasBuff("KarmaMantra"); }
-        }
-
         public Karma()
             : base("h3h3", new Version(4, 17, 14))
         {
@@ -23,6 +39,11 @@ namespace Support.Plugins
             R = new Spell(SpellSlot.R, 0);
 
             Q.SetSkillshot(0.25f, 60f, 1700f, true, SkillshotType.SkillshotLine);
+        }
+
+        private bool MantraIsActive
+        {
+            get { return Player.HasBuff("KarmaMantra"); }
         }
 
         public override void OnUpdate(EventArgs args)
@@ -45,28 +66,6 @@ namespace Support.Plugins
                 if (Q.IsValidTarget(Target, "HarassQ"))
                 {
                     Q.Cast(Target, UsePackets);
-                }
-            }
-        }
-
-        public override void OnSkillshotProtection(Obj_AI_Hero target, List<Skillshot> skillshots)
-        {
-            if (ProtectionMana && E.IsReady())
-            {
-                if (E.IsInRange(target))
-                {
-                    E.Cast(target, UsePackets);
-                }
-            }
-        }
-
-        public override void OnTargetedProtection(Obj_AI_Base caster, Obj_AI_Hero target, SpellData spell)
-        {
-            if (ProtectionMana && E.IsReady())
-            {
-                if (E.IsInRange(target))
-                {
-                    E.Cast(target, UsePackets);
                 }
             }
         }
