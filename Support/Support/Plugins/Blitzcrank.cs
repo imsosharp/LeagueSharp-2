@@ -153,7 +153,10 @@ namespace Support.Plugins
                     Player.IssueOrder(GameObjectOrder.AttackUnit, unit);
                 }
             }
-
+            if (Q.IsValidTarget(Target, "InterruptQ"))
+                {
+                    Q.Cast(unit, UsePackets);
+                }
             if (R.IsValidTarget(unit, "InterruptR"))
             {
                 R.Cast();
@@ -176,7 +179,7 @@ namespace Support.Plugins
         {
             config.AddBool("GapcloserE", "Use E to Interrupt Gapcloser", true);
             config.AddBool("GapcloserR", "Use R to Interrupt Gapcloser", true);
-
+            config.AddBool("InterruptQ", "Use Q to Interrupt Spells", true);
             config.AddBool("InterruptE", "Use E to Interrupt Spells", true);
             config.AddBool("InterruptR", "Use R to Interrupt Spells", true);
         }
