@@ -187,7 +187,10 @@ namespace Support
                     if (hero.HasBuffOfType(buff) && Menu.SubMenu("CC").Item(buff.ToString()).GetValue<bool>())
                     {
                         if (mikael.IsActive(hero))
+                        {
                             mikael.Item.Cast(hero);
+                            Console.WriteLine("Cast CC: " + mikael.Name + " -> " + hero.ChampionName + "(" + buff + ")");
+                        }
                     }
                 }
             }
@@ -226,6 +229,8 @@ namespace Support
                             ps.Spell.Cast(target, UsePackets());
                         else
                             ps.Spell.Cast();
+
+                        Console.WriteLine("Cast PS: " + ps.Name + " -> " + target.ChampionName);
                     }
                 }
 
@@ -240,6 +245,8 @@ namespace Support
                             pi.Item.Cast(target);
                         else
                             pi.Item.Cast();
+
+                        Console.WriteLine("Cast PI: " + pi.Name + " -> " + target.ChampionName + " " + target.HealthBuffer(pi.HpBuffer));
                     }
                 }
             }
@@ -268,8 +275,8 @@ namespace Support
                 if (sender.IsAlly)
                     return;
 
-                var caster = (Obj_AI_Turret) sender;
-                var target = (Obj_AI_Hero) args.Target;
+                var caster = (Obj_AI_Turret)sender;
+                var target = (Obj_AI_Hero)args.Target;
 
                 if (OnTargetedProtection != null)
                 {
@@ -301,8 +308,8 @@ namespace Support
                 if (!args.Target.IsValid<Obj_AI_Hero>() || args.Target.IsEnemy)
                     return;
 
-                var caster = (Obj_AI_Hero) sender;
-                var target = (Obj_AI_Hero) args.Target;
+                var caster = (Obj_AI_Hero)sender;
+                var target = (Obj_AI_Hero)args.Target;
 
                 if (OnTargetedProtection != null)
                 {
@@ -328,7 +335,7 @@ namespace Support
                 if (!Menu.Item("TargetedActive").GetValue<bool>())
                     return;
 
-                var missile = (Obj_SpellMissile) sender;
+                var missile = (Obj_SpellMissile)sender;
 
                 if (!missile.SpellCaster.IsValid<Obj_AI_Hero>() || !missile.SpellCaster.IsEnemy)
                     return;
@@ -336,8 +343,8 @@ namespace Support
                 if (!missile.Target.IsValid<Obj_AI_Hero>() || !missile.Target.IsAlly)
                     return;
 
-                var caster = (Obj_AI_Hero) missile.SpellCaster;
-                var target = (Obj_AI_Hero) missile.Target;
+                var caster = (Obj_AI_Hero)missile.SpellCaster;
+                var target = (Obj_AI_Hero)missile.Target;
 
                 if (OnTargetedProtection != null)
                 {
@@ -428,7 +435,7 @@ namespace Support
 
                 //Check if the skillshot is too far away.
                 if (skillshot.Start.Distance(ObjectManager.Player.ServerPosition.To2D()) >
-                    (skillshot.SpellData.Range + skillshot.SpellData.Radius + 1000)*1.5)
+                    (skillshot.SpellData.Range + skillshot.SpellData.Radius + 1000) * 1.5)
                 {
                     return;
                 }
@@ -444,13 +451,13 @@ namespace Support
                         {
                             var originalDirection = skillshot.Direction;
 
-                            for (var i = -(skillshot.SpellData.MultipleNumber - 1)/2;
-                                i <= (skillshot.SpellData.MultipleNumber - 1)/2;
+                            for (var i = -(skillshot.SpellData.MultipleNumber - 1) / 2;
+                                i <= (skillshot.SpellData.MultipleNumber - 1) / 2;
                                 i++)
                             {
                                 var end = skillshot.Start +
-                                          skillshot.SpellData.Range*
-                                          originalDirection.Rotated(skillshot.SpellData.MultipleAngle*i);
+                                          skillshot.SpellData.Range *
+                                          originalDirection.Rotated(skillshot.SpellData.MultipleAngle * i);
                                 var skillshotToAdd = new Skillshot(
                                     skillshot.DetectionType, skillshot.SpellData, skillshot.StartTick, skillshot.Start,
                                     end,
@@ -463,13 +470,13 @@ namespace Support
 
                         if (skillshot.SpellData.SpellName == "UFSlash")
                         {
-                            skillshot.SpellData.MissileSpeed = 1600 + (int) skillshot.Unit.MoveSpeed;
+                            skillshot.SpellData.MissileSpeed = 1600 + (int)skillshot.Unit.MoveSpeed;
                         }
 
                         if (skillshot.SpellData.Invert)
                         {
                             var newDirection = -(skillshot.End - skillshot.Start).Normalized();
-                            var end = skillshot.Start + newDirection*skillshot.Start.Distance(skillshot.End);
+                            var end = skillshot.Start + newDirection * skillshot.Start.Distance(skillshot.End);
                             var skillshotToAdd = new Skillshot(
                                 skillshot.DetectionType, skillshot.SpellData, skillshot.StartTick, skillshot.Start, end,
                                 skillshot.Unit);
@@ -479,8 +486,8 @@ namespace Support
 
                         if (skillshot.SpellData.Centered)
                         {
-                            var start = skillshot.Start - skillshot.Direction*skillshot.SpellData.Range;
-                            var end = skillshot.Start + skillshot.Direction*skillshot.SpellData.Range;
+                            var start = skillshot.Start - skillshot.Direction * skillshot.SpellData.Range;
+                            var end = skillshot.Start + skillshot.Direction * skillshot.SpellData.Range;
                             var skillshotToAdd = new Skillshot(
                                 skillshot.DetectionType, skillshot.SpellData, skillshot.StartTick, start, end,
                                 skillshot.Unit);
@@ -493,8 +500,8 @@ namespace Support
                             var angle = 60;
                             var edge1 =
                                 (skillshot.End - skillshot.Unit.ServerPosition.To2D()).Rotated(
-                                    -angle/2*(float) Math.PI/180);
-                            var edge2 = edge1.Rotated(angle*(float) Math.PI/180);
+                                    -angle / 2 * (float)Math.PI / 180);
+                            var edge2 = edge1.Rotated(angle * (float)Math.PI / 180);
 
                             foreach (var minion in ObjectManager.Get<Obj_AI_Minion>())
                             {
@@ -520,8 +527,8 @@ namespace Support
 
                         if (skillshot.SpellData.SpellName == "AlZaharCalloftheVoid")
                         {
-                            var start = skillshot.End - skillshot.Direction.Perpendicular()*400;
-                            var end = skillshot.End + skillshot.Direction.Perpendicular()*400;
+                            var start = skillshot.End - skillshot.Direction.Perpendicular() * 400;
+                            var end = skillshot.End + skillshot.Direction.Perpendicular() * 400;
                             var skillshotToAdd = new Skillshot(
                                 skillshot.DetectionType, skillshot.SpellData, skillshot.StartTick, start, end,
                                 skillshot.Unit);
@@ -532,20 +539,20 @@ namespace Support
                         if (skillshot.SpellData.SpellName == "ZiggsQ")
                         {
                             var d1 = skillshot.Start.Distance(skillshot.End);
-                            var d2 = d1*0.4f;
-                            var d3 = d2*0.69f;
+                            var d2 = d1 * 0.4f;
+                            var d3 = d2 * 0.69f;
 
 
                             var bounce1SpellData = SpellDatabase.GetByName("ZiggsQBounce1");
                             var bounce2SpellData = SpellDatabase.GetByName("ZiggsQBounce2");
 
-                            var bounce1Pos = skillshot.End + skillshot.Direction*d2;
-                            var bounce2Pos = bounce1Pos + skillshot.Direction*d3;
+                            var bounce1Pos = skillshot.End + skillshot.Direction * d2;
+                            var bounce2Pos = bounce1Pos + skillshot.Direction * d3;
 
                             bounce1SpellData.Delay =
-                                (int) (skillshot.SpellData.Delay + d1*1000f/skillshot.SpellData.MissileSpeed + 500);
+                                (int)(skillshot.SpellData.Delay + d1 * 1000f / skillshot.SpellData.MissileSpeed + 500);
                             bounce2SpellData.Delay =
-                                (int) (bounce1SpellData.Delay + d2*1000f/bounce1SpellData.MissileSpeed + 500);
+                                (int)(bounce1SpellData.Delay + d2 * 1000f / bounce1SpellData.MissileSpeed + 500);
 
                             var bounce1 = new Skillshot(
                                 skillshot.DetectionType, bounce1SpellData, skillshot.StartTick, skillshot.End,
@@ -562,7 +569,7 @@ namespace Support
                         if (skillshot.SpellData.SpellName == "ZiggsR")
                         {
                             skillshot.SpellData.Delay =
-                                (int) (1500 + 1500*skillshot.End.Distance(skillshot.Start)/skillshot.SpellData.Range);
+                                (int)(1500 + 1500 * skillshot.End.Distance(skillshot.Start) / skillshot.SpellData.Range);
                         }
 
                         if (skillshot.SpellData.SpellName == "JarvanIVDragonStrike")
@@ -591,7 +598,7 @@ namespace Support
                                 return;
                             }
 
-                            skillshot.End = endPos + 200*(endPos - skillshot.Start).Normalized();
+                            skillshot.End = endPos + 200 * (endPos - skillshot.Start).Normalized();
                             skillshot.Direction = (skillshot.End - skillshot.Start).Normalized();
                         }
                     }
@@ -629,7 +636,7 @@ namespace Support
         /// </summary>
         private static IsSafeResult IsSafe(Vector2 point)
         {
-            var result = new IsSafeResult {SkillshotList = new List<Skillshot>()};
+            var result = new IsSafeResult { SkillshotList = new List<Skillshot>() };
 
             foreach (var skillshot in DetectedSkillshots)
             {
@@ -726,7 +733,7 @@ namespace Support
                 Name = "Wild Growth",
                 ChampionName = "Lulu",
                 Spell = new Spell(SpellSlot.R, 900),
-                HpBuffer = 5,
+                HpBuffer = 10,
                 Harass = false,
                 Targeted = true
             });
@@ -766,7 +773,7 @@ namespace Support
                 Name = "Intervention",
                 ChampionName = "Kayle",
                 Spell = new Spell(SpellSlot.R, 900),
-                HpBuffer = 5,
+                HpBuffer = 10,
                 Harass = false,
                 Targeted = true
             });
@@ -786,7 +793,7 @@ namespace Support
                 Name = "Chrono Shift",
                 ChampionName = "Zilean",
                 Spell = new Spell(SpellSlot.R, 900),
-                HpBuffer = 5,
+                HpBuffer = 10,
                 Harass = false,
                 Targeted = true
             });
@@ -795,7 +802,7 @@ namespace Support
             {
                 Name = "Mikael's Crucible",
                 Item = new Items.Item(3222, 750),
-                HpBuffer = 5,
+                HpBuffer = 10,
                 Targeted = true
             });
 
@@ -803,7 +810,7 @@ namespace Support
             {
                 Name = "Locket of the Iron Solari",
                 Item = new Items.Item(3190, 600),
-                HpBuffer = 5
+                HpBuffer = 10
             });
         }
 

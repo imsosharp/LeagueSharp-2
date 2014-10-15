@@ -97,8 +97,7 @@ namespace Support
 
             Orbwalking.BeforeAttack += args =>
             {
-                if (args.Target.IsValid<Obj_AI_Minion>() && !AttackMinions &&
-                    Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None)
+                if (args.Target.IsValid<Obj_AI_Minion>() && !AttackMinion)
                     args.Process = false;
 
                 if (args.Target.IsValid<Obj_AI_Hero>() && !GetValue<bool>("AttackChampions") &&
@@ -265,14 +264,15 @@ namespace Support
         }
 
         /// <summary>
-        ///     AttackMinions
+        ///     AttackMinion
         /// </summary>
-        public bool AttackMinions
+        public bool AttackMinion
         {
             get
             {
-                return Player.Buffs.Any(buff => buff.Name == "talentreaperdisplay" && buff.Count > 0) &&
-                       Helpers.AllyInRange(2000).Count > 1;
+                return (Helpers.AllyInRange(2000).Count == 0 ||
+                        Player.Buffs.Any(buff => buff.Name == "talentreaperdisplay" && buff.Count > 0)) &&
+                       Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None;
             }
         }
 

@@ -69,7 +69,7 @@ namespace Support.Plugins
                     W.Cast();
                 }
 
-                if (E.IsReady() && Helpers.AllyInRange(E.Range).Count > 1 && GetValue<bool>("ComboE") &&
+                if (E.IsReady() && Helpers.AllyInRange(E.Range).Count > 0 && GetValue<bool>("ComboE") &&
                     E.HasEnoughMana())
                 {
                     E.Cast();
@@ -106,7 +106,7 @@ namespace Support.Plugins
                     W.Cast();
                 }
 
-                if (E.IsReady() && Helpers.AllyInRange(E.Range).Count > 1 && GetValue<bool>("HarassE") &&
+                if (E.IsReady() && Helpers.AllyInRange(E.Range).Count > 0 && GetValue<bool>("HarassE") &&
                     E.HasEnoughMana())
                 {
                     E.Cast();

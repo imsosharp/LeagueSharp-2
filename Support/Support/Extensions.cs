@@ -107,7 +107,7 @@ namespace Support
 
         public static double HealthBuffer(this Obj_AI_Base hero, int buffer)
         {
-            return ObjectManager.Player.Health - (ObjectManager.Player.MaxHealth*(1 - buffer/100));
+            return hero.Health - (hero.MaxHealth * buffer / 100);
         }
 
         public static void IssueOrderEx(this Obj_AI_Base hero, GameObjectOrder order, GameObject target,
@@ -200,17 +200,17 @@ namespace Support
             return ObjectManager.Player.Distance(target) < item.Range;
         }
 
-        public static bool WillKill(this Obj_AI_Base caster, Obj_AI_Base target, string spell, int buffer = 5)
+        public static bool WillKill(this Obj_AI_Base caster, Obj_AI_Base target, string spell, int buffer = 10)
         {
             return caster.GetSpellDamage(target, spell) >= target.HealthBuffer(buffer);
         }
 
-        public static bool WillKill(this Obj_AI_Base caster, Obj_AI_Base target, SpellData spell, int buffer = 5)
+        public static bool WillKill(this Obj_AI_Base caster, Obj_AI_Base target, SpellData spell, int buffer = 10)
         {
             return caster.GetSpellDamage(target, spell.Name) >= target.HealthBuffer(buffer);
         }
 
-        public static bool WillKill(this Obj_AI_Base caster, Obj_AI_Base target, Evade.SpellData spell, int buffer = 5)
+        public static bool WillKill(this Obj_AI_Base caster, Obj_AI_Base target, Evade.SpellData spell, int buffer = 10)
         {
             return caster.GetSpellDamage(target, spell.SpellName) >= target.HealthBuffer(buffer);
         }
