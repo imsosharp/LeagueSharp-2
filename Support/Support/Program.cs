@@ -32,8 +32,6 @@ namespace Support
     {
         private static void Main(string[] args)
         {
-            Protector.Init();
-
             CustomEvents.Game.OnGameLoad += a =>
             {
                 try
@@ -42,6 +40,7 @@ namespace Support
 
                     if (type != null)
                     {
+                        Protector.Init();
                         Activator.CreateInstance(type);
                         return;
                     }

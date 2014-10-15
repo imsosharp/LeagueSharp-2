@@ -142,8 +142,8 @@ namespace Support.Plugins
             config.AddBool("ComboW", "Use W", true);
             config.AddBool("ComboE", "Use E", true);
             config.AddBool("ComboR", "Use R", true);
-            config.AddSlider("ComboCountR", "Targets in range to Ult", 2, 1, 5);
-            config.AddSlider("ComboHealthW", "Health to Heal", 20, 1, 100);
+            config.AddSlider("ComboCountR", "Targets in range to Ult", 3, 1, 5);
+            config.AddSlider("ComboHealthW", "Health to Heal", 80, 1, 100);
         }
 
         public override void HarassMenu(Menu config)
@@ -151,7 +151,7 @@ namespace Support.Plugins
             config.AddBool("HarassQ", "Use Q", true);
             config.AddBool("HarassW", "Use W", true);
             config.AddBool("HarassE", "Use E", true);
-            config.AddSlider("HarassHealthW", "Health to Heal", 20, 1, 100);
+            config.AddSlider("HarassHealthW", "Health to Heal", 60, 1, 100);
         }
 
         public override void InterruptMenu(Menu config)

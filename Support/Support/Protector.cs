@@ -93,33 +93,30 @@ namespace Support
         {
             if (!_isInitComplete)
             {
-                CustomEvents.Game.OnGameLoad += a =>
-                {
-                    // Init stuff
-                    InitSpells();
-                    CreateMenu();
-                    Collision.Init();
+                // Init stuff
+                InitSpells();
+                CreateMenu();
+                Collision.Init();
 
-                    // Internal events
-                    Game.OnGameUpdate += OnGameUpdate;
-                    SkillshotDetector.OnDetectSkillshot += OnDetectSkillshot;
-                    Obj_AI_Base.OnProcessSpellCast += HeroOnProcessSpellCast;
-                    Obj_AI_Base.OnProcessSpellCast += TurretOnProcessSpellCast;
-                    GameObject.OnCreate += SpellMissile_OnCreate;
+                // Internal events
+                Game.OnGameUpdate += OnGameUpdate;
+                SkillshotDetector.OnDetectSkillshot += OnDetectSkillshot;
+                Obj_AI_Base.OnProcessSpellCast += HeroOnProcessSpellCast;
+                Obj_AI_Base.OnProcessSpellCast += TurretOnProcessSpellCast;
+                GameObject.OnCreate += SpellMissile_OnCreate;
 
-                    // Actives
-                    Game.OnGameUpdate += CcCheck;
-                    OnSkillshotProtection += ProtectorOnOnSkillshotProtection;
-                    OnTargetedProtection += ProtectorOnOnTargetedProtection;
+                // Actives
+                Game.OnGameUpdate += CcCheck;
+                OnSkillshotProtection += ProtectorOnOnSkillshotProtection;
+                OnTargetedProtection += ProtectorOnOnTargetedProtection;
 
-                    // Debug
-                    OnSkillshotProtection += Protector_OnSkillshotProtection;
-                    OnTargetedProtection += Protector_OnTargetedProtection;
+                // Debug
+                OnSkillshotProtection += Protector_OnSkillshotProtection;
+                OnTargetedProtection += Protector_OnTargetedProtection;
 
-                    Helpers.PrintMessage(string.Format("Protector by h3h3 loaded!"));
-                    _isInitComplete = true;
-                    Console.WriteLine("Protector Init Complete");
-                };
+                Helpers.PrintMessage(string.Format("Protector by h3h3 loaded!"));
+                _isInitComplete = true;
+                Console.WriteLine("Protector Init Complete");
             }
         }
 
