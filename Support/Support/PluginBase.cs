@@ -109,9 +109,15 @@ namespace Support
             {
                 foreach (var spell in _spells.Where(s => s != null))
                 {
-                    var menuItem = Config.Item(spell.Slot + "Range" + ChampionName).GetValue<Circle>();
-                    if (menuItem.Active && spell.Level > 0 && spell.IsReady())
-                        Utility.DrawCircle(Player.Position, spell.Range + Player.BoundingRadius, menuItem.Color);
+                    var menuItem = GetValue<Circle>(spell.Slot + "Range");
+                    if (menuItem.Active && spell.Level > 0)
+                    {
+                        if (spell.IsReady())
+                            Utility.DrawCircle(Player.Position, spell.Range + Player.BoundingRadius, menuItem.Color);
+                        else
+                            Utility.DrawCircle(Player.Position, spell.Range + Player.BoundingRadius, Color.Red);
+                    }
+
                 }
             };
         }
@@ -220,7 +226,7 @@ namespace Support
         /// </summary>
         public bool HarassMana
         {
-            get { return Player.Mana > Player.MaxMana*GetValue<Slider>("HarassMana").Value/100; }
+            get { return Player.Mana > Player.MaxMana * GetValue<Slider>("HarassMana").Value / 100; }
         }
 
         /// <summary>
