@@ -1,31 +1,8 @@
 Support
 ======================
 Support Bundle  
+More Informations: http://www.joduska.me/forum/viewtopic.php?f=15&t=185
 
-http://www.joduska.me/forum/viewtopic.php?f=15&t=185
-
-
-Supported Champions  
-Alistar  
-Blitzcrank  
-Braum  
-Fiddlesticks  
-Janna  
-Karma  
-Leona  
-Lulu   
-Morgana  
-Nami  
-Sona  
-Taric  
-Kayle  
-Soraka  
-Thresh  
-Zilean  
-Zyra  
-
-Credits 
-https://github.com/Dibes/LeagueSharp  
 
 
 
