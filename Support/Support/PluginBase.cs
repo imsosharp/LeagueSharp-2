@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using LeagueSharp;
@@ -95,6 +96,15 @@ namespace Support
                 TargetSelector.SetRange(_spells.Where(s => s.Range != float.MaxValue).Select(s => s.Range).Max());
             });
 
+            Game.OnGameUpdate += args =>
+            {
+                if (Config.Item("visit").GetValue<bool>())
+                {
+                    Process.Start("http://www.joduska.me/forum/topic/170-support-bundle/");
+                    Config.Item("visit").SetValue(false);
+                }
+            };
+
             Orbwalking.BeforeAttack += args =>
             {
                 if (args.Target.IsValid<Obj_AI_Minion>() && !AttackMinion)
@@ -137,6 +147,7 @@ namespace Support
             MiscConfig = Config.AddSubMenu(new Menu("Misc", "Misc"));
             InterruptConfig = Config.AddSubMenu(new Menu("Interrupt", "Interrupt"));
             DrawingConfig = Config.AddSubMenu(new Menu("Drawings", "Drawings"));
+            Config.AddItem(new MenuItem("visit", "Visit Forum").SetValue(false));
 
             // mana
             ManaConfig.AddSlider("HarassMana", "Harass Mana %", 1, 1, 100);
