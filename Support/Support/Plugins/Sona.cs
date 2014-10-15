@@ -48,24 +48,16 @@ namespace Support.Plugins
             {
                 if (Q.IsValidTarget(Target, "ComboQ"))
                 {
-                    // TODO: Testing
-                    try
-                    {
-                        var check = ObjectManager
-                            .Get<Obj_AI_Base>()
-                            .Where(
-                                h =>
-                                    h.IsValidTarget(Q.Range) && (h.IsValid<Obj_AI_Hero>() || h.IsValid<Obj_AI_Minion>()))
-                            .OrderBy(h => Player.Distance(h)).Take(2).ToList();
+                    var check = ObjectManager
+                        .Get<Obj_AI_Base>()
+                        .Where(
+                            h =>
+                                h.IsValidTarget(Q.Range) && (h.IsValid<Obj_AI_Hero>() || h.IsValid<Obj_AI_Minion>()))
+                        .OrderBy(h => Player.Distance(h)).Take(2).ToList();
 
-                        if (check.Any() && check.Count(h => h.IsMinion) < 2)
-                        {
-                            Q.Cast();
-                        }
-                    }
-                    catch (Exception e)
+                    if (check.Any() && check.Count(h => h.IsMinion) < 2)
                     {
-                        Console.WriteLine(e);
+                        Q.Cast();
                     }
                 }
 
@@ -75,8 +67,8 @@ namespace Support.Plugins
                     W.Cast();
                 }
 
-                var allyE = Helpers.AllyInRange(E.Range);
-                if (E.IsValidTarget(allyE.FirstOrDefault(), "ComboE", true, false))
+                if (E.IsReady() && Helpers.AllyInRange(E.Range).Count > 1 && GetValue<bool>("ComboE") &&
+                    E.HasEnoughMana())
                 {
                     E.Cast();
                 }
@@ -91,24 +83,16 @@ namespace Support.Plugins
             {
                 if (Q.IsValidTarget(Target, "HarassQ"))
                 {
-                    // TODO: Testing
-                    try
-                    {
-                        var check = ObjectManager
-                            .Get<Obj_AI_Base>()
-                            .Where(
-                                h =>
-                                    h.IsValidTarget(Q.Range) && (h.IsValid<Obj_AI_Hero>() || h.IsValid<Obj_AI_Minion>()))
-                            .OrderBy(h => Player.Distance(h)).Take(2).ToList();
+                    var check = ObjectManager
+                        .Get<Obj_AI_Base>()
+                        .Where(
+                            h =>
+                                h.IsValidTarget(Q.Range) && (h.IsValid<Obj_AI_Hero>() || h.IsValid<Obj_AI_Minion>()))
+                        .OrderBy(h => Player.Distance(h)).Take(2).ToList();
 
-                        if (check.Any() && check.Count(h => h.IsMinion) < 2)
-                        {
-                            Q.Cast();
-                        }
-                    }
-                    catch (Exception e)
+                    if (check.Any() && check.Count(h => h.IsMinion) < 2)
                     {
-                        Console.WriteLine(e);
+                        Q.Cast();
                     }
                 }
 
@@ -118,8 +102,8 @@ namespace Support.Plugins
                     W.Cast();
                 }
 
-                var allyE = Helpers.AllyInRange(E.Range);
-                if (E.IsValidTarget(allyE.FirstOrDefault(), "HarassE", true, false))
+                if (E.IsReady() && Helpers.AllyInRange(E.Range).Count > 1 && GetValue<bool>("HarassE") &&
+                    E.HasEnoughMana())
                 {
                     E.Cast();
                 }

@@ -173,7 +173,7 @@ namespace Support
             bool team = true)
         {
             return
-                spell.IsReady() &&
+                spell.IsReady() && spell.HasEnoughMana() &&
                 target.IsValidTarget(range ? spell.Range : float.MaxValue, team) &&
                 PluginBase.Config.Item(menu + ObjectManager.Player.ChampionName).GetValue<bool>();
         }
@@ -181,8 +181,13 @@ namespace Support
         public static bool IsValidTarget(this Spell spell, Obj_AI_Base target, bool range = true, bool team = true)
         {
             return
-                spell.IsReady() &&
+                spell.IsReady() && spell.HasEnoughMana() &&
                 target.IsValidTarget(range ? spell.Range : float.MaxValue, team);
+        }
+
+        public static bool HasEnoughMana(this Spell spell)
+        {
+            return ObjectManager.Player.Mana >= spell.Instance.ManaCost;
         }
 
         public static bool IsInRange(this Spell spell, Obj_AI_Base target)

@@ -98,7 +98,7 @@ namespace Support
             Orbwalking.BeforeAttack += args =>
             {
                 if (args.Target.IsValid<Obj_AI_Minion>() && !GetValue<bool>("AttackMinions") &&
-                    Helpers.AllyInRange(2000).Count > 0 && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None)
+                    Helpers.AllyInRange(2000).Count > 1 && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None)
                     args.Process = false;
 
                 if (args.Target.IsValid<Obj_AI_Hero>() && !GetValue<bool>("AttackChampions") &&
@@ -134,7 +134,6 @@ namespace Support
             DrawingConfig = Config.AddSubMenu(new Menu("Drawings", "Drawings"));
 
             // mana
-            ManaConfig.AddSlider("ComboMana", "Combo Mana %", 1, 1, 100);
             ManaConfig.AddSlider("HarassMana", "Harass Mana %", 1, 1, 100);
 
             // misc

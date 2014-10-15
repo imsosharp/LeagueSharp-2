@@ -118,6 +118,7 @@ namespace Support
 
                     Helpers.PrintMessage(string.Format("Protector by h3h3 loaded!"));
                     _isInitComplete = true;
+                    Console.WriteLine("Protector Init Complete");
                 };
             }
         }

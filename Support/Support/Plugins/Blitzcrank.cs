@@ -154,9 +154,9 @@ namespace Support.Plugins
                 }
             }
             if (Q.IsValidTarget(Target, "InterruptQ"))
-                {
-                    Q.Cast(unit, UsePackets);
-                }
+            {
+                Q.Cast(unit, UsePackets);
+            }
             if (R.IsValidTarget(unit, "InterruptR"))
             {
                 R.Cast();

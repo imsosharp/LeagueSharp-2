@@ -60,7 +60,7 @@ namespace Support
         {
             return ObjectManager
                 .Get<Obj_AI_Hero>()
-                .Where(h => ObjectManager.Player.Distance(h.Position) < range && h.IsEnemy)
+                .Where(h => ObjectManager.Player.Distance(h.Position) < range && h.IsAlly)
                 .OrderBy(h => ObjectManager.Player.Distance(h.Position))
                 .ToList();
         }
