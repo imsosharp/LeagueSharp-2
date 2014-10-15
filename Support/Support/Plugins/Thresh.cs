@@ -86,7 +86,7 @@ namespace Support.Plugins
 
                 if (E.IsValidTarget(Target, "ComboE"))
                 {
-                    if (Helpers.AllyBelowHp(GetValue<Slider>("ComboHealthE").Value, E.Range) != null)
+                    if (Helpers.AllyBelowHp(ConfigValue<Slider>("ComboHealthE").Value, E.Range) != null)
                     {
                         E.Cast(Target.Position, UsePackets);
                     }
@@ -98,7 +98,7 @@ namespace Support.Plugins
 
                 if (R.IsValidTarget(Target, "ComboR"))
                 {
-                    if (Helpers.EnemyInRange(GetValue<Slider>("ComboCountR").Value, R.Range))
+                    if (Helpers.EnemyInRange(ConfigValue<Slider>("ComboCountR").Value, R.Range))
                         R.Cast();
                 }
             }
@@ -117,7 +117,7 @@ namespace Support.Plugins
 
                 if (E.IsValidTarget(Target, "HarassE"))
                 {
-                    if (Helpers.AllyBelowHp(GetValue<Slider>("HarassHealthE").Value, E.Range) != null)
+                    if (Helpers.AllyBelowHp(ConfigValue<Slider>("HarassHealthE").Value, E.Range) != null)
                     {
                         E.Cast(Target.Position, UsePackets);
                     }

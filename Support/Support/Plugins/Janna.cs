@@ -40,14 +40,7 @@ namespace Support.Plugins
 
             Q.SetSkillshot(0.5f, 150f, 900f, false, SkillshotType.SkillshotLine);
             GameObject.OnCreate += GameObjectOnCreate;
-        }
-
-        public override void OnLoad(EventArgs args)
-        {
-            foreach (var buff in Player.Buffs)
-            {
-                Console.WriteLine(buff.Name + " - " + buff.Count);
-            }
+            GameObject.OnCreate += RangeAttackOnCreate;
         }
 
         public override void OnUpdate(EventArgs args)
@@ -69,7 +62,7 @@ namespace Support.Plugins
                     W.CastOnUnit(Target, UsePackets);
                 }
 
-                var ally = Helpers.AllyBelowHp(GetValue<Slider>("ComboHealthR").Value, R.Range);
+                var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("ComboHealthR").Value, R.Range);
                 if (R.IsValidTarget(ally, "ComboR", true, false))
                 {
                     R.Cast();
@@ -85,17 +78,41 @@ namespace Support.Plugins
             }
         }
 
+        private void RangeAttackOnCreate(GameObject sender, EventArgs args)
+        {
+            if (!sender.IsValid<Obj_SpellMissile>())
+                return;
+
+            var missile = (Obj_SpellMissile)sender;
+
+            // Caster ally hero / not me
+            if (!missile.SpellCaster.IsValid<Obj_AI_Hero>() || !missile.SpellCaster.IsAlly ||
+                missile.SpellCaster.IsMe || !missile.SpellCaster.IsHeroType(HeroType.Ad) ||
+                missile.SpellCaster.IsMelee())
+                return;
+
+            // Target enemy hero
+            if (!missile.Target.IsValid<Obj_AI_Hero>() || !missile.Target.IsEnemy)
+                return;
+
+            // only in SBTW mode
+            if (E.IsReady() && E.IsInRange(missile.SpellCaster) && E.HasEnoughMana() && (ComboMode || HarassMode) && ConfigValue<bool>("MiscE"))
+            {
+                E.CastOnUnit(missile.SpellCaster, UsePackets);
+            }
+        }
+
         private void GameObjectOnCreate(GameObject sender, EventArgs args)
         {
             if (sender is Obj_SpellMissile && sender.IsValid)
             {
-                var missile = (Obj_SpellMissile) sender;
+                var missile = (Obj_SpellMissile)sender;
 
                 // Ally Turret -> Enemy Hero
                 if (missile.SpellCaster.IsValid<Obj_AI_Turret>() && missile.SpellCaster.IsAlly &&
                     missile.Target.IsValid<Obj_AI_Hero>() && missile.Target.IsEnemy)
                 {
-                    var turret = (Obj_AI_Turret) missile.SpellCaster;
+                    var turret = (Obj_AI_Turret)missile.SpellCaster;
 
                     if (E.IsReady())
                     {
@@ -167,6 +184,11 @@ namespace Support.Plugins
         public override void HarassMenu(Menu config)
         {
             config.AddBool("HarassW", "Use W", true);
+        }
+
+        public override void MiscMenu(Menu config)
+        {
+            config.AddBool("MiscE", "Use E on ADC Attacks", false);
         }
 
         public override void InterruptMenu(Menu config)

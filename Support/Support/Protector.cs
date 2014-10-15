@@ -219,7 +219,7 @@ namespace Support
                             .Where(
                                 s =>
                                     s.ChampionName == ObjectManager.Player.ChampionName && s.Spell.IsReady() &&
-                                    s.Spell.IsInRange(target) && s.Spell.Instance.ManaCost <= ObjectManager.Player.Mana &&
+                                    s.Spell.IsInRange(target) && s.Spell.HasEnoughMana() &&
                                     s.IsActive(target))
                     )
                 {

@@ -177,9 +177,9 @@ namespace Support.Evade
         public Geometry.Polygon EvadePolygon { get; set; }
         public Obj_AI_Base Unit { get; set; }
 
-        //public T GetValue<T>(string name)
+        //public T ConfigValue<T>(string name)
         //{
-        //    return Config.Menu.Item(name + SpellData.MenuItemName).GetValue<T>();
+        //    return Config.Menu.Item(name + SpellData.MenuItemName).ConfigValue<T>();
         //}
         /// <summary>
         ///     Returns the value from this skillshot menu.
@@ -210,7 +210,7 @@ namespace Support.Evade
         //        return _cachedValue;
         //    }
 
-        //    if (!GetValue<bool>("IsDangerous") && Config.Menu.Item("OnlyDangerous").GetValue<KeyBind>().Active)
+        //    if (!ConfigValue<bool>("IsDangerous") && Config.Menu.Item("OnlyDangerous").ConfigValue<KeyBind>().Active)
         //    {
         //        _cachedValue = false;
         //        _cachedValueTick = Environment.TickCount;
@@ -218,7 +218,7 @@ namespace Support.Evade
         //    }
 
 
-        //    _cachedValue = GetValue<bool>("Enabled");
+        //    _cachedValue = ConfigValue<bool>("Enabled");
         //    _cachedValueTick = Environment.TickCount;
 
         //    return _cachedValue;
@@ -590,7 +590,7 @@ namespace Support.Evade
 
         //public void Draw(Color color, Color missileColor, int width = 1)
         //{
-        //    if (!GetValue<bool>("Draw"))
+        //    if (!ConfigValue<bool>("Draw"))
         //    {
         //        return;
         //    }

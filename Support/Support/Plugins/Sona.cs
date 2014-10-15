@@ -63,13 +63,13 @@ namespace Support.Plugins
                     }
                 }
 
-                var allyW = Helpers.AllyBelowHp(GetValue<Slider>("ComboHealthW").Value, W.Range);
+                var allyW = Helpers.AllyBelowHp(ConfigValue<Slider>("ComboHealthW").Value, W.Range);
                 if (W.IsValidTarget(allyW, "ComboW", true, false))
                 {
                     W.Cast();
                 }
 
-                if (E.IsReady() && Helpers.AllyInRange(E.Range).Count > 0 && GetValue<bool>("ComboE") &&
+                if (E.IsReady() && Helpers.AllyInRange(E.Range).Count > 0 && ConfigValue<bool>("ComboE") &&
                     E.HasEnoughMana())
                 {
                     E.Cast();
@@ -77,7 +77,7 @@ namespace Support.Plugins
 
                 if (R.IsValidTarget(Target, "ComboR"))
                 {
-                    R.CastIfWillHit(Target, GetValue<Slider>("ComboCountR").Value, true);
+                    R.CastIfWillHit(Target, ConfigValue<Slider>("ComboCountR").Value, true);
                 }
             }
 
@@ -100,13 +100,13 @@ namespace Support.Plugins
                     }
                 }
 
-                var allyW = Helpers.AllyBelowHp(GetValue<Slider>("HarassHealthW").Value, W.Range);
+                var allyW = Helpers.AllyBelowHp(ConfigValue<Slider>("HarassHealthW").Value, W.Range);
                 if (W.IsValidTarget(allyW, "HarassW", true, false))
                 {
                     W.Cast();
                 }
 
-                if (E.IsReady() && Helpers.AllyInRange(E.Range).Count > 0 && GetValue<bool>("HarassE") &&
+                if (E.IsReady() && Helpers.AllyInRange(E.Range).Count > 0 && ConfigValue<bool>("HarassE") &&
                     E.HasEnoughMana())
                 {
                     E.Cast();

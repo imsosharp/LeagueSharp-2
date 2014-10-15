@@ -70,7 +70,7 @@ namespace Support.Plugins
 
                 if (R.IsValidTarget(Target, "ComboR"))
                 {
-                    if (Helpers.EnemyInRange(GetValue<Slider>("ComboCountR").Value, R.Range))
+                    if (Helpers.EnemyInRange(ConfigValue<Slider>("ComboCountR").Value, R.Range))
                         R.Cast();
                 }
             }

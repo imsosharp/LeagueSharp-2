@@ -44,7 +44,7 @@ namespace Support
         protected PluginBase(string author, Version version)
         {
             Author = author;
-            ChampionName = ObjectManager.Player.ChampionName;
+            ChampionName = Player.ChampionName;
             Version = version;
 
             InitConfig();
@@ -100,7 +100,7 @@ namespace Support
                 if (args.Target.IsValid<Obj_AI_Minion>() && !AttackMinion)
                     args.Process = false;
 
-                if (args.Target.IsValid<Obj_AI_Hero>() && !GetValue<bool>("AttackChampions") &&
+                if (args.Target.IsValid<Obj_AI_Hero>() && !ConfigValue<bool>("AttackChampions") &&
                     Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None)
                     args.Process = false;
             };
@@ -109,7 +109,7 @@ namespace Support
             {
                 foreach (var spell in _spells.Where(s => s != null))
                 {
-                    var menuItem = GetValue<Circle>(spell.Slot + "Range");
+                    var menuItem = ConfigValue<Circle>(spell.Slot + "Range");
                     if (menuItem.Active && spell.Level > 0)
                     {
                         if (spell.IsReady())
@@ -226,7 +226,7 @@ namespace Support
         /// </summary>
         public bool HarassMana
         {
-            get { return Player.Mana > Player.MaxMana * GetValue<Slider>("HarassMana").Value / 100; }
+            get { return Player.Mana > Player.MaxMana * ConfigValue<Slider>("HarassMana").Value / 100; }
         }
 
         /// <summary>
@@ -234,7 +234,7 @@ namespace Support
         /// </summary>
         public bool UsePackets
         {
-            get { return GetValue<bool>("UsePackets"); }
+            get { return ConfigValue<bool>("UsePackets"); }
         }
 
         /// <summary>
@@ -339,7 +339,7 @@ namespace Support
 
 
         /// <summary>
-        ///     GetValue
+        ///     ConfigValue
         /// </summary>
         /// <typeparam name="T">Type</typeparam>
         /// <param name="item">string</param>
@@ -347,9 +347,9 @@ namespace Support
         ///     Helper for
         /// </remarks>
         /// <returns></returns>
-        public T GetValue<T>(string item)
+        public T ConfigValue<T>(string item)
         {
-            return Config.Item(item + ObjectManager.Player.ChampionName).GetValue<T>();
+            return Config.Item(item + ChampionName).GetValue<T>();
         }
 
         /// <summary>

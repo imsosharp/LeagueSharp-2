@@ -43,7 +43,7 @@ namespace Support.Plugins
         {
             if (ComboMode)
             {
-                var ally = Helpers.AllyBelowHp(GetValue<Slider>("ComboHealthQ").Value, Q.Range);
+                var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("ComboHealthQ").Value, Q.Range);
                 if (Q.IsValidTarget(ally, "ComboQ", true, false))
                 {
                     Q.Cast(ally, UsePackets);
@@ -67,7 +67,7 @@ namespace Support.Plugins
 
             if (HarassMode)
             {
-                var ally = Helpers.AllyBelowHp(GetValue<Slider>("HarassHealthQ").Value, Q.Range);
+                var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("HarassHealthQ").Value, Q.Range);
                 if (Q.IsValidTarget(ally, "HarassQ", true, false))
                 {
                     Q.Cast(ally, UsePackets);

@@ -92,7 +92,7 @@ namespace Support.Evade
         //    {
         //        if (Config.Menu.Item("DangerLevel" + Name) != null)
         //        {
-        //            return Config.Menu.Item("DangerLevel" + Name).GetValue<Slider>().Value;
+        //            return Config.Menu.Item("DangerLevel" + Name).ConfigValue<Slider>().Value;
         //        }
         //        return _dangerLevel;
         //    }
@@ -104,7 +104,7 @@ namespace Support.Evade
         //    {
         //        if (Config.Menu.Item("Enabled" + Name) != null)
         //        {
-        //            return Config.Menu.Item("Enabled" + Name).GetValue<bool>();
+        //            return Config.Menu.Item("Enabled" + Name).ConfigValue<bool>();
         //        }
         //        return true;
         //    }

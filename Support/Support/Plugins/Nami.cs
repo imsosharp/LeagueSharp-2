@@ -60,7 +60,7 @@ namespace Support.Plugins
             if (!missile.Target.IsValid<Obj_AI_Hero>() || !missile.Target.IsEnemy)
                 return;
 
-            if (E.IsReady() && E.IsInRange(missile.SpellCaster) && GetValue<bool>("AutoE"))
+            if (E.IsReady() && E.IsInRange(missile.SpellCaster) && E.HasEnoughMana() && ConfigValue<bool>("MiscE"))
             {
                 E.CastOnUnit(missile.SpellCaster, UsePackets);
             }
@@ -75,7 +75,7 @@ namespace Support.Plugins
                     Q.Cast(Target, UsePackets);
                 }
 
-                var ally = Helpers.AllyBelowHp(GetValue<Slider>("ComboHealthW").Value, W.Range);
+                var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("ComboHealthW").Value, W.Range);
                 if (W.IsValidTarget(ally, "ComboW", true, false))
                 {
                     W.CastOnUnit(ally, UsePackets);
@@ -88,7 +88,7 @@ namespace Support.Plugins
 
                 if (R.IsValidTarget(Target, "ComboR"))
                 {
-                    R.CastIfWillHit(Target, GetValue<Slider>("ComboCountR").Value, UsePackets);
+                    R.CastIfWillHit(Target, ConfigValue<Slider>("ComboCountR").Value, UsePackets);
                 }
             }
 
@@ -99,7 +99,7 @@ namespace Support.Plugins
                     Q.Cast(Target, UsePackets);
                 }
 
-                var ally = Helpers.AllyBelowHp(GetValue<Slider>("HarassHealthW").Value, W.Range);
+                var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("HarassHealthW").Value, W.Range);
                 if (W.IsValidTarget(ally, "HarassW", true, false))
                 {
                     W.CastOnUnit(ally, UsePackets);
@@ -157,7 +157,7 @@ namespace Support.Plugins
 
         public override void MiscMenu(Menu config)
         {
-            config.AddBool("AutoE", "Use E on AA", true);
+            config.AddBool("MiscE", "Use E on ADC Attacks", true);
         }
 
         public override void InterruptMenu(Menu config)

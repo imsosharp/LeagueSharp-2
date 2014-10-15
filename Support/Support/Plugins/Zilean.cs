@@ -48,13 +48,13 @@ namespace Support.Plugins
                     Q.Cast(Target, UsePackets);
                 }
 
-                if (W.IsReady() && !Q.IsReady() && GetValue<bool>("ComboW"))
+                if (W.IsReady() && !Q.IsReady() && ConfigValue<bool>("ComboW"))
                 {
                     W.Cast();
                 }
 
                 // TODO: speed adc/jungler/engage
-                //if (E.IsReady() && Utility.CountEnemysInRange(2000) > 0 && GetValue<bool>("ComboE"))
+                //if (E.IsReady() && Utility.CountEnemysInRange(2000) > 0 && ConfigValue<bool>("ComboE"))
                 //{
                 //    E.Cast(Player);
                 //}
@@ -67,7 +67,7 @@ namespace Support.Plugins
                     Q.Cast(Target, UsePackets);
                 }
 
-                if (W.IsReady() && !Q.IsReady() && GetValue<bool>("HarassW"))
+                if (W.IsReady() && !Q.IsReady() && ConfigValue<bool>("HarassW"))
                 {
                     W.Cast();
                 }

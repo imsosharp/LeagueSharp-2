@@ -47,34 +47,34 @@ namespace Support.Disabled
         {
             if (ComboMode)
             {
-                if (Q.IsReady() && Target.IsValidTarget(Q.Range) && GetValue<bool>("UseQC"))
+                if (Q.IsReady() && Target.IsValidTarget(Q.Range) && ConfigValue<bool>("UseQC"))
                 {
                 }
 
-                if (W.IsReady() && Target.IsValidTarget(W.Range) && GetValue<bool>("UseWC"))
+                if (W.IsReady() && Target.IsValidTarget(W.Range) && ConfigValue<bool>("UseWC"))
                 {
                 }
 
-                if (E.IsReady() && Target.IsValidTarget(E.Range) && GetValue<bool>("UseEC"))
+                if (E.IsReady() && Target.IsValidTarget(E.Range) && ConfigValue<bool>("UseEC"))
                 {
                 }
 
-                if (R.IsReady() && Target.IsValidTarget(R.Range) && GetValue<bool>("UseRC"))
+                if (R.IsReady() && Target.IsValidTarget(R.Range) && ConfigValue<bool>("UseRC"))
                 {
                 }
             }
 
             if (HarassMode)
             {
-                if (Q.IsReady() && Target.IsValidTarget(Q.Range) && GetValue<bool>("UseQH"))
+                if (Q.IsReady() && Target.IsValidTarget(Q.Range) && ConfigValue<bool>("UseQH"))
                 {
                 }
 
-                if (W.IsReady() && Target.IsValidTarget(W.Range) && GetValue<bool>("UseWH"))
+                if (W.IsReady() && Target.IsValidTarget(W.Range) && ConfigValue<bool>("UseWH"))
                 {
                 }
 
-                if (E.IsReady() && Target.IsValidTarget(E.Range) && GetValue<bool>("UseEH"))
+                if (E.IsReady() && Target.IsValidTarget(E.Range) && ConfigValue<bool>("UseEH"))
                 {
                 }
             }

@@ -53,7 +53,7 @@ namespace Support.Plugins
 
                 if (R.IsValidTarget(Target, "ComboR"))
                 {
-                    R.CastIfWillHit(Target, GetValue<Slider>("ComboCountR").Value, true);
+                    R.CastIfWillHit(Target, ConfigValue<Slider>("ComboCountR").Value, true);
                 }
             }
 
