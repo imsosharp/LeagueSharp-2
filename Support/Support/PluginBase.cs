@@ -63,7 +63,7 @@ namespace Support
         /// </summary>
         private void InitTargetSelector()
         {
-            TargetSelector = new TargetSelector(Player.AttackRange, TargetSelector.TargetingMode.AutoPriority);
+            TargetSelector = new TargetSelector(Player.AttackRange, TargetSelector.TargetingMode.NearMouse);
         }
 
         /// <summary>
@@ -97,8 +97,8 @@ namespace Support
 
             Orbwalking.BeforeAttack += args =>
             {
-                if (args.Target.IsValid<Obj_AI_Minion>() && !GetValue<bool>("AttackMinions") &&
-                    Helpers.AllyInRange(2000).Count > 1 && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None)
+                if (args.Target.IsValid<Obj_AI_Minion>() && !AttackMinions &&
+                    Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None)
                     args.Process = false;
 
                 if (args.Target.IsValid<Obj_AI_Hero>() && !GetValue<bool>("AttackChampions") &&
@@ -122,7 +122,7 @@ namespace Support
         /// </summary>
         private void InitConfig()
         {
-            Config = new Menu(Player.ChampionName, Player.ChampionName, true);
+            Config = new Menu("Support: " + Player.ChampionName, Player.ChampionName, true);
             Config.AddSubMenu(new Menu("Orbwalking", "Orbwalking"));
             SimpleTs.AddToMenu(Config.AddSubMenu(new Menu("Target Selector", "Target Selector")));
 
@@ -138,7 +138,6 @@ namespace Support
 
             // misc
             MiscConfig.AddBool("UsePackets", "Use Packets?", true);
-            MiscConfig.AddBool("AttackMinions", "Attack Minions?", true);
             MiscConfig.AddBool("AttackChampions", "Attack Champions?", true);
 
             // drawing
@@ -263,6 +262,18 @@ namespace Support
         public Obj_AI_Base OrbwalkerTarget
         {
             get { return Orbwalker.GetTarget(); }
+        }
+
+        /// <summary>
+        ///     AttackMinions
+        /// </summary>
+        public bool AttackMinions
+        {
+            get
+            {
+                return Player.Buffs.Any(buff => buff.Name == "talentreaperdisplay" && buff.Count > 0) &&
+                       Helpers.AllyInRange(2000).Count > 1;
+            }
         }
 
         /// <summary>

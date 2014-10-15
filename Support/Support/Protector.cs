@@ -125,7 +125,7 @@ namespace Support
 
         private static void CreateMenu()
         {
-            Menu = new Menu("Protector", "Protector", true);
+            Menu = new Menu("Support: Protector", "Protector", true);
 
             var detector = Menu.AddSubMenu(new Menu("Detector", "Detector"));
             detector.AddItem(new MenuItem("TargetedActive", "Targeted").SetValue(true));

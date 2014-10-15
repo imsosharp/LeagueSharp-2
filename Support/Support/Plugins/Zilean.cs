@@ -53,10 +53,11 @@ namespace Support.Plugins
                     W.Cast();
                 }
 
-                if (E.IsReady() && Utility.CountEnemysInRange(2000) > 0 && GetValue<bool>("ComboE"))
-                {
-                    E.Cast(Player);
-                }
+                // TODO: speed adc/jungler/engage
+                //if (E.IsReady() && Utility.CountEnemysInRange(2000) > 0 && GetValue<bool>("ComboE"))
+                //{
+                //    E.Cast(Player);
+                //}
             }
 
             if (HarassMode)
@@ -88,7 +89,7 @@ namespace Support.Plugins
         {
             config.AddBool("ComboQ", "Use Q", true);
             config.AddBool("ComboW", "Use W", true);
-            config.AddBool("ComboE", "Use E", true);
+            //config.AddBool("ComboE", "Use E", true);
         }
 
         public override void HarassMenu(Menu config)

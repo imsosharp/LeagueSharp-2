@@ -42,6 +42,14 @@ namespace Support.Plugins
             GameObject.OnCreate += GameObjectOnCreate;
         }
 
+        public override void OnLoad(EventArgs args)
+        {
+            foreach (var buff in Player.Buffs)
+            {
+                Console.WriteLine(buff.Name + " - " + buff.Count);
+            }
+        }
+
         public override void OnUpdate(EventArgs args)
         {
             if (ComboMode)
