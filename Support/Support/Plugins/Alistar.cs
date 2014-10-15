@@ -1,20 +1,20 @@
 ﻿#region LICENSE
 
-//  Copyright 2014 - 2014 Support
-//  Alistar.cs is part of Support.
-//  
-//  Support is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-//  
-//  Support is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-//  GNU General Public License for more details.
-//  
-//  You should have received a copy of the GNU General Public License
-//  along with Support. If not, see <http://www.gnu.org/licenses/>.
+// /*
+// Copyright 2014 - 2014 Support
+// Alistar.cs is part of Support.
+// Support is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// Support is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with Support. If not, see <http://www.gnu.org/licenses/>.
+// */
+// 
 
 #endregion
 
@@ -37,6 +37,8 @@ namespace Support.Plugins
             W = new Spell(SpellSlot.W, 650);
             E = new Spell(SpellSlot.E, 575);
             R = new Spell(SpellSlot.R, 0);
+
+            W.SetTargetted(0.5f, float.MaxValue);
         }
 
         public override void OnUpdate(EventArgs args)
@@ -50,8 +52,8 @@ namespace Support.Plugins
 
                 if (Q.IsReady() && W.IsValidTarget(Target, "ComboW"))
                 {
-                    if (W.Cast(Target, UsePackets) == Spell.CastStates.SuccessfullyCasted)
-                        Utility.DelayAction.Add(100, () => Q.Cast()); // TODO: calc timing
+                    W.CastOnUnit(Target, UsePackets);
+                    Utility.DelayAction.Add(100, () => Q.Cast()); // TODO: calc timing
                 }
 
                 var ally = Helpers.AllyBelowHp(GetValue<Slider>("ComboHealthE").Value, E.Range);
@@ -88,7 +90,7 @@ namespace Support.Plugins
 
             if (W.IsValidTarget(gapcloser.Sender, "GapcloserW"))
             {
-                W.Cast(gapcloser.Sender, UsePackets);
+                W.CastOnUnit(gapcloser.Sender, UsePackets);
             }
         }
 
@@ -104,7 +106,7 @@ namespace Support.Plugins
 
             if (W.IsValidTarget(unit, "InterruptW"))
             {
-                W.Cast(unit, UsePackets);
+                W.CastOnUnit(unit, UsePackets);
             }
         }
 
@@ -123,7 +125,7 @@ namespace Support.Plugins
             config.AddSlider("HarassHealthR", "Health to Heal", 20, 1, 100);
         }
 
-        public override void MiscMenu(Menu config)
+        public override void InterruptMenu(Menu config)
         {
             config.AddBool("GapcloserQ", "Use Q to Interrupt Gapcloser", true);
             config.AddBool("GapcloserW", "Use W to Interrupt Gapcloser", true);

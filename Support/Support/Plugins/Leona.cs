@@ -1,20 +1,20 @@
 ﻿#region LICENSE
 
-//  Copyright 2014 - 2014 Support
-//  Leona.cs is part of Support.
-//  
-//  Support is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-//  
-//  Support is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-//  GNU General Public License for more details.
-//  
-//  You should have received a copy of the GNU General Public License
-//  along with Support. If not, see <http://www.gnu.org/licenses/>.
+// /*
+// Copyright 2014 - 2014 Support
+// Leona.cs is part of Support.
+// Support is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// Support is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with Support. If not, see <http://www.gnu.org/licenses/>.
+// */
+// 
 
 #endregion
 
@@ -59,8 +59,19 @@ namespace Support.Plugins
 
                 if (E.IsValidTarget(Target, "ComboQWE") && Q.IsReady())
                 {
-                    if (E.Cast(Target, UsePackets) == Spell.CastStates.SuccessfullyCasted)
-                        W.Cast();
+                    // Max Range with VeryHigh Hitchance / Immobile
+                    if (E.GetPrediction(Target).Hitchance >= HitChance.VeryHigh)
+                    {
+                        if (E.Cast(Target, UsePackets) == Spell.CastStates.SuccessfullyCasted)
+                            W.Cast();
+                    }
+
+                    // Lower Range
+                    if (E.GetPrediction(Target, false, 775).Hitchance >= HitChance.High)
+                    {
+                        if (E.Cast(Target, UsePackets) == Spell.CastStates.SuccessfullyCasted)
+                            W.Cast();
+                    }
                 }
 
                 if (E.IsValidTarget(Target, "ComboE"))
@@ -137,7 +148,7 @@ namespace Support.Plugins
             config.AddBool("ComboR", "Use R", true);
         }
 
-        public override void MiscMenu(Menu config)
+        public override void InterruptMenu(Menu config)
         {
             config.AddBool("GapcloserQ", "Use Q to Interrupt Gapcloser", true);
 

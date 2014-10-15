@@ -1,20 +1,20 @@
 ﻿#region LICENSE
 
-//  Copyright 2014 - 2014 Support
-//  Protector.cs is part of Support.
-//  
-//  Support is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-//  
-//  Support is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-//  GNU General Public License for more details.
-//  
-//  You should have received a copy of the GNU General Public License
-//  along with Support. If not, see <http://www.gnu.org/licenses/>.
+// /*
+// Copyright 2014 - 2014 Support
+// Protector.cs is part of Support.
+// Support is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// Support is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with Support. If not, see <http://www.gnu.org/licenses/>.
+// */
+// 
 
 #endregion
 
@@ -41,6 +41,12 @@ namespace Support
         public Spell Spell { get; set; }
         public int HpBuffer { get; set; }
         public bool Harass { get; set; }
+        public bool Targeted { get; set; }
+
+        public bool IsActive(Obj_AI_Hero hero)
+        {
+            return Protector.Menu.SubMenu("Spells").SubMenu(Name).Item(hero.ChampionName).GetValue<bool>();
+        }
     }
 
     internal class ProtectorItem
@@ -48,6 +54,12 @@ namespace Support
         public string Name { get; set; }
         public Items.Item Item { get; set; }
         public int HpBuffer { get; set; }
+        public bool Targeted { get; set; }
+
+        public bool IsActive(Obj_AI_Hero hero)
+        {
+            return Protector.Menu.SubMenu("Items").SubMenu(Name).Item(hero.ChampionName).GetValue<bool>();
+        }
     }
 
     internal class Protector
@@ -55,6 +67,17 @@ namespace Support
         public delegate void OnSkillshotProtectionH(Obj_AI_Hero target, List<Skillshot> skillshots);
 
         public delegate void OnTargetedProtectionH(Obj_AI_Base caster, Obj_AI_Hero target, SpellData spell);
+
+        public static List<BuffType> CcTypes = new List<BuffType>
+        {
+            BuffType.Fear,
+            BuffType.Polymorph,
+            BuffType.Snare,
+            BuffType.Stun,
+            BuffType.Suppression,
+            BuffType.Taunt,
+            BuffType.Charm
+        };
 
         public static List<ProtectorSpell> ProtectorSpells = new List<ProtectorSpell>();
         public static List<ProtectorItem> ProtectorItems = new List<ProtectorItem>();
@@ -99,11 +122,56 @@ namespace Support
             }
         }
 
+        private static void CreateMenu()
+        {
+            Menu = new Menu("Protector", "Protector", true);
+
+            var detector = Menu.AddSubMenu(new Menu("Detector", "Detector"));
+            detector.AddItem(new MenuItem("TargetedActive", "Targeted").SetValue(true));
+            detector.AddItem(new MenuItem("SkillshotActive", "Skillshots").SetValue(true));
+
+            var spells = Menu.AddSubMenu(new Menu("Spells", "Spells"));
+            foreach (var spell in ProtectorSpells.Where(s => s.ChampionName == ObjectManager.Player.ChampionName))
+            {
+                var spellMenu = spells.AddSubMenu(new Menu(spell.Name, spell.Name));
+                foreach (var ally in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsAlly))
+                {
+                    spellMenu.AddItem(new MenuItem(ally.ChampionName, ally.ChampionName).SetValue(true));
+                }
+            }
+
+            var items = Menu.AddSubMenu(new Menu("Items", "Items"));
+            foreach (var item in ProtectorItems)
+            {
+                var itemsMenu = items.AddSubMenu(new Menu(item.Name, item.Name));
+                foreach (var ally in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsAlly))
+                {
+                    itemsMenu.AddItem(new MenuItem(ally.ChampionName, ally.ChampionName).SetValue(true));
+                }
+            }
+
+            var cc = Menu.AddSubMenu(new Menu("CC", "CC"));
+            foreach (var b in CcTypes)
+            {
+                cc.AddItem(new MenuItem(b.ToString(), b.ToString()).SetValue(true));
+            }
+
+            var misc = Menu.AddSubMenu(new Menu("Misc", "Misc"));
+            misc.AddItem(new MenuItem("UsePackets", "Use Packets").SetValue(true));
+
+            Menu.AddToMainMenu();
+        }
+
+        private static bool UsePackets()
+        {
+            return Menu.SubMenu("Misc").Item("UsePackets").GetValue<bool>();
+        }
+
         private static void CcCheck(EventArgs args)
         {
-            var mikael = new Items.Item(3222, 750);
+            var mikael = ProtectorItems.First();
 
-            if (!mikael.IsReady())
+            if (!mikael.Item.IsReady())
                 return;
 
             foreach (
@@ -111,15 +179,16 @@ namespace Support
                     ObjectManager.Get<Obj_AI_Hero>()
                         .Where(h => h.IsAlly && !h.IsDead)
                         .OrderByDescending(h => h.FlatPhysicalDamageMod)
-                        .ThenBy(h => h.Health)
-                        .Where(mikael.IsInRange)
-                        .Where(
-                            hero =>
-                                hero.HasBuffOfType(BuffType.Charm) || hero.HasBuffOfType(BuffType.Fear) ||
-                                hero.HasBuffOfType(BuffType.Polymorph) || hero.HasBuffOfType(BuffType.Snare) ||
-                                hero.HasBuffOfType(BuffType.Stun) || hero.HasBuffOfType(BuffType.Taunt)))
+                        .Where(mikael.Item.IsInRange))
             {
-                mikael.Cast(hero);
+                foreach (var buff in CcTypes)
+                {
+                    if (hero.HasBuffOfType(buff) && Menu.SubMenu("CC").Item(buff.ToString()).GetValue<bool>())
+                    {
+                        if (mikael.IsActive(hero))
+                            mikael.Item.Cast(hero);
+                    }
+                }
             }
         }
 
@@ -142,35 +211,34 @@ namespace Support
             {
                 foreach (
                     var ps in
-                        ProtectorSpells.Where(
-                            s => s.ChampionName == ObjectManager.Player.ChampionName && s.Spell.IsReady()))
+                        ProtectorSpells
+                            .Where(
+                                s =>
+                                    s.ChampionName == ObjectManager.Player.ChampionName && s.Spell.IsReady() &&
+                                    s.Spell.IsInRange(target) && s.Spell.Instance.ManaCost <= ObjectManager.Player.Mana &&
+                                    s.IsActive(target))
+                    )
                 {
-                    if (Menu.Item("spell" + ps.Name) == null || !Menu.Item("spell" + ps.Name).GetValue<bool>())
-                        continue;
-
-                    if (ps.Spell.Instance.ManaCost > ObjectManager.Player.Mana)
-                        continue;
-
-                    if (!ps.Spell.IsInRange(target))
-                        continue;
-
                     if (ps.Harass || caster.WillKill(target, spell, ps.HpBuffer))
                     {
-                        ps.Spell.Cast(target);
+                        if (ps.Targeted)
+                            ps.Spell.Cast(target, UsePackets());
+                        else
+                            ps.Spell.Cast();
                     }
                 }
 
-                foreach (var pi in ProtectorItems.Where(i => i.Item.IsReady()))
+                foreach (
+                    var pi in
+                        ProtectorItems
+                            .Where(i => i.Item.IsReady() && i.Item.IsInRange(target) && i.IsActive(target)))
                 {
-                    if (Menu.Item("item" + pi.Name) == null || !Menu.Item("item" + pi.Name).GetValue<bool>())
-                        continue;
-
-                    if (!pi.Item.IsInRange(target))
-                        continue;
-
                     if (caster.WillKill(target, spell, pi.HpBuffer))
                     {
-                        pi.Item.Cast(target);
+                        if (pi.Targeted)
+                            pi.Item.Cast(target);
+                        else
+                            pi.Item.Cast();
                     }
                 }
             }
@@ -180,164 +248,14 @@ namespace Support
             }
         }
 
-        private static void InitSpells()
-        {
-            ProtectorSpells.Add(new ProtectorSpell
-            {
-                Name = "Triumphant Roar",
-                ChampionName = "Alistar",
-                Spell = new Spell(SpellSlot.E, 575),
-                HpBuffer = 0,
-                Harass = true
-            });
-
-            ProtectorSpells.Add(new ProtectorSpell
-            {
-                Name = "Eye of the Storm",
-                ChampionName = "Janna",
-                Spell = new Spell(SpellSlot.E, 800),
-                HpBuffer = 0,
-                Harass = true
-            });
-
-            ProtectorSpells.Add(new ProtectorSpell
-            {
-                Name = "Inspire",
-                ChampionName = "Karma",
-                Spell = new Spell(SpellSlot.E, 800),
-                HpBuffer = 0,
-                Harass = true
-            });
-
-            ProtectorSpells.Add(new ProtectorSpell
-            {
-                Name = "Wild Growth",
-                ChampionName = "Lulu",
-                Spell = new Spell(SpellSlot.R, 900),
-                HpBuffer = 20,
-                Harass = false
-            });
-
-            ProtectorSpells.Add(new ProtectorSpell
-            {
-                Name = "Help, Pix!",
-                ChampionName = "Lulu",
-                Spell = new Spell(SpellSlot.E, 650),
-                HpBuffer = 0,
-                Harass = true
-            });
-
-            ProtectorSpells.Add(new ProtectorSpell
-            {
-                Name = "Ebb and Flow",
-                ChampionName = "Nami",
-                Spell = new Spell(SpellSlot.W, 725),
-                HpBuffer = 0,
-                Harass = true
-            });
-
-            ProtectorSpells.Add(new ProtectorSpell
-            {
-                Name = "Imbue",
-                ChampionName = "Taric",
-                Spell = new Spell(SpellSlot.Q, 750),
-                HpBuffer = 0,
-                Harass = true
-            });
-
-            ProtectorSpells.Add(new ProtectorSpell
-            {
-                Name = "Intervention",
-                ChampionName = "Kayle",
-                Spell = new Spell(SpellSlot.R, 900),
-                HpBuffer = 20,
-                Harass = false
-            });
-
-            ProtectorSpells.Add(new ProtectorSpell
-            {
-                Name = "Divine Blessing",
-                ChampionName = "Kayle",
-                Spell = new Spell(SpellSlot.W, 900),
-                HpBuffer = 0,
-                Harass = true
-            });
-
-            ProtectorSpells.Add(new ProtectorSpell
-            {
-                Name = "Chrono Shift",
-                ChampionName = "Zilean",
-                Spell = new Spell(SpellSlot.R, 900),
-                HpBuffer = 20,
-                Harass = false
-            });
-
-            ProtectorItems.Add(new ProtectorItem
-            {
-                Name = "Zhonya's Hourglass",
-                Item = new Items.Item(3157, float.MaxValue),
-                HpBuffer = 20
-            });
-
-            ProtectorItems.Add(new ProtectorItem
-            {
-                Name = "Seraph's Embrace",
-                Item = new Items.Item(3040, float.MaxValue),
-                HpBuffer = 20
-            });
-
-            ProtectorItems.Add(new ProtectorItem
-            {
-                Name = "Locket of the Iron Solari",
-                Item = new Items.Item(3190, 600),
-                HpBuffer = 20
-            });
-
-            ProtectorItems.Add(new ProtectorItem
-            {
-                Name = "Mikael's Crucible",
-                Item = new Items.Item(3222, 750),
-                HpBuffer = 20
-            });
-        }
-
-        private static void CreateMenu()
-        {
-            Menu = new Menu("Protector", "Protector", true);
-
-            var items = Menu.AddSubMenu(new Menu("Items", "Items"));
-            foreach (var i in ProtectorItems)
-            {
-                items.AddItem(new MenuItem("item" + i.Name, "Use " + i.Name).SetValue(true));
-            }
-
-            var spells = Menu.AddSubMenu(new Menu("Spells", "Spells"));
-            foreach (var i in ProtectorSpells.Where(s => s.ChampionName == ObjectManager.Player.ChampionName))
-            {
-                spells.AddItem(new MenuItem("spell" + i.Name, "Use " + i.Name).SetValue(true));
-            }
-
-            var targeted = Menu.AddSubMenu(new Menu("Targeted", "ProtectTargeted"));
-            var skillshots = Menu.AddSubMenu(new Menu("Skillshot", "ProtectSkillshot"));
-            targeted.AddItem(new MenuItem("TargetedActive", "Active").SetValue(true));
-            skillshots.AddItem(new MenuItem("SkillshotActive", "Active").SetValue(true));
-
-            foreach (var ally in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsAlly))
-            {
-                targeted.AddItem(
-                    new MenuItem("targeted" + ally.ChampionName, "Protect " + ally.ChampionName).SetValue(true));
-                skillshots.AddItem(
-                    new MenuItem("skillshot" + ally.ChampionName, "Protect " + ally.ChampionName).SetValue(true));
-            }
-
-            Menu.AddToMainMenu();
-        }
-
         private static void TurretOnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             try
             {
-                if (!(sender is Obj_AI_Turret))
+                if (!sender.IsValid<Obj_AI_Turret>())
+                    return;
+
+                if (!args.Target.IsValid<Obj_AI_Hero>())
                     return;
 
                 if (ObjectManager.Player.IsDead)
@@ -346,22 +264,15 @@ namespace Support
                 if (!Menu.Item("TargetedActive").GetValue<bool>())
                     return;
 
-                if (!sender.IsValid || sender.IsAlly)
-                    return;
-
-                if (!args.Target.IsValid || !(args.Target is Obj_AI_Hero))
+                if (sender.IsAlly)
                     return;
 
                 var caster = (Obj_AI_Turret) sender;
                 var target = (Obj_AI_Hero) args.Target;
 
-                var protectAlly = Menu.Item("targeted" + target.ChampionName);
-                if (protectAlly != null && protectAlly.GetValue<bool>())
+                if (OnTargetedProtection != null)
                 {
-                    if (OnTargetedProtection != null)
-                    {
-                        OnTargetedProtection(caster, target, args.SData);
-                    }
+                    OnTargetedProtection(caster, target, args.SData);
                 }
             }
             catch (Exception e)
@@ -374,7 +285,7 @@ namespace Support
         {
             try
             {
-                if (!(sender is Obj_AI_Hero))
+                if (!sender.IsValid<Obj_AI_Hero>())
                     return;
 
                 if (ObjectManager.Player.IsDead)
@@ -383,22 +294,18 @@ namespace Support
                 if (!Menu.Item("TargetedActive").GetValue<bool>())
                     return;
 
-                if (!sender.IsValid || sender.IsAlly || !sender.IsMelee())
+                if (sender.IsAlly)
                     return;
 
-                if (!args.Target.IsValid || !(args.Target is Obj_AI_Hero))
+                if (!args.Target.IsValid<Obj_AI_Hero>() || args.Target.IsEnemy)
                     return;
 
                 var caster = (Obj_AI_Hero) sender;
                 var target = (Obj_AI_Hero) args.Target;
 
-                var protectAlly = Menu.Item("targeted" + target.ChampionName);
-                if (protectAlly != null && protectAlly.GetValue<bool>())
+                if (OnTargetedProtection != null)
                 {
-                    if (OnTargetedProtection != null)
-                    {
-                        OnTargetedProtection(caster, target, args.SData);
-                    }
+                    OnTargetedProtection(caster, target, args.SData);
                 }
             }
             catch (Exception e)
@@ -411,7 +318,7 @@ namespace Support
         {
             try
             {
-                if (!(sender is Obj_SpellMissile))
+                if (!sender.IsValid<Obj_SpellMissile>())
                     return;
 
                 if (ObjectManager.Player.IsDead)
@@ -422,22 +329,18 @@ namespace Support
 
                 var missile = (Obj_SpellMissile) sender;
 
-                if (!(missile.SpellCaster is Obj_AI_Hero) || !missile.SpellCaster.IsValid || missile.SpellCaster.IsAlly)
+                if (!missile.SpellCaster.IsValid<Obj_AI_Hero>() || !missile.SpellCaster.IsEnemy)
                     return;
 
-                if (!(missile.Target is Obj_AI_Hero) || !missile.Target.IsValid || !missile.Target.IsAlly)
+                if (!missile.Target.IsValid<Obj_AI_Hero>() || !missile.Target.IsAlly)
                     return;
 
                 var caster = (Obj_AI_Hero) missile.SpellCaster;
                 var target = (Obj_AI_Hero) missile.Target;
 
-                var protectAlly = Menu.Item("targeted" + target.ChampionName);
-                if (protectAlly != null && protectAlly.GetValue<bool>())
+                if (OnTargetedProtection != null)
                 {
-                    if (OnTargetedProtection != null)
-                    {
-                        OnTargetedProtection(caster, target, missile.SData);
-                    }
+                    OnTargetedProtection(caster, target, missile.SData);
                 }
             }
             catch (Exception e)
@@ -473,19 +376,15 @@ namespace Support
                 // Protect
                 foreach (var ally in ObjectManager.Get<Obj_AI_Hero>()
                     .Where(h => h.IsAlly && h.IsValidTarget(2000, false))
-                    .OrderByDescending(h => h.Health))
+                    .OrderByDescending(h => h.FlatPhysicalDamageMod))
                 {
-                    var protectAlly = Menu.Item("skillshot" + ally.ChampionName);
-                    if (protectAlly != null && protectAlly.GetValue<bool>())
-                    {
-                        var allySafeResult = IsSafe(ally.ServerPosition.To2D());
+                    var allySafeResult = IsSafe(ally.ServerPosition.To2D());
 
-                        if (!allySafeResult.IsSafe && IsAboutToHit(ally, 100))
+                    if (!allySafeResult.IsSafe && IsAboutToHit(ally, 100))
+                    {
+                        if (OnSkillshotProtection != null)
                         {
-                            if (OnSkillshotProtection != null)
-                            {
-                                OnSkillshotProtection(ally, allySafeResult.SkillshotList);
-                            }
+                            OnSkillshotProtection(ally, allySafeResult.SkillshotList);
                         }
                     }
                 }
@@ -713,9 +612,6 @@ namespace Support
                     {
                         return;
                     }
-#if DEBUG
-                    Console.WriteLine(Environment.TickCount + "Adding new skillshot: " + skillshot.SpellData.SpellName);
-#endif
 
                     DetectedSkillshots.Add(skillshot);
                 }
@@ -758,7 +654,7 @@ namespace Support
         {
             try
             {
-                var text = string.Format("{0,-10} -> {1,-10} - {2} {3}",
+                var text = string.Format("{0,-15} -> {1,-15} - {3} {2}",
                     caster.BaseSkinName,
                     target.BaseSkinName,
                     spell.Name,
@@ -778,7 +674,7 @@ namespace Support
             {
                 foreach (var skillshot in skillshots)
                 {
-                    var text = string.Format("{0,-10} -> {1,-10} - {2} {3}",
+                    var text = string.Format("{0,-15} -> {1,-15} - {3} {2}",
                         skillshot.Unit.BaseSkinName,
                         target.BaseSkinName,
                         skillshot.SpellData.SpellName,
@@ -791,6 +687,123 @@ namespace Support
             {
                 Console.WriteLine(e);
             }
+        }
+
+        private static void InitSpells()
+        {
+            ProtectorSpells.Add(new ProtectorSpell
+            {
+                Name = "Triumphant Roar",
+                ChampionName = "Alistar",
+                Spell = new Spell(SpellSlot.E, 575),
+                HpBuffer = 0,
+                Harass = true
+            });
+
+            ProtectorSpells.Add(new ProtectorSpell
+            {
+                Name = "Eye of the Storm",
+                ChampionName = "Janna",
+                Spell = new Spell(SpellSlot.E, 800),
+                HpBuffer = 0,
+                Harass = true,
+                Targeted = true
+            });
+
+            ProtectorSpells.Add(new ProtectorSpell
+            {
+                Name = "Inspire",
+                ChampionName = "Karma",
+                Spell = new Spell(SpellSlot.E, 800),
+                HpBuffer = 0,
+                Harass = true,
+                Targeted = true
+            });
+
+            ProtectorSpells.Add(new ProtectorSpell
+            {
+                Name = "Wild Growth",
+                ChampionName = "Lulu",
+                Spell = new Spell(SpellSlot.R, 900),
+                HpBuffer = 5,
+                Harass = false,
+                Targeted = true
+            });
+
+            ProtectorSpells.Add(new ProtectorSpell
+            {
+                Name = "Help, Pix!",
+                ChampionName = "Lulu",
+                Spell = new Spell(SpellSlot.E, 650),
+                HpBuffer = 0,
+                Harass = true,
+                Targeted = true
+            });
+
+            ProtectorSpells.Add(new ProtectorSpell
+            {
+                Name = "Ebb and Flow",
+                ChampionName = "Nami",
+                Spell = new Spell(SpellSlot.W, 725),
+                HpBuffer = 0,
+                Harass = true,
+                Targeted = true
+            });
+
+            ProtectorSpells.Add(new ProtectorSpell
+            {
+                Name = "Imbue",
+                ChampionName = "Taric",
+                Spell = new Spell(SpellSlot.Q, 750),
+                HpBuffer = 0,
+                Harass = true,
+                Targeted = true
+            });
+
+            ProtectorSpells.Add(new ProtectorSpell
+            {
+                Name = "Intervention",
+                ChampionName = "Kayle",
+                Spell = new Spell(SpellSlot.R, 900),
+                HpBuffer = 5,
+                Harass = false,
+                Targeted = true
+            });
+
+            ProtectorSpells.Add(new ProtectorSpell
+            {
+                Name = "Divine Blessing",
+                ChampionName = "Kayle",
+                Spell = new Spell(SpellSlot.W, 900),
+                HpBuffer = 0,
+                Harass = true,
+                Targeted = true
+            });
+
+            ProtectorSpells.Add(new ProtectorSpell
+            {
+                Name = "Chrono Shift",
+                ChampionName = "Zilean",
+                Spell = new Spell(SpellSlot.R, 900),
+                HpBuffer = 5,
+                Harass = false,
+                Targeted = true
+            });
+
+            ProtectorItems.Add(new ProtectorItem
+            {
+                Name = "Mikael's Crucible",
+                Item = new Items.Item(3222, 750),
+                HpBuffer = 5,
+                Targeted = true
+            });
+
+            ProtectorItems.Add(new ProtectorItem
+            {
+                Name = "Locket of the Iron Solari",
+                Item = new Items.Item(3190, 600),
+                HpBuffer = 5
+            });
         }
 
         private struct IsSafeResult

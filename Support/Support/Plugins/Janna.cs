@@ -1,20 +1,20 @@
 ﻿#region LICENSE
 
-//  Copyright 2014 - 2014 Support
-//  Janna.cs is part of Support.
-//  
-//  Support is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-//  
-//  Support is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-//  GNU General Public License for more details.
-//  
-//  You should have received a copy of the GNU General Public License
-//  along with Support. If not, see <http://www.gnu.org/licenses/>.
+// /*
+// Copyright 2014 - 2014 Support
+// Janna.cs is part of Support.
+// Support is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// Support is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with Support. If not, see <http://www.gnu.org/licenses/>.
+// */
+// 
 
 #endregion
 
@@ -39,7 +39,7 @@ namespace Support.Plugins
             R = new Spell(SpellSlot.R, 700);
 
             Q.SetSkillshot(0.5f, 150f, 900f, false, SkillshotType.SkillshotLine);
-            GameObject.OnCreate += GameObjectOnOnCreate;
+            GameObject.OnCreate += GameObjectOnCreate;
         }
 
         public override void OnUpdate(EventArgs args)
@@ -49,7 +49,7 @@ namespace Support.Plugins
                 if (Q.IsValidTarget(Target, "ComboQ"))
                 {
                     var pred = Q.GetPrediction(Target);
-                    if (pred.Hitchance > HitChance.Medium)
+                    if (pred.Hitchance >= HitChance.High)
                     {
                         Q.Cast(pred.CastPosition, UsePackets);
                         Q.Cast(pred.CastPosition, UsePackets);
@@ -58,7 +58,7 @@ namespace Support.Plugins
 
                 if (W.IsValidTarget(Target, "ComboW"))
                 {
-                    W.Cast(Target, UsePackets);
+                    W.CastOnUnit(Target, UsePackets);
                 }
 
                 var ally = Helpers.AllyBelowHp(GetValue<Slider>("ComboHealthR").Value, R.Range);
@@ -72,28 +72,28 @@ namespace Support.Plugins
             {
                 if (W.IsValidTarget(Target, "HarassW"))
                 {
-                    W.Cast(Target, UsePackets);
+                    W.CastOnUnit(Target, UsePackets);
                 }
             }
         }
 
-        private void GameObjectOnOnCreate(GameObject sender, EventArgs args)
+        private void GameObjectOnCreate(GameObject sender, EventArgs args)
         {
             if (sender is Obj_SpellMissile && sender.IsValid)
             {
                 var missile = (Obj_SpellMissile) sender;
 
                 // Ally Turret -> Enemy Hero
-                if (missile.SpellCaster is Obj_AI_Turret && missile.SpellCaster.IsValid && missile.SpellCaster.IsAlly &&
-                    missile.Target is Obj_AI_Hero && missile.Target.IsValid && missile.Target.IsEnemy)
+                if (missile.SpellCaster.IsValid<Obj_AI_Turret>() && missile.SpellCaster.IsAlly &&
+                    missile.Target.IsValid<Obj_AI_Hero>() && missile.Target.IsEnemy)
                 {
                     var turret = (Obj_AI_Turret) missile.SpellCaster;
 
-                    if (ProtectionMana && E.IsReady())
+                    if (E.IsReady())
                     {
                         if (E.IsInRange(turret))
                         {
-                            E.Cast(turret, UsePackets);
+                            E.CastOnUnit(turret, UsePackets);
                         }
                     }
                 }
@@ -113,7 +113,7 @@ namespace Support.Plugins
             if (Q.IsValidTarget(gapcloser.Sender, "GapcloserQ"))
             {
                 var pred = Q.GetPrediction(gapcloser.Sender);
-                if (pred.Hitchance > HitChance.Medium)
+                if (pred.Hitchance >= HitChance.High)
                 {
                     Q.Cast(pred.CastPosition, UsePackets);
                     Q.Cast(pred.CastPosition, UsePackets);
@@ -122,7 +122,7 @@ namespace Support.Plugins
 
             if (W.IsValidTarget(gapcloser.Sender, "GapcloserW"))
             {
-                W.Cast(gapcloser.Sender, UsePackets);
+                W.CastOnUnit(gapcloser.Sender, UsePackets);
             }
         }
 
@@ -135,7 +135,7 @@ namespace Support.Plugins
             if (Q.IsValidTarget(unit, "InterruptQ"))
             {
                 var pred = Q.GetPrediction(unit);
-                if (pred.Hitchance > HitChance.Medium)
+                if (pred.Hitchance >= HitChance.High)
                 {
                     Q.Cast(pred.CastPosition, UsePackets);
                     Q.Cast(pred.CastPosition, UsePackets);
@@ -161,7 +161,7 @@ namespace Support.Plugins
             config.AddBool("HarassW", "Use W", true);
         }
 
-        public override void MiscMenu(Menu config)
+        public override void InterruptMenu(Menu config)
         {
             config.AddBool("GapcloserQ", "Use Q to Interrupt Gapcloser", true);
             config.AddBool("GapcloserW", "Use W to Interrupt Gapcloser", true);

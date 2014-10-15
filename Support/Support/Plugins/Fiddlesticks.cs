@@ -1,20 +1,20 @@
 ﻿#region LICENSE
 
-//  Copyright 2014 - 2014 Support
-//  Fiddlesticks.cs is part of Support.
-//  
-//  Support is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-//  
-//  Support is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-//  GNU General Public License for more details.
-//  
-//  You should have received a copy of the GNU General Public License
-//  along with Support. If not, see <http://www.gnu.org/licenses/>.
+// /*
+// Copyright 2014 - 2014 Support
+// Fiddlesticks.cs is part of Support.
+// Support is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// Support is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with Support. If not, see <http://www.gnu.org/licenses/>.
+// */
+// 
 
 #endregion
 
@@ -45,12 +45,12 @@ namespace Support.Plugins
             {
                 if (Q.IsValidTarget(Target, "ComboQ"))
                 {
-                    Q.Cast(Target, UsePackets);
+                    Q.CastOnUnit(Target, UsePackets);
                 }
 
                 if (E.IsValidTarget(Target, "ComboE"))
                 {
-                    E.Cast(Target, UsePackets);
+                    E.CastOnUnit(Target, UsePackets);
                 }
             }
 
@@ -58,7 +58,7 @@ namespace Support.Plugins
             {
                 if (E.IsValidTarget(Target, "HarassE"))
                 {
-                    E.Cast(Target, UsePackets);
+                    E.CastOnUnit(Target, UsePackets);
                 }
             }
         }
@@ -70,7 +70,7 @@ namespace Support.Plugins
 
             if (Q.IsValidTarget(gapcloser.Sender, "GapcloserQ"))
             {
-                Q.Cast(gapcloser.Sender, UsePackets);
+                Q.CastOnUnit(gapcloser.Sender, UsePackets);
             }
         }
 
@@ -81,12 +81,12 @@ namespace Support.Plugins
 
             if (Q.IsValidTarget(unit, "InterruptQ"))
             {
-                Q.Cast(unit, UsePackets);
+                Q.CastOnUnit(unit, UsePackets);
             }
 
             if (E.IsValidTarget(unit, "InterruptE"))
             {
-                E.Cast(unit, UsePackets);
+                E.CastOnUnit(unit, UsePackets);
             }
         }
 
@@ -101,7 +101,7 @@ namespace Support.Plugins
             config.AddBool("HarassE", "Use E", true);
         }
 
-        public override void MiscMenu(Menu config)
+        public override void InterruptMenu(Menu config)
         {
             config.AddBool("GapcloserQ", "Use Q to Interrupt Gapcloser", true);
 

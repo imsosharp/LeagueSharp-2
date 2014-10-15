@@ -1,20 +1,20 @@
 ﻿#region LICENSE
 
-//  Copyright 2014 - 2014 Support
-//  Morgana.cs is part of Support.
-//  
-//  Support is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-//  
-//  Support is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-//  GNU General Public License for more details.
-//  
-//  You should have received a copy of the GNU General Public License
-//  along with Support. If not, see <http://www.gnu.org/licenses/>.
+// /*
+// Copyright 2014 - 2014 Support
+// Morgana.cs is part of Support.
+// Support is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// Support is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with Support. If not, see <http://www.gnu.org/licenses/>.
+// */
+// 
 
 #endregion
 
@@ -38,7 +38,8 @@ namespace Support.Plugins
             E = new Spell(SpellSlot.E, 750);
             R = new Spell(SpellSlot.R, 550);
 
-            Q.SetSkillshot(0.5f, 80, 1200, true, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(0.234f, 70f, 1200f, true, SkillshotType.SkillshotLine);
+            W.SetSkillshot(0.28f, 175f, float.MaxValue, false, SkillshotType.SkillshotCircle);
         }
 
         public override void OnUpdate(EventArgs args)
@@ -50,9 +51,9 @@ namespace Support.Plugins
                     Q.Cast(Target, UsePackets);
                 }
 
-                if (W.IsValidTarget(Target, "ComboW"))
+                if (W.IsValidTarget(Target, "ComboW") && E.GetPrediction(Target).Hitchance == HitChance.Immobile)
                 {
-                    W.Cast(Target, UsePackets);
+                    W.Cast(Target.Position, UsePackets);
                 }
 
                 if (R.IsValidTarget(Target, "ComboR"))
@@ -68,9 +69,9 @@ namespace Support.Plugins
                     Q.Cast(Target, UsePackets);
                 }
 
-                if (W.IsValidTarget(Target, "HarassW"))
+                if (W.IsValidTarget(Target, "HarassW") && E.GetPrediction(Target).Hitchance == HitChance.Immobile)
                 {
-                    W.Cast(Target, UsePackets);
+                    W.Cast(Target.Position, UsePackets);
                 }
             }
         }
@@ -101,7 +102,7 @@ namespace Support.Plugins
             config.AddBool("HarassW", "Use W", true);
         }
 
-        public override void MiscMenu(Menu config)
+        public override void InterruptMenu(Menu config)
         {
             config.AddBool("GapcloserQ", "Use Q to Interrupt Gapcloser", true);
         }

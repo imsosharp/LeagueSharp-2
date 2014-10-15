@@ -1,20 +1,20 @@
 ﻿#region LICENSE
 
-//  Copyright 2014 - 2014 Support
-//  PluginBase.cs is part of Support.
-//  
-//  Support is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-//  
-//  Support is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-//  GNU General Public License for more details.
-//  
-//  You should have received a copy of the GNU General Public License
-//  along with Support. If not, see <http://www.gnu.org/licenses/>.
+// /*
+// Copyright 2014 - 2014 Support
+// PluginBase.cs is part of Support.
+// Support is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// Support is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with Support. If not, see <http://www.gnu.org/licenses/>.
+// */
+// 
 
 #endregion
 
@@ -97,10 +97,12 @@ namespace Support
 
             Orbwalking.BeforeAttack += args =>
             {
-                if (args.Target.IsMinion && !GetValue<bool>("AttackMinions"))
+                if (args.Target.IsValid<Obj_AI_Minion>() && !GetValue<bool>("AttackMinions") &&
+                    Helpers.AllyInRange(2000).Count > 0 && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None)
                     args.Process = false;
 
-                if (args.Target is Obj_AI_Hero && !GetValue<bool>("AttackChampions"))
+                if (args.Target.IsValid<Obj_AI_Hero>() && !GetValue<bool>("AttackChampions") &&
+                    Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None)
                     args.Process = false;
             };
 
@@ -110,7 +112,7 @@ namespace Support
                 {
                     var menuItem = Config.Item(spell.Slot + "Range" + ChampionName).GetValue<Circle>();
                     if (menuItem.Active && spell.Level > 0 && spell.IsReady())
-                        Utility.DrawCircle(Player.Position, spell.Range, menuItem.Color);
+                        Utility.DrawCircle(Player.Position, spell.Range + Player.BoundingRadius, menuItem.Color);
                 }
             };
         }
@@ -128,12 +130,12 @@ namespace Support
             HarassConfig = Config.AddSubMenu(new Menu("Harass", "Harass"));
             ManaConfig = Config.AddSubMenu(new Menu("Mana Limiter", "Mana Limiter"));
             MiscConfig = Config.AddSubMenu(new Menu("Misc", "Misc"));
+            InterruptConfig = Config.AddSubMenu(new Menu("Interrupt", "Interrupt"));
             DrawingConfig = Config.AddSubMenu(new Menu("Drawings", "Drawings"));
 
             // mana
             ManaConfig.AddSlider("ComboMana", "Combo Mana %", 1, 1, 100);
             ManaConfig.AddSlider("HarassMana", "Harass Mana %", 1, 1, 100);
-            ManaConfig.AddSlider("ProtectionMana", "Protector Mana %", 1, 1, 100);
 
             // misc
             MiscConfig.AddBool("UsePackets", "Use Packets?", true);
@@ -159,6 +161,7 @@ namespace Support
             HarassMenu(HarassConfig);
             ManaMenu(ManaConfig);
             MiscMenu(MiscConfig);
+            InterruptMenu(InterruptConfig);
             DrawingMenu(DrawingConfig);
 
             Config.AddToMainMenu();
@@ -204,7 +207,7 @@ namespace Support
         /// </summary>
         public bool ComboMode
         {
-            get { return Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && ComboMana; }
+            get { return Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo; }
         }
 
         /// <summary>
@@ -216,27 +219,11 @@ namespace Support
         }
 
         /// <summary>
-        ///     ComboMana
-        /// </summary>
-        public bool ComboMana
-        {
-            get { return Player.Mana > Player.MaxMana*GetValue<Slider>("ComboMana").Value/100; }
-        }
-
-        /// <summary>
         ///     HarassMana
         /// </summary>
         public bool HarassMana
         {
             get { return Player.Mana > Player.MaxMana*GetValue<Slider>("HarassMana").Value/100; }
-        }
-
-        /// <summary>
-        ///     ProtectionMana
-        /// </summary>
-        public bool ProtectionMana
-        {
-            get { return Player.Mana > Player.MaxMana*GetValue<Slider>("ProtectionMana").Value/100; }
         }
 
         /// <summary>
@@ -260,7 +247,7 @@ namespace Support
         /// </summary>
         public float AttackRange
         {
-            get { return Orbwalking.GetRealAutoAttackRange(null) + 65; }
+            get { return Orbwalking.GetRealAutoAttackRange(null); }
         }
 
         /// <summary>
@@ -328,6 +315,11 @@ namespace Support
         ///     DrawingConfig
         /// </summary>
         public Menu DrawingConfig { get; set; }
+
+        /// <summary>
+        ///     InterruptConfig
+        /// </summary>
+        public Menu InterruptConfig { get; set; }
 
 
         /// <summary>
@@ -464,6 +456,17 @@ namespace Support
         /// </remarks>
         /// <param name="config">Menu</param>
         public virtual void MiscMenu(Menu config)
+        {
+        }
+
+        /// <summary>
+        ///     MiscMenu
+        /// </summary>
+        /// <remarks>
+        ///     override to Implement Interrupt Config
+        /// </remarks>
+        /// <param name="config">Menu</param>
+        public virtual void InterruptMenu(Menu config)
         {
         }
 
