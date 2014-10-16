@@ -187,7 +187,7 @@ namespace Support
                 {
                     if (hero.HasBuffOfType(buff) && Menu.SubMenu("CC").Item(buff.ToString()).GetValue<bool>())
                     {
-                        if (mikael.IsActive(hero) && hero.CountEnemysInRange(1000) > 0)
+                        if (mikael.IsActive(hero) && hero.CountEnemysInRange(1500) > 0)
                         {
                             mikael.Item.Cast(hero);
                             Console.WriteLine("Cast CC: " + mikael.Name + " -> " + hero.ChampionName + "(" + buff + ")");
