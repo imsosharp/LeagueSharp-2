@@ -107,7 +107,7 @@ namespace Support
 
         public static double HealthBuffer(this Obj_AI_Base hero, int buffer)
         {
-            return hero.Health - (hero.MaxHealth * buffer / 100);
+            return hero.Health - (hero.MaxHealth*buffer/100);
         }
 
         public static void IssueOrderEx(this Obj_AI_Base hero, GameObjectOrder order, GameObject target,

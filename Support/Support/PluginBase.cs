@@ -127,7 +127,6 @@ namespace Support
                         else
                             Utility.DrawCircle(Player.Position, spell.Range + Player.BoundingRadius, Color.Red);
                     }
-
                 }
             };
         }
@@ -237,7 +236,7 @@ namespace Support
         /// </summary>
         public bool HarassMana
         {
-            get { return Player.Mana > Player.MaxMana * ConfigValue<Slider>("HarassMana").Value / 100; }
+            get { return Player.Mana > Player.MaxMana*ConfigValue<Slider>("HarassMana").Value/100; }
         }
 
         /// <summary>

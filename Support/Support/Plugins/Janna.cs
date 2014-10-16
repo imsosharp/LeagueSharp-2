@@ -83,7 +83,7 @@ namespace Support.Plugins
             if (!sender.IsValid<Obj_SpellMissile>())
                 return;
 
-            var missile = (Obj_SpellMissile)sender;
+            var missile = (Obj_SpellMissile) sender;
 
             // Caster ally hero / not me
             if (!missile.SpellCaster.IsValid<Obj_AI_Hero>() || !missile.SpellCaster.IsAlly ||
@@ -96,7 +96,8 @@ namespace Support.Plugins
                 return;
 
             // only in SBTW mode
-            if (E.IsReady() && E.IsInRange(missile.SpellCaster) && (ComboMode || HarassMode) && ConfigValue<bool>("MiscE"))
+            if (E.IsReady() && E.IsInRange(missile.SpellCaster) && (ComboMode || HarassMode) &&
+                ConfigValue<bool>("MiscE"))
             {
                 E.CastOnUnit(missile.SpellCaster, UsePackets);
             }
@@ -106,13 +107,13 @@ namespace Support.Plugins
         {
             if (sender is Obj_SpellMissile && sender.IsValid)
             {
-                var missile = (Obj_SpellMissile)sender;
+                var missile = (Obj_SpellMissile) sender;
 
                 // Ally Turret -> Enemy Hero
                 if (missile.SpellCaster.IsValid<Obj_AI_Turret>() && missile.SpellCaster.IsAlly &&
                     missile.Target.IsValid<Obj_AI_Hero>() && missile.Target.IsEnemy)
                 {
-                    var turret = (Obj_AI_Turret)missile.SpellCaster;
+                    var turret = (Obj_AI_Turret) missile.SpellCaster;
 
                     if (E.IsReady())
                     {

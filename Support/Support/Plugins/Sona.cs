@@ -24,8 +24,6 @@ using System;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
-using SharpDX;
-using Color = System.Drawing.Color;
 
 #endregion
 
@@ -67,7 +65,8 @@ namespace Support.Plugins
                     }
                 }
 
-                if (Target.IsValidTarget(AttackRange) && (Player.HasBuff("sonaqprocattacker") || Player.HasBuff("sonaqprocattacker")))
+                if (Target.IsValidTarget(AttackRange) &&
+                    (Player.HasBuff("sonaqprocattacker") || Player.HasBuff("sonaqprocattacker")))
                 {
                     Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
                 }
@@ -108,7 +107,8 @@ namespace Support.Plugins
                     }
                 }
 
-                if (Target.IsValidTarget(AttackRange) && (Player.HasBuff("sonaqprocattacker") || Player.HasBuff("sonaqprocattacker")))
+                if (Target.IsValidTarget(AttackRange) &&
+                    (Player.HasBuff("sonaqprocattacker") || Player.HasBuff("sonaqprocattacker")))
                 {
                     Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
                 }
