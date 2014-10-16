@@ -164,6 +164,11 @@ namespace Support
             }
         }
 
+        public static int CountEnemysInRange(this Obj_AI_Base hero, int range)
+        {
+            return Utility.CountEnemysInRange(range, hero);
+        }
+
         public static bool IsValidTarget(this Items.Item item, Obj_AI_Base target)
         {
             return item != null && item.IsReady() && target.IsValidTarget(item.Range);
