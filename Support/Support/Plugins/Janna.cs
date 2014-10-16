@@ -96,7 +96,7 @@ namespace Support.Plugins
                 return;
 
             // only in SBTW mode
-            if (E.IsReady() && E.IsInRange(missile.SpellCaster) && E.HasEnoughMana() && (ComboMode || HarassMode) && ConfigValue<bool>("MiscE"))
+            if (E.IsReady() && E.IsInRange(missile.SpellCaster) && (ComboMode || HarassMode) && ConfigValue<bool>("MiscE"))
             {
                 E.CastOnUnit(missile.SpellCaster, UsePackets);
             }

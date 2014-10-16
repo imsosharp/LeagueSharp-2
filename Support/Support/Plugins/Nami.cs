@@ -60,7 +60,7 @@ namespace Support.Plugins
             if (!missile.Target.IsValid<Obj_AI_Hero>() || !missile.Target.IsEnemy)
                 return;
 
-            if (E.IsReady() && E.IsInRange(missile.SpellCaster) && E.HasEnoughMana() && ConfigValue<bool>("MiscE"))
+            if (E.IsReady() && E.IsInRange(missile.SpellCaster) && ConfigValue<bool>("MiscE"))
             {
                 E.CastOnUnit(missile.SpellCaster, UsePackets);
             }

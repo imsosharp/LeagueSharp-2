@@ -216,7 +216,7 @@ namespace Support
                             .Where(
                                 s =>
                                     s.ChampionName == ObjectManager.Player.ChampionName && s.Spell.IsReady() &&
-                                    s.Spell.IsInRange(target) && s.Spell.HasEnoughMana() &&
+                                    s.Spell.IsInRange(target) &&
                                     s.IsActive(target))
                     )
                 {

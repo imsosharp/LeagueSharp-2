@@ -24,6 +24,8 @@ using System;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
+using SharpDX;
+using Color = System.Drawing.Color;
 
 #endregion
 
@@ -46,6 +48,8 @@ namespace Support.Plugins
         {
             if (ComboMode)
             {
+                // sonaqprocattacker
+                // sonapassivattack
                 if (Q.IsValidTarget(Target, "ComboQ"))
                 {
                     var check =
@@ -63,14 +67,18 @@ namespace Support.Plugins
                     }
                 }
 
+                if (Target.IsValidTarget(AttackRange) && Player.HasBuff("sonaqprocattacker") || Player.HasBuff("sonaqprocattacker"))
+                {
+                    Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
+                }
+
                 var allyW = Helpers.AllyBelowHp(ConfigValue<Slider>("ComboHealthW").Value, W.Range);
                 if (W.IsValidTarget(allyW, "ComboW", true, false))
                 {
                     W.Cast();
                 }
 
-                if (E.IsReady() && Helpers.AllyInRange(E.Range).Count > 0 && ConfigValue<bool>("ComboE") &&
-                    E.HasEnoughMana())
+                if (E.IsReady() && Helpers.AllyInRange(E.Range).Count > 0 && ConfigValue<bool>("ComboE"))
                 {
                     E.Cast();
                 }
@@ -106,8 +114,7 @@ namespace Support.Plugins
                     W.Cast();
                 }
 
-                if (E.IsReady() && Helpers.AllyInRange(E.Range).Count > 0 && ConfigValue<bool>("HarassE") &&
-                    E.HasEnoughMana())
+                if (E.IsReady() && Helpers.AllyInRange(E.Range).Count > 0 && ConfigValue<bool>("HarassE"))
                 {
                     E.Cast();
                 }
