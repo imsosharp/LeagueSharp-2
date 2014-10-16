@@ -67,7 +67,7 @@ namespace Support.Plugins
                     }
                 }
 
-                if (Target.IsValidTarget(AttackRange) && Player.HasBuff("sonaqprocattacker") || Player.HasBuff("sonaqprocattacker"))
+                if (Target.IsValidTarget(AttackRange) && (Player.HasBuff("sonaqprocattacker") || Player.HasBuff("sonaqprocattacker")))
                 {
                     Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
                 }
@@ -106,6 +106,11 @@ namespace Support.Plugins
                     {
                         Q.Cast();
                     }
+                }
+
+                if (Target.IsValidTarget(AttackRange) && (Player.HasBuff("sonaqprocattacker") || Player.HasBuff("sonaqprocattacker")))
+                {
+                    Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
                 }
 
                 var allyW = Helpers.AllyBelowHp(ConfigValue<Slider>("HarassHealthW").Value, W.Range);
