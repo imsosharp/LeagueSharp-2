@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
+using LX_Orbwalker;
 
 #endregion
 
@@ -39,7 +40,7 @@ namespace Marksman
                 var menuItem = GetValue<Circle>("Draw" + spell.Slot);
                 if (menuItem.Active)
                     Utility.DrawCircle(ObjectManager.Player.Position,
-                        spell.Slot == SpellSlot.W ? Orbwalking.GetRealAutoAttackRange(null) + 65 + W.Range : spell.Range,
+                        spell.Slot == SpellSlot.W ? LXOrbwalker.GetAutoAttackRange() + 65 + W.Range : spell.Range,
                         menuItem.Color);
             }
         }
@@ -59,7 +60,7 @@ namespace Marksman
                     R.Cast(hero, false, true);
 
             if ((!ComboActive && !HarassActive) ||
-                (!Orbwalking.CanMove(100) &&
+                (!LXOrbwalker.CanMove() &&
                  !(ObjectManager.Player.BaseAbilityDamage + ObjectManager.Player.FlatMagicDamageMod > 100))) return;
 
             var useQ = GetValue<bool>("UseQ" + (ComboActive ? "C" : "H"));
@@ -72,7 +73,7 @@ namespace Marksman
                 foreach (
                     var hero in
                         ObjectManager.Get<Obj_AI_Hero>()
-                            .Where(hero => hero.IsValidTarget(Orbwalking.GetRealAutoAttackRange(hero) + W.Range)))
+                            .Where(hero => hero.IsValidTarget(LXOrbwalker.GetAutoAttackRange(hero) + W.Range)))
                     W.CastOnUnit(ObjectManager.Player);
 
             if (useQ && Q.IsReady())

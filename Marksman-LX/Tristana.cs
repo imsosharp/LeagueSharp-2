@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
+using LX_Orbwalker;
 
 #endregion
 
@@ -71,7 +72,7 @@ namespace Marksman
             //Update E and R range depending on level; 590 + 9 Ã— ( Tristana's level - 1)
             E.Range = 590 + 9 * (ObjectManager.Player.Level - 1);
             R.Range = 590 + 9 * (ObjectManager.Player.Level - 1);
-            if (Orbwalking.CanMove(100) && (ComboActive || HarassActive))
+            if (LXOrbwalker.CanMove() && (ComboActive || HarassActive))
             {
                 var useE = GetValue<bool>("UseE" + (ComboActive ? "C" : "H"));
                 if (useE)

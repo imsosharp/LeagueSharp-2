@@ -6,6 +6,7 @@ using System.Linq;
 
 using LeagueSharp;
 using LeagueSharp.Common;
+using LX_Orbwalker;
 
 #endregion
 
@@ -151,7 +152,7 @@ namespace Marksman
                 Q.Cast();
             }
 
-            if ((!ComboActive && !HarassActive) || !Orbwalking.CanMove(100))
+            if ((!ComboActive && !HarassActive) || !LXOrbwalker.CanMove())
             {
                 return;
             }

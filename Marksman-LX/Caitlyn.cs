@@ -4,6 +4,7 @@ using System;
 using System.Drawing;
 using LeagueSharp;
 using LeagueSharp.Common;
+using LX_Orbwalker;
 
 #endregion
 
@@ -93,8 +94,9 @@ namespace Marksman
                     Q.Cast(vTarget, false, true);
                 }
             }
+
             // PQ you broke it D:
-            if ((!ComboActive && !HarassActive) || !Orbwalking.CanMove(100)) return;
+            if ((!ComboActive && !HarassActive) || !LXOrbwalker.CanMove()) return;
 
             var useQ = GetValue<bool>("UseQ" + (ComboActive ? "C" : "H"));
             var useE = GetValue<bool>("UseEC");
@@ -117,7 +119,7 @@ namespace Marksman
             {
                 vTarget = SimpleTs.GetTarget(R.Range, SimpleTs.DamageType.Physical);
                 if (vTarget != null && vTarget.Health <= R.GetDamage(vTarget) &&
-                    !Orbwalking.InAutoAttackRange(vTarget))
+                    !LXOrbwalker.InAutoAttackRange(vTarget))
                 {
                     R.CastOnUnit(vTarget);
                 }

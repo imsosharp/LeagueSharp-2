@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
+using LX_Orbwalker;
 using SharpDX;
 using Color = System.Drawing.Color;
 
@@ -49,7 +50,7 @@ namespace Marksman
             }
             else if (spell.SData.Name.Contains("Lucian") && !spell.SData.Name.Contains("Attack"))
             {
-                Orbwalking.ResetAutoAttackTimer();
+                LXOrbwalker.ResetAutoAttackTimer();
 
                 Utility.DelayAction.Add(6000, () =>
                 {

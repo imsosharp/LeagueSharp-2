@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
+using LX_Orbwalker;
 
 #endregion
 
@@ -48,7 +49,7 @@ namespace Marksman
 
         public override void Game_OnGameUpdate(EventArgs args)
         {
-            if (Orbwalking.CanMove(100) && (ComboActive || HarassActive))
+            if (LXOrbwalker.CanMove() && (ComboActive || HarassActive))
             {
                 var useQ = GetValue<bool>("UseQ" + (ComboActive ? "C" : "H"));
                 if (useQ)

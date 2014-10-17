@@ -4,6 +4,7 @@ using System;
 using System.Drawing;
 using LeagueSharp;
 using LeagueSharp.Common;
+using LX_Orbwalker;
 
 #endregion
 
@@ -68,7 +69,7 @@ namespace Marksman
                 var useQ = GetValue<bool>("UseQ" + (ComboActive ? "C" : "H"));
                 var useW = GetValue<bool>("UseW" + (ComboActive ? "C" : "H"));
 
-                if (Orbwalking.CanMove(100))
+                if (LXOrbwalker.CanMove())
                 {
                     if (Q.IsReady() && useQ)
                     {
