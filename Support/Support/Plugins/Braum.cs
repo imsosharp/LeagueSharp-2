@@ -31,7 +31,7 @@ namespace Support.Plugins
     public class Braum : PluginBase
     {
         public Braum()
-            : base("h3h3", new Version(4, 17, 14))
+            : base("h3h3", new Version(4, 18, 14))
         {
             Q = new Spell(SpellSlot.Q, 1000);
             W = new Spell(SpellSlot.W, 650);

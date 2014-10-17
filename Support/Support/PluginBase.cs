@@ -117,7 +117,7 @@ namespace Support
 
             Drawing.OnDraw += args =>
             {
-                if(Player.IsDead)
+                if (Player.IsDead)
                     return;
 
                 foreach (var spell in _spells.Where(s => s != null))

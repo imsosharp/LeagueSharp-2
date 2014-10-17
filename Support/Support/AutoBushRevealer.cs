@@ -65,7 +65,7 @@ namespace Support
                 useWardsMenu.AddItem(new MenuItem("AutoBush" + ward.Key, ward.Value).SetValue(true));
 
             Game.OnGameUpdate += Game_OnGameUpdate;
-        } 
+        }
 
         private InventorySlot GetWardSlot()
         {

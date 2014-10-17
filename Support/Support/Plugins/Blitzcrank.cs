@@ -21,7 +21,6 @@
 #region
 
 using System;
-using System.Drawing;
 using LeagueSharp;
 using LeagueSharp.Common;
 
@@ -32,7 +31,7 @@ namespace Support.Plugins
     public class Blitzcrank : PluginBase
     {
         public Blitzcrank()
-            : base("h3h3", new Version(4, 17, 14))
+            : base("h3h3", new Version(4, 18, 14))
         {
             Q = new Spell(SpellSlot.Q, 950);
             W = new Spell(SpellSlot.W, 0);

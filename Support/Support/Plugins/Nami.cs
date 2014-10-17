@@ -31,7 +31,7 @@ namespace Support.Plugins
     public class Nami : PluginBase
     {
         public Nami()
-            : base("h3h3", new Version(4, 17, 14))
+            : base("h3h3", new Version(4, 18, 14))
         {
             Q = new Spell(SpellSlot.Q, 875);
             W = new Spell(SpellSlot.W, 725);

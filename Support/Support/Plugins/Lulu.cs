@@ -31,7 +31,7 @@ namespace Support.Plugins
     public class Lulu : PluginBase
     {
         public Lulu()
-            : base("h3h3", new Version(4, 17, 14))
+            : base("h3h3", new Version(4, 18, 14))
         {
             Q = new Spell(SpellSlot.Q, 925);
             W = new Spell(SpellSlot.W, 650);

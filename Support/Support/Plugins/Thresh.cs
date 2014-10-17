@@ -37,7 +37,7 @@ namespace Support.Plugins
         private int _qTick;
 
         public Thresh()
-            : base("h3h3", new Version(4, 17, 14))
+            : base("h3h3", new Version(4, 18, 14))
         {
             Q = new Spell(SpellSlot.Q, 1025);
             W = new Spell(SpellSlot.W, 950);
