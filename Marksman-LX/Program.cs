@@ -168,9 +168,9 @@ namespace Marksman
         private static void Game_OnGameUpdate(EventArgs args)
         {
             //Update the combo and harass values.
-            CClass.ComboActive = CClass.Config.Item("Orbwalk").GetValue<KeyBind>().Active;
-            CClass.HarassActive = CClass.Config.Item("Farm").GetValue<KeyBind>().Active;
-            CClass.LaneClearActive = CClass.Config.Item("LaneClear").GetValue<KeyBind>().Active;
+            CClass.ComboActive = LXOrbwalker.CurrentMode == LXOrbwalker.Mode.Combo;
+            CClass.HarassActive = LXOrbwalker.CurrentMode == LXOrbwalker.Mode.Harass;
+            CClass.LaneClearActive = LXOrbwalker.CurrentMode == LXOrbwalker.Mode.LaneClear;
             CClass.Game_OnGameUpdate(args);
 
             var useItemModes = Config.Item("UseItemsMode").GetValue<StringList>().SelectedIndex;
