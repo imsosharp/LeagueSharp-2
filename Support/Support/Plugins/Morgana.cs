@@ -135,7 +135,7 @@ namespace Support.Plugins
             config.AddBool("ComboW", "Use W", true);
             config.AddBool("ComboE", "Use E", true);
             config.AddBool("ComboR", "Use R", true);
-            config.AddSlider("ComboCountR", "Targets in range to Ult", 2, 1, 5);
+            config.AddSlider("ComboCountR", "Targets in range to Ult", 3, 1, 5);
         }
 
         public override void HarassMenu(Menu config)

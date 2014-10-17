@@ -21,6 +21,7 @@
 #region
 
 using System;
+using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 
@@ -30,22 +31,41 @@ namespace Support.Plugins
 {
     public class Blitzcrank : PluginBase
     {
+        private bool BlockQ
+        {
+            get
+            {
+                if (!Q.IsReady())
+                    return true;
+
+                if (Target.HasBuff("Black Shield", true))
+                    return true;
+
+                if (Helpers.AllyInRange(1000).Any(ally => ally.Distance(Target) < ally.AttackRange + ally.BoundingRadius))
+                {
+                    return true;
+                }
+
+                return Player.Distance(Target) < 400;
+            }
+        }
+
         public Blitzcrank()
             : base("h3h3", new Version(4, 18, 14))
         {
-            Q = new Spell(SpellSlot.Q, 950);
+            Q = new Spell(SpellSlot.Q, 900);
             W = new Spell(SpellSlot.W, 0);
             E = new Spell(SpellSlot.E, AttackRange);
             R = new Spell(SpellSlot.R, 600);
 
-            Q.SetSkillshot(0.25f, 70f, 1800f, true, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(0.22f, 70f, 1800f, true, SkillshotType.SkillshotLine);
         }
 
         public override void OnUpdate(EventArgs args)
         {
             if (ComboMode)
             {
-                if (Q.IsValidTarget(Target, "ComboQ"))
+                if (Q.IsValidTarget(Target, "ComboQ") && !BlockQ)
                 {
                     Q.Cast(Target, UsePackets);
                 }
@@ -68,6 +88,11 @@ namespace Support.Plugins
                     }
                 }
 
+                if (W.IsReady() && ConfigValue<bool>("ComboW") && (BlockQ || Player.Distance(Target) > 1000))
+                {
+                    W.Cast();
+                }
+
                 if (R.IsValidTarget(Target, "ComboR"))
                 {
                     if (Helpers.EnemyInRange(ConfigValue<Slider>("ComboCountR").Value, R.Range))
@@ -77,7 +102,7 @@ namespace Support.Plugins
 
             if (HarassMode)
             {
-                if (Q.IsValidTarget(Target, "HarassQ"))
+                if (Q.IsValidTarget(Target, "HarassQ") && !BlockQ)
                 {
                     Q.Cast(Target, UsePackets);
                 }
@@ -107,7 +132,7 @@ namespace Support.Plugins
             if (!unit.IsMe)
                 return;
 
-            if (!(target is Obj_AI_Hero) && !target.Name.ToLower().Contains("ward"))
+            if (!target.IsValid<Obj_AI_Hero>() && !target.Name.ToLower().Contains("ward"))
                 return;
 
             if (!E.IsReady())
@@ -153,10 +178,12 @@ namespace Support.Plugins
                     Player.IssueOrder(GameObjectOrder.AttackUnit, unit);
                 }
             }
+
             if (Q.IsValidTarget(Target, "InterruptQ"))
             {
                 Q.Cast(unit, UsePackets);
             }
+
             if (R.IsValidTarget(unit, "InterruptR"))
             {
                 R.Cast();
@@ -166,6 +193,7 @@ namespace Support.Plugins
         public override void ComboMenu(Menu config)
         {
             config.AddBool("ComboQ", "Use Q/E", true);
+            config.AddBool("ComboW", "Use W", true);
             config.AddBool("ComboR", "Use R", true);
             config.AddSlider("ComboCountR", "Targets in range to Ult", 2, 1, 5);
         }
