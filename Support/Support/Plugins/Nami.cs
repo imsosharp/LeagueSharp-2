@@ -109,6 +109,8 @@ namespace Support.Plugins
                 {
                     W.CastOnUnit(Target, UsePackets);
                 }
+
+                Config.AddItem(new MenuItem("test", "test").SetValue(new Slider(0, 0, 100)));
             }
         }
 

@@ -117,6 +117,9 @@ namespace Support
 
             Drawing.OnDraw += args =>
             {
+                if(Player.IsDead)
+                    return;
+
                 foreach (var spell in _spells.Where(s => s != null))
                 {
                     var menuItem = ConfigValue<Circle>(spell.Slot + "Range");
@@ -220,7 +223,7 @@ namespace Support
         /// </summary>
         public bool ComboMode
         {
-            get { return Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo; }
+            get { return Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && !Player.IsDead; }
         }
 
         /// <summary>
@@ -228,7 +231,7 @@ namespace Support
         /// </summary>
         public bool HarassMode
         {
-            get { return Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && HarassMana; }
+            get { return Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && HarassMana && !Player.IsDead; }
         }
 
         /// <summary>

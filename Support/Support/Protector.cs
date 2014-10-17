@@ -173,7 +173,7 @@ namespace Support
         {
             var mikael = ProtectorItems.First();
 
-            if (!mikael.Item.IsReady())
+            if (!mikael.Item.IsReady() || ObjectManager.Player.IsDead)
                 return;
 
             foreach (
