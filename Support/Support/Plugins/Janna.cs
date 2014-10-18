@@ -47,7 +47,7 @@ namespace Support.Plugins
         {
             if (ComboMode)
             {
-                if (Q.IsValidTarget(Target, "ComboQ"))
+                if (Q.CastCheck(Target, "ComboQ"))
                 {
                     var pred = Q.GetPrediction(Target);
                     if (pred.Hitchance >= HitChance.High)
@@ -57,13 +57,13 @@ namespace Support.Plugins
                     }
                 }
 
-                if (W.IsValidTarget(Target, "ComboW"))
+                if (W.CastCheck(Target, "ComboW"))
                 {
                     W.CastOnUnit(Target, UsePackets);
                 }
 
                 var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("ComboHealthR").Value, R.Range);
-                if (R.IsValidTarget(ally, "ComboR", true, false))
+                if (R.CastCheck(ally, "ComboR", true, false))
                 {
                     R.Cast();
                 }
@@ -71,7 +71,7 @@ namespace Support.Plugins
 
             if (HarassMode)
             {
-                if (W.IsValidTarget(Target, "HarassW"))
+                if (W.CastCheck(Target, "HarassW"))
                 {
                     W.CastOnUnit(Target, UsePackets);
                 }
@@ -136,7 +136,7 @@ namespace Support.Plugins
             if (gapcloser.Sender.IsAlly)
                 return;
 
-            if (Q.IsValidTarget(gapcloser.Sender, "GapcloserQ"))
+            if (Q.CastCheck(gapcloser.Sender, "GapcloserQ"))
             {
                 var pred = Q.GetPrediction(gapcloser.Sender);
                 if (pred.Hitchance >= HitChance.High)
@@ -146,7 +146,7 @@ namespace Support.Plugins
                 }
             }
 
-            if (W.IsValidTarget(gapcloser.Sender, "GapcloserW"))
+            if (W.CastCheck(gapcloser.Sender, "GapcloserW"))
             {
                 W.CastOnUnit(gapcloser.Sender, UsePackets);
             }
@@ -158,7 +158,7 @@ namespace Support.Plugins
                 unit.IsAlly)
                 return;
 
-            if (Q.IsValidTarget(unit, "InterruptQ"))
+            if (Q.CastCheck(unit, "InterruptQ"))
             {
                 var pred = Q.GetPrediction(unit);
                 if (pred.Hitchance >= HitChance.High)
@@ -168,7 +168,7 @@ namespace Support.Plugins
                 }
             }
 
-            if (!Q.IsReady() && R.IsValidTarget(unit, "InterruptR"))
+            if (!Q.IsReady() && R.CastCheck(unit, "InterruptR"))
             {
                 R.Cast();
             }

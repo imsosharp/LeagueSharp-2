@@ -43,34 +43,34 @@ namespace Support.Disabled
         {
             if (ComboMode)
             {
-                if (Q.IsValidTarget(Target, "ComboQ"))
+                if (Q.CastCheck(Target, "ComboQ"))
                 {
                 }
 
-                if (W.IsValidTarget(Target, "ComboW"))
+                if (W.CastCheck(Target, "ComboW"))
                 {
                 }
 
-                if (E.IsValidTarget(Target, "ComboE"))
+                if (E.CastCheck(Target, "ComboE"))
                 {
                 }
 
-                if (R.IsValidTarget(Target, "ComboR"))
+                if (R.CastCheck(Target, "ComboR"))
                 {
                 }
             }
 
             if (HarassMode)
             {
-                if (Q.IsValidTarget(Target, "HarassQ"))
+                if (Q.CastCheck(Target, "HarassQ"))
                 {
                 }
 
-                if (W.IsValidTarget(Target, "HarassW"))
+                if (W.CastCheck(Target, "HarassW"))
                 {
                 }
 
-                if (E.IsValidTarget(Target, "HarassE"))
+                if (E.CastCheck(Target, "HarassE"))
                 {
                 }
             }
@@ -86,19 +86,19 @@ namespace Support.Disabled
 
         public override void OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (Q.IsValidTarget(gapcloser.Sender, "GapcloserQ"))
+            if (Q.CastCheck(gapcloser.Sender, "GapcloserQ"))
             {
             }
 
-            if (W.IsValidTarget(gapcloser.Sender, "GapcloserW"))
+            if (W.CastCheck(gapcloser.Sender, "GapcloserW"))
             {
             }
 
-            if (E.IsValidTarget(gapcloser.Sender, "GapcloserE"))
+            if (E.CastCheck(gapcloser.Sender, "GapcloserE"))
             {
             }
 
-            if (R.IsValidTarget(gapcloser.Sender, "GapcloserR"))
+            if (R.CastCheck(gapcloser.Sender, "GapcloserR"))
             {
             }
         }
@@ -108,19 +108,19 @@ namespace Support.Disabled
             if (spell.DangerLevel < InterruptableDangerLevel.High || unit.IsAlly)
                 return;
 
-            if (Q.IsValidTarget(unit, "InterruptQ"))
+            if (Q.CastCheck(unit, "InterruptQ"))
             {
             }
 
-            if (W.IsValidTarget(unit, "InterruptW"))
+            if (W.CastCheck(unit, "InterruptW"))
             {
             }
 
-            if (E.IsValidTarget(unit, "InterruptE"))
+            if (E.CastCheck(unit, "InterruptE"))
             {
             }
 
-            if (R.IsValidTarget(unit, "InterruptR"))
+            if (R.CastCheck(unit, "InterruptR"))
             {
             }
         }

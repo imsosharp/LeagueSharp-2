@@ -174,12 +174,12 @@ namespace Support
             return Utility.CountEnemysInRange(range, hero);
         }
 
-        public static bool IsValidTarget(this Items.Item item, Obj_AI_Base target)
+        public static bool CastCheck(this Items.Item item, Obj_AI_Base target)
         {
             return item != null && item.IsReady() && target.IsValidTarget(item.Range);
         }
 
-        public static bool IsValidTarget(this Spell spell, Obj_AI_Base target, string menu, bool range = true,
+        public static bool CastCheck(this Spell spell, Obj_AI_Base target, string menu, bool range = true,
             bool team = true)
         {
             return
@@ -188,7 +188,7 @@ namespace Support
                 PluginBase.Config.Item(menu + ObjectManager.Player.ChampionName).GetValue<bool>();
         }
 
-        public static bool IsValidTarget(this Spell spell, Obj_AI_Base target, bool range = true, bool team = true)
+        public static bool CastCheck(this Spell spell, Obj_AI_Base target, bool range = true, bool team = true)
         {
             return
                 spell.IsReady() &&

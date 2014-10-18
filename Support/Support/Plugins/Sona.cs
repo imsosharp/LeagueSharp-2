@@ -48,7 +48,7 @@ namespace Support.Plugins
             {
                 // sonaqprocattacker
                 // sonapassivattack
-                if (Q.IsValidTarget(Target, "ComboQ"))
+                if (Q.CastCheck(Target, "ComboQ"))
                 {
                     var check =
                         ObjectManager.Get<Obj_AI_Base>()
@@ -72,7 +72,7 @@ namespace Support.Plugins
                 }
 
                 var allyW = Helpers.AllyBelowHp(ConfigValue<Slider>("ComboHealthW").Value, W.Range);
-                if (W.IsValidTarget(allyW, "ComboW", true, false))
+                if (W.CastCheck(allyW, "ComboW", true, false))
                 {
                     W.Cast();
                 }
@@ -82,7 +82,7 @@ namespace Support.Plugins
                     E.Cast();
                 }
 
-                if (R.IsValidTarget(Target, "ComboR"))
+                if (R.CastCheck(Target, "ComboR"))
                 {
                     R.CastIfWillHit(Target, ConfigValue<Slider>("ComboCountR").Value, true);
                 }
@@ -90,7 +90,7 @@ namespace Support.Plugins
 
             if (HarassMode)
             {
-                if (Q.IsValidTarget(Target, "HarassQ"))
+                if (Q.CastCheck(Target, "HarassQ"))
                 {
                     var check =
                         ObjectManager.Get<Obj_AI_Base>()
@@ -114,7 +114,7 @@ namespace Support.Plugins
                 }
 
                 var allyW = Helpers.AllyBelowHp(ConfigValue<Slider>("HarassHealthW").Value, W.Range);
-                if (W.IsValidTarget(allyW, "HarassW", true, false))
+                if (W.CastCheck(allyW, "HarassW", true, false))
                 {
                     W.Cast();
                 }
@@ -131,7 +131,7 @@ namespace Support.Plugins
             if (gapcloser.Sender.IsAlly)
                 return;
 
-            if (R.IsValidTarget(gapcloser.Sender, "GapcloserR"))
+            if (R.CastCheck(gapcloser.Sender, "GapcloserR"))
             {
                 R.Cast(Target, true);
             }
@@ -142,7 +142,7 @@ namespace Support.Plugins
             if (spell.DangerLevel < InterruptableDangerLevel.High || unit.IsAlly)
                 return;
 
-            if (R.IsValidTarget(unit, "InterruptR"))
+            if (R.CastCheck(unit, "InterruptR"))
             {
                 R.Cast(Target, true);
             }

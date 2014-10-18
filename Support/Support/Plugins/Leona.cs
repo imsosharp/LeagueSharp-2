@@ -46,18 +46,18 @@ namespace Support.Plugins
         {
             if (ComboMode)
             {
-                if (Q.IsValidTarget(Target))
+                if (Q.CastCheck(Target))
                 {
                     Orbwalking.ResetAutoAttackTimer();
                     Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
                 }
 
-                if (W.IsValidTarget(Target, "ComboQWE"))
+                if (W.CastCheck(Target, "ComboQWE"))
                 {
                     W.Cast();
                 }
 
-                if (E.IsValidTarget(Target, "ComboQWE") && Q.IsReady())
+                if (E.CastCheck(Target, "ComboQWE") && Q.IsReady())
                 {
                     // Max Range with VeryHigh Hitchance / Immobile
                     if (E.GetPrediction(Target).Hitchance >= HitChance.VeryHigh)
@@ -74,12 +74,12 @@ namespace Support.Plugins
                     }
                 }
 
-                if (E.IsValidTarget(Target, "ComboE"))
+                if (E.CastCheck(Target, "ComboE"))
                 {
                     E.Cast(Target);
                 }
 
-                if (R.IsValidTarget(Target, "ComboR"))
+                if (R.CastCheck(Target, "ComboR"))
                 {
                     R.CastIfHitchanceEquals(Target, HitChance.Immobile, UsePackets);
                 }
@@ -109,7 +109,7 @@ namespace Support.Plugins
             if (gapcloser.Sender.IsAlly)
                 return;
 
-            if (Q.IsValidTarget(gapcloser.Sender, "GapcloserQ"))
+            if (Q.CastCheck(gapcloser.Sender, "GapcloserQ"))
             {
                 if (Q.Cast())
                 {
@@ -124,7 +124,7 @@ namespace Support.Plugins
             if (spell.DangerLevel < InterruptableDangerLevel.High || unit.IsAlly)
                 return;
 
-            if (Q.IsValidTarget(unit, "InterruptQ"))
+            if (Q.CastCheck(unit, "InterruptQ"))
             {
                 if (Q.Cast())
                 {
@@ -135,7 +135,7 @@ namespace Support.Plugins
                 return;
             }
 
-            if (R.IsValidTarget(unit, "InterruptR"))
+            if (R.CastCheck(unit, "InterruptR"))
             {
                 R.Cast(unit, UsePackets);
             }

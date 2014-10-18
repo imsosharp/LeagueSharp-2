@@ -45,19 +45,19 @@ namespace Support.Plugins
         {
             if (ComboMode)
             {
-                if (Q.IsValidTarget(Target, "ComboQ"))
+                if (Q.CastCheck(Target, "ComboQ"))
                 {
                     Q.Cast();
                 }
 
-                if (Q.IsReady() && W.IsValidTarget(Target, "ComboW"))
+                if (Q.IsReady() && W.CastCheck(Target, "ComboW"))
                 {
                     W.CastOnUnit(Target, UsePackets);
                     Utility.DelayAction.Add(100, () => Q.Cast()); // TODO: calc timing
                 }
 
                 var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("ComboHealthE").Value, E.Range);
-                if (E.IsValidTarget(ally, "ComboE", true, false))
+                if (E.CastCheck(ally, "ComboE", true, false))
                 {
                     E.Cast();
                 }
@@ -65,13 +65,13 @@ namespace Support.Plugins
 
             if (HarassMode)
             {
-                if (Q.IsValidTarget(Target, "HarassQ"))
+                if (Q.CastCheck(Target, "HarassQ"))
                 {
                     Q.Cast();
                 }
 
                 var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("HarassHealthR").Value, E.Range);
-                if (E.IsValidTarget(ally, "HarassE", true, false))
+                if (E.CastCheck(ally, "HarassE", true, false))
                 {
                     E.Cast();
                 }
@@ -83,12 +83,12 @@ namespace Support.Plugins
             if (gapcloser.Sender.IsAlly)
                 return;
 
-            if (Q.IsValidTarget(gapcloser.Sender, "GapcloserQ"))
+            if (Q.CastCheck(gapcloser.Sender, "GapcloserQ"))
             {
                 Q.Cast();
             }
 
-            if (W.IsValidTarget(gapcloser.Sender, "GapcloserW"))
+            if (W.CastCheck(gapcloser.Sender, "GapcloserW"))
             {
                 W.CastOnUnit(gapcloser.Sender, UsePackets);
             }
@@ -99,12 +99,12 @@ namespace Support.Plugins
             if (spell.DangerLevel < InterruptableDangerLevel.High || unit.IsAlly)
                 return;
 
-            if (Q.IsValidTarget(unit, "InterruptQ"))
+            if (Q.CastCheck(unit, "InterruptQ"))
             {
                 Q.Cast();
             }
 
-            if (W.IsValidTarget(unit, "InterruptW"))
+            if (W.CastCheck(unit, "InterruptW"))
             {
                 W.CastOnUnit(unit, UsePackets);
             }

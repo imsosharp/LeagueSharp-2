@@ -43,12 +43,12 @@ namespace Support.Plugins
         {
             if (ComboMode)
             {
-                if (Q.IsValidTarget(Target, "ComboQ"))
+                if (Q.CastCheck(Target, "ComboQ"))
                 {
                     Q.CastOnUnit(Target, UsePackets);
                 }
 
-                if (E.IsValidTarget(Target, "ComboE"))
+                if (E.CastCheck(Target, "ComboE"))
                 {
                     E.CastOnUnit(Target, UsePackets);
                 }
@@ -56,7 +56,7 @@ namespace Support.Plugins
 
             if (HarassMode)
             {
-                if (E.IsValidTarget(Target, "HarassE"))
+                if (E.CastCheck(Target, "HarassE"))
                 {
                     E.CastOnUnit(Target, UsePackets);
                 }
@@ -68,7 +68,7 @@ namespace Support.Plugins
             if (gapcloser.Sender.IsAlly)
                 return;
 
-            if (Q.IsValidTarget(gapcloser.Sender, "GapcloserQ"))
+            if (Q.CastCheck(gapcloser.Sender, "GapcloserQ"))
             {
                 Q.CastOnUnit(gapcloser.Sender, UsePackets);
             }
@@ -79,12 +79,12 @@ namespace Support.Plugins
             if (spell.DangerLevel < InterruptableDangerLevel.High || unit.IsAlly)
                 return;
 
-            if (Q.IsValidTarget(unit, "InterruptQ"))
+            if (Q.CastCheck(unit, "InterruptQ"))
             {
                 Q.CastOnUnit(unit, UsePackets);
             }
 
-            if (E.IsValidTarget(unit, "InterruptE"))
+            if (E.CastCheck(unit, "InterruptE"))
             {
                 E.CastOnUnit(unit, UsePackets);
             }

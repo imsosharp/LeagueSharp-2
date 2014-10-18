@@ -46,17 +46,17 @@ namespace Support.Plugins
         {
             if (ComboMode)
             {
-                if (Q.IsValidTarget(Target, "ComboQ"))
+                if (Q.CastCheck(Target, "ComboQ"))
                 {
                     Q.Cast(Target, UsePackets);
                 }
 
-                if (W.IsValidTarget(Target, "ComboW") && E.GetPrediction(Target).Hitchance == HitChance.Immobile)
+                if (W.CastCheck(Target, "ComboW") && E.GetPrediction(Target).Hitchance == HitChance.Immobile)
                 {
                     W.Cast(Target.Position, UsePackets);
                 }
 
-                if (R.IsValidTarget(Target, "ComboR"))
+                if (R.CastCheck(Target, "ComboR"))
                 {
                     R.CastIfWillHit(Target, ConfigValue<Slider>("ComboCountR").Value, UsePackets);
                 }
@@ -64,12 +64,12 @@ namespace Support.Plugins
 
             if (HarassMode)
             {
-                if (Q.IsValidTarget(Target, "HarassQ"))
+                if (Q.CastCheck(Target, "HarassQ"))
                 {
                     Q.Cast(Target, UsePackets);
                 }
 
-                if (W.IsValidTarget(Target, "HarassW") && E.GetPrediction(Target).Hitchance == HitChance.Immobile)
+                if (W.CastCheck(Target, "HarassW") && E.GetPrediction(Target).Hitchance == HitChance.Immobile)
                 {
                     W.Cast(Target.Position, UsePackets);
                 }
@@ -81,7 +81,7 @@ namespace Support.Plugins
             if (gapcloser.Sender.IsAlly)
                 return;
 
-            if (Q.IsValidTarget(gapcloser.Sender, "GapcloserQ"))
+            if (Q.CastCheck(gapcloser.Sender, "GapcloserQ"))
             {
                 Q.Cast(gapcloser.Sender, UsePackets);
             }

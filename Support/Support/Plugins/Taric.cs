@@ -44,22 +44,22 @@ namespace Support.Plugins
             if (ComboMode)
             {
                 var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("ComboHealthQ").Value, Q.Range);
-                if (Q.IsValidTarget(ally, "ComboQ", true, false))
+                if (Q.CastCheck(ally, "ComboQ", true, false))
                 {
                     Q.Cast(ally, UsePackets);
                 }
 
-                if (W.IsValidTarget(Target, "ComboW"))
+                if (W.CastCheck(Target, "ComboW"))
                 {
                     W.Cast();
                 }
 
-                if (E.IsValidTarget(Target, "ComboE"))
+                if (E.CastCheck(Target, "ComboE"))
                 {
                     E.Cast(Target, UsePackets);
                 }
 
-                if (R.IsValidTarget(Target, "ComboR"))
+                if (R.CastCheck(Target, "ComboR"))
                 {
                     R.Cast();
                 }
@@ -68,12 +68,12 @@ namespace Support.Plugins
             if (HarassMode)
             {
                 var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("HarassHealthQ").Value, Q.Range);
-                if (Q.IsValidTarget(ally, "HarassQ", true, false))
+                if (Q.CastCheck(ally, "HarassQ", true, false))
                 {
                     Q.Cast(ally, UsePackets);
                 }
 
-                if (E.IsValidTarget(Target, "HarassE"))
+                if (E.CastCheck(Target, "HarassE"))
                 {
                     E.Cast(Target, UsePackets);
                 }
@@ -85,7 +85,7 @@ namespace Support.Plugins
             if (gapcloser.Sender.IsAlly)
                 return;
 
-            if (E.IsValidTarget(gapcloser.Sender, "GapcloserE"))
+            if (E.CastCheck(gapcloser.Sender, "GapcloserE"))
             {
                 E.Cast(gapcloser.Sender, UsePackets);
             }
@@ -96,7 +96,7 @@ namespace Support.Plugins
             if (spell.DangerLevel < InterruptableDangerLevel.High || unit.IsAlly)
                 return;
 
-            if (E.IsValidTarget(unit, "InterruptE"))
+            if (E.CastCheck(unit, "InterruptE"))
             {
                 E.Cast(unit, UsePackets);
             }

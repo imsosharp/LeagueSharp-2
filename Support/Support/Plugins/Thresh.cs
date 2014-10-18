@@ -65,7 +65,7 @@ namespace Support.Plugins
 
             if (ComboMode)
             {
-                if (Q.IsValidTarget(Target, "ComboQ") && FollowQBlock)
+                if (Q.CastCheck(Target, "ComboQ") && FollowQBlock)
                 {
                     if (Q.Cast(Target, UsePackets) == Spell.CastStates.SuccessfullyCasted)
                     {
@@ -73,18 +73,18 @@ namespace Support.Plugins
                         _qTarget = Target;
                     }
                 }
-                if (Q.IsValidTarget(_qTarget, "ComboQFollow"))
+                if (Q.CastCheck(_qTarget, "ComboQFollow"))
                 {
                     if (FollowQ)
                         Q.Cast();
                 }
 
-                if (W.IsValidTarget(Target, "ComboW"))
+                if (W.CastCheck(Target, "ComboW"))
                 {
                     EngageFriendLatern();
                 }
 
-                if (E.IsValidTarget(Target, "ComboE"))
+                if (E.CastCheck(Target, "ComboE"))
                 {
                     if (Helpers.AllyBelowHp(ConfigValue<Slider>("ComboHealthE").Value, E.Range) != null)
                     {
@@ -96,7 +96,7 @@ namespace Support.Plugins
                     }
                 }
 
-                if (R.IsValidTarget(Target, "ComboR"))
+                if (R.CastCheck(Target, "ComboR"))
                 {
                     if (Helpers.EnemyInRange(ConfigValue<Slider>("ComboCountR").Value, R.Range))
                         R.Cast();
@@ -105,17 +105,17 @@ namespace Support.Plugins
 
             if (HarassMode)
             {
-                if (Q.IsValidTarget(Target, "HarassQ") && FollowQBlock)
+                if (Q.CastCheck(Target, "HarassQ") && FollowQBlock)
                 {
                     Q.Cast(Target, UsePackets);
                 }
 
-                if (W.IsValidTarget(Target, "HarassW"))
+                if (W.CastCheck(Target, "HarassW"))
                 {
                     SafeFriendLatern();
                 }
 
-                if (E.IsValidTarget(Target, "HarassE"))
+                if (E.CastCheck(Target, "HarassE"))
                 {
                     if (Helpers.AllyBelowHp(ConfigValue<Slider>("HarassHealthE").Value, E.Range) != null)
                     {
@@ -134,7 +134,7 @@ namespace Support.Plugins
             if (gapcloser.Sender.IsAlly)
                 return;
 
-            if (E.IsValidTarget(gapcloser.Sender, "GapcloserE"))
+            if (E.CastCheck(gapcloser.Sender, "GapcloserE"))
             {
                 E.Cast(gapcloser.Start, UsePackets);
             }
@@ -145,7 +145,7 @@ namespace Support.Plugins
             if (spell.DangerLevel < InterruptableDangerLevel.High || unit.IsAlly)
                 return;
 
-            if (E.IsValidTarget(unit, "InterruptE"))
+            if (E.CastCheck(unit, "InterruptE"))
             {
                 E.Cast(unit.Position, UsePackets);
             }

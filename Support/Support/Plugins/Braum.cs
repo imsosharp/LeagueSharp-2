@@ -169,12 +169,12 @@ namespace Support.Plugins
         {
             if (ComboMode)
             {
-                if (Q.IsValidTarget(Target, "Combo.Q"))
+                if (Q.CastCheck(Target, "Combo.Q"))
                 {
                     Q.Cast(Target, UsePackets);
                 }
 
-                if (R.IsValidTarget(Target, "Combo.R"))
+                if (R.CastCheck(Target, "Combo.R"))
                 {
                     R.CastIfWillHit(Target, ConfigValue<Slider>("Combo.R.Count").Value, true);
                 }
@@ -182,7 +182,7 @@ namespace Support.Plugins
 
             if (HarassMode)
             {
-                if (Q.IsValidTarget(Target, "Harass.Q"))
+                if (Q.CastCheck(Target, "Harass.Q"))
                 {
                     Q.Cast(Target, UsePackets);
                 }
@@ -191,12 +191,12 @@ namespace Support.Plugins
 
         public override void OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (Q.IsValidTarget(gapcloser.Sender, "Gapcloser.Q"))
+            if (Q.CastCheck(gapcloser.Sender, "Gapcloser.Q"))
             {
                 Q.Cast(gapcloser.Sender, UsePackets);
             }
 
-            if (R.IsValidTarget(gapcloser.Sender, "Gapcloser.R"))
+            if (R.CastCheck(gapcloser.Sender, "Gapcloser.R"))
             {
                 R.Cast(gapcloser.Sender, UsePackets);
             }
@@ -207,7 +207,7 @@ namespace Support.Plugins
             if (spell.DangerLevel < InterruptableDangerLevel.High || unit.IsAlly)
                 return;
 
-            if (R.IsValidTarget(unit, "Interrupt.R"))
+            if (R.CastCheck(unit, "Interrupt.R"))
             {
                 R.Cast(unit, UsePackets);
             }

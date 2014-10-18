@@ -66,12 +66,12 @@ namespace Support.Plugins
         {
             if (ComboMode)
             {
-                if (Q.IsValidTarget(Target, "ComboQ") && !BlockQ)
+                if (Q.CastCheck(Target, "ComboQ") && !BlockQ)
                 {
                     Q.Cast(Target, UsePackets);
                 }
 
-                if (E.IsValidTarget(Target))
+                if (E.CastCheck(Target))
                 {
                     if (E.Cast())
                     {
@@ -94,7 +94,7 @@ namespace Support.Plugins
                     W.Cast();
                 }
 
-                if (R.IsValidTarget(Target, "ComboR"))
+                if (R.CastCheck(Target, "ComboR"))
                 {
                     if (Helpers.EnemyInRange(ConfigValue<Slider>("ComboCountR").Value, R.Range))
                         R.Cast();
@@ -103,12 +103,12 @@ namespace Support.Plugins
 
             if (HarassMode)
             {
-                if (Q.IsValidTarget(Target, "HarassQ") && !BlockQ)
+                if (Q.CastCheck(Target, "HarassQ") && !BlockQ)
                 {
                     Q.Cast(Target, UsePackets);
                 }
 
-                if (E.IsValidTarget(Target))
+                if (E.CastCheck(Target))
                 {
                     if (E.Cast())
                     {
@@ -151,7 +151,7 @@ namespace Support.Plugins
             if (gapcloser.Sender.IsAlly)
                 return;
 
-            if (E.IsValidTarget(gapcloser.Sender, "GapcloserE"))
+            if (E.CastCheck(gapcloser.Sender, "GapcloserE"))
             {
                 if (E.Cast())
                 {
@@ -160,7 +160,7 @@ namespace Support.Plugins
                 }
             }
 
-            if (R.IsValidTarget(gapcloser.Sender, "GapcloserR"))
+            if (R.CastCheck(gapcloser.Sender, "GapcloserR"))
             {
                 R.Cast();
             }
@@ -171,7 +171,7 @@ namespace Support.Plugins
             if (spell.DangerLevel < InterruptableDangerLevel.High || unit.IsAlly)
                 return;
 
-            if (E.IsValidTarget(unit, "InterruptE"))
+            if (E.CastCheck(unit, "InterruptE"))
             {
                 if (E.Cast())
                 {
@@ -180,12 +180,12 @@ namespace Support.Plugins
                 }
             }
 
-            if (Q.IsValidTarget(Target, "InterruptQ"))
+            if (Q.CastCheck(Target, "InterruptQ"))
             {
                 Q.Cast(unit, UsePackets);
             }
 
-            if (R.IsValidTarget(unit, "InterruptR"))
+            if (R.CastCheck(unit, "InterruptR"))
             {
                 R.Cast();
             }

@@ -43,7 +43,7 @@ namespace Support.Plugins
         {
             if (ComboMode)
             {
-                if (Q.IsValidTarget(Target, "ComboQ"))
+                if (Q.CastCheck(Target, "ComboQ"))
                 {
                     Q.Cast(Target, UsePackets);
                 }
@@ -62,7 +62,7 @@ namespace Support.Plugins
 
             if (HarassMode)
             {
-                if (Q.IsValidTarget(Target, "HarassQ"))
+                if (Q.CastCheck(Target, "HarassQ"))
                 {
                     Q.Cast(Target, UsePackets);
                 }
@@ -79,7 +79,7 @@ namespace Support.Plugins
             if (gapcloser.Sender.IsAlly)
                 return;
 
-            if (E.IsValidTarget(gapcloser.Sender, "GapcloserE"))
+            if (E.CastCheck(gapcloser.Sender, "GapcloserE"))
             {
                 E.Cast(gapcloser.Sender);
             }
