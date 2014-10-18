@@ -40,6 +40,7 @@ namespace Support
 
                     if (type != null)
                     {
+                        Helpers.UpdateCheck();
                         Protector.Init();
                         Activator.CreateInstance(type);
                         return;

@@ -110,6 +110,11 @@ namespace Support
             return hero.Health - (hero.MaxHealth*buffer/100);
         }
 
+        public static double HealthPercent(this Obj_AI_Base hero)
+        {
+            return hero.Health/hero.MaxHealth*100;
+        }
+
         public static void IssueOrderEx(this Obj_AI_Base hero, GameObjectOrder order, GameObject target,
             bool packet = false)
         {

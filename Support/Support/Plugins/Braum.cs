@@ -21,8 +21,12 @@
 #region
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
+using Support.Evade;
+using SpellData = LeagueSharp.SpellData;
 
 #endregion
 
@@ -40,26 +44,135 @@ namespace Support.Plugins
 
             Q.SetSkillshot(0.3333f, 70f, 1200f, true, SkillshotType.SkillshotLine);
             R.SetSkillshot(0.5f, 80f, 1200f, false, SkillshotType.SkillshotLine);
+            Protector.OnSkillshotProtection += ProtectorOnSkillshotProtection;
+            Protector.OnTargetedProtection += ProtectorOnTargetedProtection;
+        }
+
+        private bool IsShieldActive { get; set; }
+
+        private void ProtectorOnTargetedProtection(Obj_AI_Base caster, Obj_AI_Hero target, SpellData spell)
+        {
+            try
+            {
+                if (!ConfigValue<bool>("Misc.Shield.Target"))
+                    return;
+
+                if (Orbwalking.IsAutoAttack(spell.Name) &&
+                    target.HealthPercent() > ConfigValue<Slider>("Misc.Shield.Health").Value)
+                    return;
+
+                if (spell.MissileSpeed > 2000)
+                    return;
+
+                if (target.IsMe && E.IsReady())
+                {
+                    E.Cast(caster.Position, UsePackets);
+                    IsShieldActive = true;
+                    Utility.DelayAction.Add(4000, () => IsShieldActive = false);
+                }
+
+                if (!target.IsMe && W.IsReady() && W.IsInRange(target) && (IsShieldActive || E.IsReady()))
+                {
+                    var jumpTime = (Player.Distance(target)*1000/W.Instance.SData.MissileSpeed) +
+                                   W.Instance.SData.SpellCastTime + 100 + Game.Ping/2;
+                    var missileTime = (caster.Distance(target)*1000/spell.MissileSpeed) + Game.Ping/2;
+
+                    if (jumpTime > missileTime)
+                    {
+                        Console.WriteLine("Abort Jump - Missile too Fast: {0} {1}", jumpTime, missileTime);
+                        return;
+                    }
+
+                    W.CastOnUnit(target, UsePackets);
+
+                    Utility.DelayAction.Add((int) jumpTime, () =>
+                    {
+                        E.Cast(caster.Position, UsePackets);
+                        IsShieldActive = true;
+                        Utility.DelayAction.Add(4000, () => IsShieldActive = false);
+                    });
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+
+        private void ProtectorOnSkillshotProtection(Obj_AI_Hero target, List<Skillshot> skillshots)
+        {
+            try
+            {
+                if (!ConfigValue<bool>("Misc.Shield.Skill"))
+                    return;
+
+                var max = skillshots.First();
+                foreach (var spell in skillshots)
+                {
+                    if (spell.Unit.GetSpellDamage(target, spell.SpellData.SpellName) >
+                        max.Unit.GetSpellDamage(target, max.SpellData.SpellName))
+                    {
+                        max = spell;
+                    }
+                }
+
+                if (max.SpellData.MissileSpeed > 2000)
+                    return;
+
+                if (target.IsMe && E.IsReady())
+                {
+                    E.Cast(max.Start, UsePackets);
+
+                    IsShieldActive = true;
+                    Utility.DelayAction.Add(4000, () => IsShieldActive = false);
+                }
+
+                if (!target.IsMe && W.IsReady() && W.IsInRange(target) && (IsShieldActive || E.IsReady()))
+                {
+                    var jumpTime = (Player.Distance(target)*1000/W.Instance.SData.MissileSpeed) +
+                                   W.Instance.SData.SpellCastTime + 100 + Game.Ping/2;
+                    var missileTime = (max.Unit.Distance(target)*1000/max.SpellData.MissileSpeed) + Game.Ping/2;
+
+                    if (jumpTime > missileTime)
+                    {
+                        Console.WriteLine("Abort Jump - Missile too Fast: {0} {1}", jumpTime, missileTime);
+                        return;
+                    }
+
+                    W.CastOnUnit(target, UsePackets);
+
+                    Utility.DelayAction.Add((int) jumpTime, () =>
+                    {
+                        E.Cast(max.Start, UsePackets);
+                        IsShieldActive = true;
+                        Utility.DelayAction.Add(4000, () => IsShieldActive = false);
+                    });
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
 
         public override void OnUpdate(EventArgs args)
         {
             if (ComboMode)
             {
-                if (Q.IsValidTarget(Target, "ComboQ"))
+                if (Q.IsValidTarget(Target, "Combo.Q"))
                 {
                     Q.Cast(Target, UsePackets);
                 }
 
-                if (R.IsValidTarget(Target, "ComboR"))
+                if (R.IsValidTarget(Target, "Combo.R"))
                 {
-                    R.CastIfWillHit(Target, ConfigValue<Slider>("ComboCountR").Value, true);
+                    R.CastIfWillHit(Target, ConfigValue<Slider>("Combo.R.Count").Value, true);
                 }
             }
 
             if (HarassMode)
             {
-                if (Q.IsValidTarget(Target, "HarassQ"))
+                if (Q.IsValidTarget(Target, "Harass.Q"))
                 {
                     Q.Cast(Target, UsePackets);
                 }
@@ -68,12 +181,12 @@ namespace Support.Plugins
 
         public override void OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (Q.IsValidTarget(gapcloser.Sender, "GapcloserQ"))
+            if (Q.IsValidTarget(gapcloser.Sender, "Gapcloser.Q"))
             {
                 Q.Cast(gapcloser.Sender, UsePackets);
             }
 
-            if (R.IsValidTarget(gapcloser.Sender, "GapcloserR"))
+            if (R.IsValidTarget(gapcloser.Sender, "Gapcloser.R"))
             {
                 R.Cast(gapcloser.Sender, UsePackets);
             }
@@ -84,7 +197,7 @@ namespace Support.Plugins
             if (spell.DangerLevel < InterruptableDangerLevel.High || unit.IsAlly)
                 return;
 
-            if (R.IsValidTarget(unit, "InterruptR"))
+            if (R.IsValidTarget(unit, "Interrupt.R"))
             {
                 R.Cast(unit, UsePackets);
             }
@@ -92,22 +205,29 @@ namespace Support.Plugins
 
         public override void ComboMenu(Menu config)
         {
-            config.AddBool("ComboQ", "Use Q", true);
-            config.AddBool("ComboR", "Use R", true);
-            config.AddSlider("ComboCountR", "Targets in range to Ult", 2, 1, 5);
+            config.AddBool("Combo.Q", "Use Q", true);
+            config.AddBool("Combo.R", "Use R", true);
+            config.AddSlider("Combo.R.Count", "Targets hit by R", 2, 1, 5);
         }
 
         public override void HarassMenu(Menu config)
         {
-            config.AddBool("HarassQ", "Use Q", true);
+            config.AddBool("Harass.Q", "Use Q", true);
+        }
+
+        public override void MiscMenu(Menu config)
+        {
+            config.AddBool("Misc.Shield.Skill", "Shield Skillshots", true);
+            config.AddBool("Misc.Shield.Target", "Shield Targeted", true);
+            config.AddSlider("Misc.Shield.Health", "Shield AA below HP", 30, 1, 100);
         }
 
         public override void InterruptMenu(Menu config)
         {
-            config.AddBool("GapcloserQ", "Use Q to Interrupt Gapcloser", true);
-            config.AddBool("GapcloserR", "Use R to Interrupt Gapcloser", false);
+            config.AddBool("Gapcloser.Q", "Use Q to Interrupt Gapcloser", true);
+            config.AddBool("Gapcloser.R", "Use R to Interrupt Gapcloser", false);
 
-            config.AddBool("InterruptR", "Use R to Interrupt Spells", true);
+            config.AddBool("Interrupt.R", "Use R to Interrupt Spells", true);
         }
     }
 }

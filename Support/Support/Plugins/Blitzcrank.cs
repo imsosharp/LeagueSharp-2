@@ -31,6 +31,17 @@ namespace Support.Plugins
 {
     public class Blitzcrank : PluginBase
     {
+        public Blitzcrank()
+            : base("h3h3", new Version(4, 18, 14))
+        {
+            Q = new Spell(SpellSlot.Q, 900);
+            W = new Spell(SpellSlot.W, 0);
+            E = new Spell(SpellSlot.E, AttackRange);
+            R = new Spell(SpellSlot.R, 600);
+
+            Q.SetSkillshot(0.22f, 70f, 1800f, true, SkillshotType.SkillshotLine);
+        }
+
         private bool BlockQ
         {
             get
@@ -41,24 +52,14 @@ namespace Support.Plugins
                 if (Target.HasBuff("Black Shield", true))
                     return true;
 
-                if (Helpers.AllyInRange(1000).Any(ally => ally.Distance(Target) < ally.AttackRange + ally.BoundingRadius))
+                if (Helpers.AllyInRange(1000)
+                    .Any(ally => ally.Distance(Target) < ally.AttackRange + ally.BoundingRadius))
                 {
                     return true;
                 }
 
                 return Player.Distance(Target) < 400;
             }
-        }
-
-        public Blitzcrank()
-            : base("h3h3", new Version(4, 18, 14))
-        {
-            Q = new Spell(SpellSlot.Q, 900);
-            W = new Spell(SpellSlot.W, 0);
-            E = new Spell(SpellSlot.E, AttackRange);
-            R = new Spell(SpellSlot.R, 600);
-
-            Q.SetSkillshot(0.22f, 70f, 1800f, true, SkillshotType.SkillshotLine);
         }
 
         public override void OnUpdate(EventArgs args)
