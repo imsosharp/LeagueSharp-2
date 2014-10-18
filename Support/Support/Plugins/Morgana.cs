@@ -21,7 +21,6 @@
 #region
 
 using System;
-using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 
@@ -32,7 +31,7 @@ namespace Support.Plugins
     public class Morgana : PluginBase
     {
         public Morgana()
-            : base("h3h3", new Version(4, 18, 14))
+            : base("h3h3", new Version(4, 17, 14))
         {
             Q = new Spell(SpellSlot.Q, 1175);
             W = new Spell(SpellSlot.W, 900);
@@ -52,29 +51,9 @@ namespace Support.Plugins
                     Q.Cast(Target, UsePackets);
                 }
 
-                if (W.IsValidTarget(Target, "ComboW"))
+                if (W.IsValidTarget(Target, "ComboW") && E.GetPrediction(Target).Hitchance == HitChance.Immobile)
                 {
-                    foreach (
-                        var enemy in
-                            ObjectManager.Get<Obj_AI_Hero>()
-                                .Where(
-                                    hero =>
-                                        (hero.HasBuffOfType(BuffType.Snare) || hero.HasBuffOfType(BuffType.Stun) ||
-                                         hero.HasBuffOfType(BuffType.Taunt) && hero.IsValidTarget(W.Range + (W.Width/2))))
-                        )
-                    {
-                        W.Cast(enemy.Position, UsePackets);
-                        return;
-                    }
-
-                    foreach (
-                        var enemy in
-                            ObjectManager.Get<Obj_AI_Hero>()
-                                .Where(hero => hero.IsValidTarget(W.Range + (W.Width/2))))
-                    {
-                        W.CastIfWillHit(enemy, 2, UsePackets);
-                        return;
-                    }
+                    W.Cast(Target.Position, UsePackets);
                 }
 
                 if (R.IsValidTarget(Target, "ComboR"))
@@ -90,30 +69,9 @@ namespace Support.Plugins
                     Q.Cast(Target, UsePackets);
                 }
 
-                if (W.IsValidTarget(Target, "ComboW"))
+                if (W.IsValidTarget(Target, "HarassW") && E.GetPrediction(Target).Hitchance == HitChance.Immobile)
                 {
-                    foreach (
-                        var enemy in
-                            ObjectManager.Get<Obj_AI_Hero>()
-                                .Where(
-                                    hero =>
-                                        hero.IsEnemy &&
-                                        (hero.HasBuffOfType(BuffType.Snare) || hero.HasBuffOfType(BuffType.Stun) ||
-                                         hero.HasBuffOfType(BuffType.Taunt) && hero.IsValidTarget(W.Range + (W.Width/2))))
-                        )
-                    {
-                        W.Cast(enemy.Position, UsePackets);
-                        return;
-                    }
-
-                    foreach (
-                        var enemy in
-                            ObjectManager.Get<Obj_AI_Hero>()
-                                .Where(hero => hero.IsEnemy && hero.IsValidTarget(W.Range + (W.Width/2))))
-                    {
-                        W.CastIfWillHit(enemy, 2, UsePackets);
-                        return;
-                    }
+                    W.Cast(Target.Position, UsePackets);
                 }
             }
         }
@@ -135,7 +93,7 @@ namespace Support.Plugins
             config.AddBool("ComboW", "Use W", true);
             config.AddBool("ComboE", "Use E", true);
             config.AddBool("ComboR", "Use R", true);
-            config.AddSlider("ComboCountR", "Targets in range to Ult", 3, 1, 5);
+            config.AddSlider("ComboCountR", "Targets in range to Ult", 2, 1, 5);
         }
 
         public override void HarassMenu(Menu config)
