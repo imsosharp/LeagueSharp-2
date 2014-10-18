@@ -73,9 +73,9 @@ namespace Support.Plugins
 
                 if (!target.IsMe && W.IsReady() && W.IsInRange(target) && (IsShieldActive || E.IsReady()))
                 {
-                    var jumpTime = (Player.Distance(target) * 1000 / W.Instance.SData.MissileSpeed) +
-                                   W.Instance.SData.SpellCastTime + Game.Ping / 2;
-                    var missileTime = (caster.Distance(target) * 1000 / spell.MissileSpeed) + Game.Ping / 2;
+                    var jumpTime = (Player.Distance(target)*1000/W.Instance.SData.MissileSpeed) +
+                                   W.Instance.SData.SpellCastTime + Game.Ping/2;
+                    var missileTime = (caster.Distance(target)*1000/spell.MissileSpeed) + Game.Ping/2;
 
                     if (jumpTime > missileTime)
                     {
@@ -85,7 +85,7 @@ namespace Support.Plugins
 
                     W.CastOnUnit(target, UsePackets);
 
-                    Utility.DelayAction.Add((int)jumpTime, () =>
+                    Utility.DelayAction.Add((int) jumpTime, () =>
                     {
                         E.Cast(caster.Position, UsePackets);
                         IsShieldActive = true;
@@ -106,17 +106,26 @@ namespace Support.Plugins
                 if (!ConfigValue<bool>("Misc.Shield.Skill"))
                     return;
 
+                // get most dangerous skillshot
                 var max = skillshots.First();
                 foreach (var spell in skillshots)
                 {
                     if (spell.Unit.GetSpellDamage(target, spell.SpellData.SpellName) >
-                        max.Unit.GetSpellDamage(target, max.SpellData.SpellName))
+                        max.Unit.GetSpellDamage(target, max.SpellData.SpellName) &&
+                        spell.SpellData.Type != SkillShotType.SkillshotCircle &&
+                        spell.SpellData.Type != SkillShotType.SkillshotRing)
                     {
                         max = spell;
                     }
                 }
 
+                // too fast
                 if (max.SpellData.MissileSpeed > 2000 || max.SpellData.MissileSpeed == 0)
+                    return;
+
+                // dont block Circle skillshots
+                if (max.SpellData.Type != SkillShotType.SkillshotCircle &&
+                    max.SpellData.Type != SkillShotType.SkillshotRing)
                     return;
 
                 if (target.IsMe && E.IsReady())
@@ -129,9 +138,10 @@ namespace Support.Plugins
 
                 if (!target.IsMe && W.IsReady() && W.IsInRange(target) && (IsShieldActive || E.IsReady()))
                 {
-                    var jumpTime = (Player.Distance(target) * 1000 / W.Instance.SData.MissileSpeed) +
-                                   W.Instance.SData.SpellCastTime + Game.Ping / 2;
-                    var missileTime = (target.Distance(max.MissilePosition) * 1000 / max.SpellData.MissileSpeed) + Game.Ping / 2;
+                    var jumpTime = (Player.Distance(target)*1000/W.Instance.SData.MissileSpeed) +
+                                   W.Instance.SData.SpellCastTime + Game.Ping/2;
+                    var missileTime = (target.Distance(max.MissilePosition)*1000/max.SpellData.MissileSpeed) +
+                                      Game.Ping/2;
 
                     if (jumpTime > missileTime)
                     {
@@ -141,7 +151,7 @@ namespace Support.Plugins
 
                     W.CastOnUnit(target, UsePackets);
 
-                    Utility.DelayAction.Add((int)jumpTime, () =>
+                    Utility.DelayAction.Add((int) jumpTime, () =>
                     {
                         E.Cast(max.Start, UsePackets);
                         IsShieldActive = true;

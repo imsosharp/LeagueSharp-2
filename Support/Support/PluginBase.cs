@@ -98,6 +98,8 @@ namespace Support
 
             Game.OnGameUpdate += args =>
             {
+                ActiveMode = Orbwalker.ActiveMode;
+
                 if (Config.Item("visit").GetValue<bool>())
                 {
                     Process.Start("http://www.joduska.me/forum/topic/170-support-bundle/");
@@ -212,6 +214,11 @@ namespace Support
         ///     Orbwalker
         /// </summary>
         public Orbwalking.Orbwalker Orbwalker { get; set; }
+
+        /// <summary>
+        ///     ActiveMode
+        /// </summary>
+        public static Orbwalking.OrbwalkingMode ActiveMode { get; set; }
 
         /// <summary>
         ///     SupportTargetSelector

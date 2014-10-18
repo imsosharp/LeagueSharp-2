@@ -55,7 +55,7 @@ namespace Support
         {
             _enemyInfo = ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsEnemy).Select(x => new EnemyInfo(x)).ToList();
 
-            _menu = menu;
+            _menu = menu.AddSubMenu(new Menu("Auto Bush Revealer", "AutoBushRevealerMenu"));
             _menu.AddItem(new MenuItem("Auto Bush Revealer", "AutoBushRevealer").SetValue(true));
             _menu.AddItem(new MenuItem("AutoBushEnabled", "Enabled").SetValue(true));
 
@@ -89,6 +89,9 @@ namespace Support
 
             foreach (var enemyInfo in _enemyInfo.Where(x => x.Player.IsVisible))
                 enemyInfo.LastSeen = time;
+
+            if (PluginBase.ActiveMode != Orbwalking.OrbwalkingMode.Combo)
+                return;
 
             if (_menu.Item("AutoBushEnabled").GetValue<bool>())
             {

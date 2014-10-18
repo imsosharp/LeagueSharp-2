@@ -128,10 +128,26 @@ namespace Support
         {
             Menu = new Menu("Support: Protector", "Protector", true);
 
+            // detector
             var detector = Menu.AddSubMenu(new Menu("Detector", "Detector"));
-            detector.AddItem(new MenuItem("TargetedActive", "Targeted").SetValue(true));
-            detector.AddItem(new MenuItem("SkillshotActive", "Skillshots").SetValue(true));
 
+            // detector targeted
+            var targeted = detector.AddSubMenu(new Menu("Targeted", "Targeted"));
+            targeted.AddItem(new MenuItem("TargetedActive", "Active").SetValue(true));
+            foreach (var ally in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsAlly))
+            {
+                targeted.AddItem(new MenuItem(ally.ChampionName, ally.ChampionName).SetValue(true));
+            }
+
+            // detector skillshots
+            var skillshot = detector.AddSubMenu(new Menu("Skillshots", "Skillshots"));
+            skillshot.AddItem(new MenuItem("SkillshotsActive", "Active").SetValue(true));
+            foreach (var ally in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsAlly))
+            {
+                skillshot.AddItem(new MenuItem(ally.ChampionName, ally.ChampionName).SetValue(true));
+            }
+
+            // spells
             var spells = Menu.AddSubMenu(new Menu("Spells", "Spells"));
             foreach (var spell in ProtectorSpells.Where(s => s.ChampionName == ObjectManager.Player.ChampionName))
             {
@@ -142,6 +158,7 @@ namespace Support
                 }
             }
 
+            // items
             var items = Menu.AddSubMenu(new Menu("Items", "Items"));
             foreach (var item in ProtectorItems)
             {
@@ -152,12 +169,14 @@ namespace Support
                 }
             }
 
+            // cc
             var cc = Menu.AddSubMenu(new Menu("CC", "CC"));
             foreach (var b in CcTypes)
             {
                 cc.AddItem(new MenuItem(b.ToString(), b.ToString()).SetValue(true));
             }
 
+            // misc
             var misc = Menu.AddSubMenu(new Menu("Misc", "Misc"));
             misc.AddItem(new MenuItem("UsePackets", "Use Packets").SetValue(true));
 
@@ -279,9 +298,12 @@ namespace Support
                 var caster = (Obj_AI_Turret) sender;
                 var target = (Obj_AI_Hero) args.Target;
 
-                if (OnTargetedProtection != null)
+                if (Menu.SubMenu("Detector").SubMenu("Targeted").Item(target.ChampionName).GetValue<bool>())
                 {
-                    OnTargetedProtection(caster, target, args.SData);
+                    if (OnTargetedProtection != null)
+                    {
+                        OnTargetedProtection(caster, target, args.SData);
+                    }
                 }
             }
             catch (Exception e)
@@ -312,9 +334,12 @@ namespace Support
                 var caster = (Obj_AI_Hero) sender;
                 var target = (Obj_AI_Hero) args.Target;
 
-                if (OnTargetedProtection != null)
+                if (Menu.SubMenu("Detector").SubMenu("Targeted").Item(target.ChampionName).GetValue<bool>())
                 {
-                    OnTargetedProtection(caster, target, args.SData);
+                    if (OnTargetedProtection != null)
+                    {
+                        OnTargetedProtection(caster, target, args.SData);
+                    }
                 }
             }
             catch (Exception e)
@@ -347,9 +372,12 @@ namespace Support
                 var caster = (Obj_AI_Hero) missile.SpellCaster;
                 var target = (Obj_AI_Hero) missile.Target;
 
-                if (OnTargetedProtection != null)
+                if (Menu.SubMenu("Detector").SubMenu("Targeted").Item(target.ChampionName).GetValue<bool>())
                 {
-                    OnTargetedProtection(caster, target, missile.SData);
+                    if (OnTargetedProtection != null)
+                    {
+                        OnTargetedProtection(caster, target, missile.SData);
+                    }
                 }
             }
             catch (Exception e)
@@ -362,7 +390,7 @@ namespace Support
         {
             try
             {
-                if (!Menu.Item("SkillshotActive").GetValue<bool>())
+                if (!Menu.Item("SkillshotsActive").GetValue<bool>())
                 {
                     return;
                 }
@@ -391,9 +419,12 @@ namespace Support
 
                     if (!allySafeResult.IsSafe && IsAboutToHit(ally, 100))
                     {
-                        if (OnSkillshotProtection != null)
+                        if (Menu.SubMenu("Detector").SubMenu("Skillshots").Item(ally.ChampionName).GetValue<bool>())
                         {
-                            OnSkillshotProtection(ally, allySafeResult.SkillshotList);
+                            if (OnSkillshotProtection != null)
+                            {
+                                OnSkillshotProtection(ally, allySafeResult.SkillshotList);
+                            }
                         }
                     }
                 }
@@ -412,7 +443,7 @@ namespace Support
                 var alreadyAdded = false;
 
                 // Integration disabled
-                if (!Menu.Item("SkillshotActive").GetValue<bool>())
+                if (!Menu.Item("SkillshotsActive").GetValue<bool>())
                 {
                     return;
                 }
