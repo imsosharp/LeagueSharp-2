@@ -102,7 +102,7 @@ namespace Support
 
                 if (Config.Item("visit").GetValue<bool>())
                 {
-                    Process.Start("http://www.joduska.me/forum/topic/170-support-bundle/");
+                    Process.Start("http://www.joduska.me/forum/topic/170-aio-support-is-easy/");
                     Config.Item("visit").SetValue(false);
                 }
             };
