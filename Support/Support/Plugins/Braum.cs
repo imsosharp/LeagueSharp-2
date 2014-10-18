@@ -61,7 +61,7 @@ namespace Support.Plugins
                     target.HealthPercent() > ConfigValue<Slider>("Misc.Shield.Health").Value)
                     return;
 
-                if (spell.MissileSpeed > 2000)
+                if (spell.MissileSpeed > 2000 || spell.MissileSpeed == 0)
                     return;
 
                 if (target.IsMe && E.IsReady())
@@ -116,7 +116,7 @@ namespace Support.Plugins
                     }
                 }
 
-                if (max.SpellData.MissileSpeed > 2000)
+                if (max.SpellData.MissileSpeed > 2000 || max.SpellData.MissileSpeed == 0)
                     return;
 
                 if (target.IsMe && E.IsReady())
