@@ -1,7 +1,7 @@
 Support
 ======================
 Support Bundle  
-More Informations: http://www.joduska.me/forum/viewtopic.php?f=15&t=185
+More Informations: http://www.joduska.me/forum/topic/170-aio-support-is-easy/
 
 
 
