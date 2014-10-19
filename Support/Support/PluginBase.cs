@@ -47,7 +47,7 @@ namespace Support
         {
             Author = "h3h3";
             ChampionName = Player.ChampionName;
-            Version = Assembly.GetCallingAssembly().GetName().Version;
+            Version = Program.Version;
 
             InitConfig();
             InitOrbwalker();

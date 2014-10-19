@@ -55,32 +55,39 @@ namespace Support
         {
             Task.Factory.StartNew(() =>
             {
-                using (var c = new WebClient())
+                try
                 {
-                    var rawVersion =
-                        c.DownloadString(
-                            "https://raw.githubusercontent.com/h3h3/LeagueSharp/master/Support/Support/Properties/AssemblyInfo.cs");
-                    var match =
-                        new Regex(@"\[assembly\: AssemblyVersion\(""(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})""\)\]").Match
-                            (rawVersion);
-
-                    if (match.Success)
+                    using (var c = new WebClient())
                     {
-                        var gitVersion =
-                            new Version(string.Format("{0}.{1}.{2}.{3}", match.Groups[1], match.Groups[2],
-                                match.Groups[3],
-                                match.Groups[4]));
+                        var rawVersion =
+                            c.DownloadString(
+                                "https://raw.githubusercontent.com/h3h3/LeagueSharp/master/Support/Support/Properties/AssemblyInfo.cs");
+                        var match =
+                            new Regex(@"\[assembly\: AssemblyVersion\(""(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})""\)\]").Match
+                                (rawVersion);
 
-                        if (Assembly.GetCallingAssembly().GetName().Version < gitVersion)
+                        if (match.Success)
                         {
-                            Game.PrintChat("<font color='#15C3AC'>Support:</font> <font color='#800000'>" +
-                                           "OUTDATED - Please Update to Version: " + gitVersion + "</font>");
-                            Game.PrintChat("<font color='#15C3AC'>Support:</font> <font color='#800000'>" +
-                                           "OUTDATED - Please Update to Version: " + gitVersion + "</font>");
-                            Game.PrintChat("<font color='#15C3AC'>Support:</font> <font color='#800000'>" +
-                                           "OUTDATED - Please Update to Version: " + gitVersion + "</font>");
+                            var gitVersion =
+                                new Version(string.Format("{0}.{1}.{2}.{3}", match.Groups[1], match.Groups[2],
+                                    match.Groups[3],
+                                    match.Groups[4]));
+
+                            if (gitVersion > Program.Version)
+                            {
+                                Game.PrintChat("<font color='#15C3AC'>Support:</font> <font color='#800000'>" +
+                                               "OUTDATED - Please Update to Version: " + gitVersion + "</font>");
+                                Game.PrintChat("<font color='#15C3AC'>Support:</font> <font color='#800000'>" +
+                                               "OUTDATED - Please Update to Version: " + gitVersion + "</font>");
+                                Game.PrintChat("<font color='#15C3AC'>Support:</font> <font color='#800000'>" +
+                                               "OUTDATED - Please Update to Version: " + gitVersion + "</font>");
+                            }
                         }
                     }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
                 }
             });
         }
@@ -92,7 +99,7 @@ namespace Support
 
         public static bool EnemyInRange(int numOfEnemy, float range)
         {
-            return Utility.CountEnemysInRange((int) range) >= numOfEnemy;
+            return Utility.CountEnemysInRange((int)range) >= numOfEnemy;
         }
 
         public static List<Obj_AI_Hero> AllyInRange(float range)
@@ -110,7 +117,7 @@ namespace Support
             {
                 if (ally.IsMe)
                 {
-                    if (((ObjectManager.Player.Health/ObjectManager.Player.MaxHealth)*100) < percentHp)
+                    if (((ObjectManager.Player.Health / ObjectManager.Player.MaxHealth) * 100) < percentHp)
                     {
                         return ally;
                     }
@@ -118,7 +125,7 @@ namespace Support
                 else if (ally.IsAlly)
                 {
                     if (Vector3.Distance(ObjectManager.Player.Position, ally.Position) < range &&
-                        ((ally.Health/ally.MaxHealth)*100) < percentHp)
+                        ((ally.Health / ally.MaxHealth) * 100) < percentHp)
                     {
                         return ally;
                     }

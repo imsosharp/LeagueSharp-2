@@ -21,6 +21,7 @@
 #region
 
 using System;
+using System.Reflection;
 using LeagueSharp;
 using LeagueSharp.Common;
 
@@ -30,8 +31,13 @@ namespace Support
 {
     internal class Program
     {
+        public static Version Version;
+
         private static void Main(string[] args)
         {
+            Version = Assembly.GetExecutingAssembly().GetName().Version;
+            
+
             CustomEvents.Game.OnGameLoad += a =>
             {
                 try
