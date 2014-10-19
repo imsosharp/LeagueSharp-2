@@ -1,6 +1,5 @@
 ﻿#region LICENSE
 
-// /*
 // Copyright 2014 - 2014 Support
 // Helpers.cs is part of Support.
 // Support is free software: you can redistribute it and/or modify
@@ -13,8 +12,6 @@
 // GNU General Public License for more details.
 // You should have received a copy of the GNU General Public License
 // along with Support. If not, see <http://www.gnu.org/licenses/>.
-// */
-// 
 
 #endregion
 
@@ -24,7 +21,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using LeagueSharp;
@@ -63,7 +59,8 @@ namespace Support
                             c.DownloadString(
                                 "https://raw.githubusercontent.com/h3h3/LeagueSharp/master/Support/Support/Properties/AssemblyInfo.cs");
                         var match =
-                            new Regex(@"\[assembly\: AssemblyVersion\(""(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})""\)\]").Match
+                            new Regex(@"\[assembly\: AssemblyVersion\(""(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})""\)\]")
+                                .Match
                                 (rawVersion);
 
                         if (match.Success)
@@ -99,7 +96,7 @@ namespace Support
 
         public static bool EnemyInRange(int numOfEnemy, float range)
         {
-            return Utility.CountEnemysInRange((int)range) >= numOfEnemy;
+            return Utility.CountEnemysInRange((int) range) >= numOfEnemy;
         }
 
         public static List<Obj_AI_Hero> AllyInRange(float range)
@@ -117,7 +114,7 @@ namespace Support
             {
                 if (ally.IsMe)
                 {
-                    if (((ObjectManager.Player.Health / ObjectManager.Player.MaxHealth) * 100) < percentHp)
+                    if (((ObjectManager.Player.Health/ObjectManager.Player.MaxHealth)*100) < percentHp)
                     {
                         return ally;
                     }
@@ -125,7 +122,7 @@ namespace Support
                 else if (ally.IsAlly)
                 {
                     if (Vector3.Distance(ObjectManager.Player.Position, ally.Position) < range &&
-                        ((ally.Health / ally.MaxHealth) * 100) < percentHp)
+                        ((ally.Health/ally.MaxHealth)*100) < percentHp)
                     {
                         return ally;
                     }

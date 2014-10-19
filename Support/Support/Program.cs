@@ -1,6 +1,5 @@
 ﻿#region LICENSE
 
-// /*
 // Copyright 2014 - 2014 Support
 // Program.cs is part of Support.
 // Support is free software: you can redistribute it and/or modify
@@ -13,14 +12,13 @@
 // GNU General Public License for more details.
 // You should have received a copy of the GNU General Public License
 // along with Support. If not, see <http://www.gnu.org/licenses/>.
-// */
-// 
 
 #endregion
 
 #region
 
 using System;
+using System.Drawing;
 using System.Reflection;
 using LeagueSharp;
 using LeagueSharp.Common;
@@ -58,6 +56,24 @@ namespace Support
                     Console.WriteLine(e);
                 }
             };
+
+            //Drawing.OnDraw += a =>
+            //{
+            //    var offset = 0;
+            //    foreach (var buff in ObjectManager.Player.Buffs)
+            //    {
+            //        Drawing.DrawText(100, 100 + offset, Color.Tomato,
+            //            string.Format("{0} | {1} | {2} | {3} | {4} | {5} | {6}", buff.Name, buff.DisplayName,
+            //                buff.Type.ToString(), buff.Count, buff.IsActive, buff.StartTime, buff.EndTime));
+            //        offset += 15;
+            //    }
+            //};
+
+            //Obj_AI_Base.OnProcessSpellCast += (sender, spell) =>
+            //{
+            //    if (sender.IsValid<Obj_AI_Hero>() && !Orbwalking.IsAutoAttack(spell.SData.Name))
+            //        Console.WriteLine(sender.Name + " | " + spell.SData.Name.ToLower());
+            //};
         }
     }
 }

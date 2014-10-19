@@ -1,6 +1,5 @@
 ﻿#region LICENSE
 
-// /*
 // Copyright 2014 - 2014 Support
 // AssemblyInfo.cs is part of Support.
 // Support is free software: you can redistribute it and/or modify
@@ -13,8 +12,6 @@
 // GNU General Public License for more details.
 // You should have received a copy of the GNU General Public License
 // along with Support. If not, see <http://www.gnu.org/licenses/>.
-// */
-// 
 
 #endregion
 
@@ -59,5 +56,5 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 
-[assembly: AssemblyVersion("2.0.3.7")]
-[assembly: AssemblyFileVersion("2.0.3.7")]
+[assembly: AssemblyVersion("2.0.4.0")]
+[assembly: AssemblyFileVersion("2.0.4.0")]

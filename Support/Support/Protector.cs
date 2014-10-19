@@ -1,6 +1,5 @@
 ﻿#region LICENSE
 
-// /*
 // Copyright 2014 - 2014 Support
 // Protector.cs is part of Support.
 // Support is free software: you can redistribute it and/or modify
@@ -13,8 +12,6 @@
 // GNU General Public License for more details.
 // You should have received a copy of the GNU General Public License
 // along with Support. If not, see <http://www.gnu.org/licenses/>.
-// */
-// 
 
 #endregion
 
@@ -188,11 +185,25 @@ namespace Support
             return Menu.SubMenu("Misc").Item("UsePackets").GetValue<bool>();
         }
 
+        private static void ProtectorOnOnTargetedProtection(Obj_AI_Base caster, Obj_AI_Hero target, SpellData spell)
+        {
+            ProtectionIntegration(caster, target, spell.Name);
+        }
+
+        private static void ProtectorOnOnSkillshotProtection(Obj_AI_Hero target, IEnumerable<Skillshot> skillshots)
+        {
+            foreach (var skillshot in skillshots)
+            {
+                ProtectionIntegration(skillshot.Unit, target, skillshot.SpellData.SpellName);
+            }
+        }
+
         private static void CcCheck(EventArgs args)
         {
             var mikael = ProtectorItems.First();
 
-            if (!mikael.Item.IsReady() || ObjectManager.Player.IsDead)
+            if (!mikael.Item.IsReady() || ObjectManager.Player.IsDead ||
+                ObjectManager.Player.IsChannelingImportantSpell())
                 return;
 
             foreach (
@@ -216,23 +227,13 @@ namespace Support
             }
         }
 
-        private static void ProtectorOnOnTargetedProtection(Obj_AI_Base caster, Obj_AI_Hero target, SpellData spell)
-        {
-            ProtectionIntegration(caster, target, spell.Name);
-        }
-
-        private static void ProtectorOnOnSkillshotProtection(Obj_AI_Hero target, IEnumerable<Skillshot> skillshots)
-        {
-            foreach (var skillshot in skillshots)
-            {
-                ProtectionIntegration(skillshot.Unit, target, skillshot.SpellData.SpellName);
-            }
-        }
-
         private static void ProtectionIntegration(Obj_AI_Base caster, Obj_AI_Hero target, string spell)
         {
             try
             {
+                if (ObjectManager.Player.IsDead || ObjectManager.Player.IsChannelingImportantSpell())
+                    return;
+
                 foreach (
                     var ps in
                         ProtectorSpells
@@ -286,9 +287,6 @@ namespace Support
                 if (!args.Target.IsValid<Obj_AI_Hero>())
                     return;
 
-                if (ObjectManager.Player.IsDead)
-                    return;
-
                 if (!Menu.Item("TargetedActive").GetValue<bool>())
                     return;
 
@@ -317,9 +315,6 @@ namespace Support
             try
             {
                 if (!sender.IsValid<Obj_AI_Hero>())
-                    return;
-
-                if (ObjectManager.Player.IsDead)
                     return;
 
                 if (!Menu.Item("TargetedActive").GetValue<bool>())
@@ -353,9 +348,6 @@ namespace Support
             try
             {
                 if (!sender.IsValid<Obj_SpellMissile>())
-                    return;
-
-                if (ObjectManager.Player.IsDead)
                     return;
 
                 if (!Menu.Item("TargetedActive").GetValue<bool>())
@@ -402,12 +394,6 @@ namespace Support
                 foreach (var skillshot in DetectedSkillshots)
                 {
                     skillshot.Game_OnGameUpdate();
-                }
-
-                //Avoid sending move/cast packets while dead.
-                if (ObjectManager.Player.IsDead)
-                {
-                    return;
                 }
 
                 // Protect
@@ -460,7 +446,7 @@ namespace Support
                 }
 
                 //Check if the skillshot is from an ally.
-                if (skillshot.Unit.Team == ObjectManager.Player.Team)
+                if (skillshot.Unit.IsAlly)
                 {
                     return;
                 }
@@ -666,7 +652,7 @@ namespace Support
         /// <summary>
         ///     Returns true if the point is not inside the detected skillshots.
         /// </summary>
-        private static IsSafeResult IsSafe(Vector2 point)
+        public static IsSafeResult IsSafe(Vector2 point)
         {
             var result = new IsSafeResult {SkillshotList = new List<Skillshot>()};
 
@@ -683,7 +669,7 @@ namespace Support
         /// <summary>
         ///     Returns true if some detected skillshot is about to hit the unit.
         /// </summary>
-        private static bool IsAboutToHit(Obj_AI_Base unit, int time)
+        public static bool IsAboutToHit(Obj_AI_Base unit, int time)
         {
             time += 150;
             return DetectedSkillshots
@@ -854,7 +840,7 @@ namespace Support
             });
         }
 
-        private struct IsSafeResult
+        public struct IsSafeResult
         {
             public bool IsSafe;
             public List<Skillshot> SkillshotList;

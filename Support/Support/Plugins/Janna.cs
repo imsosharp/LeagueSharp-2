@@ -1,6 +1,5 @@
 ﻿#region LICENSE
 
-// /*
 // Copyright 2014 - 2014 Support
 // Janna.cs is part of Support.
 // Support is free software: you can redistribute it and/or modify
@@ -13,8 +12,6 @@
 // GNU General Public License for more details.
 // You should have received a copy of the GNU General Public License
 // along with Support. If not, see <http://www.gnu.org/licenses/>.
-// */
-// 
 
 #endregion
 
@@ -40,10 +37,36 @@ namespace Support.Plugins
             Q.SetSkillshot(0.5f, 150f, 900f, false, SkillshotType.SkillshotLine);
             GameObject.OnCreate += GameObjectOnCreate;
             GameObject.OnCreate += RangeAttackOnCreate;
+            Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+        }
+
+        private bool IsUltChanneling { get; set; }
+
+        private void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (!sender.IsMe || args.SData.Name != "ReapTheWhirlwind")
+                return;
+
+            Player.IssueOrder(GameObjectOrder.HoldPosition, Player.ServerPosition);
+            Orbwalker.SetAttack(false);
+            Orbwalker.SetMovement(false);
+            IsUltChanneling = true;
         }
 
         public override void OnUpdate(EventArgs args)
         {
+            if (Player.IsChannelingImportantSpell())
+            {
+                return;
+            }
+
+            if (IsUltChanneling)
+            {
+                Orbwalker.SetAttack(true);
+                Orbwalker.SetMovement(true);
+                IsUltChanneling = false;
+            }
+
             if (ComboMode)
             {
                 if (Q.CastCheck(Target, "ComboQ"))
