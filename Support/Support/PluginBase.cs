@@ -124,7 +124,7 @@ namespace Support
                     return;
 
                 if (Target != null && ConfigValue<Circle>("Target").Active)
-                    Utility.DrawCircle(Target.Position, Target.BoundingRadius, ConfigValue<Circle>("Target").Color);
+                    Utility.DrawCircle(Target.Position, 120, ConfigValue<Circle>("Target").Color);
 
                 foreach (var spell in _spells.Where(s => s != null))
                 {
@@ -168,7 +168,7 @@ namespace Support
             // drawing
             DrawingConfig.AddItem(
                 new MenuItem("Target" + ChampionName, "Target").SetValue(new Circle(true,
-                    Color.FromArgb(150, Color.Teal))));
+                    Color.Red)));
             DrawingConfig.AddItem(
                 new MenuItem("QRange" + ChampionName, "Q Range").SetValue(new Circle(false,
                     Color.FromArgb(150, Color.DodgerBlue))));

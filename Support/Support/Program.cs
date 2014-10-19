@@ -36,7 +36,6 @@ namespace Support
         private static void Main(string[] args)
         {
             Version = Assembly.GetExecutingAssembly().GetName().Version;
-            
 
             CustomEvents.Game.OnGameLoad += a =>
             {
