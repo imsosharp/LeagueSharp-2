@@ -115,6 +115,11 @@ namespace Support.Plugins
             if (gapcloser.Sender.IsAlly)
                 return;
 
+            if (Q.CastCheck(gapcloser.Sender, "GapcloserQ"))
+            {
+                Q.Cast(gapcloser.Sender, UsePackets);
+            }
+
             if (R.CastCheck(gapcloser.Sender, "GapcloserR"))
             {
                 R.Cast(gapcloser.Sender, UsePackets);
@@ -131,7 +136,7 @@ namespace Support.Plugins
                 Q.Cast(unit, UsePackets);
             }
 
-            if (R.CastCheck(unit, "InterruptR"))
+            if (!Q.IsReady() && R.CastCheck(unit, "InterruptR"))
             {
                 R.Cast(unit, UsePackets);
             }
@@ -160,6 +165,7 @@ namespace Support.Plugins
 
         public override void InterruptMenu(Menu config)
         {
+            config.AddBool("GapcloserQ", "Use Q to Interrupt Gapcloser", true);
             config.AddBool("GapcloserR", "Use R to Interrupt Gapcloser", false);
 
             config.AddBool("InterruptQ", "Use Q to Interrupt Spells", true);
