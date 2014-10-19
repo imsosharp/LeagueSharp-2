@@ -49,9 +49,8 @@ namespace Support.Plugins
                 if (Q.IsReady() && W.CastCheck(Target, "ComboW"))
                 {
                     W.CastOnUnit(Target, UsePackets);
-                    var jumpTime = (Player.Distance(Target)*1000/W.Instance.SData.MissileSpeed) +
-                                   (W.Instance.SData.SpellCastTime*1000) + Game.Ping/2;
-                    Utility.DelayAction.Add((int) jumpTime, () => Q.Cast()); // TODO: calc timing
+                    var jumpTime = Math.Max(0, Player.Distance(Target) - 500)*10/25 + 25;
+                    Utility.DelayAction.Add((int)jumpTime, () => Q.Cast());
                 }
 
                 var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("ComboHealthE").Value, E.Range);

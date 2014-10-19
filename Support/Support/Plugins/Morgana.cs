@@ -18,6 +18,7 @@
 #region
 
 using System;
+using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 
@@ -47,14 +48,34 @@ namespace Support.Plugins
                     Q.Cast(Target, UsePackets);
                 }
 
-                if (W.CastCheck(Target, "ComboW") && E.GetPrediction(Target).Hitchance == HitChance.Immobile)
+                if (W.CastCheck(Target, "ComboW"))
                 {
-                    W.Cast(Target.Position, UsePackets);
+                    foreach (
+                        var enemy in
+                            ObjectManager.Get<Obj_AI_Hero>()
+                                .Where(
+                                    hero =>
+                                        (hero.HasBuffOfType(BuffType.Snare) || hero.HasBuffOfType(BuffType.Stun) ||
+                                         hero.HasBuffOfType(BuffType.Taunt) && hero.IsValidTarget(W.Range)))
+                        )
+                    {
+                        W.Cast(enemy.Position, UsePackets);
+                        return;
+                    }
+
+                    foreach (
+                        var enemy in
+                            ObjectManager.Get<Obj_AI_Hero>()
+                                .Where(hero => hero.IsValidTarget(W.Range)))
+                    {
+                        W.CastIfWillHit(enemy, 2, UsePackets);
+                        return;
+                    }
                 }
 
-                if (R.CastCheck(Target, "ComboR"))
+                if (R.CastCheck(Target, "ComboR") && Helpers.EnemyInRange(ConfigValue<Slider>("ComboCountR").Value, R.Range))
                 {
-                    R.CastIfWillHit(Target, ConfigValue<Slider>("ComboCountR").Value, UsePackets);
+                    R.Cast();
                 }
             }
 
@@ -65,9 +86,29 @@ namespace Support.Plugins
                     Q.Cast(Target, UsePackets);
                 }
 
-                if (W.CastCheck(Target, "HarassW") && E.GetPrediction(Target).Hitchance == HitChance.Immobile)
+                if (W.CastCheck(Target, "HarassW"))
                 {
-                    W.Cast(Target.Position, UsePackets);
+                    foreach (
+                        var enemy in
+                            ObjectManager.Get<Obj_AI_Hero>()
+                                .Where(
+                                    hero =>
+                                        (hero.HasBuffOfType(BuffType.Snare) || hero.HasBuffOfType(BuffType.Stun) ||
+                                         hero.HasBuffOfType(BuffType.Taunt) && hero.IsValidTarget(W.Range)))
+                        )
+                    {
+                        W.Cast(enemy.Position, UsePackets);
+                        return;
+                    }
+
+                    foreach (
+                        var enemy in
+                            ObjectManager.Get<Obj_AI_Hero>()
+                                .Where(hero => hero.IsValidTarget(W.Range)))
+                    {
+                        W.CastIfWillHit(enemy, 2, UsePackets);
+                        return;
+                    }
                 }
             }
         }
