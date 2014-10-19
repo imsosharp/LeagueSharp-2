@@ -102,7 +102,7 @@ namespace Support.Plugins
 
         private void RangeAttackOnCreate(GameObject sender, EventArgs args)
         {
-            if (!sender.IsValid<Obj_SpellMissile>())
+            if (!sender.IsValid<Obj_SpellMissile>() || IsUltChanneling)
                 return;
 
             var missile = (Obj_SpellMissile) sender;
@@ -127,7 +127,7 @@ namespace Support.Plugins
 
         private void GameObjectOnCreate(GameObject sender, EventArgs args)
         {
-            if (sender is Obj_SpellMissile && sender.IsValid)
+            if (sender.IsValid<Obj_SpellMissile>() && !IsUltChanneling)
             {
                 var missile = (Obj_SpellMissile) sender;
 
