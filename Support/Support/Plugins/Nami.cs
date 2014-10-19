@@ -69,7 +69,7 @@ namespace Support.Plugins
         {
             if (ComboMode)
             {
-                if (Q.CastCheck(Target, "ComboQ")) // TODO: add check for slowed targets by E
+                if (Q.CastCheck(Target, "ComboQ")) // TODO: add check for slowed targets by E or FrostQeen
                 {
                     Q.Cast(Target, UsePackets);
                 }

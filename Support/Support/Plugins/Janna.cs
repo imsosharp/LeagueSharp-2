@@ -62,7 +62,7 @@ namespace Support.Plugins
                 }
 
                 var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("ComboHealthR").Value, R.Range);
-                if (R.CastCheck(ally, "ComboR", true, false))
+                if (R.CastCheck(ally, "ComboR", true, false)) // TODO: block movement+casting
                 {
                     R.Cast();
                 }
