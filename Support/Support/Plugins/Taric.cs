@@ -31,7 +31,6 @@ namespace Support.Plugins
     public class Taric : PluginBase
     {
         public Taric()
-            : base("h3h3", new Version(4, 18, 14))
         {
             Q = new Spell(SpellSlot.Q, 750);
             W = new Spell(SpellSlot.W, 200);

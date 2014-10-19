@@ -31,7 +31,6 @@ namespace Support.Plugins
     public class Leona : PluginBase
     {
         public Leona()
-            : base("h3h3", new Version(4, 18, 14))
         {
             Q = new Spell(SpellSlot.Q, AttackRange);
             W = new Spell(SpellSlot.W, AttackRange);

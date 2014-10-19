@@ -31,7 +31,6 @@ namespace Support.Plugins
     public class Zilean : PluginBase
     {
         public Zilean()
-            : base("h3h3", new Version(4, 18, 14))
         {
             Q = new Spell(SpellSlot.Q, 700);
             W = new Spell(SpellSlot.W, 0);
@@ -54,10 +53,10 @@ namespace Support.Plugins
                 }
 
                 // TODO: speed adc/jungler/engage
-                //if (E.IsReady() && Utility.CountEnemysInRange(2000) > 0 && ConfigValue<bool>("ComboE"))
-                //{
-                //    E.Cast(Player);
-                //}
+                if (E.IsReady() && Utility.CountEnemysInRange(2000) > 0 && ConfigValue<bool>("ComboE"))
+                {
+                    E.Cast(Player);
+                }
             }
 
             if (HarassMode)
@@ -89,7 +88,7 @@ namespace Support.Plugins
         {
             config.AddBool("ComboQ", "Use Q", true);
             config.AddBool("ComboW", "Use W", true);
-            //config.AddBool("ComboE", "Use E", true);
+            config.AddBool("ComboE", "Use E", true);
         }
 
         public override void HarassMenu(Menu config)

@@ -31,7 +31,6 @@ namespace Support.Disabled
     public class Zyra : PluginBase
     {
         public Zyra()
-            : base("h3h3", new Version(4, 17, 14))
         {
             Q = new Spell(SpellSlot.Q, 800);
             W = new Spell(SpellSlot.W, 850);

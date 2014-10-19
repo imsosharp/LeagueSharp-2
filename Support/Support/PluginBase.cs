@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using LeagueSharp;
 using LeagueSharp.Common;
 
@@ -42,11 +43,11 @@ namespace Support
         /// <summary>
         ///     Init BaseClass
         /// </summary>
-        protected PluginBase(string author, Version version)
+        protected PluginBase()
         {
-            Author = author;
+            Author = "h3h3";
             ChampionName = Player.ChampionName;
-            Version = version;
+            Version = Assembly.GetCallingAssembly().GetName().Version;
 
             InitConfig();
             InitOrbwalker();
@@ -122,6 +123,9 @@ namespace Support
                 if (Player.IsDead)
                     return;
 
+                if (Target != null && ConfigValue<Circle>("Target").Active)
+                    Utility.DrawCircle(Target.Position, Target.BoundingRadius, ConfigValue<Circle>("Target").Color);
+
                 foreach (var spell in _spells.Where(s => s != null))
                 {
                     var menuItem = ConfigValue<Circle>(spell.Slot + "Range");
@@ -130,7 +134,8 @@ namespace Support
                         if (spell.IsReady())
                             Utility.DrawCircle(Player.Position, spell.Range + Player.BoundingRadius, menuItem.Color);
                         else
-                            Utility.DrawCircle(Player.Position, spell.Range + Player.BoundingRadius, Color.Red);
+                            Utility.DrawCircle(Player.Position, spell.Range + Player.BoundingRadius,
+                                Color.FromArgb(150, Color.Red));
                     }
                 }
             };
@@ -161,6 +166,9 @@ namespace Support
             MiscConfig.AddBool("AttackChampions", "Attack Champions?", true);
 
             // drawing
+            DrawingConfig.AddItem(
+                new MenuItem("Target" + ChampionName, "Target").SetValue(new Circle(true,
+                    Color.FromArgb(150, Color.Teal))));
             DrawingConfig.AddItem(
                 new MenuItem("QRange" + ChampionName, "Q Range").SetValue(new Circle(false,
                     Color.FromArgb(150, Color.DodgerBlue))));

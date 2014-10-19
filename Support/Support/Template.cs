@@ -31,7 +31,6 @@ namespace Support
     public class Template : PluginBase
     {
         public Template()
-            : base("h3h3", new Version(4, 17, 14))
         {
             Q = new Spell(SpellSlot.Q, 0);
             W = new Spell(SpellSlot.W, 0);

@@ -35,7 +35,6 @@ namespace Support.Plugins
     public class Braum : PluginBase
     {
         public Braum()
-            : base("h3h3", new Version(4, 18, 14))
         {
             Q = new Spell(SpellSlot.Q, 1000);
             W = new Spell(SpellSlot.W, 650);
@@ -64,6 +63,8 @@ namespace Support.Plugins
                 if (spell.MissileSpeed > 2000 || spell.MissileSpeed == 0)
                     return;
 
+                // TODO: blacklist FiddleQ, FioraQ/R, LeonaE, VladQ, ZileanQ
+
                 if (target.IsMe && E.IsReady())
                 {
                     E.Cast(caster.Position, UsePackets);
@@ -74,8 +75,8 @@ namespace Support.Plugins
                 if (!target.IsMe && W.IsReady() && W.IsInRange(target) && (IsShieldActive || E.IsReady()))
                 {
                     var jumpTime = (Player.Distance(target)*1000/W.Instance.SData.MissileSpeed) +
-                                   W.Instance.SData.SpellCastTime + Game.Ping/2;
-                    var missileTime = (caster.Distance(target)*1000/spell.MissileSpeed) + Game.Ping/2;
+                                   (W.Instance.SData.SpellCastTime*1000);
+                    var missileTime = caster.Distance(target)*1000/spell.MissileSpeed;
 
                     if (jumpTime > missileTime)
                     {
@@ -139,9 +140,8 @@ namespace Support.Plugins
                 if (!target.IsMe && W.IsReady() && W.IsInRange(target) && (IsShieldActive || E.IsReady()))
                 {
                     var jumpTime = (Player.Distance(target)*1000/W.Instance.SData.MissileSpeed) +
-                                   W.Instance.SData.SpellCastTime + Game.Ping/2;
-                    var missileTime = (target.Distance(max.MissilePosition)*1000/max.SpellData.MissileSpeed) +
-                                      Game.Ping/2;
+                                   (W.Instance.SData.SpellCastTime*1000);
+                    var missileTime = target.Distance(max.MissilePosition)*1000/max.SpellData.MissileSpeed;
 
                     if (jumpTime > missileTime)
                     {

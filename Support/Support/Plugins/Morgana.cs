@@ -31,7 +31,6 @@ namespace Support.Plugins
     public class Morgana : PluginBase
     {
         public Morgana()
-            : base("h3h3", new Version(4, 17, 14))
         {
             Q = new Spell(SpellSlot.Q, 1175);
             W = new Spell(SpellSlot.W, 900);

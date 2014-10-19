@@ -31,7 +31,6 @@ namespace Support.Plugins
     public class Fiddlesticks : PluginBase
     {
         public Fiddlesticks()
-            : base("h3h3", new Version(4, 18, 14))
         {
             Q = new Spell(SpellSlot.Q, 575);
             W = new Spell(SpellSlot.W, 575);

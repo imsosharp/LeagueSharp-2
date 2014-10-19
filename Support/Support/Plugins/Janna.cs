@@ -31,7 +31,6 @@ namespace Support.Plugins
     public class Janna : PluginBase
     {
         public Janna()
-            : base("h3h3", new Version(4, 18, 14))
         {
             Q = new Spell(SpellSlot.Q, 1100);
             W = new Spell(SpellSlot.W, 600);

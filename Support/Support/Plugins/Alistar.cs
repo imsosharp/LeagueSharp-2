@@ -31,7 +31,6 @@ namespace Support.Plugins
     public class Alistar : PluginBase
     {
         public Alistar()
-            : base("h3h3", new Version(4, 18, 14))
         {
             Q = new Spell(SpellSlot.Q, 365);
             W = new Spell(SpellSlot.W, 650);
@@ -53,7 +52,9 @@ namespace Support.Plugins
                 if (Q.IsReady() && W.CastCheck(Target, "ComboW"))
                 {
                     W.CastOnUnit(Target, UsePackets);
-                    Utility.DelayAction.Add(100, () => Q.Cast()); // TODO: calc timing
+                    var jumpTime = (Player.Distance(Target)*1000/W.Instance.SData.MissileSpeed) +
+                                   (W.Instance.SData.SpellCastTime*1000) + Game.Ping/2;
+                    Utility.DelayAction.Add((int) jumpTime, () => Q.Cast()); // TODO: calc timing
                 }
 
                 var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("ComboHealthE").Value, E.Range);

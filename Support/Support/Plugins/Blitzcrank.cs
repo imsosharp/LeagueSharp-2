@@ -32,7 +32,6 @@ namespace Support.Plugins
     public class Blitzcrank : PluginBase
     {
         public Blitzcrank()
-            : base("h3h3", new Version(4, 18, 14))
         {
             Q = new Spell(SpellSlot.Q, 900);
             W = new Spell(SpellSlot.W, 0);
