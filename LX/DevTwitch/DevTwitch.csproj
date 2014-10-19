@@ -35,11 +35,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DevCommom">
+      <HintPath>..\..\..\..\Spiele\LeagueSharp\System\DevCommom.dll</HintPath>
+    </Reference>
     <Reference Include="LeagueSharp">
       <HintPath>D:\Spiele\LeagueSharp\System\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp.Common">
       <HintPath>D:\Spiele\LeagueSharp\System\LeagueSharp.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="LX-Orbwalker">
+      <HintPath>..\..\..\..\Spiele\LeagueSharp\System\LX-Orbwalker.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
       <HintPath>D:\Spiele\LeagueSharp\System\SharpDX.dll</HintPath>
@@ -59,12 +65,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DevCommom\DevCommom.csproj">
-      <Project>{d7913d32-bc5c-4a9b-84aa-a8018057e6f7}</Project>
-      <Name>DevCommom</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

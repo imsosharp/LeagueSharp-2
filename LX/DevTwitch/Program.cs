@@ -1,11 +1,36 @@
-﻿using System;
+﻿#region LICENSE
+
+// /*
+// Copyright 2014 - 2014 DevTwitch
+// Program.cs is part of DevTwitch.
+// DevTwitch is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// DevTwitch is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with DevTwitch. If not, see <http://www.gnu.org/licenses/>.
+// */
+// 
+
+#endregion
+
+#region
+
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
+using DevCommom;
 using LeagueSharp;
 using LeagueSharp.Common;
-using DevCommom;
-using SharpDX;
+using LX_Orbwalker;
+
+#endregion
 
 /*
  * ##### DevTwitch Mods #####
@@ -22,12 +47,11 @@ using SharpDX;
 
 namespace DevTwitch
 {
-    class Program
+    internal class Program
     {
         public const string ChampionName = "twitch";
 
         public static Menu Config;
-        public static Orbwalking.Orbwalker Orbwalker;
         public static List<Spell> SpellList = new List<Spell>();
         public static Obj_AI_Hero Player;
         public static Spell Q;
@@ -42,9 +66,9 @@ namespace DevTwitch
         private static bool mustDebug = false;
 
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            LeagueSharp.Common.CustomEvents.Game.OnGameLoad += onGameLoad;
+            CustomEvents.Game.OnGameLoad += onGameLoad;
         }
 
         private static void OnTick(EventArgs args)
@@ -54,19 +78,19 @@ namespace DevTwitch
 
             try
             {
-                switch (Orbwalker.ActiveMode)
+                switch (LXOrbwalker.CurrentMode)
                 {
-                    case Orbwalking.OrbwalkingMode.Combo:
+                    case LXOrbwalker.Mode.Combo:
                         BurstCombo();
                         Combo();
                         break;
-                    case Orbwalking.OrbwalkingMode.Mixed:
+                    case LXOrbwalker.Mode.Harass:
                         Harass();
                         break;
-                    case Orbwalking.OrbwalkingMode.LaneClear:
+                    case LXOrbwalker.Mode.LaneClear:
                         WaveClear();
                         break;
-                    case Orbwalking.OrbwalkingMode.LastHit:
+                    case LXOrbwalker.Mode.Lasthit:
                         Freeze();
                         break;
                     default:
@@ -81,7 +105,7 @@ namespace DevTwitch
             }
             catch (Exception ex)
             {
-                Console.WriteLine("OnTick e:" + ex.ToString());
+                Console.WriteLine("OnTick e:" + ex);
                 if (mustDebug)
                     Game.PrintChat("OnTick e:" + ex.Message);
             }
@@ -113,10 +137,10 @@ namespace DevTwitch
                 var rTarget = SimpleTs.GetTarget(R.Range, SimpleTs.DamageType.Physical);
 
                 double totalCombo = 0;
-                totalCombo += Damage.GetAutoAttackDamage(Player, rTarget) + GetRAttackDamageBonus();
-                totalCombo += Damage.GetAutoAttackDamage(Player, rTarget) + GetRAttackDamageBonus();
+                totalCombo += Player.GetAutoAttackDamage(rTarget) + GetRAttackDamageBonus();
+                totalCombo += Player.GetAutoAttackDamage(rTarget) + GetRAttackDamageBonus();
 
-                if (totalCombo * 0.9 > rTarget.Health)
+                if (totalCombo*0.9 > rTarget.Health)
                 {
                     if (packetCast)
                         Packet.C2S.Cast.Encoded(new Packet.C2S.Cast.Struct(0, SpellSlot.R)).Send();
@@ -137,7 +161,13 @@ namespace DevTwitch
             // R Killsteal
             if (RKillSteal && R.IsReady())
             {
-                var enemies = DevHelper.GetEnemyList().Where(x => x.IsValidTarget(R.Range) && Player.GetAutoAttackDamage(x) + GetRAttackDamageBonus() > x.Health * 1.1).OrderBy(x => x.Health);
+                var enemies =
+                    DevHelper.GetEnemyList()
+                        .Where(
+                            x =>
+                                x.IsValidTarget(R.Range) &&
+                                Player.GetAutoAttackDamage(x) + GetRAttackDamageBonus() > x.Health*1.1)
+                        .OrderBy(x => x.Health);
                 if (enemies.Count() > 0)
                 {
                     var enemy = enemies.First();
@@ -155,7 +185,7 @@ namespace DevTwitch
             if (EKillSteal && E.IsReady())
             {
                 var query = DevHelper.GetEnemyList()
-                    .Where(x => x.IsValidTarget(E.Range) && GetExpungeStacks(x) > 0 && E.GetDamage(x) * 0.9 > x.Health)
+                    .Where(x => x.IsValidTarget(E.Range) && GetExpungeStacks(x) > 0 && E.GetDamage(x)*0.9 > x.Health)
                     .OrderBy(x => x.Health);
 
                 if (query.Count() > 0)
@@ -172,7 +202,7 @@ namespace DevTwitch
 
             if (eTarget == null)
                 return;
-             
+
             if (mustDebug)
                 Game.PrintChat("Combo Start");
 
@@ -183,7 +213,7 @@ namespace DevTwitch
             var useIgnite = Config.Item("UseIgnite").GetValue<bool>();
             var packetCast = Config.Item("PacketCast").GetValue<bool>();
             var MinPassiveStackUseE = Config.Item("MinPassiveStackUseECombo").GetValue<Slider>().Value;
-            
+
 
             if (eTarget.IsValidTarget(W.Range) && W.IsReady() && useW)
             {
@@ -192,13 +222,14 @@ namespace DevTwitch
 
             if (eTarget.IsValidTarget(E.Range) && E.IsReady() && useE)
             {
-                if (Player.Distance(eTarget) > E.Range * 0.75 && GetExpungeStacks(eTarget) >= MinPassiveStackUseE)
+                if (Player.Distance(eTarget) > E.Range*0.75 && GetExpungeStacks(eTarget) >= MinPassiveStackUseE)
                     CastE();
 
                 if (GetExpungeStacks(eTarget) >= 6)
                     CastE();
 
-                if (GetExpungeBuff(eTarget) != null && GetExpungeBuff(eTarget).EndTime < Game.Time + 0.2f && GetExpungeStacks(eTarget) >= MinPassiveStackUseE)
+                if (GetExpungeBuff(eTarget) != null && GetExpungeBuff(eTarget).EndTime < Game.Time + 0.2f &&
+                    GetExpungeStacks(eTarget) >= MinPassiveStackUseE)
                     CastE();
             }
 
@@ -207,7 +238,6 @@ namespace DevTwitch
                 if (IgniteManager.Cast(eTarget))
                     Game.PrintChat(string.Format("Ignite Combo KS -> {0} ", eTarget.SkinName));
             }
-
         }
 
         public static void Harass()
@@ -231,13 +261,14 @@ namespace DevTwitch
 
             if (eTarget.IsValidTarget(E.Range) && E.IsReady() && useE)
             {
-                if (Player.Distance(eTarget) > E.Range * 0.75 && GetExpungeStacks(eTarget) >= MinPassiveStackUseE)
+                if (Player.Distance(eTarget) > E.Range*0.75 && GetExpungeStacks(eTarget) >= MinPassiveStackUseE)
                     CastE();
 
                 if (GetExpungeStacks(eTarget) >= 6)
                     CastE();
 
-                if (GetExpungeBuff(eTarget) != null && GetExpungeBuff(eTarget).EndTime < Game.Time + 0.2f && GetExpungeStacks(eTarget) >= MinPassiveStackUseE)
+                if (GetExpungeBuff(eTarget) != null && GetExpungeBuff(eTarget).EndTime < Game.Time + 0.2f &&
+                    GetExpungeStacks(eTarget) >= MinPassiveStackUseE)
                     CastE();
             }
         }
@@ -253,14 +284,12 @@ namespace DevTwitch
                 return;
 
             var packetCast = Config.Item("PacketCast").GetValue<bool>();
-
         }
 
         public static void Freeze()
         {
             if (mustDebug)
                 Game.PrintChat("Freeze Start");
-
         }
 
         private static void CastE()
@@ -273,10 +302,10 @@ namespace DevTwitch
         }
 
 
-        static double GetRAttackDamageBonus()
+        private static double GetRAttackDamageBonus()
         {
             switch (R.Level)
-            { 
+            {
                 case 1:
                     return 20;
                 case 2:
@@ -305,7 +334,8 @@ namespace DevTwitch
 
                 InitializeAttachEvents();
 
-                Game.PrintChat(string.Format("<font color='#fb762d'>DevTwitch Loaded v{0}</font>", Assembly.GetExecutingAssembly().GetName().Version));
+                Game.PrintChat(string.Format("<font color='#fb762d'>DevTwitch Loaded v{0}</font>",
+                    Assembly.GetExecutingAssembly().GetName().Version));
 
                 assemblyUtil = new AssemblyUtil(Assembly.GetExecutingAssembly().GetName().Name);
                 assemblyUtil.onGetVersionCompleted += AssemblyUtil_onGetVersionCompleted;
@@ -319,14 +349,19 @@ namespace DevTwitch
             }
         }
 
-        static void AssemblyUtil_onGetVersionCompleted(OnGetVersionCompletedArgs args)
+        private static void AssemblyUtil_onGetVersionCompleted(OnGetVersionCompletedArgs args)
         {
             if (args.IsSuccess)
             {
                 if (args.CurrentVersion == Assembly.GetExecutingAssembly().GetName().Version.ToString())
-                    Game.PrintChat(string.Format("<font color='#fb762d'>DevTwitch You have the lastest version. {0}</font>", Assembly.GetExecutingAssembly().GetName().Version));
+                    Game.PrintChat(
+                        string.Format("<font color='#fb762d'>DevTwitch You have the lastest version. {0}</font>",
+                            Assembly.GetExecutingAssembly().GetName().Version));
                 else
-                    Game.PrintChat(string.Format("<font color='#fb762d'>DevTwitch NEW VERSION available! Tap F8 for Update!</font>", Assembly.GetExecutingAssembly().GetName().Version));
+                    Game.PrintChat(
+                        string.Format(
+                            "<font color='#fb762d'>DevTwitch NEW VERSION available! Tap F8 for Update!</font>",
+                            Assembly.GetExecutingAssembly().GetName().Version));
             }
         }
 
@@ -342,7 +377,11 @@ namespace DevTwitch
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Interrupter.OnPossibleToInterrupt += Interrupter_OnPossibleToInterrupt;
 
-            Config.Item("RDamage").ValueChanged += (object sender, OnValueChangeEventArgs e) => { Utility.HpBarDamageIndicator.Enabled = e.GetNewValue<bool>(); };
+            Config.Item("RDamage").ValueChanged +=
+                (object sender, OnValueChangeEventArgs e) =>
+                {
+                    Utility.HpBarDamageIndicator.Enabled = e.GetNewValue<bool>();
+                };
             if (Config.Item("RDamage").GetValue<bool>())
             {
                 Utility.HpBarDamageIndicator.DamageToUnit = GetRDamage;
@@ -390,18 +429,17 @@ namespace DevTwitch
             SkinManager.Add("Vandal Twitch");
         }
 
-        static void Game_OnGameSendPacket(GamePacketEventArgs args)
+        private static void Game_OnGameSendPacket(GamePacketEventArgs args)
         {
-
         }
 
-        static void Game_OnWndProc(WndEventArgs args)
+        private static void Game_OnWndProc(WndEventArgs args)
         {
             if (MenuGUI.IsChatOpen)
                 return;
         }
 
-        static void Interrupter_OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
+        private static void Interrupter_OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
         {
             var packetCast = Config.Item("PacketCast").GetValue<bool>();
             var QGapCloser = Config.Item("QGapCloser").GetValue<bool>();
@@ -415,7 +453,7 @@ namespace DevTwitch
             //}
         }
 
-        static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
+        private static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             if (mustDebug)
                 Game.PrintChat(string.Format("OnEnemyGapcloser -> {0}", gapcloser.Sender.SkinName));
@@ -423,11 +461,13 @@ namespace DevTwitch
             var BarrierGapCloser = Config.Item("BarrierGapCloser").GetValue<bool>();
             var BarrierGapCloserMinHealth = Config.Item("BarrierGapCloserMinHealth").GetValue<Slider>().Value;
             //var QGapCloser = Config.Item("QGapCloser").GetValue<bool>();
-            
-            if (BarrierGapCloser && Player.GetHealthPerc() < BarrierGapCloserMinHealth && gapcloser.Sender.IsValidTarget(Player.AttackRange))
+
+            if (BarrierGapCloser && Player.GetHealthPerc() < BarrierGapCloserMinHealth &&
+                gapcloser.Sender.IsValidTarget(Player.AttackRange))
             {
                 if (BarrierManager.Cast())
-                    Game.PrintChat(string.Format("OnEnemyGapcloser -> BarrierGapCloser on {0} !", gapcloser.Sender.SkinName));
+                    Game.PrintChat(string.Format("OnEnemyGapcloser -> BarrierGapCloser on {0} !",
+                        gapcloser.Sender.SkinName));
             }
 
             //if (QGapCloser && Q.IsReady())
@@ -440,7 +480,6 @@ namespace DevTwitch
             //    else
             //        Q.Cast();
             //}
-
         }
 
         private static BuffInstance GetExpungeBuff(Obj_AI_Base unit)
@@ -449,8 +488,7 @@ namespace DevTwitch
 
             if (query.Count() > 0)
                 return query.First();
-            else
-                return null;
+            return null;
         }
 
         private static int GetExpungeStacks(Obj_AI_Base unit)
@@ -459,13 +497,12 @@ namespace DevTwitch
 
             if (query.Count() > 0)
                 return query.First().Count;
-            else
-                return 0;
+            return 0;
         }
 
         private static float GetRDamage(Obj_AI_Hero enemy)
         {
-            return (float)Damage.GetSpellDamage(Player, enemy, SpellSlot.R);
+            return (float) Player.GetSpellDamage(enemy, SpellSlot.R);
         }
 
         private static void OnDraw(EventArgs args)
@@ -492,8 +529,8 @@ namespace DevTwitch
             SimpleTs.AddToMenu(targetSelectorMenu);
             Config.AddSubMenu(targetSelectorMenu);
 
-            Config.AddSubMenu(new Menu("Orbwalking", "Orbwalking"));
-            Orbwalker = new Orbwalking.Orbwalker(Config.SubMenu("Orbwalking"));
+            var orb = Config.AddSubMenu(new Menu("Orbwalking", "Orbwalking"));
+            LXOrbwalker.AddToMenu(orb);
 
             Config.AddSubMenu(new Menu("Combo", "Combo"));
             Config.SubMenu("Combo").AddItem(new MenuItem("UseQCombo", "Use Q").SetValue(true));
@@ -501,14 +538,19 @@ namespace DevTwitch
             Config.SubMenu("Combo").AddItem(new MenuItem("UseECombo", "Use E").SetValue(true));
             Config.SubMenu("Combo").AddItem(new MenuItem("UseRCombo", "Use R").SetValue(true));
             Config.SubMenu("Combo").AddItem(new MenuItem("UseIgnite", "Use Ignite").SetValue(true));
-            Config.SubMenu("Combo").AddItem(new MenuItem("MinPassiveStackUseECombo", "Min Expunge Stacks Use E").SetValue(new Slider(3, 1, 6)));
+            Config.SubMenu("Combo")
+                .AddItem(
+                    new MenuItem("MinPassiveStackUseECombo", "Min Expunge Stacks Use E").SetValue(new Slider(3, 1, 6)));
 
             Config.AddSubMenu(new Menu("Harass", "Harass"));
             Config.SubMenu("Harass").AddItem(new MenuItem("UseQHarass", "Use Q").SetValue(true));
             Config.SubMenu("Harass").AddItem(new MenuItem("UseWHarass", "Use W").SetValue(true));
             Config.SubMenu("Harass").AddItem(new MenuItem("UseEHarass", "Use E").SetValue(true));
-            Config.SubMenu("Harass").AddItem(new MenuItem("MinPassiveStackUseEHarass", "Min Expunge Stacks Use E").SetValue(new Slider(2, 1, 6)));
-            Config.SubMenu("Harass").AddItem(new MenuItem("ManaHarass", "Min Mana Harass").SetValue(new Slider(50, 1, 100)));
+            Config.SubMenu("Harass")
+                .AddItem(
+                    new MenuItem("MinPassiveStackUseEHarass", "Min Expunge Stacks Use E").SetValue(new Slider(2, 1, 6)));
+            Config.SubMenu("Harass")
+                .AddItem(new MenuItem("ManaHarass", "Min Mana Harass").SetValue(new Slider(50, 1, 100)));
 
             //Config.AddSubMenu(new Menu("LaneClear", "LaneClear"));
             //Config.SubMenu("LaneClear").AddItem(new MenuItem("UseELaneClear", "Use E").SetValue(false));
@@ -524,17 +566,25 @@ namespace DevTwitch
             Config.AddSubMenu(new Menu("GapCloser", "GapCloser"));
             //Config.SubMenu("GapCloser").AddItem(new MenuItem("QGapCloser", "Use Q onGapCloser").SetValue(true));
             Config.SubMenu("GapCloser").AddItem(new MenuItem("BarrierGapCloser", "Barrier onGapCloser").SetValue(true));
-            Config.SubMenu("GapCloser").AddItem(new MenuItem("BarrierGapCloserMinHealth", "Barrier MinHealth").SetValue(new Slider(40, 0, 100)));
+            Config.SubMenu("GapCloser")
+                .AddItem(new MenuItem("BarrierGapCloserMinHealth", "Barrier MinHealth").SetValue(new Slider(40, 0, 100)));
 
             //Config.AddSubMenu(new Menu("Ultimate", "Ultimate"));
             //Config.SubMenu("Ultimate").AddItem(new MenuItem("UseAssistedUlt", "Use AssistedUlt").SetValue(true));
             //Config.SubMenu("Ultimate").AddItem(new MenuItem("AssistedUltKey", "Assisted Ult Key").SetValue((new KeyBind("R".ToCharArray()[0], KeyBindType.Press))));
 
             Config.AddSubMenu(new Menu("Drawings", "Drawings"));
-            Config.SubMenu("Drawings").AddItem(new MenuItem("QRange", "Q Range").SetValue(new Circle(true, System.Drawing.Color.FromArgb(255, 255, 255, 255))));
-            Config.SubMenu("Drawings").AddItem(new MenuItem("WRange", "W Range").SetValue(new Circle(false, System.Drawing.Color.FromArgb(255, 255, 255, 255))));
-            Config.SubMenu("Drawings").AddItem(new MenuItem("ERange", "E Range").SetValue(new Circle(false, System.Drawing.Color.FromArgb(255, 255, 255, 255))));
-            Config.SubMenu("Drawings").AddItem(new MenuItem("RRange", "R Range").SetValue(new Circle(false, System.Drawing.Color.FromArgb(255, 255, 255, 255))));
+            Config.SubMenu("Drawings")
+                .AddItem(new MenuItem("QRange", "Q Range").SetValue(new Circle(true, Color.FromArgb(255, 255, 255, 255))));
+            Config.SubMenu("Drawings")
+                .AddItem(
+                    new MenuItem("WRange", "W Range").SetValue(new Circle(false, Color.FromArgb(255, 255, 255, 255))));
+            Config.SubMenu("Drawings")
+                .AddItem(
+                    new MenuItem("ERange", "E Range").SetValue(new Circle(false, Color.FromArgb(255, 255, 255, 255))));
+            Config.SubMenu("Drawings")
+                .AddItem(
+                    new MenuItem("RRange", "R Range").SetValue(new Circle(false, Color.FromArgb(255, 255, 255, 255))));
             Config.SubMenu("Drawings").AddItem(new MenuItem("RDamage", "R Dmg onHPBar").SetValue(true));
 
 

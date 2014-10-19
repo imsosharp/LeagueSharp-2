@@ -1,12 +1,24 @@
-﻿using DevCommom;
-using LeagueSharp;
-using LeagueSharp.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿#region LICENSE
+
+// /*
+// Copyright 2014 - 2014 DevRyze
+// Program.cs is part of DevRyze.
+// DevRyze is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// DevRyze is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with DevRyze. If not, see <http://www.gnu.org/licenses/>.
+// */
+// 
+
+#endregion
+
+#region
 
 /*
  * ##### DevRyze Mods #####
@@ -19,15 +31,25 @@ using System.Threading.Tasks;
  * + Skin Hack
 
 */
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Reflection;
+using DevCommom;
+using LeagueSharp;
+using LeagueSharp.Common;
+using LX_Orbwalker;
+
+#endregion
 
 namespace DevRyze
 {
-    class Program
+    internal class Program
     {
         public const string ChampionName = "ryze";
 
         public static Menu Config;
-        public static Orbwalking.Orbwalker Orbwalker;
         public static List<Spell> SpellList = new List<Spell>();
         public static Obj_AI_Hero Player;
         public static Spell Q;
@@ -44,12 +66,12 @@ namespace DevRyze
         private static bool mustDebug = false;
 
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            LeagueSharp.Common.CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
         }
 
-        static void Game_OnGameLoad(EventArgs args)
+        private static void Game_OnGameLoad(EventArgs args)
         {
             try
             {
@@ -66,7 +88,8 @@ namespace DevRyze
 
                 InitializeAttachEvents();
 
-                Game.PrintChat(string.Format("<font color='#fb762d'>DevRyze Loaded v{0}</font>", Assembly.GetExecutingAssembly().GetName().Version));
+                Game.PrintChat(string.Format("<font color='#fb762d'>DevRyze Loaded v{0}</font>",
+                    Assembly.GetExecutingAssembly().GetName().Version));
 
                 assemblyUtil = new AssemblyUtil(Assembly.GetExecutingAssembly().GetName().Name);
                 assemblyUtil.onGetVersionCompleted += AssemblyUtil_onGetVersionCompleted;
@@ -80,17 +103,20 @@ namespace DevRyze
             }
         }
 
-        static void AssemblyUtil_onGetVersionCompleted(OnGetVersionCompletedArgs args)
+        private static void AssemblyUtil_onGetVersionCompleted(OnGetVersionCompletedArgs args)
         {
             if (args.IsSuccess)
             {
                 if (args.CurrentVersion == Assembly.GetExecutingAssembly().GetName().Version.ToString())
-                    Game.PrintChat(string.Format("<font color='#fb762d'>DevRyze You have the lastest version.</font>", Assembly.GetExecutingAssembly().GetName().Version));
+                    Game.PrintChat(string.Format("<font color='#fb762d'>DevRyze You have the lastest version.</font>",
+                        Assembly.GetExecutingAssembly().GetName().Version));
                 else
-                    Game.PrintChat(string.Format("<font color='#fb762d'>DevRyze NEW VERSION available! Tap F8 to update! {0} -> {1}</font>", Assembly.GetExecutingAssembly().GetName().Version, args.CurrentVersion));
+                    Game.PrintChat(
+                        string.Format(
+                            "<font color='#fb762d'>DevRyze NEW VERSION available! Tap F8 to update! {0} -> {1}</font>",
+                            Assembly.GetExecutingAssembly().GetName().Version, args.CurrentVersion));
             }
         }
-
 
 
         private static void InitializeSpells()
@@ -150,10 +176,14 @@ namespace DevRyze
             Drawing.OnDraw += Drawing_OnDraw;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Interrupter.OnPossibleToInterrupt += Interrupter_OnPossibleToInterrupt;
-            Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
-            Orbwalking.AfterAttack += Orbwalking_AfterAttack;
+            LXOrbwalker.BeforeAttack += Orbwalking_BeforeAttack;
+            LXOrbwalker.AfterAttack += Orbwalking_AfterAttack;
 
-            Config.Item("ComboDamage").ValueChanged += (object sender, OnValueChangeEventArgs e) => { Utility.HpBarDamageIndicator.Enabled = e.GetNewValue<bool>(); };
+            Config.Item("ComboDamage").ValueChanged +=
+                (object sender, OnValueChangeEventArgs e) =>
+                {
+                    Utility.HpBarDamageIndicator.Enabled = e.GetNewValue<bool>();
+                };
             if (Config.Item("ComboDamage").GetValue<bool>())
             {
                 Utility.HpBarDamageIndicator.DamageToUnit = GetComboDamage;
@@ -169,12 +199,17 @@ namespace DevRyze
         {
             var packetCast = Config.Item("PacketCast").GetValue<bool>();
 
-            if (Environment.TickCount < Orbwalking.LastAATick + (Player.AttackDelay * 1000) + (Game.Ping / 2))
+            if (Environment.TickCount < Orbwalking.LastAATick + (Player.AttackDelay*1000) + (Game.Ping/2))
             {
-                int timeNextAA = (int)(Orbwalking.LastAATick + (Player.AttackDelay * 1000) + (Game.Ping / 2)) - Environment.TickCount;
+                var timeNextAA = (int) (Orbwalking.LastAATick + (Player.AttackDelay*1000) + (Game.Ping/2)) -
+                                 Environment.TickCount;
 
-                var MinionList = MinionManager.GetMinions(Player.Position, Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health)
-                    .Where(x => !x.IsDead && HealthPrediction.LaneClearHealthPrediction(x, (int)(timeNextAA * 1.1)) <= 0).ToList();
+                var MinionList =
+                    MinionManager.GetMinions(Player.Position, Q.Range, MinionTypes.All, MinionTeam.Enemy,
+                        MinionOrderTypes.Health)
+                        .Where(
+                            x => !x.IsDead && HealthPrediction.LaneClearHealthPrediction(x, (int) (timeNextAA*1.1)) <= 0)
+                        .ToList();
 
                 if (MinionList.Count() > 0)
                 {
@@ -195,26 +230,28 @@ namespace DevRyze
                         MinionList.Remove(mob);
                     }
                 }
-
             }
         }
 
-        static void Orbwalking_AfterAttack(Obj_AI_Base unit, Obj_AI_Base target)
+        private static void Orbwalking_AfterAttack(Obj_AI_Base unit, Obj_AI_Base target)
         {
             var packetCast = Config.Item("PacketCast").GetValue<bool>();
 
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit ||
-                Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+            if (LXOrbwalker.CurrentMode == LXOrbwalker.Mode.Lasthit ||
+                LXOrbwalker.CurrentMode == LXOrbwalker.Mode.LaneClear)
             {
                 if (target.IsMinion)
                 {
-                    var MinionList = MinionManager.GetMinions(Player.Position, Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health)
-                        .Where(x => 
-                            !x.IsDead && target.NetworkId != x.NetworkId && !MinionListToIgnore.Contains(x) &&
-                            HealthPrediction.LaneClearHealthPrediction(x, (int)(Player.AttackDelay * 1000 * 1.1)) <= 0).ToList();
+                    var MinionList =
+                        MinionManager.GetMinions(Player.Position, Q.Range, MinionTypes.All, MinionTeam.Enemy,
+                            MinionOrderTypes.Health)
+                            .Where(x =>
+                                !x.IsDead && target.NetworkId != x.NetworkId && !MinionListToIgnore.Contains(x) &&
+                                HealthPrediction.LaneClearHealthPrediction(x, (int) (Player.AttackDelay*1000*1.1)) <= 0)
+                            .ToList();
 
                     if (MinionList.Count() > 0)
-                    { 
+                    {
                         var mob = MinionList.First();
                         if (Q.IsReady() && mob.IsValidTarget(Q.Range))
                         {
@@ -239,34 +276,35 @@ namespace DevRyze
 
         private static float GetComboDamage(Obj_AI_Hero enemy)
         {
-            IEnumerable<SpellSlot> spellCombo = new[] { SpellSlot.Q, SpellSlot.W, SpellSlot.E, SpellSlot.R };
-            return (float)Damage.GetComboDamage(Player, enemy, spellCombo);
+            IEnumerable<SpellSlot> spellCombo = new[] {SpellSlot.Q, SpellSlot.W, SpellSlot.E, SpellSlot.R};
+            return (float) Player.GetComboDamage(enemy, spellCombo);
         }
 
-        static void Orbwalking_BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
+        private static void Orbwalking_BeforeAttack(LXOrbwalker.BeforeAttackEventArgs args)
         {
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+            if (LXOrbwalker.CurrentMode == LXOrbwalker.Mode.Combo)
             {
                 var useQ = Config.Item("UseQCombo").GetValue<bool>();
                 var useW = Config.Item("UseWCombo").GetValue<bool>();
                 var useE = Config.Item("UseQCombo").GetValue<bool>();
 
-                if (Player.GetNearestEnemy().IsValidTarget(W.Range) && ((useQ && Q.IsReady()) || (useW && W.IsReady() || useE && E.IsReady())))
+                if (Player.GetNearestEnemy().IsValidTarget(W.Range) &&
+                    ((useQ && Q.IsReady()) || (useW && W.IsReady() || useE && E.IsReady())))
                     args.Process = false;
             }
-            else
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+            else if (LXOrbwalker.CurrentMode == LXOrbwalker.Mode.Harass)
             {
                 var useQ = Config.Item("UseQHarass").GetValue<bool>();
                 var useW = Config.Item("UseWHarass").GetValue<bool>();
                 var useE = Config.Item("UseEHarass").GetValue<bool>();
 
-                if (Player.GetNearestEnemy().IsValidTarget(W.Range) && ((useQ && Q.IsReady()) || (useW && W.IsReady() || useE && E.IsReady())))
+                if (Player.GetNearestEnemy().IsValidTarget(W.Range) &&
+                    ((useQ && Q.IsReady()) || (useW && W.IsReady() || useE && E.IsReady())))
                     args.Process = false;
             }
         }
 
-        static void Interrupter_OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
+        private static void Interrupter_OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
         {
             var packetCast = Config.Item("PacketCast").GetValue<bool>();
             var WInterruptSpell = Config.Item("WInterruptSpell").GetValue<bool>();
@@ -277,16 +315,17 @@ namespace DevRyze
             }
         }
 
-        static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
+        private static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             var packetCast = Config.Item("PacketCast").GetValue<bool>();
             var BarrierGapCloser = Config.Item("BarrierGapCloser").GetValue<bool>();
             var WGapCloser = Config.Item("WGapCloser").GetValue<bool>();
-            
+
             if (BarrierGapCloser && gapcloser.Sender.IsValidTarget(Player.AttackRange))
             {
                 if (BarrierManager.Cast())
-                    Game.PrintChat(string.Format("OnEnemyGapcloser -> BarrierGapCloser on {0} !", gapcloser.Sender.SkinName));
+                    Game.PrintChat(string.Format("OnEnemyGapcloser -> BarrierGapCloser on {0} !",
+                        gapcloser.Sender.SkinName));
             }
 
             if (WGapCloser && W.IsReady() && gapcloser.Sender.IsValidTarget(W.Range))
@@ -295,42 +334,40 @@ namespace DevRyze
             }
         }
 
-        static void Game_OnGameUpdate(EventArgs args)
+        private static void Game_OnGameUpdate(EventArgs args)
         {
             try
             {
-                switch (Orbwalker.ActiveMode)
+                switch (LXOrbwalker.CurrentMode)
                 {
-                    case Orbwalking.OrbwalkingMode.Combo:
+                    case LXOrbwalker.Mode.Combo:
                         BurstCombo();
                         Combo();
                         break;
-                    case Orbwalking.OrbwalkingMode.Mixed:
+                    case LXOrbwalker.Mode.Harass:
                         Harass();
                         break;
-                    case Orbwalking.OrbwalkingMode.LaneClear:
+                    case LXOrbwalker.Mode.LaneClear:
                         WaveClear();
                         break;
-                    case Orbwalking.OrbwalkingMode.LastHit:
+                    case LXOrbwalker.Mode.Lasthit:
                         Freeze();
                         break;
                     default:
+                    {
+                        if (Config.Item("UseHarassAlways").GetValue<bool>())
                         {
-                            if (Config.Item("UseHarassAlways").GetValue<bool>())
-                            {
-                                Harass();
-                            }
-                            break;
+                            Harass();
                         }
-                       
+                        break;
+                    }
                 }
 
                 SkinManager.Update();
-
             }
             catch (Exception ex)
             {
-                Console.WriteLine("OnTick e:" + ex.ToString());
+                Console.WriteLine("OnTick e:" + ex);
                 if (mustDebug)
                     Game.PrintChat("OnTick e:" + ex.Message);
             }
@@ -346,7 +383,8 @@ namespace DevRyze
             var useQ = Config.Item("UseQCombo").GetValue<bool>();
             var useW = Config.Item("UseWCombo").GetValue<bool>();
             var useE = Config.Item("UseECombo").GetValue<bool>();
-            var useR = Config.Item("UseRCombo").GetValue<bool>() || Config.Item("UseRComboToggle").GetValue<KeyBind>().Active;
+            var useR = Config.Item("UseRCombo").GetValue<bool>() ||
+                       Config.Item("UseRComboToggle").GetValue<KeyBind>().Active;
             var packetCast = Config.Item("PacketCast").GetValue<bool>();
 
             // Cast R if will hit 1+ enemies
@@ -359,7 +397,8 @@ namespace DevRyze
             }
 
             // Cast R for Killable Combo
-            IEnumerable<SpellSlot> spellCombo = new[] { SpellSlot.Q, SpellSlot.R, SpellSlot.E, SpellSlot.Q, SpellSlot.W, SpellSlot.Q };
+            IEnumerable<SpellSlot> spellCombo = new[]
+            {SpellSlot.Q, SpellSlot.R, SpellSlot.E, SpellSlot.Q, SpellSlot.W, SpellSlot.Q};
             if (useR && R.IsReady() && Player.IsKillable(eTarget, spellCombo))
             {
                 if (packetCast)
@@ -369,7 +408,8 @@ namespace DevRyze
             }
 
             // Cast on W
-            IEnumerable<SpellSlot> spellComboHard = new[] { SpellSlot.Q, SpellSlot.R, SpellSlot.E, SpellSlot.Q, SpellSlot.W, SpellSlot.Q, SpellSlot.Q };
+            IEnumerable<SpellSlot> spellComboHard = new[]
+            {SpellSlot.Q, SpellSlot.R, SpellSlot.E, SpellSlot.Q, SpellSlot.W, SpellSlot.Q, SpellSlot.Q};
             if (useR && R.IsReady() && eTarget.HasBuff("Rune Prision") && Player.IsKillable(eTarget, spellComboHard))
             {
                 if (packetCast)
@@ -392,7 +432,8 @@ namespace DevRyze
             var useQ = Config.Item("UseQCombo").GetValue<bool>();
             var useW = Config.Item("UseWCombo").GetValue<bool>();
             var useE = Config.Item("UseECombo").GetValue<bool>();
-            var useR = Config.Item("UseRCombo").GetValue<bool>() || Config.Item("UseRComboToggle").GetValue<KeyBind>().Active;
+            var useR = Config.Item("UseRCombo").GetValue<bool>() ||
+                       Config.Item("UseRComboToggle").GetValue<KeyBind>().Active;
             var packetCast = Config.Item("PacketCast").GetValue<bool>();
 
             if (eTarget.IsValidTarget(Q.Range) && Q.IsReady() && useQ)
@@ -445,7 +486,8 @@ namespace DevRyze
                 Q.CastOnUnit(eTarget, packetCast);
             }
 
-            if (Player.Distance(eTarget) > 500 && eTarget.IsValidTarget(W.Range) && !eTarget.IsFacing(Player) && W.IsReady() && useW)
+            if (Player.Distance(eTarget) > 500 && eTarget.IsValidTarget(W.Range) && !eTarget.IsFacing(Player) &&
+                W.IsReady() && useW)
             {
                 W.CastOnUnit(eTarget, packetCast);
             }
@@ -463,10 +505,13 @@ namespace DevRyze
 
         public static void WaveClear()
         {
-            var MinionList = MinionManager.GetMinions(Player.Position, Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health)
-                .Where(x => !MinionListToIgnore.Contains(x)).ToList();
+            var MinionList =
+                MinionManager.GetMinions(Player.Position, Q.Range, MinionTypes.All, MinionTeam.Enemy,
+                    MinionOrderTypes.Health)
+                    .Where(x => !MinionListToIgnore.Contains(x)).ToList();
 
-            var JungleList = MinionManager.GetMinions(Player.Position, Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+            var JungleList = MinionManager.GetMinions(Player.Position, Q.Range, MinionTypes.All, MinionTeam.Neutral,
+                MinionOrderTypes.MaxHealth);
 
             if (mustDebug)
                 Game.PrintChat("WaveClear Start");
@@ -486,7 +531,12 @@ namespace DevRyze
                     Q.CastOnUnit(mob, packetCast);
                 }
 
-                var queryMinion = MinionList.Where(x => x.IsValidTarget(Q.Range) && HealthPrediction.LaneClearHealthPrediction(x, (int)Q.Delay * 1000) < Player.GetSpellDamage(x, SpellSlot.Q) * 0.9);
+                var queryMinion =
+                    MinionList.Where(
+                        x =>
+                            x.IsValidTarget(Q.Range) &&
+                            HealthPrediction.LaneClearHealthPrediction(x, (int) Q.Delay*1000) <
+                            Player.GetSpellDamage(x, SpellSlot.Q)*0.9);
                 if (queryMinion.Count() > 0)
                 {
                     var mob = queryMinion.First();
@@ -505,7 +555,12 @@ namespace DevRyze
                     W.CastOnUnit(mob, packetCast);
                 }
 
-                var query = MinionList.Where(x => x.IsValidTarget(W.Range) && HealthPrediction.LaneClearHealthPrediction(x, (int)W.Delay * 1000) < Player.GetSpellDamage(x, SpellSlot.W) * 0.9);
+                var query =
+                    MinionList.Where(
+                        x =>
+                            x.IsValidTarget(W.Range) &&
+                            HealthPrediction.LaneClearHealthPrediction(x, (int) W.Delay*1000) <
+                            Player.GetSpellDamage(x, SpellSlot.W)*0.9);
                 if (query.Count() > 0)
                 {
                     var mob = query.First();
@@ -524,7 +579,12 @@ namespace DevRyze
                     E.CastOnUnit(mob, packetCast);
                 }
 
-                var query = MinionList.Where(x => x.IsValidTarget(E.Range) && HealthPrediction.LaneClearHealthPrediction(x, (int)E.Delay * 1000) < Player.GetSpellDamage(x, SpellSlot.E) * 0.9);
+                var query =
+                    MinionList.Where(
+                        x =>
+                            x.IsValidTarget(E.Range) &&
+                            HealthPrediction.LaneClearHealthPrediction(x, (int) E.Delay*1000) <
+                            Player.GetSpellDamage(x, SpellSlot.E)*0.9);
                 if (query.Count() > 0)
                 {
                     var mob = query.First();
@@ -533,12 +593,12 @@ namespace DevRyze
                     MinionList.Remove(mob);
                 }
             }
-
         }
 
         public static void Freeze()
         {
-            var MinionList = MinionManager.GetMinions(Player.Position, Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health)
+            var MinionList = MinionManager.GetMinions(Player.Position, Q.Range, MinionTypes.All, MinionTeam.Enemy,
+                MinionOrderTypes.Health)
                 .Where(x => !MinionListToIgnore.Contains(x));
 
             if (mustDebug)
@@ -550,7 +610,12 @@ namespace DevRyze
 
             if (Q.IsReady() && useQ && Player.GetManaPerc() > ManaLaneClear)
             {
-                var queryMinion = MinionList.Where(x => x.IsValidTarget(Q.Range) && HealthPrediction.LaneClearHealthPrediction(x, (int)Q.Delay * 1000) < Player.GetSpellDamage(x, SpellSlot.Q) * 0.9);
+                var queryMinion =
+                    MinionList.Where(
+                        x =>
+                            x.IsValidTarget(Q.Range) &&
+                            HealthPrediction.LaneClearHealthPrediction(x, (int) Q.Delay*1000) <
+                            Player.GetSpellDamage(x, SpellSlot.Q)*0.9);
                 if (queryMinion.Count() > 0)
                 {
                     var mob = queryMinion.First();
@@ -560,7 +625,7 @@ namespace DevRyze
             }
         }
 
-        static void Drawing_OnDraw(EventArgs args)
+        private static void Drawing_OnDraw(EventArgs args)
         {
             foreach (var spell in SpellList)
             {
@@ -568,9 +633,9 @@ namespace DevRyze
                 if (menuItem.Active)
                 {
                     if (spell.IsReady())
-                        Utility.DrawCircle(ObjectManager.Player.Position, spell.Range, System.Drawing.Color.Green);
+                        Utility.DrawCircle(ObjectManager.Player.Position, spell.Range, Color.Green);
                     else
-                        Utility.DrawCircle(ObjectManager.Player.Position, spell.Range, System.Drawing.Color.Red);
+                        Utility.DrawCircle(ObjectManager.Player.Position, spell.Range, Color.Red);
                 }
             }
         }
@@ -586,15 +651,18 @@ namespace DevRyze
             SimpleTs.AddToMenu(targetSelectorMenu);
             Config.AddSubMenu(targetSelectorMenu);
 
-            Config.AddSubMenu(new Menu("Orbwalking", "Orbwalking"));
-            Orbwalker = new Orbwalking.Orbwalker(Config.SubMenu("Orbwalking"));
+            var orb = Config.AddSubMenu(new Menu("Orbwalking", "Orbwalking"));
+            LXOrbwalker.AddToMenu(orb);
 
             Config.AddSubMenu(new Menu("Combo", "Combo"));
             Config.SubMenu("Combo").AddItem(new MenuItem("UseQCombo", "Use Q").SetValue(true));
             Config.SubMenu("Combo").AddItem(new MenuItem("UseWCombo", "Use W").SetValue(true));
             Config.SubMenu("Combo").AddItem(new MenuItem("UseECombo", "Use E").SetValue(true));
             Config.SubMenu("Combo").AddItem(new MenuItem("UseRCombo", "Use R").SetValue(true));
-            Config.SubMenu("Combo").AddItem(new MenuItem("UseRComboToggle", "Use R (toggle)").SetValue(new KeyBind("G".ToCharArray()[0], KeyBindType.Toggle)));
+            Config.SubMenu("Combo")
+                .AddItem(
+                    new MenuItem("UseRComboToggle", "Use R (toggle)").SetValue(new KeyBind("G".ToCharArray()[0],
+                        KeyBindType.Toggle)));
 
             Config.AddSubMenu(new Menu("Harass", "Harass"));
             Config.SubMenu("Harass").AddItem(new MenuItem("UseQHarass", "Use Q").SetValue(true));
@@ -606,7 +674,8 @@ namespace DevRyze
             Config.SubMenu("LaneClear").AddItem(new MenuItem("UseQLaneClear", "Use Q").SetValue(true));
             Config.SubMenu("LaneClear").AddItem(new MenuItem("UseWLaneClear", "Use W").SetValue(false));
             Config.SubMenu("LaneClear").AddItem(new MenuItem("UseELaneClear", "Use E").SetValue(true));
-            Config.SubMenu("LaneClear").AddItem(new MenuItem("ManaLaneClear", "Min Mana LaneClear").SetValue(new Slider(40, 1, 100)));
+            Config.SubMenu("LaneClear")
+                .AddItem(new MenuItem("ManaLaneClear", "Min Mana LaneClear").SetValue(new Slider(40, 1, 100)));
 
             Config.AddSubMenu(new Menu("Freeze", "Freeze"));
             Config.SubMenu("Freeze").AddItem(new MenuItem("UseQFreeze", "Use Q LastHit").SetValue(false));
@@ -621,10 +690,17 @@ namespace DevRyze
             Config.SubMenu("GapCloser").AddItem(new MenuItem("WInterruptSpell", "W Interrupt Spell").SetValue(true));
 
             Config.AddSubMenu(new Menu("Drawings", "Drawings"));
-            Config.SubMenu("Drawings").AddItem(new MenuItem("QRange", "Q Range").SetValue(new Circle(true, System.Drawing.Color.FromArgb(255, 255, 255, 255))));
-            Config.SubMenu("Drawings").AddItem(new MenuItem("WRange", "W Range").SetValue(new Circle(false, System.Drawing.Color.FromArgb(255, 255, 255, 255))));
-            Config.SubMenu("Drawings").AddItem(new MenuItem("ERange", "E Range").SetValue(new Circle(false, System.Drawing.Color.FromArgb(255, 255, 255, 255))));
-            Config.SubMenu("Drawings").AddItem(new MenuItem("RRange", "R Range").SetValue(new Circle(false, System.Drawing.Color.FromArgb(255, 255, 255, 255))));
+            Config.SubMenu("Drawings")
+                .AddItem(new MenuItem("QRange", "Q Range").SetValue(new Circle(true, Color.FromArgb(255, 255, 255, 255))));
+            Config.SubMenu("Drawings")
+                .AddItem(
+                    new MenuItem("WRange", "W Range").SetValue(new Circle(false, Color.FromArgb(255, 255, 255, 255))));
+            Config.SubMenu("Drawings")
+                .AddItem(
+                    new MenuItem("ERange", "E Range").SetValue(new Circle(false, Color.FromArgb(255, 255, 255, 255))));
+            Config.SubMenu("Drawings")
+                .AddItem(
+                    new MenuItem("RRange", "R Range").SetValue(new Circle(false, Color.FromArgb(255, 255, 255, 255))));
             Config.SubMenu("Drawings").AddItem(new MenuItem("ComboDamage", "Drawings on HPBar").SetValue(true));
 
             SkinManager.AddToMenu(ref Config);
