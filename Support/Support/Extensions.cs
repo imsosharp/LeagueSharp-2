@@ -99,7 +99,7 @@ namespace Support
 
         public static bool IsValid<T>(this GameObject obj)
         {
-            return obj != null && obj.IsValid && obj is T;
+            return obj.IsValid && obj is T;
         }
 
         public static double HealthBuffer(this Obj_AI_Base hero, int buffer)

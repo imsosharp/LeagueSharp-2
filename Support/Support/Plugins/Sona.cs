@@ -150,7 +150,7 @@ namespace Support.Plugins
             config.AddBool("ComboW", "Use W", true);
             config.AddBool("ComboE", "Use E", true);
             config.AddBool("ComboR", "Use R", true);
-            config.AddSlider("ComboCountR", "Targets in range to Ult", 3, 1, 5);
+            config.AddSlider("ComboCountR", "Targets hit to Ult", 3, 1, 5);
             config.AddSlider("ComboHealthW", "Health to Heal", 80, 1, 100);
         }
 

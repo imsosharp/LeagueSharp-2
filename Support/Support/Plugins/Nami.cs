@@ -34,7 +34,7 @@ namespace Support.Plugins
             E = new Spell(SpellSlot.E, 800);
             R = new Spell(SpellSlot.R, 2200);
 
-            Q.SetSkillshot(1.0f, 200f, Int32.MaxValue, false, SkillshotType.SkillshotCircle);
+            Q.SetSkillshot(0.875f, 200f, Int32.MaxValue, false, SkillshotType.SkillshotCircle);
             R.SetSkillshot(0.5f, 325f, 1200f, false, SkillshotType.SkillshotLine);
             GameObject.OnCreate += RangeAttackOnCreate;
         }
