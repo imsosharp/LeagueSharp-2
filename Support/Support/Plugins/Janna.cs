@@ -75,7 +75,7 @@ namespace Support.Plugins
                     if (pred.Hitchance >= HitChance.High)
                     {
                         Q.Cast(pred.CastPosition, UsePackets);
-                        Q.Cast(pred.CastPosition, UsePackets);
+                        Q.Cast();
                     }
                 }
 
@@ -164,7 +164,7 @@ namespace Support.Plugins
                 if (pred.Hitchance >= HitChance.High)
                 {
                     Q.Cast(pred.CastPosition, UsePackets);
-                    Q.Cast(pred.CastPosition, UsePackets);
+                    Q.Cast();
                 }
             }
 
@@ -186,7 +186,7 @@ namespace Support.Plugins
                 if (pred.Hitchance >= HitChance.High)
                 {
                     Q.Cast(pred.CastPosition, UsePackets);
-                    Q.Cast(pred.CastPosition, UsePackets);
+                    Q.Cast();
                 }
             }
 
