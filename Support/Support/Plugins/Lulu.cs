@@ -34,7 +34,7 @@ namespace Support.Plugins
             E = new Spell(SpellSlot.E, 650); //shield
             R = new Spell(SpellSlot.R, 900);
 
-            Q.SetSkillshot(0.25f, 50, 1450, false, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(0.25f, 60, 1450, false, SkillshotType.SkillshotLine);
         }
 
         public override void OnUpdate(EventArgs args)

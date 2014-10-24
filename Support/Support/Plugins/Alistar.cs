@@ -50,7 +50,7 @@ namespace Support.Plugins
                 {
                     W.CastOnUnit(Target, UsePackets);
                     var jumpTime = Math.Max(0, Player.Distance(Target) - 500)*10/25 + 25;
-                    Utility.DelayAction.Add((int)jumpTime, () => Q.Cast());
+                    Utility.DelayAction.Add((int) jumpTime, () => Q.Cast());
                 }
 
                 var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("ComboHealthE").Value, E.Range);

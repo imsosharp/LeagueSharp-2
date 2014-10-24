@@ -35,7 +35,7 @@ namespace Support.Plugins
             E = new Spell(SpellSlot.E, 750);
             R = new Spell(SpellSlot.R, 550);
 
-            Q.SetSkillshot(0.234f, 70f, 1200f, true, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(0.25f, 80f, 1200f, true, SkillshotType.SkillshotLine);
             W.SetSkillshot(0.28f, 175f, float.MaxValue, false, SkillshotType.SkillshotCircle);
         }
 
@@ -73,7 +73,8 @@ namespace Support.Plugins
                     }
                 }
 
-                if (R.CastCheck(Target, "ComboR") && Helpers.EnemyInRange(ConfigValue<Slider>("ComboCountR").Value, R.Range))
+                if (R.CastCheck(Target, "ComboR") &&
+                    Helpers.EnemyInRange(ConfigValue<Slider>("ComboCountR").Value, R.Range))
                 {
                     R.Cast();
                 }

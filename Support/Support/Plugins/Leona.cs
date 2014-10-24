@@ -34,8 +34,8 @@ namespace Support.Plugins
             E = new Spell(SpellSlot.E, 875);
             R = new Spell(SpellSlot.R, 1200);
 
-            E.SetSkillshot(0.25f, 85f, 2000f, false, SkillshotType.SkillshotLine);
-            R.SetSkillshot(0.625f, 315f, float.MaxValue, false, SkillshotType.SkillshotCircle);
+            E.SetSkillshot(0.25f, 100f, 2000f, false, SkillshotType.SkillshotLine);
+            R.SetSkillshot(1f, 300f, float.MaxValue, false, SkillshotType.SkillshotCircle);
         }
 
         public override void OnUpdate(EventArgs args)

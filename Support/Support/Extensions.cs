@@ -97,6 +97,12 @@ namespace Support
             return false;
         }
 
+        public static bool IsValidAlly(this Obj_AI_Base unit, float range = float.MaxValue)
+        {
+            return unit.Distance(ObjectManager.Player) < range && unit.IsValid<Obj_AI_Hero>() && unit.IsAlly &&
+                   !unit.IsDead && unit.IsTargetable;
+        }
+
         public static bool IsValid<T>(this GameObject obj)
         {
             return obj.IsValid && obj is T;

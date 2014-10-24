@@ -18,6 +18,7 @@
 #region
 
 using System;
+using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 
@@ -32,9 +33,9 @@ namespace Support.Plugins
             Q = new Spell(SpellSlot.Q, 1100);
             W = new Spell(SpellSlot.W, 600);
             E = new Spell(SpellSlot.E, 800);
-            R = new Spell(SpellSlot.R, 700);
+            R = new Spell(SpellSlot.R, 550);
 
-            Q.SetSkillshot(0.5f, 150f, 900f, false, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(0.25f, 150f, 900f, false, SkillshotType.SkillshotLine);
             GameObject.OnCreate += GameObjectOnCreate;
             GameObject.OnCreate += RangeAttackOnCreate;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
@@ -47,7 +48,6 @@ namespace Support.Plugins
             if (!sender.IsMe || args.SData.Name != "ReapTheWhirlwind")
                 return;
 
-            Player.IssueOrder(GameObjectOrder.HoldPosition, Player.ServerPosition);
             Orbwalker.SetAttack(false);
             Orbwalker.SetMovement(false);
             IsUltChanneling = true;
@@ -69,7 +69,7 @@ namespace Support.Plugins
 
             if (ComboMode)
             {
-                if (Q.CastCheck(Target, "ComboQ"))
+                if (Q.CastCheck(Target, "Combo.Q"))
                 {
                     var pred = Q.GetPrediction(Target);
                     if (pred.Hitchance >= HitChance.High)
@@ -79,13 +79,13 @@ namespace Support.Plugins
                     }
                 }
 
-                if (W.CastCheck(Target, "ComboW"))
+                if (W.CastCheck(Target, "Combo.W"))
                 {
                     W.CastOnUnit(Target, UsePackets);
                 }
 
-                var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("ComboHealthR").Value, R.Range);
-                if (R.CastCheck(ally, "ComboR", true, false)) // TODO: block movement+casting
+                var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("Combo.R.Health").Value, R.Range);
+                if (R.CastCheck(ally, "Combo.R", true, false))
                 {
                     R.Cast();
                 }
@@ -93,7 +93,7 @@ namespace Support.Plugins
 
             if (HarassMode)
             {
-                if (W.CastCheck(Target, "HarassW"))
+                if (W.CastCheck(Target, "Harass.W"))
                 {
                     W.CastOnUnit(Target, UsePackets);
                 }
@@ -109,19 +109,20 @@ namespace Support.Plugins
 
             // Caster ally hero / not me
             if (!missile.SpellCaster.IsValid<Obj_AI_Hero>() || !missile.SpellCaster.IsAlly ||
-                missile.SpellCaster.IsMe || !missile.SpellCaster.IsHeroType(HeroType.Ad) ||
-                missile.SpellCaster.IsMelee())
+                missile.SpellCaster.IsMe || missile.SpellCaster.IsMelee())
                 return;
 
             // Target enemy hero
             if (!missile.Target.IsValid<Obj_AI_Hero>() || !missile.Target.IsEnemy)
                 return;
 
+            var caster = (Obj_AI_Hero) missile.SpellCaster;
+
             // only in SBTW mode
-            if (E.IsReady() && E.IsInRange(missile.SpellCaster) && (ComboMode || HarassMode) &&
-                ConfigValue<bool>("MiscE"))
+            if (E.IsReady() && E.IsInRange(caster) && (ComboMode || HarassMode) &&
+                ConfigValue<bool>("Misc.E.AA." + caster.ChampionName))
             {
-                E.CastOnUnit(missile.SpellCaster, UsePackets);
+                E.CastOnUnit(caster, UsePackets);
             }
         }
 
@@ -158,7 +159,7 @@ namespace Support.Plugins
             if (gapcloser.Sender.IsAlly)
                 return;
 
-            if (Q.CastCheck(gapcloser.Sender, "GapcloserQ"))
+            if (Q.CastCheck(gapcloser.Sender, "Gapcloser.Q"))
             {
                 var pred = Q.GetPrediction(gapcloser.Sender);
                 if (pred.Hitchance >= HitChance.High)
@@ -168,7 +169,7 @@ namespace Support.Plugins
                 }
             }
 
-            if (W.CastCheck(gapcloser.Sender, "GapcloserW"))
+            if (W.CastCheck(gapcloser.Sender, "Gapcloser.W"))
             {
                 W.CastOnUnit(gapcloser.Sender, UsePackets);
             }
@@ -180,7 +181,7 @@ namespace Support.Plugins
                 unit.IsAlly)
                 return;
 
-            if (Q.CastCheck(unit, "InterruptQ"))
+            if (Q.CastCheck(unit, "Interrupt.Q"))
             {
                 var pred = Q.GetPrediction(unit);
                 if (pred.Hitchance >= HitChance.High)
@@ -190,7 +191,7 @@ namespace Support.Plugins
                 }
             }
 
-            if (!Q.IsReady() && R.CastCheck(unit, "InterruptR"))
+            if (!Q.IsReady() && R.CastCheck(unit, "Interrupt.R"))
             {
                 R.Cast();
             }
@@ -198,45 +199,33 @@ namespace Support.Plugins
 
         public override void ComboMenu(Menu config)
         {
-            config.AddBool("ComboQ", "Use Q", true);
-            config.AddBool("ComboW", "Use W", true);
-            config.AddBool("ComboR", "Use R", true);
-            config.AddSlider("ComboHealthR", "Health to Ult", 15, 1, 100);
+            config.AddBool("Combo.Q", "Use Q", true);
+            config.AddBool("Combo.W", "Use W", true);
+            config.AddBool("Combo.R", "Use R", true);
+            config.AddSlider("Combo.R.Health", "Health to Ult", 15, 1, 100);
         }
 
         public override void HarassMenu(Menu config)
         {
-            config.AddBool("HarassW", "Use W", true);
+            config.AddBool("Harass.W", "Use W", true);
         }
 
         public override void MiscMenu(Menu config)
         {
-            config.AddBool("MiscE", "Use E on ADC Attacks", false);
+            var sub = config.AddSubMenu(new Menu("Use E on Attacks", "Misc.E.AA.Menu"));
+            foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsAlly))
+            {
+                sub.AddBool("Misc.E.AA." + hero.ChampionName, hero.ChampionName, true);
+            }
         }
 
         public override void InterruptMenu(Menu config)
         {
-            config.AddBool("GapcloserQ", "Use Q to Interrupt Gapcloser", true);
-            config.AddBool("GapcloserW", "Use W to Interrupt Gapcloser", true);
+            config.AddBool("Gapcloser.Q", "Use Q to Interrupt Gapcloser", true);
+            config.AddBool("Gapcloser.W", "Use W to Interrupt Gapcloser", true);
 
-            config.AddBool("InterruptQ", "Use Q to Interrupt Spells", true);
-            config.AddBool("InterruptR", "Use R to Interrupt Spells", true);
+            config.AddBool("Interrupt.Q", "Use Q to Interrupt Spells", true);
+            config.AddBool("Interrupt.R", "Use R to Interrupt Spells", true);
         }
-
-        //public override void OnDraw(EventArgs args)
-        //{
-        //    try
-        //    {
-        //        if (!Target.IsValidTarget())
-        //            return;
-        //        var pred = Q.GetPrediction(Target);
-        //        Utility.DrawCircle(pred.CastPosition, 100, Color.Green);
-        //        Utility.DrawCircle(pred.UnitPosition, 100, Color.Red);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Console.WriteLine(e);
-        //    }
-        //}
     }
 }

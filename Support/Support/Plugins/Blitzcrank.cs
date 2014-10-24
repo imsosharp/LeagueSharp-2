@@ -35,7 +35,7 @@ namespace Support.Plugins
             E = new Spell(SpellSlot.E, AttackRange);
             R = new Spell(SpellSlot.R, 600);
 
-            Q.SetSkillshot(0.22f, 70f, 1800f, true, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(0.25f, 70f, 1800f, true, SkillshotType.SkillshotLine);
         }
 
         private bool BlockQ

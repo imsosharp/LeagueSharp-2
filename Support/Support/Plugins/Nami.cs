@@ -18,6 +18,7 @@
 #region
 
 using System;
+using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 
@@ -34,9 +35,18 @@ namespace Support.Plugins
             E = new Spell(SpellSlot.E, 800);
             R = new Spell(SpellSlot.R, 2200);
 
-            Q.SetSkillshot(0.875f, 200f, Int32.MaxValue, false, SkillshotType.SkillshotCircle);
-            R.SetSkillshot(0.5f, 325f, 1200f, false, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(1f, 150f, float.MaxValue, false, SkillshotType.SkillshotCircle);
+            R.SetSkillshot(0.5f, 260f, 850f, false, SkillshotType.SkillshotLine);
             GameObject.OnCreate += RangeAttackOnCreate;
+        }
+
+        private double WHeal
+        {
+            get
+            {
+                int[] heal = {0, 65, 95, 125, 155, 185};
+                return heal[W.Level] + Player.FlatMagicDamageMod*0.3;
+            }
         }
 
         private void RangeAttackOnCreate(GameObject sender, EventArgs args)
@@ -71,15 +81,9 @@ namespace Support.Plugins
                     Q.Cast(Target, UsePackets);
                 }
 
-                var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("ComboHealthW").Value, W.Range);
-                if (W.CastCheck(ally, "ComboW", true, false))
+                if (W.IsReady() && ConfigValue<bool>("ComboW"))
                 {
-                    W.CastOnUnit(ally, UsePackets);
-                }
-
-                if (W.CastCheck(Target, "ComboW"))
-                {
-                    W.CastOnUnit(Target, UsePackets);
+                    HealLogic();
                 }
 
                 if (R.CastCheck(Target, "ComboR"))
@@ -95,18 +99,36 @@ namespace Support.Plugins
                     Q.Cast(Target, UsePackets);
                 }
 
-                var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("HarassHealthW").Value, W.Range);
-                if (W.CastCheck(ally, "HarassW", true, false))
+                if (W.IsReady() && ConfigValue<bool>("HarassW"))
                 {
-                    W.CastOnUnit(ally, UsePackets);
+                    HealLogic();
                 }
+            }
+        }
 
-                if (W.CastCheck(Target, "HarassW"))
+        private void HealLogic()
+        {
+            var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("ComboHealthW").Value, W.Range);
+            if (ally != null) // force heal low ally
+            {
+                W.CastOnUnit(ally);
+                return;
+            }
+
+            if (Player.Distance(Target) > W.Range) // target out of range try bounce
+            {
+                var bounceTarget =
+                    ObjectManager.Get<Obj_AI_Hero>()
+                        .SingleOrDefault(hero => hero.IsValidAlly(W.Range) && hero.Distance(Target) < W.Range);
+
+                if (bounceTarget != null && bounceTarget.MaxHealth - bounceTarget.Health > WHeal) // use bounce & heal
                 {
-                    W.CastOnUnit(Target, UsePackets);
+                    W.CastOnUnit(bounceTarget);
                 }
-
-                Config.AddItem(new MenuItem("test", "test").SetValue(new Slider(0, 0, 100)));
+            }
+            else // target in range
+            {
+                W.CastOnUnit(Target);
             }
         }
 
@@ -147,7 +169,7 @@ namespace Support.Plugins
             config.AddBool("ComboQ", "Use Q", true);
             config.AddBool("ComboW", "Use W", true);
             config.AddBool("ComboR", "Use R", true);
-            config.AddSlider("ComboCountR", "Targets in range to Ult", 2, 1, 5);
+            config.AddSlider("ComboCountR", "Targets hit to Ult", 2, 1, 5);
             config.AddSlider("ComboHealthW", "Health to Heal", 20, 1, 100);
         }
 

@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
+using SharpDX;
 using Support.Evade;
 using SpellData = LeagueSharp.SpellData;
 
@@ -36,15 +37,25 @@ namespace Support.Plugins
             Q = new Spell(SpellSlot.Q, 1000);
             W = new Spell(SpellSlot.W, 650);
             E = new Spell(SpellSlot.E, 0);
-            R = new Spell(SpellSlot.R, 1250);
+            R = new Spell(SpellSlot.R, 1200);
 
-            Q.SetSkillshot(0.3333f, 70f, 1200f, true, SkillshotType.SkillshotLine);
-            R.SetSkillshot(0.5f, 80f, 1200f, false, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(0.25f, 60f, 1700f, true, SkillshotType.SkillshotLine);
+            R.SetSkillshot(0.5f, 115f, 1400f, false, SkillshotType.SkillshotLine);
             Protector.OnSkillshotProtection += ProtectorOnSkillshotProtection;
             Protector.OnTargetedProtection += ProtectorOnTargetedProtection;
         }
 
         private bool IsShieldActive { get; set; }
+
+        private void CastShield(Vector3 v)
+        {
+            if (!E.IsReady())
+                return;
+
+            E.Cast(v, UsePackets);
+            IsShieldActive = true;
+            Utility.DelayAction.Add(4000, () => IsShieldActive = false);
+        }
 
         private void ProtectorOnTargetedProtection(Obj_AI_Base caster, Obj_AI_Hero target, SpellData spell)
         {
@@ -64,9 +75,7 @@ namespace Support.Plugins
 
                 if (target.IsMe && E.IsReady())
                 {
-                    E.Cast(caster.Position, UsePackets);
-                    IsShieldActive = true;
-                    Utility.DelayAction.Add(4000, () => IsShieldActive = false);
+                    CastShield(caster.Position);
                 }
 
                 if (!target.IsMe && W.IsReady() && W.IsInRange(target) && (IsShieldActive || E.IsReady()))
@@ -82,13 +91,7 @@ namespace Support.Plugins
                     }
 
                     W.CastOnUnit(target, UsePackets);
-
-                    Utility.DelayAction.Add((int) jumpTime, () =>
-                    {
-                        E.Cast(caster.Position, UsePackets);
-                        IsShieldActive = true;
-                        Utility.DelayAction.Add(4000, () => IsShieldActive = false);
-                    });
+                    Utility.DelayAction.Add((int) jumpTime, () => CastShield(caster.Position));
                 }
             }
             catch (Exception e)
@@ -128,10 +131,7 @@ namespace Support.Plugins
 
                 if (target.IsMe && E.IsReady())
                 {
-                    E.Cast(max.Start, UsePackets);
-
-                    IsShieldActive = true;
-                    Utility.DelayAction.Add(4000, () => IsShieldActive = false);
+                    CastShield(max.Start.To3D());
                 }
 
                 if (!target.IsMe && W.IsReady() && W.IsInRange(target) && (IsShieldActive || E.IsReady()))
@@ -147,13 +147,7 @@ namespace Support.Plugins
                     }
 
                     W.CastOnUnit(target, UsePackets);
-
-                    Utility.DelayAction.Add((int) jumpTime, () =>
-                    {
-                        E.Cast(max.Start, UsePackets);
-                        IsShieldActive = true;
-                        Utility.DelayAction.Add(4000, () => IsShieldActive = false);
-                    });
+                    Utility.DelayAction.Add((int) jumpTime, () => CastShield(max.Start.To3D()));
                 }
             }
             catch (Exception e)

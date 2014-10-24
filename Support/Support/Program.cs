@@ -18,7 +18,6 @@
 #region
 
 using System;
-using System.Drawing;
 using System.Reflection;
 using LeagueSharp;
 using LeagueSharp.Common;
