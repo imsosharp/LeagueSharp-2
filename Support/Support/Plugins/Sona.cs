@@ -46,19 +46,21 @@ namespace Support.Plugins
                 // sonapassivattack
                 if (Q.CastCheck(Target, "ComboQ"))
                 {
-                    var check =
-                        ObjectManager.Get<Obj_AI_Base>()
-                            .Where(
-                                h =>
-                                    h.IsValidTarget(Q.Range) && (h.IsValid<Obj_AI_Hero>() || h.IsValid<Obj_AI_Minion>()))
-                            .OrderBy(h => Player.Distance(h))
-                            .Take(2)
-                            .ToList();
+                    //var check =
+                    //    ObjectManager.Get<Obj_AI_Base>()
+                    //        .Where(
+                    //            h =>
+                    //                h.IsValidTarget(Q.Range) && (h.IsValid<Obj_AI_Hero>() || h.IsValid<Obj_AI_Minion>()))
+                    //        .OrderBy(h => Player.Distance(h))
+                    //        .Take(2)
+                    //        .ToList();
 
-                    if (check.Any() && check.Count(h => h.IsMinion) < 2)
-                    {
-                        Q.Cast();
-                    }
+                    //if (check.Any() && check.Count(h => h.IsMinion) < 2)
+                    //{
+                    //    Q.Cast();
+                    //}
+
+                    Q.Cast();
                 }
 
                 if (Target.IsValidTarget(AttackRange) &&
@@ -88,19 +90,21 @@ namespace Support.Plugins
             {
                 if (Q.CastCheck(Target, "HarassQ"))
                 {
-                    var check =
-                        ObjectManager.Get<Obj_AI_Base>()
-                            .Where(
-                                h =>
-                                    h.IsValidTarget(Q.Range) && (h.IsValid<Obj_AI_Hero>() || h.IsValid<Obj_AI_Minion>()))
-                            .OrderBy(h => Player.Distance(h))
-                            .Take(2)
-                            .ToList();
+                    //var check =
+                    //    ObjectManager.Get<Obj_AI_Base>()
+                    //        .Where(
+                    //            h =>
+                    //                h.IsValidTarget(Q.Range) && (h.IsValid<Obj_AI_Hero>() || h.IsValid<Obj_AI_Minion>()))
+                    //        .OrderBy(h => Player.Distance(h))
+                    //        .Take(2)
+                    //        .ToList();
 
-                    if (check.Any() && check.Count(h => h.IsMinion) < 2)
-                    {
-                        Q.Cast();
-                    }
+                    //if (check.Any() && check.Count(h => h.IsMinion) < 2)
+                    //{
+                    //    Q.Cast();
+                    //}
+
+                    Q.Cast();
                 }
 
                 if (Target.IsValidTarget(AttackRange) &&
