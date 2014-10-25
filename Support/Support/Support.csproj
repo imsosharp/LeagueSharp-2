@@ -107,7 +107,7 @@
     <Compile Include="Template.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="Plugins\Zilean.cs" />
-    <Compile Include="Disabled\Zyra.cs" />
+    <Compile Include="Plugins\Zyra.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
