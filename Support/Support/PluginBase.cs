@@ -127,11 +127,8 @@ namespace Support
                     var menuItem = ConfigValue<Circle>(spell.Slot + "Range");
                     if (menuItem.Active && spell.Level > 0)
                     {
-                        if (spell.IsReady())
-                            Utility.DrawCircle(Player.Position, spell.Range + Player.BoundingRadius, menuItem.Color);
-                        else
-                            Utility.DrawCircle(Player.Position, spell.Range + Player.BoundingRadius,
-                                Color.FromArgb(150, Color.Red));
+                        Utility.DrawCircle(Player.Position, spell.Range + Player.BoundingRadius,
+                            spell.IsReady() ? menuItem.Color : Color.FromArgb(150, Color.Red));
                     }
                 }
             };
@@ -300,7 +297,7 @@ namespace Support
         {
             get
             {
-                return (Helpers.AllyInRange(2000).Count == 0 ||
+                return (Helpers.AllyInRange(1500).Count == 0 ||
                         Player.Buffs.Any(buff => buff.Name == "talentreaperdisplay" && buff.Count > 0)) &&
                        Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None;
             }

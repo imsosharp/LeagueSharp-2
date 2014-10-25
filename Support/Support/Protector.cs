@@ -85,6 +85,16 @@ namespace Support
         public static AutoBushRevealer Revealer;
         private static bool _isInitComplete;
 
+        private static bool UsePackets
+        {
+            get { return Menu.SubMenu("Misc").Item("UsePackets").GetValue<bool>(); }
+        }
+
+        private static int IsAboutToHitTime
+        {
+            get { return Menu.Item("IsAboutToHitTime").GetValue<Slider>().Value; }
+        }
+
         public static event OnSkillshotProtectionH OnSkillshotProtection;
 
         public static event OnTargetedProtectionH OnTargetedProtection;
@@ -112,8 +122,8 @@ namespace Support
                 OnTargetedProtection += ProtectorOnOnTargetedProtection;
 
                 // Debug
-                //OnSkillshotProtection += Protector_OnSkillshotProtection;
-                //OnTargetedProtection += Protector_OnTargetedProtection;
+                OnSkillshotProtection += Protector_OnSkillshotProtection;
+                OnTargetedProtection += Protector_OnTargetedProtection;
 
                 Helpers.PrintMessage(string.Format("Protector by h3h3 loaded!"));
                 Console.WriteLine("Protector Init Complete");
@@ -139,6 +149,7 @@ namespace Support
             // detector skillshots
             var skillshot = detector.AddSubMenu(new Menu("Skillshots", "Skillshots"));
             skillshot.AddItem(new MenuItem("SkillshotsActive", "Active").SetValue(true));
+            skillshot.AddItem(new MenuItem("IsAboutToHitTime", "IsAboutToHit Time").SetValue(new Slider(200, 0, 400)));
             foreach (var ally in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsAlly))
             {
                 skillshot.AddItem(new MenuItem(ally.ChampionName, ally.ChampionName).SetValue(true));
@@ -178,11 +189,6 @@ namespace Support
             misc.AddItem(new MenuItem("UsePackets", "Use Packets").SetValue(true));
 
             Menu.AddToMainMenu();
-        }
-
-        private static bool UsePackets()
-        {
-            return Menu.SubMenu("Misc").Item("UsePackets").GetValue<bool>();
         }
 
         private static void ProtectorOnOnTargetedProtection(Obj_AI_Base caster, Obj_AI_Hero target, SpellData spell)
@@ -247,7 +253,7 @@ namespace Support
                     if (ps.Harass || caster.WillKill(target, spell, ps.HpBuffer))
                     {
                         if (ps.Targeted)
-                            ps.Spell.Cast(target, UsePackets());
+                            ps.Spell.CastOnUnit(target, UsePackets);
                         else
                             ps.Spell.Cast();
 
@@ -403,7 +409,7 @@ namespace Support
                 {
                     var allySafeResult = IsSafe(ally.ServerPosition.To2D());
 
-                    if (!allySafeResult.IsSafe && IsAboutToHit(ally, 100))
+                    if (!allySafeResult.IsSafe && IsAboutToHit(ally, IsAboutToHitTime))
                     {
                         if (Menu.SubMenu("Detector").SubMenu("Skillshots").Item(ally.ChampionName).GetValue<bool>())
                         {
