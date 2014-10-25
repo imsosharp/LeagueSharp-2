@@ -6,25 +6,6 @@ More Informations: http://www.joduska.me/forum/topic/170-aio-support-is-easy/
 
 
 
-
-Killability
+Marksman with LX Orbwalker
 ======================
-Draws Killmarker/Combo if you can Kill the Champion.
-http://i.imgur.com/iGkeohP.png
-
-Supported Spells  
-Deathfire Grasp (first in combo)  
-Tiamat  
-Ravenous Hydra  
-Hextech Gunblade  
-Bilgewater Cutlass  
-Blade of the Ruined King  
-Ignite  
-Q/W/E/R  
-
-Config Options  
-Display Kill Icon  
-Display Combo Text  
-
-Easy Install  
-[INSTALL](http://www.joduska.me/forum/viewtopic.php?f=16&t=41)
+https://github.com/h3h3/Esk0r-LeagueSharp
