@@ -18,7 +18,6 @@
 #region
 
 using System;
-using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
@@ -29,9 +28,6 @@ namespace Support.Plugins
 {
     public class Zyra : PluginBase
     {
-        private Spell Passive { get; set; }
-        private int WCount { get { return W.Instance.Level > 0 ? W.Instance.Ammo : 0; } }
-
         public Zyra()
         {
             Q = new Spell(SpellSlot.Q, 800);
@@ -47,12 +43,13 @@ namespace Support.Plugins
         }
 
         #region UltimateCarry2 https://github.com/LXMedia1/UltimateCarry2/blob/master/LexxersAIOCarry/Zyra.cs
+
         private bool ZyraisZombie()
         {
             return Player.Spellbook.GetSpell(SpellSlot.Q).Name ==
-            Player.Spellbook.GetSpell(SpellSlot.E).Name ||
-            Player.Spellbook.GetSpell(SpellSlot.W).Name ==
-            Player.Spellbook.GetSpell(SpellSlot.R).Name;
+                   Player.Spellbook.GetSpell(SpellSlot.E).Name ||
+                   Player.Spellbook.GetSpell(SpellSlot.W).Name ==
+                   Player.Spellbook.GetSpell(SpellSlot.R).Name;
         }
 
         private void CastPassive()
@@ -63,10 +60,21 @@ namespace Support.Plugins
                 return;
             Passive.CastIfHitchanceEquals(Target, HitChance.High, UsePackets);
         }
+
         #endregion
+
+        private Spell Passive { get; set; }
+
+        private int WCount
+        {
+            get { return W.Instance.Level > 0 ? W.Instance.Ammo : 0; }
+        }
 
         private void CastW(Vector3 v)
         {
+            if (!W.IsReady())
+                return;
+
             if (WCount == 1)
             {
                 Utility.DelayAction.Add(50, () => W.Cast(new Vector2(v.X - 5, v.Y - 5), UsePackets));
@@ -75,7 +83,7 @@ namespace Support.Plugins
             if (WCount == 2)
             {
                 Utility.DelayAction.Add(50, () => W.Cast(new Vector2(v.X - 5, v.Y - 5), UsePackets));
-                Utility.DelayAction.Add(150, () => W.Cast(new Vector2(v.X - 5, v.Y - 5), UsePackets));
+                Utility.DelayAction.Add(180, () => W.Cast(new Vector2(v.X - 5, v.Y - 5), UsePackets));
             }
         }
 

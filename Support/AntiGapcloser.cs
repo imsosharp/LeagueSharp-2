@@ -41,16 +41,18 @@ namespace Support
         public string ChampionName;
         public GapcloserType SkillType;
         public SpellSlot Slot;
+        public int Speed;
         public string SpellName;
     }
 
     public struct ActiveGapcloser
     {
         public Vector3 End;
+        public int EndTick;
         public Obj_AI_Base Sender;
         public GapcloserType SkillType;
         public Vector3 Start;
-        public int TickCount;
+        public int StartTick;
     }
 
     public static class AntiGapcloser
@@ -394,7 +396,7 @@ namespace Support
                     ChampionName = "Malphite",
                     Slot = SpellSlot.R,
                     SpellName = "ufslash",
-                    SkillType = GapcloserType.Targeted
+                    SkillType = GapcloserType.Skillshot
                 });
 
             #endregion
@@ -451,19 +453,6 @@ namespace Support
 
             #endregion
 
-            #region Thresh
-
-            Spells.Add(
-                new Gapcloser
-                {
-                    ChampionName = "Thresh",
-                    Slot = SpellSlot.Q,
-                    SpellName = "threshq",
-                    SkillType = GapcloserType.Skillshot
-                });
-
-            #endregion
-
             #region Lucian
 
             Spells.Add(
@@ -477,6 +466,45 @@ namespace Support
 
             #endregion
 
+            #region Tristana
+
+            Spells.Add(
+                new Gapcloser
+                {
+                    ChampionName = "Tristana",
+                    Slot = SpellSlot.W,
+                    SpellName = "RocketJump",
+                    SkillType = GapcloserType.Skillshot
+                });
+
+            #endregion
+
+            #region Zac
+
+            Spells.Add(
+                new Gapcloser
+                {
+                    ChampionName = "Zac",
+                    Slot = SpellSlot.E,
+                    SpellName = "zace",
+                    SkillType = GapcloserType.Skillshot
+                });
+
+            #endregion
+
+            #region Ziggs
+
+            Spells.Add(
+                new Gapcloser
+                {
+                    ChampionName = "Ziggs",
+                    Slot = SpellSlot.W,
+                    SpellName = "ziggswtoggle",
+                    SkillType = GapcloserType.Skillshot
+                });
+
+            #endregion
+
             Game.OnGameUpdate += Game_OnGameUpdate;
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
         }
@@ -485,7 +513,7 @@ namespace Support
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            ActiveGapclosers.RemoveAll(entry => Environment.TickCount > entry.TickCount + 900);
+            ActiveGapclosers.RemoveAll(entry => Environment.TickCount > entry.EndTick);
 
             if (OnEnemyGapcloser == null)
             {
@@ -494,9 +522,18 @@ namespace Support
 
             foreach (var gapcloser in ActiveGapclosers)
             {
-                if (gapcloser.Sender.IsValidTarget())
+                if (gapcloser.SkillType == GapcloserType.Targeted ||
+                    (gapcloser.SkillType == GapcloserType.Skillshot &&
+                     ObjectManager.Get<Obj_AI_Hero>()
+                         .Any(
+                             h =>
+                                 h.IsAlly && !h.IsDead &&
+                                 (h.Distance(gapcloser.Start) < 800 || h.Distance(gapcloser.End) < 800))))
                 {
-                    OnEnemyGapcloser(gapcloser);
+                    if (gapcloser.Sender.IsValidTarget())
+                    {
+                        OnEnemyGapcloser(gapcloser);
+                    }
                 }
             }
         }
@@ -514,7 +551,8 @@ namespace Support
                     Start = args.Start,
                     End = args.End,
                     Sender = sender,
-                    TickCount = Environment.TickCount,
+                    StartTick = Environment.TickCount,
+                    EndTick = Environment.TickCount + 900, // TODO: calc duration with speed
                     SkillType = GetGapcloser(args).SkillType
                 });
         }
@@ -526,7 +564,7 @@ namespace Support
 
         private static Gapcloser GetGapcloser(GameObjectProcessSpellCastEventArgs args)
         {
-            return Spells.SingleOrDefault(spell => spell.SpellName == args.SData.Name.ToLower());
+            return Spells.SingleOrDefault(spell => spell.SpellName == args.SData.Name.ToLowerInvariant());
         }
     }
 }

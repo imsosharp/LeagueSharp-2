@@ -122,8 +122,8 @@ namespace Support
                 OnTargetedProtection += ProtectorOnOnTargetedProtection;
 
                 // Debug
-                OnSkillshotProtection += Protector_OnSkillshotProtection;
-                OnTargetedProtection += Protector_OnTargetedProtection;
+                //OnSkillshotProtection += Protector_OnSkillshotProtection;
+                //OnTargetedProtection += Protector_OnTargetedProtection;
 
                 Helpers.PrintMessage(string.Format("Protector by h3h3 loaded!"));
                 Console.WriteLine("Protector Init Complete");

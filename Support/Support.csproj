@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="AntiGapcloser.cs" />
     <Compile Include="AutoBushRevealer.cs" />
+    <Compile Include="DamageBoostDatabase.cs" />
     <Compile Include="Evade\Collision.cs" />
     <Compile Include="Evade\Config.cs" />
     <Compile Include="Protector.cs" />

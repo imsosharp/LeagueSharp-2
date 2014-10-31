@@ -109,25 +109,19 @@ namespace Support.Plugins
 
                 // get most dangerous skillshot
                 var max = skillshots.First();
-                foreach (var spell in skillshots)
+                foreach (
+                    var spell in
+                        skillshots.Where(
+                            s =>
+                                s.SpellData.Type == SkillShotType.SkillshotMissileLine ||
+                                s.SpellData.Type == SkillShotType.SkillshotMissileCone))
                 {
                     if (spell.Unit.GetSpellDamage(target, spell.SpellData.SpellName) >
-                        max.Unit.GetSpellDamage(target, max.SpellData.SpellName) &&
-                        spell.SpellData.Type != SkillShotType.SkillshotCircle &&
-                        spell.SpellData.Type != SkillShotType.SkillshotRing)
+                        max.Unit.GetSpellDamage(target, max.SpellData.SpellName))
                     {
                         max = spell;
                     }
                 }
-
-                // too fast
-                if (max.SpellData.MissileSpeed > 2000 || max.SpellData.MissileSpeed == 0)
-                    return;
-
-                // dont block Circle skillshots
-                if (max.SpellData.Type != SkillShotType.SkillshotCircle &&
-                    max.SpellData.Type != SkillShotType.SkillshotRing)
-                    return;
 
                 if (target.IsMe && E.IsReady())
                 {

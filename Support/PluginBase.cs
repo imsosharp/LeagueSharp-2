@@ -83,7 +83,7 @@ namespace Support
         /// </summary>
         private void InitPrivateEvents()
         {
-            Utility.DelayAction.Add(250, () =>
+            Utility.DelayAction.Add(500, () =>
             {
                 _spells.Add(Q);
                 _spells.Add(W);
@@ -106,8 +106,19 @@ namespace Support
 
             Orbwalking.BeforeAttack += args =>
             {
-                if (args.Target.IsValid<Obj_AI_Minion>() && !AttackMinion)
-                    args.Process = false;
+                if (args.Target.IsValid<Obj_AI_Minion>() && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None)
+                {
+                    switch (ConfigValue<StringList>("AttackMinions").SelectedIndex)
+                    {
+                        case 0: // Smart
+                            args.Process = AttackMinion;
+                            break;
+
+                        case 1: // Never
+                            args.Process = false;
+                            break;
+                    }
+                }
 
                 if (args.Target.IsValid<Obj_AI_Hero>() && !ConfigValue<bool>("AttackChampions") &&
                     Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None)
@@ -120,14 +131,14 @@ namespace Support
                     return;
 
                 if (Target != null && ConfigValue<Circle>("Target").Active)
-                    Utility.DrawCircle(Target.Position, 120, ConfigValue<Circle>("Target").Color);
+                    Utility.DrawCircle(Target.Position, 125, ConfigValue<Circle>("Target").Color);
 
                 foreach (var spell in _spells.Where(s => s != null))
                 {
                     var menuItem = ConfigValue<Circle>(spell.Slot + "Range");
                     if (menuItem.Active && spell.Level > 0)
                     {
-                        Utility.DrawCircle(Player.Position, spell.Range + Player.BoundingRadius,
+                        Utility.DrawCircle(Player.Position, spell.Range,
                             spell.IsReady() ? menuItem.Color : Color.FromArgb(150, Color.Red));
                     }
                 }
@@ -156,12 +167,13 @@ namespace Support
 
             // misc
             MiscConfig.AddBool("UsePackets", "Use Packets?", true);
+            MiscConfig.AddList("AttackMinions", "Attack Minions?", new[] {"Smart", "Never", "Always"});
             MiscConfig.AddBool("AttackChampions", "Attack Champions?", true);
 
             // drawing
             DrawingConfig.AddItem(
                 new MenuItem("Target" + ChampionName, "Target").SetValue(new Circle(true,
-                    Color.Red)));
+                    Color.DodgerBlue)));
             DrawingConfig.AddItem(
                 new MenuItem("QRange" + ChampionName, "Q Range").SetValue(new Circle(false,
                     Color.FromArgb(150, Color.DodgerBlue))));
@@ -231,7 +243,11 @@ namespace Support
         /// </summary>
         public bool ComboMode
         {
-            get { return Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && !Player.IsDead; }
+            get
+            {
+                return Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && !Player.IsDead &&
+                       Orbwalking.CanMove(100);
+            }
         }
 
         /// <summary>
@@ -239,7 +255,11 @@ namespace Support
         /// </summary>
         public bool HarassMode
         {
-            get { return Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && HarassMana && !Player.IsDead; }
+            get
+            {
+                return Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && HarassMana && !Player.IsDead &&
+                       Orbwalking.CanMove(100);
+            }
         }
 
         /// <summary>
@@ -297,9 +317,8 @@ namespace Support
         {
             get
             {
-                return (Helpers.AllyInRange(1500).Count == 0 ||
-                        Player.Buffs.Any(buff => buff.Name == "talentreaperdisplay" && buff.Count > 0)) &&
-                       Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None;
+                return Helpers.AllyInRange(1500).Count == 0 ||
+                       Player.Buffs.Any(buff => buff.Name == "talentreaperdisplay" && buff.Count > 0);
             }
         }
 

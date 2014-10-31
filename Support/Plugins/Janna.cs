@@ -43,16 +43,6 @@ namespace Support.Plugins
 
         private bool IsUltChanneling { get; set; }
 
-        private void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
-        {
-            if (!sender.IsMe || args.SData.Name != "ReapTheWhirlwind")
-                return;
-
-            Orbwalker.SetAttack(false);
-            Orbwalker.SetMovement(false);
-            IsUltChanneling = true;
-        }
-
         public override void OnUpdate(EventArgs args)
         {
             if (Player.IsChannelingImportantSpell())
@@ -85,7 +75,7 @@ namespace Support.Plugins
                 }
 
                 var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("Combo.R.Health").Value, R.Range);
-                if (R.CastCheck(ally, "Combo.R", true, false))
+                if (R.CastCheck(ally, "Combo.R", true, false) && Player.CountEnemysInRange(1000) > 0)
                 {
                     R.Cast();
                 }
@@ -96,6 +86,46 @@ namespace Support.Plugins
                 if (W.CastCheck(Target, "Harass.W"))
                 {
                     W.CastOnUnit(Target, UsePackets);
+                }
+            }
+        }
+
+        private void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (sender.IsMe && args.SData.Name == "ReapTheWhirlwind")
+            {
+                Orbwalker.SetAttack(false);
+                Orbwalker.SetMovement(false);
+                IsUltChanneling = true;
+            }
+
+            if (!E.IsReady() || !E.IsInRange(sender) || IsUltChanneling)
+                return;
+
+            // Boost Damage
+            // Caster ally / target enemy hero
+            if (sender.IsValid<Obj_AI_Hero>() && sender.IsAlly && !sender.IsMe)
+            {
+                var spell = args.SData.Name;
+                var caster = (Obj_AI_Hero) sender;
+
+                if (DamageBoostDatabase.Spells.Any(s => s.Spell == spell))
+                {
+                    switch (ConfigValue<Slider>("Misc.E.Spell." + args.SData.Name).Value) // prio 0 = disabled
+                    {
+                        case 1:
+                            if (Player.ManaPercent() > ConfigValue<Slider>("Mana.E.Priority.1").Value)
+                                E.CastOnUnit(caster, UsePackets);
+                            break;
+                        case 2:
+                            if (Player.ManaPercent() > ConfigValue<Slider>("Mana.E.Priority.2").Value)
+                                E.CastOnUnit(caster, UsePackets);
+                            break;
+                        case 3:
+                            if (Player.ManaPercent() > ConfigValue<Slider>("Mana.E.Priority.3").Value)
+                                E.CastOnUnit(caster, UsePackets);
+                            break;
+                    }
                 }
             }
         }
@@ -128,6 +158,9 @@ namespace Support.Plugins
 
         private void GameObjectOnCreate(GameObject sender, EventArgs args)
         {
+            if (!E.IsReady() || !ConfigValue<bool>("Misc.E.Tower"))
+                return;
+
             if (sender.IsValid<Obj_SpellMissile>() && !IsUltChanneling)
             {
                 var missile = (Obj_SpellMissile) sender;
@@ -138,19 +171,11 @@ namespace Support.Plugins
                 {
                     var turret = (Obj_AI_Turret) missile.SpellCaster;
 
-                    if (E.IsReady())
+                    if (E.IsInRange(turret))
                     {
-                        if (E.IsInRange(turret))
-                        {
-                            E.CastOnUnit(turret, UsePackets);
-                        }
+                        E.CastOnUnit(turret, UsePackets);
                     }
                 }
-
-                //// Ally Hero special attack
-                //if (missile.SpellCaster is Obj_AI_Hero && missile.SpellCaster.IsValid && missile.SpellCaster.IsAlly)
-                //{
-                //}
             }
         }
 
@@ -162,7 +187,7 @@ namespace Support.Plugins
             if (Q.CastCheck(gapcloser.Sender, "Gapcloser.Q"))
             {
                 var pred = Q.GetPrediction(gapcloser.Sender);
-                if (pred.Hitchance >= HitChance.High)
+                if (pred.Hitchance >= HitChance.Medium)
                 {
                     Q.Cast(pred.CastPosition, UsePackets);
                     Q.Cast();
@@ -177,14 +202,13 @@ namespace Support.Plugins
 
         public override void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
         {
-            if ((spell.DangerLevel < InterruptableDangerLevel.High && !unit.BaseSkinName.Contains("Thresh")) ||
-                unit.IsAlly)
+            if ((spell.DangerLevel < InterruptableDangerLevel.High && unit.IsAlly))
                 return;
 
             if (Q.CastCheck(unit, "Interrupt.Q"))
             {
                 var pred = Q.GetPrediction(unit);
-                if (pred.Hitchance >= HitChance.High)
+                if (pred.Hitchance >= HitChance.Medium)
                 {
                     Q.Cast(pred.CastPosition, UsePackets);
                     Q.Cast();
@@ -212,11 +236,32 @@ namespace Support.Plugins
 
         public override void MiscMenu(Menu config)
         {
-            var sub = config.AddSubMenu(new Menu("Use E on Attacks", "Misc.E.AA.Menu"));
-            foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsAlly))
+            config.AddBool("Misc.E.Tower", "Use E on Towers", true);
+
+            // build aa menu
+            var aa = config.AddSubMenu(new Menu("Use E on Attacks", "Misc.E.AA.Menu"));
+            foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsAlly && !h.IsMe))
             {
-                sub.AddBool("Misc.E.AA." + hero.ChampionName, hero.ChampionName, true);
+                aa.AddBool("Misc.E.AA." + hero.ChampionName, hero.ChampionName, true);
             }
+
+            // build spell menu
+            var dmg = config.AddSubMenu(new Menu("Use E on Spell", "Misc.E.Spell.Menu"));
+            foreach (
+                var spell in
+                    ObjectManager.Get<Obj_AI_Hero>()
+                        .Where(h => h.IsAlly && !h.IsMe)
+                        .SelectMany(hero => DamageBoostDatabase.Spells.Where(s => s.Champion == hero.ChampionName)))
+            {
+                dmg.AddSlider("Misc.E.Spell." + spell.Spell, spell.Champion + " " + spell.Slot, spell.Priority, 0, 3);
+            }
+        }
+
+        public override void ManaMenu(Menu config)
+        {
+            config.AddSlider("Mana.E.Priority.1", "E Priority 1", 65, 0, 100);
+            config.AddSlider("Mana.E.Priority.2", "E Priority 2", 35, 0, 100);
+            config.AddSlider("Mana.E.Priority.3", "E Priority 3", 10, 0, 100);
         }
 
         public override void InterruptMenu(Menu config)

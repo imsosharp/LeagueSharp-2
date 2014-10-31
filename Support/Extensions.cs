@@ -118,6 +118,11 @@ namespace Support
             return hero.Health/hero.MaxHealth*100;
         }
 
+        public static double ManaPercent(this Obj_AI_Base hero)
+        {
+            return hero.Mana/hero.MaxMana*100;
+        }
+
         public static void IssueOrderEx(this Obj_AI_Base hero, GameObjectOrder order, GameObject target,
             bool packet = false)
         {
@@ -172,11 +177,6 @@ namespace Support
             }
         }
 
-        public static int CountEnemysInRange(this Obj_AI_Base hero, int range)
-        {
-            return Utility.CountEnemysInRange(range, hero);
-        }
-
         public static bool CastCheck(this Items.Item item, Obj_AI_Base target)
         {
             return item != null && item.IsReady() && target.IsValidTarget(item.Range);
@@ -221,6 +221,12 @@ namespace Support
         public static bool WillKill(this Obj_AI_Base caster, Obj_AI_Base target, Evade.SpellData spell, int buffer = 10)
         {
             return caster.GetSpellDamage(target, spell.SpellName) >= target.HealthBuffer(buffer);
+        }
+
+        public static void AddList(this Menu menu, string name, string displayName, string[] list)
+        {
+            menu.AddItem(
+                new MenuItem(name + ObjectManager.Player.ChampionName, displayName).SetValue(new StringList(list)));
         }
 
         public static void AddBool(this Menu menu, string name, string displayName, bool value)

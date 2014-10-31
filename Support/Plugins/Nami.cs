@@ -58,17 +58,18 @@ namespace Support.Plugins
 
             // Caster ally hero / not me
             if (!missile.SpellCaster.IsValid<Obj_AI_Hero>() || !missile.SpellCaster.IsAlly ||
-                missile.SpellCaster.IsMe || !missile.SpellCaster.IsHeroType(HeroType.Ad) ||
-                missile.SpellCaster.IsMelee())
+                missile.SpellCaster.IsMe || missile.SpellCaster.IsMelee())
                 return;
 
             // Target enemy hero
             if (!missile.Target.IsValid<Obj_AI_Hero>() || !missile.Target.IsEnemy)
                 return;
 
-            if (E.IsReady() && E.IsInRange(missile.SpellCaster) && ConfigValue<bool>("MiscE"))
+            var caster = (Obj_AI_Hero) missile.SpellCaster;
+
+            if (E.IsReady() && E.IsInRange(missile.SpellCaster) && ConfigValue<bool>("Misc.E.AA." + caster.ChampionName))
             {
-                E.CastOnUnit(missile.SpellCaster, UsePackets);
+                E.CastOnUnit(caster, UsePackets);
             }
         }
 
@@ -182,13 +183,16 @@ namespace Support.Plugins
 
         public override void MiscMenu(Menu config)
         {
-            config.AddBool("MiscE", "Use E on ADC Attacks", true);
+            var sub = config.AddSubMenu(new Menu("Use E on Attacks", "Misc.E.AA.Menu"));
+            foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsAlly && !h.IsMe))
+            {
+                sub.AddBool("Misc.E.AA." + hero.ChampionName, hero.ChampionName, true);
+            }
         }
 
         public override void InterruptMenu(Menu config)
         {
             config.AddBool("GapcloserQ", "Use Q to Interrupt Gapcloser", true);
-            config.AddBool("GapcloserR", "Use R to Interrupt Gapcloser", false);
 
             config.AddBool("InterruptQ", "Use Q to Interrupt Spells", true);
             config.AddBool("InterruptR", "Use R to Interrupt Spells", true);

@@ -45,16 +45,19 @@ namespace Support.Plugins
                 if (!Q.IsReady())
                     return true;
 
-                if (Target.HasBuff("Black Shield", true))
+                if (!ConfigValue<bool>("Misc.Q.Block"))
+                    return false;
+
+                if (Target.HasBuff("BlackShield"))
                     return true;
 
-                if (Helpers.AllyInRange(1000)
+                if (Helpers.AllyInRange(1200)
                     .Any(ally => ally.Distance(Target) < ally.AttackRange + ally.BoundingRadius))
                 {
                     return true;
                 }
 
-                return Player.Distance(Target) < 400;
+                return Player.Distance(Target) < ConfigValue<Slider>("Misc.Q.Block.Distance").Value;
             }
         }
 
@@ -189,15 +192,21 @@ namespace Support.Plugins
 
         public override void ComboMenu(Menu config)
         {
-            config.AddBool("ComboQ", "Use Q/E", true);
+            config.AddBool("ComboQ", "Use Q", true);
             config.AddBool("ComboW", "Use W", true);
             config.AddBool("ComboR", "Use R", true);
             config.AddSlider("ComboCountR", "Targets in range to Ult", 2, 1, 5);
         }
 
+        public override void MiscMenu(Menu config)
+        {
+            config.AddBool("Misc.Q.Block", "Block Q on close Targets", true);
+            config.AddSlider("Misc.Q.Block.Distance", "Q Block Distance", 400, 0, 800);
+        }
+
         public override void HarassMenu(Menu config)
         {
-            config.AddBool("HarassQ", "Use Q/E", true);
+            config.AddBool("HarassQ", "Use Q", true);
         }
 
         public override void InterruptMenu(Menu config)
