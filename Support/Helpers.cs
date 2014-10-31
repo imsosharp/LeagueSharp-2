@@ -57,7 +57,7 @@ namespace Support
                     {
                         var rawVersion =
                             c.DownloadString(
-                                "https://raw.githubusercontent.com/h3h3/LeagueSharp/master/Support/Support/Properties/AssemblyInfo.cs");
+                                "https://raw.githubusercontent.com/h3h3/LeagueSharp/master/Support/Properties/AssemblyInfo.cs");
                         var match =
                             new Regex(@"\[assembly\: AssemblyVersion\(""(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})""\)\]")
                                 .Match
