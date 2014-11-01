@@ -80,12 +80,17 @@ namespace VayNivia
                 if (target.IsValidTarget(Condemn.Range) && anivia != null &&
                     anivia.Spellbook.GetSpell(SpellSlot.W).State == SpellState.Ready)
                 {
-                    var condemEndPos =
+                    var condemEndPosMax =
                         target.ServerPosition.To2D()
                             .Extend(ObjectManager.Player.ServerPosition.To2D(), -450)
                             .To3D();
 
-                    if (anivia.Distance(condemEndPos) < 990)
+                    var condemEndPosMin =
+                        target.ServerPosition.To2D()
+                            .Extend(ObjectManager.Player.ServerPosition.To2D(), -100)
+                            .To3D();
+
+                    if (anivia.Distance(condemEndPosMax) < 990 || anivia.Distance(condemEndPosMin) < 990)
                     {
                         Condemn.CastOnUnit(target, true);
                     }
