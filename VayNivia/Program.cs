@@ -39,32 +39,22 @@ namespace VayNivia
             get { return Config.Item("Condemn.Key").GetValue<KeyBind>().Active; }
         }
 
-        public static bool AnivaCanCastWall
+        public static bool ComboCheck(Obj_AI_Hero target)
         {
-            get
-            {
-                var anivia = ObjectManager.Get<Obj_AI_Hero>().SingleOrDefault(h => h.IsAlly && h.ChampionName == "Anivia");
+            if (target.IsDead)
+                return false;
 
-                if (anivia == null) 
-                    return false;
+            var anivia = ObjectManager.Get<Obj_AI_Hero>().SingleOrDefault(h => h.IsAlly && h.ChampionName == "Anivia");
+            var vayne = ObjectManager.Get<Obj_AI_Hero>().SingleOrDefault(h => h.IsAlly && h.ChampionName == "Vayne");
 
-                var wall = anivia.Spellbook.GetSpell(SpellSlot.W);
-                return wall.CooldownExpires < Game.Time && wall.ManaCost < anivia.Mana;
-            }
-        }
+            if (vayne == null || anivia == null)
+                return false;
 
-        public static bool VayneCanCastCondemn
-        {
-            get
-            {
-                var vayne = ObjectManager.Get<Obj_AI_Hero>().SingleOrDefault(h => h.IsAlly && h.ChampionName == "Vayne");
+            var condemn = vayne.Spellbook.GetSpell(SpellSlot.E);
+            var wall = anivia.Spellbook.GetSpell(SpellSlot.W);
+            var wallPos = target.Position.To2D().Extend(vayne.ServerPosition.To2D(), -200).To3D();
 
-                if (vayne == null)
-                    return false;
-
-                var con = vayne.Spellbook.GetSpell(SpellSlot.E);
-                return con.CooldownExpires < Game.Time && con.ManaCost < vayne.Mana;
-            }
+            return wall.CooldownExpires < Game.Time && condemn.CooldownExpires < Game.Time && wall.ManaCost < anivia.Mana && condemn.ManaCost < vayne.Mana && anivia.Distance(wallPos) < 900 && vayne.Distance(target) < 550;
         }
 
         private static void Main(string[] args)
@@ -79,11 +69,14 @@ namespace VayNivia
                     foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsEnemy))
                     {
                         var hero1 = hero;
-                        var anivia = ObjectManager.Get<Obj_AI_Hero>().SingleOrDefault(h => h.IsAlly && h.ChampionName == "Anivia");
-                        var vayne = ObjectManager.Get<Obj_AI_Hero>().SingleOrDefault(h => h.IsAlly && h.ChampionName == "Vayne");
-                        var sprite = new Render.Sprite(Resources.Crystallize, hero.HPBarPosition) { Scale = new Vector2(0.3f, 0.3f) };
+
+                        var sprite = new Render.Sprite(Resources.Crystallize, hero.HPBarPosition)
+                        {
+                            Scale = new Vector2(0.3f, 0.3f)
+                        };
+
                         sprite.PositionUpdate += () => new Vector2(hero1.HPBarPosition.X + 145, hero1.HPBarPosition.Y + 20);
-                        sprite.VisibleCondition += s => anivia.Distance(hero1.Position) < 900 && vayne.Distance(hero1.Position) < 550 && !hero1.IsDead && AnivaCanCastWall && VayneCanCastCondemn;
+                        sprite.VisibleCondition += s => ComboCheck(hero1);
                         sprite.Add();
                     }
 
@@ -117,14 +110,14 @@ namespace VayNivia
                         .SingleOrDefault(h => h.IsAlly && !h.IsDead && h.ChampionName == "Anivia");
                 var target = SimpleTs.GetTarget(Condemn.Range, SimpleTs.DamageType.Physical);
 
-                if (target.IsValidTarget(Condemn.Range) && AnivaCanCastWall)
+                if (ComboCheck(target))
                 {
-                    var condemEndPos =
+                    var condemnEndPos =
                         target.ServerPosition.To2D()
                             .Extend(ObjectManager.Player.ServerPosition.To2D(), -150)
                             .To3D();
 
-                    if (anivia.Distance(condemEndPos) < 990)
+                    if (anivia.Distance(condemnEndPos) < 990)
                     {
                         Condemn.CastOnUnit(target, true);
                     }
@@ -147,14 +140,10 @@ namespace VayNivia
                     args.SData.Name != "VayneCondemn")
                     return;
 
-                var condemEndPos = args.End.To2D().Extend(sender.ServerPosition.To2D(), -450).To3D();
-                var wallPos = args.End.To2D().Extend(sender.ServerPosition.To2D(), -150).To3D();
+                var condemnEndPos = args.Target.Position.To2D().Extend(sender.ServerPosition.To2D(), -450).To3D();
+                var wallPos = args.Target.Position.To2D().Extend(sender.ServerPosition.To2D(), -200).To3D();
 
-                // check if condem will hit wall
-                var willhit =
-                    NavMesh.GetCollisionFlags(condemEndPos).HasFlag(CollisionFlags.Wall | CollisionFlags.Building);
-
-                if (!willhit && Wall.IsInRange(wallPos))
+                if (!NavMesh.GetCollisionFlags(condemnEndPos).HasFlag(CollisionFlags.Wall | CollisionFlags.Building) && Wall.IsInRange(wallPos))
                 {
                     Wall.Cast(wallPos, true);
                 }
