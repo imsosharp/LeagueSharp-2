@@ -31,6 +31,9 @@ namespace VayNivia
         public static Spell Wall = new Spell(SpellSlot.W, 990);
         public static Menu Config = new Menu("VayNivia", "VayNivia", true);
 
+        public static int WallOffset { get { return Config.Item("Wall.Offset").GetValue<Slider>().Value; } }
+        public static int CondemnDistance { get { return Config.Item("Condemn.Distance").GetValue<Slider>().Value; } }
+
         private static void Main(string[] args)
         {
             CustomEvents.Game.OnGameLoad += eventArgs =>
@@ -38,7 +41,8 @@ namespace VayNivia
                 if (ObjectManager.Player.ChampionName != "Anivia")
                     return;
 
-                Config.AddItem(new MenuItem("CondemnDistance", "Condemn Distance").SetValue(new Slider(425, 0, 500)));
+                Config.AddItem(new MenuItem("Condemn.Distance", "Condemn Distance").SetValue(new Slider(425, 0, 500)));
+                Config.AddItem(new MenuItem("Wall.Offset", "Wall Offset").SetValue(new Slider(5, 0, 50)));
                 Config.AddToMainMenu();
 
                 Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
@@ -57,8 +61,8 @@ namespace VayNivia
                     args.SData.Name != "VayneCondemn")
                     return;
 
-                var condemEndPos = args.End.To2D().Extend(sender.ServerPosition.To2D(), -Config.Item("CondemnDistance").GetValue<Slider>().Value).To3D();
-                var wallPos = args.End.To2D().Extend(sender.ServerPosition.To2D(), -(Config.Item("CondemnDistance").GetValue<Slider>().Value - 5)).To3D();
+                var condemEndPos = args.End.To2D().Extend(sender.ServerPosition.To2D(), -CondemnDistance).To3D();
+                var wallPos = args.End.To2D().Extend(sender.ServerPosition.To2D(), -(CondemnDistance - WallOffset)).To3D();
 
                 // check if condem will hit wall
                 var willhit = NavMesh.GetCollisionFlags(condemEndPos).HasFlag(CollisionFlags.Wall) ||
