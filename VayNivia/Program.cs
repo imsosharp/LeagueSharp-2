@@ -41,8 +41,8 @@ namespace VayNivia
                 if (ObjectManager.Player.ChampionName != "Anivia")
                     return;
 
-                Config.AddItem(new MenuItem("Condemn.Distance", "Condemn Distance").SetValue(new Slider(425, 0, 500)));
-                Config.AddItem(new MenuItem("Wall.Offset", "Wall Offset").SetValue(new Slider(5, 0, 50)));
+                Config.AddItem(new MenuItem("Condemn.Distance", "Condemn Distance").SetValue(new Slider(425, 0, 600)));
+                Config.AddItem(new MenuItem("Wall.Offset", "Wall Offset").SetValue(new Slider(5, 5, 50)));
                 Config.AddToMainMenu();
 
                 Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
@@ -65,8 +65,7 @@ namespace VayNivia
                 var wallPos = args.End.To2D().Extend(sender.ServerPosition.To2D(), -(CondemnDistance - WallOffset)).To3D();
 
                 // check if condem will hit wall
-                var willhit = NavMesh.GetCollisionFlags(condemEndPos).HasFlag(CollisionFlags.Wall) ||
-                              NavMesh.GetCollisionFlags(condemEndPos).HasFlag(CollisionFlags.Building);
+                var willhit = NavMesh.GetCollisionFlags(condemEndPos).HasFlag(CollisionFlags.Wall | CollisionFlags.Building);
 
                 if (!willhit && Wall.IsInRange(wallPos))
                 {
