@@ -28,7 +28,8 @@ namespace VayNivia
 {
     public class Program
     {
-        public static Spell Wall = new Spell(SpellSlot.W, 950);
+        public static Spell Wall = new Spell(SpellSlot.W, 990);
+        public static Menu Config = new Menu("VayNivia", "VayNivia", true);
 
         private static void Main(string[] args)
         {
@@ -36,6 +37,9 @@ namespace VayNivia
             {
                 if (ObjectManager.Player.ChampionName != "Anivia")
                     return;
+
+                Config.AddItem(new MenuItem("CondemnDistance", "Condemn Distance").SetValue(new Slider(425, 0, 500)));
+                Config.AddToMainMenu();
 
                 Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
                 Extensions.PrintMessage("by h3h3 loaded.");
@@ -53,8 +57,8 @@ namespace VayNivia
                     args.SData.Name != "VayneCondemn")
                     return;
 
-                var condemEndPos = args.End.To2D().Extend(sender.ServerPosition.To2D(), -425).To3D();
-                var wallPos = args.End.To2D().Extend(sender.ServerPosition.To2D(), -420).To3D();
+                var condemEndPos = args.End.To2D().Extend(sender.ServerPosition.To2D(), -Config.Item("CondemnDistance").GetValue<Slider>().Value).To3D();
+                var wallPos = args.End.To2D().Extend(sender.ServerPosition.To2D(), -(Config.Item("CondemnDistance").GetValue<Slider>().Value - 5)).To3D();
 
                 // check if condem will hit wall
                 var willhit = NavMesh.GetCollisionFlags(condemEndPos).HasFlag(CollisionFlags.Wall) ||
