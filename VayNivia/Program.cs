@@ -33,16 +33,6 @@ namespace VayNivia
         public static Spell Condemn = new Spell(SpellSlot.E, 550);
         public static Menu Config = new Menu("VayNivia", "VayNivia", true);
 
-        public static int WallOffset
-        {
-            get { return Config.Item("Wall.Offset").GetValue<Slider>().Value; }
-        }
-
-        public static int CondemnDistance
-        {
-            get { return Config.Item("Condemn.Distance").GetValue<Slider>().Value; }
-        }
-
         public static bool CondemnKey
         {
             get { return Config.Item("Condemn.Key").GetValue<KeyBind>().Active; }
@@ -59,21 +49,13 @@ namespace VayNivia
                 {
                     if (ObjectManager.Player.ChampionName == "Anivia")
                     {
-                        Config.AddItem(
-                            new MenuItem("Condemn.Distance", "Condemn Distance").SetValue(new Slider(425, 0, 600)));
-                        Config.AddItem(new MenuItem("Wall.Offset", "Wall Offset").SetValue(new Slider(5, 5, 50)));
-                        Config.AddToMainMenu();
-
                         Obj_AI_Base.OnProcessSpellCast += AniviaIntegration;
                         Extensions.PrintMessage("Aniva by h3h3 loaded.");
                     }
 
                     if (ObjectManager.Player.ChampionName == "Vayne")
                     {
-                        Config.AddItem(
-                            new MenuItem("Condemn.Distance", "Condemn Distance").SetValue(new Slider(425, 0, 600)));
-                        Config.AddItem(
-                            new MenuItem("Condemn.Key", "Condemn Key").SetValue(new KeyBind(32, KeyBindType.Press)));
+                        Config.AddItem(new MenuItem("Condemn.Key", "Condemn Key").SetValue(new KeyBind(32, KeyBindType.Press)));
                         Config.AddToMainMenu();
 
                         Game.OnGameUpdate += VayneIntegration;
@@ -93,15 +75,14 @@ namespace VayNivia
                 var anivia =
                     ObjectManager.Get<Obj_AI_Hero>()
                         .SingleOrDefault(h => h.IsAlly && !h.IsDead && h.ChampionName == "Anivia");
-                var target = SimpleTs.GetSelectedTarget() ??
-                             SimpleTs.GetTarget(Condemn.Range, SimpleTs.DamageType.Physical);
+                var target = SimpleTs.GetTarget(Condemn.Range, SimpleTs.DamageType.Physical);
 
                 if (target.IsValidTarget(Condemn.Range) && anivia != null &&
                     anivia.Spellbook.GetSpell(SpellSlot.W).State == SpellState.Ready)
                 {
                     var condemEndPos =
                         target.ServerPosition.To2D()
-                            .Extend(ObjectManager.Player.ServerPosition.To2D(), -(CondemnDistance - 10))
+                            .Extend(ObjectManager.Player.ServerPosition.To2D(), -450)
                             .To3D();
 
                     if (anivia.Distance(condemEndPos) < 990)
@@ -127,17 +108,23 @@ namespace VayNivia
                     args.SData.Name != "VayneCondemn")
                     return;
 
-                var condemEndPos = args.End.To2D().Extend(sender.ServerPosition.To2D(), -CondemnDistance).To3D();
-                var wallPos =
-                    args.End.To2D().Extend(sender.ServerPosition.To2D(), -(CondemnDistance - WallOffset)).To3D();
+                var condemEndPos = args.End.To2D().Extend(sender.ServerPosition.To2D(), -450).To3D();
+                var wallPosMin = args.End.To2D().Extend(sender.ServerPosition.To2D(), -100).To3D();
+                var wallPosMax = args.End.To2D().Extend(sender.ServerPosition.To2D(), -450).To3D();
 
                 // check if condem will hit wall
                 var willhit =
                     NavMesh.GetCollisionFlags(condemEndPos).HasFlag(CollisionFlags.Wall | CollisionFlags.Building);
 
-                if (!willhit && Wall.IsInRange(wallPos))
+                if (!willhit && Wall.IsInRange(wallPosMin))
                 {
-                    Wall.Cast(wallPos, true);
+                    Wall.Cast(wallPosMin, true);
+                    return;
+                }
+
+                if (!willhit && Wall.IsInRange(wallPosMax))
+                {
+                    Wall.Cast(wallPosMax, true);
                 }
             }
             catch (Exception e)
