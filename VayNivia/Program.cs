@@ -42,7 +42,7 @@ namespace VayNivia
                     return;
 
                 Config.AddItem(new MenuItem("Condemn.Distance", "Condemn Distance").SetValue(new Slider(425, 0, 500)));
-                Config.AddItem(new MenuItem("Wall.Offset", "Wall Offset").SetValue(new Slider(5, 0, 50)));
+                Config.AddItem(new MenuItem("Wall.Offset", "Wall Offset").SetValue(new Slider(5, 5, 50)));
                 Config.AddToMainMenu();
 
                 Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
