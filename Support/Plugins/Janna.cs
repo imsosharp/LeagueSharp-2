@@ -28,6 +28,8 @@ namespace Support.Plugins
 {
     public class Janna : PluginBase
     {
+        private int LastQInterrupt { get; set; }
+
         public Janna()
         {
             Q = new Spell(SpellSlot.Q, 1100);
@@ -36,7 +38,7 @@ namespace Support.Plugins
             R = new Spell(SpellSlot.R, 550);
 
             Q.SetSkillshot(0.25f, 150f, 900f, false, SkillshotType.SkillshotLine);
-            GameObject.OnCreate += GameObjectOnCreate;
+            GameObject.OnCreate += TowerAttackOnCreate;
             GameObject.OnCreate += RangeAttackOnCreate;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
         }
@@ -156,7 +158,7 @@ namespace Support.Plugins
             }
         }
 
-        private void GameObjectOnCreate(GameObject sender, EventArgs args)
+        private void TowerAttackOnCreate(GameObject sender, EventArgs args)
         {
             if (!E.IsReady() || !ConfigValue<bool>("Misc.E.Tower"))
                 return;
@@ -212,10 +214,12 @@ namespace Support.Plugins
                 {
                     Q.Cast(pred.CastPosition, UsePackets);
                     Q.Cast();
+                    LastQInterrupt = Environment.TickCount;
+                    return;
                 }
             }
 
-            if (!Q.IsReady() && R.CastCheck(unit, "Interrupt.R"))
+            if (!Q.IsReady() && Environment.TickCount - LastQInterrupt > 300 && R.CastCheck(unit, "Interrupt.R"))
             {
                 R.Cast();
             }

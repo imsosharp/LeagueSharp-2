@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Copyright 2014 - 2014 Support
-// Fiddlesticks.cs is part of Support.
+// FiddleSticks.cs is part of Support.
 // Support is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
@@ -25,9 +25,9 @@ using LeagueSharp.Common;
 
 namespace Support.Plugins
 {
-    public class Fiddlesticks : PluginBase
+    public class FiddleSticks : PluginBase
     {
-        public Fiddlesticks()
+        public FiddleSticks()
         {
             Q = new Spell(SpellSlot.Q, 575);
             W = new Spell(SpellSlot.W, 575);

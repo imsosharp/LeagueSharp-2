@@ -46,20 +46,44 @@ namespace Support.Plugins
         {
             if (ComboMode)
             {
-                if (Q.CastCheck(Target, "ComboQ"))
+                if (Q.CastCheck(Target, "Combo.Q"))
                 {
                     Q.Cast(Target, UsePackets);
                 }
+                if (Q.CastCheck(Target, "Combo.Q") && R.IsReady() &&
+                    Q.GetPrediction(Target).UnitPosition.CountEnemysInRange(250) >=
+                    ConfigValue<Slider>("Combo.Q.Count").Value)
+                {
+                    R.CastOnUnit(Player, UsePackets);
+                    Utility.DelayAction.Add(150, () => Q.Cast(Target, UsePackets));
+                }
 
-                if (W.CastCheck(Target, "ComboW"))
+                if (W.CastCheck(Target, "Combo.W"))
                 {
                     W.CastOnUnit(Target, UsePackets);
+                }
+                if (W.CastCheck(Target, "Combo.W") && R.IsReady() &&
+                    Player.HealthPercent() <= ConfigValue<Slider>("Combo.W.Hp").Value)
+                {
+                    R.CastOnUnit(Player, UsePackets);
+                    Utility.DelayAction.Add(150, () => W.CastOnUnit(Target, UsePackets));
+                }
+
+                if (W.CastCheck(Target, "Combo.W"))
+                {
+                    W.CastOnUnit(Target, UsePackets);
+                }
+                if (E.IsReady() && R.IsReady() &&
+                    Helpers.AllyInRange(600).Count >= ConfigValue<Slider>("Combo.E.Count").Value)
+                {
+                    R.CastOnUnit(Player, UsePackets);
+                    Utility.DelayAction.Add(150, () => E.CastOnUnit(Player, UsePackets));
                 }
             }
 
             if (HarassMode)
             {
-                if (Q.CastCheck(Target, "HarassQ"))
+                if (Q.CastCheck(Target, "Harass.Q"))
                 {
                     Q.Cast(Target, UsePackets);
                 }
@@ -71,7 +95,7 @@ namespace Support.Plugins
             if (gapcloser.Sender.IsAlly)
                 return;
 
-            if (W.CastCheck(gapcloser.Sender, "GapcloserW"))
+            if (W.CastCheck(gapcloser.Sender, "Gapcloser.W"))
             {
                 W.CastOnUnit(gapcloser.Sender, UsePackets);
             }
@@ -79,19 +103,21 @@ namespace Support.Plugins
 
         public override void ComboMenu(Menu config)
         {
-            config.AddBool("ComboQ", "Use Q", true);
-            config.AddBool("ComboW", "Use W", true);
-            config.AddSlider("ComboHealthE", "Health to Shield", 20, 1, 100);
+            config.AddBool("Combo.Q", "Use Q", true);
+            config.AddBool("Combo.W", "Use W", true);
+            config.AddSlider("Combo.Q.Count", "Q/R Ally in Range", 3, 0, 4);
+            config.AddSlider("Combo.W.Hp", "W/R HP", 40, 1, 100);
+            config.AddSlider("Combo.E.Count", "E/R Enemy in Range", 3, 0, 4);
         }
 
         public override void HarassMenu(Menu config)
         {
-            config.AddBool("HarassQ", "Use Q", true);
+            config.AddBool("Harass.Q", "Use Q", true);
         }
 
         public override void InterruptMenu(Menu config)
         {
-            config.AddBool("GapcloserW", "Use W to Interrupt Gapcloser", true);
+            config.AddBool("Gapcloser.W", "Use W to Interrupt Gapcloser", true);
         }
     }
 }
