@@ -33,6 +33,8 @@ namespace ProFlash
 
         private static void Main(string[] args)
         {
+            CustomEvents.Game.OnGameLoad += eventArgs => Game.PrintChat("<font color='#15C3AC'>ProFlash:</font> <font color='#FFFFFF'>by h3h3 loaded.</font>");
+
             Game.OnGameSendPacket += p =>
             {
                 if (Packet.C2S.Cast.Header != p.PacketData[0])
