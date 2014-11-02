@@ -50,13 +50,12 @@ namespace ProFlash
 
                     if (summoner && slot == flashSlot && flashPacket.SourceNetworkId == ObjectManager.Player.NetworkId)
                     {
-                        if (ObjectManager.Player.ServerPosition.To2D().Distance(new Vector2(flashPacket.ToX, flashPacket.ToY)) < 390)
+                        var to = new Vector2(flashPacket.ToX, flashPacket.ToY);
+                        if (ObjectManager.Player.ServerPosition.To2D().Distance(to) < 390)
                         {
                             p.Process = false;
 
-                            var maxRange =
-                                ObjectManager.Player.ServerPosition.To2D()
-                                    .Extend(new Vector2(flashPacket.ToX, flashPacket.ToY), 400);
+                            var maxRange = ObjectManager.Player.ServerPosition.To2D().Extend(to, 400);
                             flashPacket.FromX = maxRange.X;
                             flashPacket.FromY = maxRange.Y;
                             flashPacket.ToX = maxRange.X;
