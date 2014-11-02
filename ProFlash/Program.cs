@@ -29,7 +29,7 @@ namespace ProFlash
 {
     internal class Program
     {
-        private static readonly List<byte> SummonerByte = new List<byte> {0xE9, 0xEF, 0x8B, 0xED, 0x63};
+        private static readonly List<byte> SummonerByte = new List<byte> { 0xE9, 0xEF, 0x8B, 0xED, 0x63 };
 
         private static void Main(string[] args)
         {
@@ -40,25 +40,25 @@ namespace ProFlash
 
                 var packet = new GamePacket(p.PacketData);
                 var summoner = SummonerByte.Contains(packet.ReadByte(5));
-                var slot = (SpellSlot) packet.ReadByte();
-                var flashSlot =
-                    ObjectManager.Player.SummonerSpellbook.Spells.SingleOrDefault(s => s.Name == "summonerflash").Slot;
-                var flashPacket = Packet.C2S.Cast.Decoded(p.PacketData);
+                var slot = (SpellSlot)packet.ReadByte();
+                var flash = ObjectManager.Player.SummonerSpellbook.Spells.SingleOrDefault(s => s.Name == "summonerflash");
 
-                if (summoner && slot == flashSlot && flashPacket.SourceNetworkId == ObjectManager.Player.NetworkId)
+                if (flash != null)
                 {
-                    var from = new Vector2(flashPacket.FromX, flashPacket.FromY);
-                    var to = new Vector2(flashPacket.ToX, flashPacket.ToY);
-                    var maxRange = ObjectManager.Player.ServerPosition.To2D().Extend(to, 400);
+                    var flashSlot = flash.Slot;
+                    var flashPacket = Packet.C2S.Cast.Decoded(p.PacketData);
 
-                    if (from.Distance(to) < 400)
+                    if (summoner && slot == flashSlot && flashPacket.SourceNetworkId == ObjectManager.Player.NetworkId)
                     {
-                        p.Process = false; // block fail flash
-                        Game.PrintChat("- ProFlash Intervention -");
+                        p.Process = false;
+
+                        var maxRange = ObjectManager.Player.ServerPosition.To2D().Extend(new Vector2(flashPacket.ToX, flashPacket.ToY), 400);
                         flashPacket.FromX = maxRange.X;
                         flashPacket.FromY = maxRange.Y;
                         flashPacket.ToX = maxRange.X;
                         flashPacket.ToY = maxRange.Y;
+
+                        Game.PrintChat("- ProFlash -");
                         Packet.C2S.Cast.Encoded(flashPacket).Send(p.Channel, p.ProtocolFlag);
                     }
                 }
