@@ -41,7 +41,7 @@ namespace VayNivia
 
         public static bool ComboCheck(Obj_AI_Hero target)
         {
-            if (target.IsDead)
+            if (target == null || target.IsDead)
                 return false;
 
             var anivia = ObjectManager.Get<Obj_AI_Hero>().SingleOrDefault(h => h.IsAlly && h.ChampionName == "Anivia");
@@ -52,9 +52,11 @@ namespace VayNivia
 
             var condemn = vayne.Spellbook.GetSpell(SpellSlot.E);
             var wall = anivia.Spellbook.GetSpell(SpellSlot.W);
-            var wallPos = target.Position.To2D().Extend(vayne.ServerPosition.To2D(), -200).To3D();
+            var wallPos = target.Position.To2D().Extend(vayne.ServerPosition.To2D(), -100).To3D();
 
-            return wall.CooldownExpires < Game.Time && condemn.CooldownExpires < Game.Time && wall.ManaCost < anivia.Mana && condemn.ManaCost < vayne.Mana && anivia.Distance(wallPos) < 900 && vayne.Distance(target) < 550;
+            return wall.CooldownExpires < Game.Time && condemn.CooldownExpires < Game.Time &&
+                   wall.ManaCost < anivia.Mana && condemn.ManaCost < vayne.Mana && anivia.Distance(wallPos) < 1000 &&
+                   vayne.Distance(target) < 550;
         }
 
         private static void Main(string[] args)
@@ -88,7 +90,8 @@ namespace VayNivia
 
                     if (ObjectManager.Player.ChampionName == "Vayne")
                     {
-                        Config.AddItem(new MenuItem("Condemn.Key", "Condemn Key").SetValue(new KeyBind(32, KeyBindType.Press)));
+                        Config.AddItem(
+                            new MenuItem("Condemn.Key", "Condemn Key").SetValue(new KeyBind(32, KeyBindType.Press)));
                         Config.AddToMainMenu();
 
                         Game.OnGameUpdate += VayneIntegration;
@@ -141,9 +144,10 @@ namespace VayNivia
                     return;
 
                 var condemnEndPos = args.Target.Position.To2D().Extend(sender.ServerPosition.To2D(), -450).To3D();
-                var wallPos = args.Target.Position.To2D().Extend(sender.ServerPosition.To2D(), -200).To3D();
+                var wallPos = args.Target.Position.To2D().Extend(sender.ServerPosition.To2D(), -100).To3D();
 
-                if (!NavMesh.GetCollisionFlags(condemnEndPos).HasFlag(CollisionFlags.Wall | CollisionFlags.Building) && Wall.IsInRange(wallPos))
+                if (!NavMesh.GetCollisionFlags(condemnEndPos).HasFlag(CollisionFlags.Wall | CollisionFlags.Building) &&
+                    Wall.IsInRange(wallPos))
                 {
                     Wall.Cast(wallPos, true);
                 }
