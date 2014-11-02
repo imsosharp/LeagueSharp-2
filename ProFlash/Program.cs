@@ -50,16 +50,21 @@ namespace ProFlash
 
                     if (summoner && slot == flashSlot && flashPacket.SourceNetworkId == ObjectManager.Player.NetworkId)
                     {
-                        p.Process = false;
+                        if (ObjectManager.Player.ServerPosition.To2D().Distance(new Vector2(flashPacket.ToX, flashPacket.ToY)) < 390)
+                        {
+                            p.Process = false;
 
-                        var maxRange = ObjectManager.Player.ServerPosition.To2D().Extend(new Vector2(flashPacket.ToX, flashPacket.ToY), 400);
-                        flashPacket.FromX = maxRange.X;
-                        flashPacket.FromY = maxRange.Y;
-                        flashPacket.ToX = maxRange.X;
-                        flashPacket.ToY = maxRange.Y;
+                            var maxRange =
+                                ObjectManager.Player.ServerPosition.To2D()
+                                    .Extend(new Vector2(flashPacket.ToX, flashPacket.ToY), 400);
+                            flashPacket.FromX = maxRange.X;
+                            flashPacket.FromY = maxRange.Y;
+                            flashPacket.ToX = maxRange.X;
+                            flashPacket.ToY = maxRange.Y;
 
-                        Game.PrintChat("- ProFlash -");
-                        Packet.C2S.Cast.Encoded(flashPacket).Send(p.Channel, p.ProtocolFlag);
+                            Game.PrintChat("- ProFlash -");
+                            Packet.C2S.Cast.Encoded(flashPacket).Send(p.Channel, p.ProtocolFlag);
+                        }
                     }
                 }
             };
