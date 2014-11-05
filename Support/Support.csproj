@@ -58,8 +58,9 @@
     <Reference Include="clipper_library">
       <HintPath>D:\Games\LeagueSharp\\System\clipper_library.dll</HintPath>
     </Reference>
-    <Reference Include="LeagueSharp">
-      <HintPath>D:\Games\LeagueSharp\\System\LeagueSharp.dll</HintPath>
+    <Reference Include="LeagueSharp, Version=1.0.0.25, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Games\LeagueSharp\System\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp.Common">
       <HintPath>D:\Games\LeagueSharp\\System\LeagueSharp.Common.dll</HintPath>

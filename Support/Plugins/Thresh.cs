@@ -131,8 +131,8 @@ namespace Support.Plugins
         {
             if (Q.CastCheck(args.Caster, "Misc.Q.OnAttack"))
             {
-                var collision = Collision.GetCollision(new List<Vector3> { args.Position },
-                    new PredictionInput { Delay = 0.5f, Radius = 35, Speed = 1900 });
+                var collision = Collision.GetCollision(new List<Vector3> {args.Position},
+                    new PredictionInput {Delay = 0.5f, Radius = 35, Speed = 1900});
 
                 if (collision.Count == 0)
                 {
