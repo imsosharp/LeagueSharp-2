@@ -20,10 +20,11 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
+using SharpDX;
+using Color = System.Drawing.Color;
 
 #endregion
 
@@ -35,6 +36,22 @@ namespace Support
     public abstract class PluginBase
     {
         private readonly List<Spell> _spells = new List<Spell>();
+
+        #region BeforeEnemyAttack
+
+        public static event BeforeEnemyAttackEvenH BeforeEnemyAttack;
+
+        public delegate void BeforeEnemyAttackEvenH(BeforeEnemyAttackEventArgs args);
+
+        public class BeforeEnemyAttackEventArgs
+        {
+            public Obj_AI_Base Caster { get; set; }
+            public Obj_AI_Base Target { get; set; }
+            public Packet.AttackTypePacket Type { get; set; }
+            public Vector3 Position { get; set; }
+        }
+
+        #endregion
 
         /// <summary>
         ///     Init BaseClass
@@ -71,8 +88,9 @@ namespace Support
         {
             Game.OnGameUpdate += OnUpdate;
             Drawing.OnDraw += OnDraw;
-            Orbwalking.BeforeAttack += BeforeAttack;
-            Orbwalking.AfterAttack += AfterAttack;
+            BeforeEnemyAttack += OnBeforeEnemyAttack;
+            Orbwalking.BeforeAttack += OnBeforeAttack;
+            Orbwalking.AfterAttack += OnAfterAttack;
             AntiGapcloser.OnEnemyGapcloser += OnEnemyGapcloser;
             Interrupter.OnPossibleToInterrupt += OnPossibleToInterrupt;
             OnLoad(new EventArgs());
@@ -141,6 +159,32 @@ namespace Support
                         Utility.DrawCircle(Player.Position, spell.Range,
                             spell.IsReady() ? menuItem.Color : Color.FromArgb(150, Color.Red));
                     }
+                }
+            };
+
+            Game.OnGameProcessPacket += args =>
+            {
+                if (args.PacketData[0] != Packet.MultiPacket.Header ||
+                    args.PacketData[5] != Packet.MultiPacket.OnAttack.SubHeader)
+                    return;
+
+                var basePacket = Packet.MultiPacket.DecodeHeader(args.PacketData);
+                var attackPacket = Packet.MultiPacket.OnAttack.Decoded(args.PacketData);
+                var caster = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(basePacket.NetworkId);
+                var target = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(attackPacket.TargetNetworkId);
+
+                if (!caster.IsValid<Obj_AI_Hero>() || caster.IsAlly)
+                    return;
+
+                if (BeforeEnemyAttack != null)
+                {
+                    BeforeEnemyAttack(new BeforeEnemyAttackEventArgs
+                    {
+                        Caster = caster,
+                        Target = target,
+                        Position = attackPacket.Position,
+                        Type = attackPacket.Type
+                    });
                 }
             };
         }
@@ -291,7 +335,7 @@ namespace Support
         /// </summary>
         public float AttackRange
         {
-            get { return Orbwalking.GetRealAutoAttackRange(null); }
+            get { return Orbwalking.GetRealAutoAttackRange(Target); }
         }
 
         /// <summary>
@@ -427,25 +471,36 @@ namespace Support
         }
 
         /// <summary>
-        ///     BeforeAttack
+        ///     OnBeforeEnemyAttack
         /// </summary>
         /// <remarks>
-        ///     override to Implement BeforeAttack logic
+        ///     override to Implement OnBeforeEnemyAttack logic
         /// </remarks>
-        /// <param name="args">Orbwalking.BeforeAttackEventArgs</param>
-        public virtual void BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
+        /// <param name="args">BeforeEnemyAttackEventArgs</param>
+        public virtual void OnBeforeEnemyAttack(BeforeEnemyAttackEventArgs args)
         {
         }
 
         /// <summary>
-        ///     AfterAttack
+        ///     OnBeforeAttack
         /// </summary>
         /// <remarks>
-        ///     override to Implement AfterAttack logic
+        ///     override to Implement OnBeforeAttack logic
+        /// </remarks>
+        /// <param name="args">Orbwalking.BeforeAttackEventArgs</param>
+        public virtual void OnBeforeAttack(Orbwalking.BeforeAttackEventArgs args)
+        {
+        }
+
+        /// <summary>
+        ///     OnAfterAttack
+        /// </summary>
+        /// <remarks>
+        ///     override to Implement OnAfterAttack logic
         /// </remarks>
         /// <param name="unit">unit</param>
         /// <param name="target">target</param>
-        public virtual void AfterAttack(Obj_AI_Base unit, Obj_AI_Base target)
+        public virtual void OnAfterAttack(Obj_AI_Base unit, Obj_AI_Base target)
         {
         }
 

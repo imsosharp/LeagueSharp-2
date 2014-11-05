@@ -82,7 +82,7 @@ namespace Support.Plugins
             }
         }
 
-        public override void AfterAttack(Obj_AI_Base unit, Obj_AI_Base target)
+        public override void OnAfterAttack(Obj_AI_Base unit, Obj_AI_Base target)
         {
             if (!unit.IsMe)
                 return;

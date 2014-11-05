@@ -18,10 +18,12 @@
 #region
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
+using Collision = LeagueSharp.Common.Collision;
 
 #endregion
 
@@ -125,6 +127,20 @@ namespace Support.Plugins
             }
         }
 
+        public override void OnBeforeEnemyAttack(BeforeEnemyAttackEventArgs args)
+        {
+            if (Q.CastCheck(args.Caster, "Misc.Q.OnAttack"))
+            {
+                var collision = Collision.GetCollision(new List<Vector3> { args.Position },
+                    new PredictionInput { Delay = 0.5f, Radius = 35, Speed = 1900 });
+
+                if (collision.Count == 0)
+                {
+                    Q.Cast(args.Position, UsePackets);
+                }
+            }
+        }
+
         public override void OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             if (gapcloser.Sender.IsAlly)
@@ -164,6 +180,11 @@ namespace Support.Plugins
             config.AddBool("HarassW", "Use W for Safe", true);
             config.AddBool("HarassE", "Use E", true);
             config.AddSlider("HarassHealthE", "Push Targets away if low HP", 20, 1, 100);
+        }
+
+        public override void MiscMenu(Menu config)
+        {
+            config.AddBool("Misc.Q.OnAttack", "Hook Target on Attack", true);
         }
 
         public override void InterruptMenu(Menu config)

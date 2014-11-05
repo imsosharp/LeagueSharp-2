@@ -39,12 +39,12 @@ namespace Support.Plugins
         {
             if (ComboMode)
             {
-                if (Q.CastCheck(Target, "ComboQ"))
+                if (Q.CastCheck(Target, "Combo.Q"))
                 {
                     Q.CastOnUnit(Target, UsePackets);
                 }
 
-                if (E.CastCheck(Target, "ComboE"))
+                if (E.CastCheck(Target, "Combo.E"))
                 {
                     E.CastOnUnit(Target, UsePackets);
                 }
@@ -52,7 +52,7 @@ namespace Support.Plugins
 
             if (HarassMode)
             {
-                if (E.CastCheck(Target, "HarassE"))
+                if (E.CastCheck(Target, "Harass.E"))
                 {
                     E.CastOnUnit(Target, UsePackets);
                 }
@@ -64,7 +64,7 @@ namespace Support.Plugins
             if (gapcloser.Sender.IsAlly)
                 return;
 
-            if (Q.CastCheck(gapcloser.Sender, "GapcloserQ"))
+            if (Q.CastCheck(gapcloser.Sender, "Gapcloser.Q"))
             {
                 Q.CastOnUnit(gapcloser.Sender, UsePackets);
             }
@@ -75,12 +75,13 @@ namespace Support.Plugins
             if (spell.DangerLevel < InterruptableDangerLevel.High || unit.IsAlly)
                 return;
 
-            if (Q.CastCheck(unit, "InterruptQ"))
+            if (Q.CastCheck(unit, "Interrupt.Q"))
             {
                 Q.CastOnUnit(unit, UsePackets);
+                return;
             }
 
-            if (E.CastCheck(unit, "InterruptE"))
+            if (E.CastCheck(unit, "Interrupt.E"))
             {
                 E.CastOnUnit(unit, UsePackets);
             }
@@ -88,21 +89,21 @@ namespace Support.Plugins
 
         public override void ComboMenu(Menu config)
         {
-            config.AddBool("ComboQ", "Use Q", true);
-            config.AddBool("ComboE", "Use E", true);
+            config.AddBool("Combo.Q", "Use Q", true);
+            config.AddBool("Combo.E", "Use E", true);
         }
 
         public override void HarassMenu(Menu config)
         {
-            config.AddBool("HarassE", "Use E", true);
+            config.AddBool("Harass.E", "Use E", true);
         }
 
         public override void InterruptMenu(Menu config)
         {
-            config.AddBool("GapcloserQ", "Use Q to Interrupt Gapcloser", true);
+            config.AddBool("Gapcloser.Q", "Use Q to Interrupt Gapcloser", true);
 
-            config.AddBool("InterruptQ", "Use Q to Interrupt Spells", true);
-            config.AddBool("InterruptE", "Use E to Interrupt Spells", true);
+            config.AddBool("Interrupt.Q", "Use Q to Interrupt Spells", true);
+            config.AddBool("Interrupt.E", "Use E to Interrupt Spells", true);
         }
     }
 }

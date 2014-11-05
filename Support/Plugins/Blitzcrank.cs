@@ -18,9 +18,12 @@
 #region
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
+using SharpDX;
+using Collision = LeagueSharp.Common.Collision;
 
 #endregion
 
@@ -127,7 +130,21 @@ namespace Support.Plugins
             }
         }
 
-        public override void AfterAttack(Obj_AI_Base unit, Obj_AI_Base target)
+        public override void OnBeforeEnemyAttack(BeforeEnemyAttackEventArgs args)
+        {
+            if (Q.CastCheck(args.Caster, "Misc.Q.OnAttack"))
+            {
+                var collision = Collision.GetCollision(new List<Vector3> {args.Position},
+                    new PredictionInput {Delay = 0.25f, Radius = 35, Speed = 1800});
+
+                if (collision.Count == 0)
+                {
+                    Q.Cast(args.Position, UsePackets);
+                }
+            }
+        }
+
+        public override void OnAfterAttack(Obj_AI_Base unit, Obj_AI_Base target)
         {
             if (!unit.IsMe)
                 return;
@@ -200,6 +217,7 @@ namespace Support.Plugins
 
         public override void MiscMenu(Menu config)
         {
+            config.AddBool("Misc.Q.OnAttack", "Hook Target on Attack", true);
             config.AddBool("Misc.Q.Block", "Block Q on close Targets", true);
             config.AddSlider("Misc.Q.Block.Distance", "Q Block Distance", 400, 0, 800);
         }

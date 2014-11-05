@@ -37,11 +37,6 @@ namespace Support.Plugins
             Q.SetSkillshot(0.25f, 60f, 1700f, true, SkillshotType.SkillshotLine);
         }
 
-        private bool MantraIsActive
-        {
-            get { return Player.HasBuff("KarmaMantra"); }
-        }
-
         public override void OnUpdate(EventArgs args)
         {
             if (ComboMode)
@@ -105,9 +100,9 @@ namespace Support.Plugins
         {
             config.AddBool("Combo.Q", "Use Q", true);
             config.AddBool("Combo.W", "Use W", true);
-            config.AddSlider("Combo.Q.Count", "Q/R Ally in Range", 3, 0, 4);
-            config.AddSlider("Combo.W.Hp", "W/R HP", 40, 1, 100);
-            config.AddSlider("Combo.E.Count", "E/R Enemy in Range", 3, 0, 4);
+            config.AddSlider("Combo.Q.Count", "R/Q Enemy in Range", 2, 0, 4);
+            config.AddSlider("Combo.W.Hp", "R/W HP", 40, 1, 100);
+            config.AddSlider("Combo.E.Count", "R/E Ally in Range", 3, 0, 4);
         }
 
         public override void HarassMenu(Menu config)
