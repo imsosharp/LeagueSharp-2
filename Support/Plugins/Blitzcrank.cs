@@ -132,14 +132,14 @@ namespace Support.Plugins
 
         public override void OnBeforeEnemyAttack(BeforeEnemyAttackEventArgs args)
         {
-            if (Q.CastCheck(args.Caster, "Misc.Q.OnAttack"))
+            if (Q.CastCheck(args.Caster, "Misc.Q.OnAttack") && (ComboMode || HarassMode) && !BlockQ)
             {
-                var collision = Collision.GetCollision(new List<Vector3> {args.Position},
+                var collision = Collision.GetCollision(new List<Vector3> { args.Caster.Position },
                     new PredictionInput {Delay = 0.25f, Radius = 35, Speed = 1800});
 
                 if (collision.Count == 0)
                 {
-                    Q.Cast(args.Position, UsePackets);
+                    Q.Cast(args.Caster.Position, UsePackets);
                 }
             }
         }
