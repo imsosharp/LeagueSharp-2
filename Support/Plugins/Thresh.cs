@@ -129,7 +129,8 @@ namespace Support.Plugins
 
         public override void OnBeforeEnemyAttack(BeforeEnemyAttackEventArgs args)
         {
-            if (Q.CastCheck(args.Caster, "Misc.Q.OnAttack"))
+            if (Q.CastCheck(args.Caster, "Misc.Q.OnAttack") && (ComboMode || HarassMode) &&
+                args.Caster == Target && args.Type == Packet.AttackTypePacket.TargetedAA)
             {
                 var collision = Collision.GetCollision(new List<Vector3> {args.Position},
                     new PredictionInput {Delay = 0.5f, Radius = 35, Speed = 1900});
