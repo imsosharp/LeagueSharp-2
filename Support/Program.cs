@@ -18,7 +18,10 @@
 #region
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using ClipperLib;
 using LeagueSharp;
 using LeagueSharp.Common;
 
@@ -56,6 +59,8 @@ namespace Support
                 }
             };
 
+            //Utils.EnableConsoleEditMode();
+
             //Drawing.OnDraw += a =>
             //{
             //    var offset = 0;
@@ -70,8 +75,34 @@ namespace Support
 
             //Obj_AI_Base.OnProcessSpellCast += (sender, spell) =>
             //{
-            //    if (sender.IsValid<Obj_AI_Hero>() && !Orbwalking.IsAutoAttack(spell.SData.Name))
-            //        Console.WriteLine(sender.Name + " | " + spell.SData.Name.ToLower());
+            //    if (!sender.IsValid<Obj_AI_Hero>())
+            //        return;
+
+            //    try
+            //    {
+            //        if (!Orbwalking.IsAutoAttack(spell.SData.Name))
+            //            Console.WriteLine(sender.Name + " | " + spell.SData.Name.ToLower());
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        Console.WriteLine(e);
+            //    }
+            //};
+
+            //GameObject.OnCreate += (sender, eventArgs) =>
+            //{
+            //    if (!sender.IsValid<Obj_SpellMissile>())
+            //        return;
+
+            //    try
+            //    {
+            //        var miss = (Obj_SpellMissile)sender;
+            //        Console.WriteLine(sender.Name + " | " + miss.SData.Name.ToLower());
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        Console.WriteLine(e);
+            //    }
             //};
         }
     }

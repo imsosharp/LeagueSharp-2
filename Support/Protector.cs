@@ -206,7 +206,7 @@ namespace Support
 
         private static void CcCheck(EventArgs args)
         {
-            var mikael = ProtectorItems.First();
+            var mikael = ProtectorItems.First(); // TODO: ugly shit + check if is in range
 
             if (!mikael.Item.IsReady() || ObjectManager.Player.IsDead ||
                 ObjectManager.Player.IsChannelingImportantSpell())
