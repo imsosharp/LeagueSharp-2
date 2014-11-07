@@ -22,6 +22,9 @@ namespace BamMod
 
             Game.OnGameUpdate += eventArgs =>
             {
+                if (ObjectManager.Player.LargestCriticalStrike == 0)
+                    return;
+
                 if (ObjectManager.Player.LargestCriticalStrike != _last || !Config.Item("OnlyNew").GetValue<bool>())
                 {
                     if (Config.Item("PrintChat").GetValue<bool>())
