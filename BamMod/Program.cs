@@ -28,7 +28,7 @@ namespace BamMod
                 if (ObjectManager.Player.LargestCriticalStrike != _last || !Config.Item("OnlyNew").GetValue<bool>())
                 {
                     if (Config.Item("PrintChat").GetValue<bool>())
-                        Game.PrintChat("<font color='#FF0000'>BAM</font> <font color='#FFFFFF'>" + _last + "</font>");
+                        Game.PrintChat("<font color='#FF0000'>BAM</font> <font color='#FFFFFF'>" + ObjectManager.Player.LargestCriticalStrike + "</font>");
 
                     if (Config.Item("PlaySound").GetValue<bool>())
                         Player.Play();
