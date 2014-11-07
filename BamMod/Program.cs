@@ -14,6 +14,7 @@ namespace BamMod
         {
             CustomEvents.Game.OnGameLoad += eventArgs =>
             {
+                Config.AddItem(new MenuItem("OnlyNew", "Only Largest Critical Strike").SetValue(true));
                 Config.AddItem(new MenuItem("PrintChat", "Print Chat").SetValue(true));
                 Config.AddItem(new MenuItem("PlaySound", "Play Sound").SetValue(true));
                 Config.AddToMainMenu();
@@ -21,7 +22,7 @@ namespace BamMod
 
             Game.OnGameUpdate += eventArgs =>
             {
-                if (ObjectManager.Player.LargestCriticalStrike != _last)
+                if (ObjectManager.Player.LargestCriticalStrike != _last || !Config.Item("OnlyNew").GetValue<bool>())
                 {
                     if (Config.Item("PrintChat").GetValue<bool>())
                         Game.PrintChat("<font color='#FF0000'>BAM</font> <font color='#FFFFFF'>" + _last + "</font>");
