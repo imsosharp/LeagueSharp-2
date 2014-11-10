@@ -132,7 +132,7 @@ namespace Support.Plugins
             if (Q.CastCheck(args.Caster, "Misc.Q.OnAttack") && (ComboMode || HarassMode) &&
                 args.Caster == Target && args.Type == Packet.AttackTypePacket.TargetedAA)
             {
-                var collision = Collision.GetCollision(new List<Vector3> { args.Caster.Position },
+                var collision = Collision.GetCollision(new List<Vector3> {args.Caster.Position},
                     new PredictionInput {Delay = 0.5f, Radius = 70, Speed = 1900});
 
                 if (collision.Count == 0)

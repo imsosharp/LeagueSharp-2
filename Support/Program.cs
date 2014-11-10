@@ -18,10 +18,7 @@
 #region
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using ClipperLib;
 using LeagueSharp;
 using LeagueSharp.Common;
 
