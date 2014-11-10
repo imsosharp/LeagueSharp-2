@@ -44,7 +44,7 @@ namespace Support.Plugins
                 if (Q.CastCheck(Target, "Combo.Q") && R.IsReady() &&
                     Q.GetPrediction(Target).Hitchance >= HitChance.High &&
                     Q.GetPrediction(Target).UnitPosition.CountEnemysInRange(250) >=
-                    ConfigValue<Slider>("Combo.Q.Count").Value)
+                    ConfigValue<Slider>("Misc.Q.Count").Value)
                 {
                     R.CastOnUnit(Player, UsePackets);
                     Utility.DelayAction.Add(150, () => Q.Cast(Target, UsePackets));
@@ -55,7 +55,7 @@ namespace Support.Plugins
                 }
 
                 if (W.CastCheck(Target, "Combo.W") && R.IsReady() &&
-                    Player.HealthPercent() <= ConfigValue<Slider>("Combo.W.Hp").Value)
+                    Player.HealthPercent() <= ConfigValue<Slider>("Misc.W.Hp").Value)
                 {
                     R.CastOnUnit(Player, UsePackets);
                     Utility.DelayAction.Add(150, () => W.CastOnUnit(Target, UsePackets));
@@ -66,7 +66,7 @@ namespace Support.Plugins
                 }
 
                 if (E.IsReady() && R.IsReady() &&
-                    Helpers.AllyInRange(600).Count >= ConfigValue<Slider>("Combo.E.Count").Value)
+                    Helpers.AllyInRange(600).Count >= ConfigValue<Slider>("Misc.E.Count").Value)
                 {
                     R.CastOnUnit(Player, UsePackets);
                     Utility.DelayAction.Add(150, () => E.CastOnUnit(Player, UsePackets));
@@ -82,7 +82,7 @@ namespace Support.Plugins
                 if (Q.CastCheck(Target, "Harass.Q") && R.IsReady() &&
                     Q.GetPrediction(Target).Hitchance >= HitChance.High &&
                     Q.GetPrediction(Target).UnitPosition.CountEnemysInRange(250) >=
-                    ConfigValue<Slider>("Combo.Q.Count").Value)
+                    ConfigValue<Slider>("Misc.Q.Count").Value)
                 {
                     R.CastOnUnit(Player, UsePackets);
                     Utility.DelayAction.Add(150, () => Q.Cast(Target, UsePackets));
@@ -109,9 +109,13 @@ namespace Support.Plugins
         {
             config.AddBool("Combo.Q", "Use Q", true);
             config.AddBool("Combo.W", "Use W", true);
-            config.AddSlider("Combo.Q.Count", "R/Q Enemy in Range", 2, 0, 4);
-            config.AddSlider("Combo.W.Hp", "R/W HP", 40, 1, 100);
-            config.AddSlider("Combo.E.Count", "R/E Ally in Range", 3, 0, 4);
+        }
+
+        public override void MiscMenu(Menu config)
+        {
+            config.AddSlider("Misc.Q.Count", "R/Q Enemy in Range", 2, 0, 4);
+            config.AddSlider("Misc.W.Hp", "R/W HP", 40, 1, 100);
+            config.AddSlider("Misc.E.Count", "R/E Ally in Range", 3, 0, 4);
         }
 
         public override void HarassMenu(Menu config)
