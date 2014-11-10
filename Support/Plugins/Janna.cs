@@ -111,7 +111,7 @@ namespace Support.Plugins
                 var spell = args.SData.Name;
                 var caster = (Obj_AI_Hero) sender;
 
-                if (DamageBoostDatabase.Spells.Any(s => s.Spell == spell))
+                if (DamageBoostDatabase.Spells.Any(s => s.Spell == spell) && caster.CountEnemysInRange(800) > 0)
                 {
                     switch (ConfigValue<Slider>("Misc.E.Spell." + args.SData.Name).Value) // prio 0 = disabled
                     {
@@ -219,7 +219,7 @@ namespace Support.Plugins
                 }
             }
 
-            if (!Q.IsReady() && Environment.TickCount - LastQInterrupt > 300 && R.CastCheck(unit, "Interrupt.R"))
+            if (!Q.IsReady() && Environment.TickCount - LastQInterrupt > 500 && R.CastCheck(unit, "Interrupt.R"))
             {
                 R.Cast();
             }
