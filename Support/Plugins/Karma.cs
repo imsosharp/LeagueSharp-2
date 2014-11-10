@@ -43,11 +43,12 @@ namespace Support.Plugins
             {
                 if (Q.CastCheck(Target, "Combo.Q") && R.IsReady() &&
                     Q.GetPrediction(Target).Hitchance >= HitChance.High &&
+                    Q.GetPrediction(Target).CollisionObjects.Count == 0 &&
                     Q.GetPrediction(Target).UnitPosition.CountEnemysInRange(250) >=
                     ConfigValue<Slider>("Misc.Q.Count").Value)
                 {
                     R.CastOnUnit(Player, UsePackets);
-                    Utility.DelayAction.Add(150, () => Q.Cast(Target, UsePackets));
+                    Utility.DelayAction.Add(200, () => Q.Cast(Target, UsePackets));
                 }
                 if (Q.CastCheck(Target, "Combo.Q"))
                 {
@@ -58,7 +59,7 @@ namespace Support.Plugins
                     Player.HealthPercent() <= ConfigValue<Slider>("Misc.W.Hp").Value)
                 {
                     R.CastOnUnit(Player, UsePackets);
-                    Utility.DelayAction.Add(150, () => W.CastOnUnit(Target, UsePackets));
+                    Utility.DelayAction.Add(200, () => W.CastOnUnit(Target, UsePackets));
                 }
                 if (W.CastCheck(Target, "Combo.W"))
                 {
@@ -69,7 +70,7 @@ namespace Support.Plugins
                     Helpers.AllyInRange(600).Count >= ConfigValue<Slider>("Misc.E.Count").Value)
                 {
                     R.CastOnUnit(Player, UsePackets);
-                    Utility.DelayAction.Add(150, () => E.CastOnUnit(Player, UsePackets));
+                    Utility.DelayAction.Add(200, () => E.CastOnUnit(Player, UsePackets));
                 }
                 if (W.CastCheck(Target, "Combo.W"))
                 {
@@ -80,12 +81,13 @@ namespace Support.Plugins
             if (HarassMode)
             {
                 if (Q.CastCheck(Target, "Harass.Q") && R.IsReady() &&
-                    Q.GetPrediction(Target).Hitchance >= HitChance.High &&
+                    Q.GetPrediction(Target).Hitchance >= HitChance.High && 
+                    Q.GetPrediction(Target).CollisionObjects.Count == 0 &&
                     Q.GetPrediction(Target).UnitPosition.CountEnemysInRange(250) >=
                     ConfigValue<Slider>("Misc.Q.Count").Value)
                 {
                     R.CastOnUnit(Player, UsePackets);
-                    Utility.DelayAction.Add(150, () => Q.Cast(Target, UsePackets));
+                    Utility.DelayAction.Add(200, () => Q.Cast(Target, UsePackets));
                 }
                 if (Q.CastCheck(Target, "Harass.Q"))
                 {

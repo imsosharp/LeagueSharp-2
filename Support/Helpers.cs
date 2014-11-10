@@ -78,6 +78,10 @@ namespace Support
                                                "OUTDATED - Please Update to Version: " + gitVersion + "</font>");
                                 Game.PrintChat("<font color='#15C3AC'>Support:</font> <font color='#FF0000'>" +
                                                "OUTDATED - Please Update to Version: " + gitVersion + "</font>");
+                                Game.PrintChat("<font color='#15C3AC'>Support:</font> <font color='#FF0000'>" +
+                                                "OUTDATED - Please Update to Version: " + gitVersion + "</font>");
+                                Game.PrintChat("<font color='#15C3AC'>Support:</font> <font color='#FF0000'>" +
+                                                "OUTDATED - Please Update to Version: " + gitVersion + "</font>");
                             }
                         }
                     }
