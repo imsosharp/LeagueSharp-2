@@ -74,7 +74,7 @@ namespace Support.Plugins
 
                 if (E.IsReady() && Target.IsValidTarget(E.Range) && ConfigValue<bool>("Combo.E"))
                 {
-                    E.CastOnUnit(Target, UsePackets);
+                    E.CastOnUnit(Target, UsePackets && ConfigValue<bool>("Misc.E.NoFace"));
                 }
             }
 
@@ -101,7 +101,7 @@ namespace Support.Plugins
 
                 if (E.IsReady() && Target.IsValidTarget(E.Range) && ConfigValue<bool>("Harass.E"))
                 {
-                    E.CastOnUnit(Target, UsePackets);
+                    E.CastOnUnit(Target, UsePackets && ConfigValue<bool>("Misc.E.NoFace"));
                 }
             }
 
@@ -144,6 +144,7 @@ namespace Support.Plugins
         public override void MiscMenu(Menu config)
         {
             config.AddList("Misc.Laugh", "Emote", new[] {"OFF", "ON", "ON + Mute"});
+            config.AddBool("Misc.E.NoFace", "E NoFace Exploit", false);
         }
 
         public override void InterruptMenu(Menu config)
