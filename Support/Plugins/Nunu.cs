@@ -143,7 +143,7 @@ namespace Support.Plugins
 
         public override void MiscMenu(Menu config)
         {
-            config.AddList("Misc.Laugh", "Emote", new[] {"OFF", "ON", "ON + Mute"});
+            config.AddList("Misc.Laugh", "Laugh Emote", new[] { "OFF", "ON", "ON + Mute" });
             config.AddBool("Misc.E.NoFace", "E NoFace Exploit", false);
         }
 
