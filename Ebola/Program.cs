@@ -17,7 +17,9 @@
 
 #region
 
+using System.Linq;
 using LeagueSharp;
+using LeagueSharp.Common;
 
 #endregion
 
@@ -35,7 +37,11 @@ namespace Ebola
         {
             if (sender.IsMe && args.SData.Name.ToLower().Contains("bola"))
             {
-                Game.Say("/all E-Bola");
+                var targets = string.Join(" ",
+                    ObjectManager.Get<Obj_AI_Hero>()
+                        .Where(h => h.IsEnemy && h.Distance(args.End) < 200)
+                        .Select(h => h.Name));
+                Game.Say("/all E-Bola " + targets);
             }
         }
     }
