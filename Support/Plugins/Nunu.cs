@@ -142,7 +142,6 @@ namespace Support.Plugins
             config.AddBool("Harass.W", "Use W", false);
             config.AddBool("Harass.E", "Use E", true);
             config.AddSlider("Harass.Q.Health", "Consume below %HP", 50, 1, 100);
-            config.AddObject("", "", false);
         }
 
         public override void MiscMenu(Menu config)
