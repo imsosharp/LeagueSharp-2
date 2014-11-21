@@ -123,7 +123,7 @@ namespace Support.Plugins
             {
                 E.CastOnUnit(gapcloser.Sender, UsePackets);
 
-                if(W.IsReady()) 
+                if (W.IsReady())
                     W.CastOnUnit(Player, UsePackets);
             }
         }
@@ -142,11 +142,12 @@ namespace Support.Plugins
             config.AddBool("Harass.W", "Use W", false);
             config.AddBool("Harass.E", "Use E", true);
             config.AddSlider("Harass.Q.Health", "Consume below %HP", 50, 1, 100);
+            config.AddObject("", "", false);
         }
 
         public override void MiscMenu(Menu config)
         {
-            config.AddList("Misc.Laugh", "Laugh Emote", new[] { "OFF", "ON", "ON + Mute" });
+            config.AddList("Misc.Laugh", "Laugh Emote", new[] {"OFF", "ON", "ON + Mute"});
             config.AddBool("Misc.E.NoFace", "E NoFace Exploit", false);
         }
 
