@@ -1,3 +1,4 @@
+using System;
 using System.Media;
 using LeagueSharp;
 using LeagueSharp.Common;
@@ -22,18 +23,25 @@ namespace BamMod
 
             Game.OnGameUpdate += eventArgs =>
             {
-                if (ObjectManager.Player.LargestCriticalStrike == 0)
-                    return;
-
-                if (ObjectManager.Player.LargestCriticalStrike != _last || !Config.Item("OnlyNew").GetValue<bool>())
+                try
                 {
-                    if (Config.Item("PrintChat").GetValue<bool>())
-                        Game.PrintChat("<font color='#FF0000'>BAM</font> <font color='#FFFFFF'>" + ObjectManager.Player.LargestCriticalStrike + "</font>");
+                    if (ObjectManager.Player.LargestCriticalStrike == 0)
+                        return;
 
-                    if (Config.Item("PlaySound").GetValue<bool>())
-                        Player.Play();
+                    if (ObjectManager.Player.LargestCriticalStrike != _last || !Config.Item("OnlyNew").GetValue<bool>())
+                    {
+                        if (Config.Item("PrintChat").GetValue<bool>())
+                            Game.PrintChat("<font color='#FF0000'>BAM</font> <font color='#FFFFFF'>" + ObjectManager.Player.LargestCriticalStrike + "</font>");
+
+                        if (Config.Item("PlaySound").GetValue<bool>())
+                            Player.Play();
                         
-                    _last = ObjectManager.Player.LargestCriticalStrike;
+                        _last = ObjectManager.Player.LargestCriticalStrike;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
                 }
             };
         }
