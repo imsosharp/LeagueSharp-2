@@ -32,7 +32,7 @@ namespace Support.Plugins
 
         public Janna()
         {
-            Q = new Spell(SpellSlot.Q, 1200);
+            Q = new Spell(SpellSlot.Q, 1100);
             W = new Spell(SpellSlot.W, 600);
             E = new Spell(SpellSlot.E, 800);
             R = new Spell(SpellSlot.R, 550);
