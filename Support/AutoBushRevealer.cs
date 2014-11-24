@@ -138,7 +138,7 @@ namespace Support
                     var th = angle*i;
                     var pos = new Vector3((float) (lastPos.X + radius*Math.Cos(th)),
                         (float) (lastPos.Y + radius*Math.Sin(th)), 0);
-                    wardLocations[i] = new WardLocation(pos, NavMesh.IsWallOfGrass(pos));
+                    wardLocations[i] = new WardLocation(pos, NavMesh.IsWallOfGrass(pos, 50)); // TODO: check later
                 }
 
                 var grassLocations = new List<GrassLocation>();
