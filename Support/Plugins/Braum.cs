@@ -80,9 +80,9 @@ namespace Support.Plugins
 
                 if (!target.IsMe && W.IsReady() && W.IsInRange(target) && (IsShieldActive || E.IsReady()))
                 {
-                    var jumpTime = (Player.Distance(target)*1000/W.Instance.SData.MissileSpeed) +
-                                   (W.Instance.SData.SpellCastTime*1000);
-                    var missileTime = caster.Distance(target)*1000/spell.MissileSpeed;
+                    var jumpTime = (Player.Distance(target) * 1000 / W.Instance.SData.MissileSpeed) +
+                                   (W.Instance.SData.SpellCastTime * 1000);
+                    var missileTime = caster.Distance(target) * 1000 / spell.MissileSpeed;
 
                     if (jumpTime > missileTime)
                     {
@@ -91,7 +91,7 @@ namespace Support.Plugins
                     }
 
                     W.CastOnUnit(target, UsePackets);
-                    Utility.DelayAction.Add((int) jumpTime, () => CastShield(caster.Position));
+                    Utility.DelayAction.Add((int)jumpTime, () => CastShield(caster.Position));
                 }
             }
             catch (Exception e)
@@ -130,9 +130,9 @@ namespace Support.Plugins
 
                 if (!target.IsMe && W.IsReady() && W.IsInRange(target) && (IsShieldActive || E.IsReady()))
                 {
-                    var jumpTime = (Player.Distance(target)*1000/W.Instance.SData.MissileSpeed) +
-                                   (W.Instance.SData.SpellCastTime*1000);
-                    var missileTime = target.Distance(max.MissilePosition)*1000/max.SpellData.MissileSpeed;
+                    var jumpTime = (Player.Distance(target) * 1000 / W.Instance.SData.MissileSpeed) +
+                                   (W.Instance.SData.SpellCastTime * 1000);
+                    var missileTime = target.Distance(max.MissilePosition) * 1000 / max.SpellData.MissileSpeed;
 
                     if (jumpTime > missileTime)
                     {
@@ -141,7 +141,7 @@ namespace Support.Plugins
                     }
 
                     W.CastOnUnit(target, UsePackets);
-                    Utility.DelayAction.Add((int) jumpTime, () => CastShield(max.Start.To3D()));
+                    Utility.DelayAction.Add((int)jumpTime, () => CastShield(max.Start.To3D()));
                 }
             }
             catch (Exception e)
@@ -161,7 +161,7 @@ namespace Support.Plugins
 
                 if (R.CastCheck(Target, "Combo.R"))
                 {
-                    R.CastIfWillHit(Target, ConfigValue<Slider>("Combo.R.Count").Value, true);
+                    R.CastIfWillHit(Target, ConfigValue<Slider>("Combo.R.Count").Value - 1, UsePackets);
                 }
             }
 
@@ -179,11 +179,6 @@ namespace Support.Plugins
             if (Q.CastCheck(gapcloser.Sender, "Gapcloser.Q"))
             {
                 Q.Cast(gapcloser.Sender, UsePackets);
-            }
-
-            if (R.CastCheck(gapcloser.Sender, "Gapcloser.R"))
-            {
-                R.Cast(gapcloser.Sender, UsePackets);
             }
         }
 
@@ -220,8 +215,6 @@ namespace Support.Plugins
         public override void InterruptMenu(Menu config)
         {
             config.AddBool("Gapcloser.Q", "Use Q to Interrupt Gapcloser", true);
-            config.AddBool("Gapcloser.R", "Use R to Interrupt Gapcloser", false);
-
             config.AddBool("Interrupt.R", "Use R to Interrupt Spells", true);
         }
     }

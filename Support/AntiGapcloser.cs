@@ -513,28 +513,35 @@ namespace Support
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            ActiveGapclosers.RemoveAll(entry => Environment.TickCount > entry.EndTick);
-
-            if (OnEnemyGapcloser == null)
+            try
             {
-                return;
-            }
+                ActiveGapclosers.RemoveAll(entry => Environment.TickCount > entry.EndTick);
 
-            foreach (var gapcloser in ActiveGapclosers)
-            {
-                if (gapcloser.SkillType == GapcloserType.Targeted ||
-                    (gapcloser.SkillType == GapcloserType.Skillshot &&
-                     ObjectManager.Get<Obj_AI_Hero>()
-                         .Any(
-                             h =>
-                                 h.IsAlly && !h.IsDead &&
-                                 (h.Distance(gapcloser.Start) < 800 || h.Distance(gapcloser.End) < 800))))
+                if (OnEnemyGapcloser == null)
                 {
-                    if (gapcloser.Sender.IsValidTarget())
+                    return;
+                }
+
+                foreach (var gapcloser in ActiveGapclosers)
+                {
+                    if (gapcloser.SkillType == GapcloserType.Targeted ||
+                        (gapcloser.SkillType == GapcloserType.Skillshot &&
+                         ObjectManager.Get<Obj_AI_Hero>()
+                             .Any(
+                                 h =>
+                                     h.IsAlly && !h.IsDead &&
+                                     (h.Distance(gapcloser.Start) < 800 || h.Distance(gapcloser.End) < 800))))
                     {
-                        OnEnemyGapcloser(gapcloser);
+                        if (gapcloser.Sender.IsValidTarget())
+                        {
+                            OnEnemyGapcloser(gapcloser);
+                        }
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
             }
         }
 

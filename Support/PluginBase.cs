@@ -106,88 +106,123 @@ namespace Support
         {
             Utility.DelayAction.Add(500, () =>
             {
-                _spells.Add(Q);
-                _spells.Add(W);
-                _spells.Add(E);
-                _spells.Add(R);
+                try
+                {
+                    _spells.Add(Q);
+                    _spells.Add(W);
+                    _spells.Add(E);
+                    _spells.Add(R);
 
-                TargetSelector.SetRange(_spells.Where(s => s.Range != float.MaxValue).Select(s => s.Range).Max());
+                    TargetSelector.SetRange(_spells.Where(s => s.Range != float.MaxValue).Select(s => s.Range).Max() + 500);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
             });
 
             Game.OnGameUpdate += args =>
             {
-                ActiveMode = Orbwalker.ActiveMode;
-
-                if (Config.Item("visit").GetValue<bool>())
+                try
                 {
-                    Process.Start("http://www.joduska.me/forum/topic/170-aio-support-is-easy/");
-                    Config.Item("visit").SetValue(false);
+                    ActiveMode = Orbwalker.ActiveMode;
+
+                    if (Config.Item("visit").GetValue<bool>())
+                    {
+                        Process.Start("http://www.joduska.me/forum/topic/170-aio-support-is-easy/");
+                        Config.Item("visit").SetValue(false);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
                 }
             };
 
             Orbwalking.BeforeAttack += args =>
             {
-                if (args.Target.IsValid<Obj_AI_Minion>() && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None)
+                try
                 {
-                    switch (ConfigValue<StringList>("AttackMinions").SelectedIndex)
+                    if (args.Target.IsValid<Obj_AI_Minion>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
                     {
-                        case 0: // Smart
-                            args.Process = AttackMinion;
-                            break;
+                        switch (ConfigValue<StringList>("AttackMinions").SelectedIndex)
+                        {
+                            case 0: // Smart
+                                args.Process = AttackMinion;
+                                break;
 
-                        case 1: // Never
-                            args.Process = false;
-                            break;
+                            case 1: // Never
+                                args.Process = false;
+                                break;
+                        }
                     }
-                }
 
-                if (args.Target.IsValid<Obj_AI_Hero>() && !ConfigValue<bool>("AttackChampions") &&
-                    Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None)
-                    args.Process = false;
+                    if (args.Target.IsValid<Obj_AI_Hero>() && !ConfigValue<bool>("AttackChampions") &&
+                        Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None)
+                        args.Process = false;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
             };
 
             Drawing.OnDraw += args =>
             {
-                if (Player.IsDead)
-                    return;
-
-                if (Target != null && ConfigValue<Circle>("Target").Active)
-                    Utility.DrawCircle(Target.Position, 125, ConfigValue<Circle>("Target").Color);
-
-                foreach (var spell in _spells.Where(s => s != null))
+                try
                 {
-                    var menuItem = ConfigValue<Circle>(spell.Slot + "Range");
-                    if (menuItem.Active && spell.Level > 0)
+                    if (Player.IsDead)
+                        return;
+
+                    if (Target != null && ConfigValue<Circle>("Target").Active)
+                        Utility.DrawCircle(Target.Position, 125, ConfigValue<Circle>("Target").Color);
+
+                    foreach (var spell in _spells.Where(s => s != null))
                     {
-                        Utility.DrawCircle(Player.Position, spell.Range,
-                            spell.IsReady() ? menuItem.Color : Color.FromArgb(150, Color.Red));
+                        var menuItem = ConfigValue<Circle>(spell.Slot + "Range");
+                        if (menuItem.Active && spell.Level > 0)
+                        {
+                            Utility.DrawCircle(Player.Position, spell.Range,
+                                spell.IsReady() ? menuItem.Color : Color.FromArgb(150, Color.Red));
+                        }
                     }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
                 }
             };
 
             Game.OnGameProcessPacket += args =>
             {
-                if (args.PacketData[0] != Packet.MultiPacket.Header ||
-                    args.PacketData[5] != Packet.MultiPacket.OnAttack.SubHeader)
-                    return;
-
-                var basePacket = Packet.MultiPacket.DecodeHeader(args.PacketData);
-                var attackPacket = Packet.MultiPacket.OnAttack.Decoded(args.PacketData);
-                var caster = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(basePacket.NetworkId);
-                var target = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>(attackPacket.TargetNetworkId);
-
-                if (!caster.IsValid<Obj_AI_Hero>() || caster.IsAlly)
-                    return;
-
-                if (BeforeEnemyAttack != null)
+                try
                 {
-                    BeforeEnemyAttack(new BeforeEnemyAttackEventArgs
+                    if (args.PacketData[0] != Packet.MultiPacket.Header ||
+                        args.PacketData[5] != Packet.MultiPacket.OnAttack.SubHeader)
+                        return;
+
+                    var basePacket = Packet.MultiPacket.DecodeHeader(args.PacketData);
+                    var attackPacket = Packet.MultiPacket.OnAttack.Decoded(args.PacketData);
+                    var caster = ObjectManager.GetUnitByNetworkId<GameObject>(basePacket.NetworkId) as Obj_AI_Base;
+                    var target = ObjectManager.GetUnitByNetworkId<GameObject>(attackPacket.TargetNetworkId) as Obj_AI_Base;
+
+                    if (!caster.IsValid<Obj_AI_Hero>() || caster == null || caster.IsAlly)
+                        return;
+
+                    if (BeforeEnemyAttack != null)
                     {
-                        Caster = caster,
-                        Target = target,
-                        Position = attackPacket.Position,
-                        Type = attackPacket.Type
-                    });
+                        BeforeEnemyAttack(new BeforeEnemyAttackEventArgs
+                        {
+                            Caster = caster,
+                            Target = target,
+                            Position = attackPacket.Position,
+                            Type = attackPacket.Type
+                        });
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
                 }
             };
         }
@@ -214,7 +249,7 @@ namespace Support
 
             // misc
             MiscConfig.AddBool("UsePackets", "Use Packets?", true);
-            MiscConfig.AddList("AttackMinions", "Attack Minions?", new[] {"Smart", "Never", "Always"});
+            MiscConfig.AddList("AttackMinions", "Attack Minions?", new[] { "Smart", "Never", "Always" });
             MiscConfig.AddBool("AttackChampions", "Attack Champions?", true);
 
             // drawing
@@ -292,8 +327,7 @@ namespace Support
         {
             get
             {
-                return Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && !Player.IsDead &&
-                       Orbwalking.CanMove(100);
+                return Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && !Player.IsDead;
             }
         }
 
@@ -304,8 +338,7 @@ namespace Support
         {
             get
             {
-                return Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && HarassMana && !Player.IsDead &&
-                       Orbwalking.CanMove(100);
+                return Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && HarassMana && !Player.IsDead;
             }
         }
 
@@ -314,7 +347,7 @@ namespace Support
         /// </summary>
         public bool HarassMana
         {
-            get { return Player.Mana > Player.MaxMana*ConfigValue<Slider>("HarassMana").Value/100; }
+            get { return Player.Mana > Player.MaxMana * ConfigValue<Slider>("HarassMana").Value / 100; }
         }
 
         /// <summary>

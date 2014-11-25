@@ -101,7 +101,7 @@ namespace Support
 
         public static bool EnemyInRange(int numOfEnemy, float range)
         {
-            return Utility.CountEnemysInRange((int) range) >= numOfEnemy;
+            return ObjectManager.Player.CountEnemysInRange((int)range) >= numOfEnemy;
         }
 
         public static List<Obj_AI_Hero> AllyInRange(float range)

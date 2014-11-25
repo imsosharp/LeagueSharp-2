@@ -21,6 +21,7 @@ using System;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
+using SharpDX;
 
 #endregion
 
@@ -47,48 +48,55 @@ namespace Support.Plugins
 
         public override void OnUpdate(EventArgs args)
         {
-            if (Player.IsChannelingImportantSpell())
+            try
             {
-                return;
-            }
-
-            if (IsUltChanneling)
-            {
-                Orbwalker.SetAttack(true);
-                Orbwalker.SetMovement(true);
-                IsUltChanneling = false;
-            }
-
-            if (ComboMode)
-            {
-                if (Q.CastCheck(Target, "Combo.Q"))
+                if (Player.IsChannelingImportantSpell())
                 {
-                    var pred = Q.GetPrediction(Target);
-                    if (pred.Hitchance >= HitChance.High)
+                    return;
+                }
+
+                if (IsUltChanneling)
+                {
+                    Orbwalker.SetAttack(true);
+                    Orbwalker.SetMovement(true);
+                    IsUltChanneling = false;
+                }
+
+                if (ComboMode)
+                {
+                    if (Q.CastCheck(Target, "Combo.Q"))
                     {
-                        Q.Cast(pred.CastPosition, UsePackets);
-                        Q.Cast();
+                        var pred = Q.GetPrediction(Target);
+                        if (pred.Hitchance >= HitChance.High)
+                        {
+                            Q.Cast(pred.CastPosition, UsePackets);
+                            Q.Cast();
+                        }
+                    }
+
+                    if (W.CastCheck(Target, "Combo.W"))
+                    {
+                        W.CastOnUnit(Target, UsePackets);
+                    }
+
+                    var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("Combo.R.Health").Value, R.Range);
+                    if (R.CastCheck(ally, "Combo.R", true, false) && Player.CountEnemysInRange(1000) > 0)
+                    {
+                        R.Cast();
                     }
                 }
 
-                if (W.CastCheck(Target, "Combo.W"))
+                if (HarassMode)
                 {
-                    W.CastOnUnit(Target, UsePackets);
-                }
-
-                var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("Combo.R.Health").Value, R.Range);
-                if (R.CastCheck(ally, "Combo.R", true, false) && Player.CountEnemysInRange(1000) > 0)
-                {
-                    R.Cast();
+                    if (W.CastCheck(Target, "Harass.W"))
+                    {
+                        W.CastOnUnit(Target, UsePackets);
+                    }
                 }
             }
-
-            if (HarassMode)
+            catch (Exception e)
             {
-                if (W.CastCheck(Target, "Harass.W"))
-                {
-                    W.CastOnUnit(Target, UsePackets);
-                }
+                Console.WriteLine(e);
             }
         }
 
@@ -109,7 +117,7 @@ namespace Support.Plugins
             if (sender.IsValid<Obj_AI_Hero>() && sender.IsAlly && !sender.IsMe)
             {
                 var spell = args.SData.Name;
-                var caster = (Obj_AI_Hero) sender;
+                var caster = (Obj_AI_Hero)sender;
 
                 if (DamageBoostDatabase.Spells.Any(s => s.Spell == spell) && caster.CountEnemysInRange(2000) > 0)
                 {
@@ -137,7 +145,7 @@ namespace Support.Plugins
             if (!sender.IsValid<Obj_SpellMissile>() || IsUltChanneling)
                 return;
 
-            var missile = (Obj_SpellMissile) sender;
+            var missile = (Obj_SpellMissile)sender;
 
             // Caster ally hero / not me
             if (!missile.SpellCaster.IsValid<Obj_AI_Hero>() || !missile.SpellCaster.IsAlly ||
@@ -148,7 +156,7 @@ namespace Support.Plugins
             if (!missile.Target.IsValid<Obj_AI_Hero>() || !missile.Target.IsEnemy)
                 return;
 
-            var caster = (Obj_AI_Hero) missile.SpellCaster;
+            var caster = (Obj_AI_Hero)missile.SpellCaster;
 
             // only in SBTW mode
             if (E.IsReady() && E.IsInRange(caster) && (ComboMode || HarassMode) &&
@@ -165,13 +173,13 @@ namespace Support.Plugins
 
             if (sender.IsValid<Obj_SpellMissile>() && !IsUltChanneling)
             {
-                var missile = (Obj_SpellMissile) sender;
+                var missile = (Obj_SpellMissile)sender;
 
                 // Ally Turret -> Enemy Hero
                 if (missile.SpellCaster.IsValid<Obj_AI_Turret>() && missile.SpellCaster.IsAlly &&
                     missile.Target.IsValid<Obj_AI_Hero>() && missile.Target.IsEnemy)
                 {
-                    var turret = (Obj_AI_Turret) missile.SpellCaster;
+                    var turret = (Obj_AI_Turret)missile.SpellCaster;
 
                     if (E.IsInRange(turret))
                     {

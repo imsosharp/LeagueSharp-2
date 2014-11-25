@@ -39,59 +39,60 @@ namespace Support.Plugins
 
         public override void OnUpdate(EventArgs args)
         {
-            if (ComboMode)
+            try
             {
-                if (Q.CastCheck(Target, "ComboQ"))
+                if (ComboMode)
                 {
-                    Q.Cast();
+                    if (Q.CastCheck(Target, "ComboQ"))
+                    {
+                        Q.Cast();
+                    }
+
+                    //if (Target.IsValidTarget(AttackRange) &&
+                    //    (Player.HasBuff("sonaqprocattacker") || Player.HasBuff("sonaqprocattacker")))
+                    //{
+                    //    Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
+                    //}
+
+                    var allyW = Helpers.AllyBelowHp(ConfigValue<Slider>("ComboHealthW").Value, W.Range);
+                    if (W.CastCheck(allyW, "ComboW", true, false))
+                    {
+                        W.Cast();
+                    }
+
+                    if (E.IsReady() && Helpers.AllyInRange(E.Range).Count > 0 && ConfigValue<bool>("ComboE"))
+                    {
+                        E.Cast();
+                    }
+
+                    if (R.CastCheck(Target, "ComboR"))
+                    {
+                        R.CastIfWillHit(Target, ConfigValue<Slider>("ComboCountR").Value, true);
+                    }
                 }
 
-                //if (Target.IsValidTarget(AttackRange) &&
-                //    (Player.HasBuff("sonaqprocattacker") || Player.HasBuff("sonaqprocattacker")))
-                //{
-                //    Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
-                //}
-
-                var allyW = Helpers.AllyBelowHp(ConfigValue<Slider>("ComboHealthW").Value, W.Range);
-                if (W.CastCheck(allyW, "ComboW", true, false))
+                if (HarassMode)
                 {
-                    W.Cast();
-                }
+                    if (Q.CastCheck(Target, "HarassQ"))
+                    {
+                        Q.Cast();
+                    }
 
-                if (E.IsReady() && Helpers.AllyInRange(E.Range).Count > 0 && ConfigValue<bool>("ComboE"))
-                {
-                    E.Cast();
-                }
+                    var allyW = Helpers.AllyBelowHp(ConfigValue<Slider>("HarassHealthW").Value, W.Range);
+                    if (W.CastCheck(allyW, "HarassW", true, false))
+                    {
+                        W.Cast();
+                    }
 
-                if (R.CastCheck(Target, "ComboR"))
-                {
-                    R.CastIfWillHit(Target, ConfigValue<Slider>("ComboCountR").Value, true);
+                    if (E.IsReady() && Helpers.AllyInRange(E.Range).Count > 0 && ConfigValue<bool>("HarassE"))
+                    {
+                        E.Cast();
+                    }
                 }
             }
-
-            if (HarassMode)
+            catch (Exception e)
             {
-                if (Q.CastCheck(Target, "HarassQ"))
-                {
-                    Q.Cast();
-                }
-
-                //if (Target.IsValidTarget(AttackRange) &&
-                //    (Player.HasBuff("sonaqprocattacker") || Player.HasBuff("sonaqprocattacker")))
-                //{
-                //    Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
-                //}
-
-                var allyW = Helpers.AllyBelowHp(ConfigValue<Slider>("HarassHealthW").Value, W.Range);
-                if (W.CastCheck(allyW, "HarassW", true, false))
-                {
-                    W.Cast();
-                }
-
-                if (E.IsReady() && Helpers.AllyInRange(E.Range).Count > 0 && ConfigValue<bool>("HarassE"))
-                {
-                    E.Cast();
-                }
+                Console.WriteLine(e);
             }
         }
 

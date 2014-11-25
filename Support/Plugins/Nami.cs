@@ -75,35 +75,42 @@ namespace Support.Plugins
 
         public override void OnUpdate(EventArgs args)
         {
-            if (ComboMode)
+            try
             {
-                if (Q.CastCheck(Target, "ComboQ")) // TODO: add check for slowed targets by E or FrostQeen
+                if (ComboMode)
                 {
-                    Q.Cast(Target, UsePackets);
+                    if (Q.CastCheck(Target, "ComboQ")) // TODO: add check for slowed targets by E or FrostQeen
+                    {
+                        Q.Cast(Target, UsePackets);
+                    }
+
+                    if (W.IsReady() && ConfigValue<bool>("ComboW"))
+                    {
+                        HealLogic();
+                    }
+
+                    if (R.CastCheck(Target, "ComboR"))
+                    {
+                        R.CastIfWillHit(Target, ConfigValue<Slider>("ComboCountR").Value, UsePackets);
+                    }
                 }
 
-                if (W.IsReady() && ConfigValue<bool>("ComboW"))
+                if (HarassMode)
                 {
-                    HealLogic();
-                }
+                    if (Q.CastCheck(Target, "HarassQ"))
+                    {
+                        Q.Cast(Target, UsePackets);
+                    }
 
-                if (R.CastCheck(Target, "ComboR"))
-                {
-                    R.CastIfWillHit(Target, ConfigValue<Slider>("ComboCountR").Value, UsePackets);
+                    if (W.IsReady() && ConfigValue<bool>("HarassW"))
+                    {
+                        HealLogic();
+                    }
                 }
             }
-
-            if (HarassMode)
+            catch (Exception e)
             {
-                if (Q.CastCheck(Target, "HarassQ"))
-                {
-                    Q.Cast(Target, UsePackets);
-                }
-
-                if (W.IsReady() && ConfigValue<bool>("HarassW"))
-                {
-                    HealLogic();
-                }
+                Console.WriteLine(e);
             }
         }
 

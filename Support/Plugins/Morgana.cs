@@ -41,76 +41,83 @@ namespace Support.Plugins
 
         public override void OnUpdate(EventArgs args)
         {
-            if (ComboMode)
+            try
             {
-                if (Q.CastCheck(Target, "ComboQ"))
+                if (ComboMode)
                 {
-                    Q.Cast(Target, UsePackets);
-                }
-
-                if (W.CastCheck(Target, "ComboW"))
-                {
-                    foreach (
-                        var enemy in
-                            ObjectManager.Get<Obj_AI_Hero>()
-                                .Where(
-                                    hero =>
-                                        (hero.HasBuffOfType(BuffType.Snare) || hero.HasBuffOfType(BuffType.Stun) ||
-                                         hero.HasBuffOfType(BuffType.Taunt) && hero.IsValidTarget(W.Range)))
-                        )
+                    if (Q.CastCheck(Target, "ComboQ"))
                     {
-                        W.Cast(enemy.Position, UsePackets);
-                        return;
+                        Q.Cast(Target, UsePackets);
                     }
 
-                    foreach (
-                        var enemy in
-                            ObjectManager.Get<Obj_AI_Hero>()
-                                .Where(hero => hero.IsValidTarget(W.Range)))
+                    if (W.CastCheck(Target, "ComboW"))
                     {
-                        W.CastIfWillHit(enemy, 2, UsePackets);
-                        return;
+                        foreach (
+                            var enemy in
+                                ObjectManager.Get<Obj_AI_Hero>()
+                                    .Where(
+                                        hero =>
+                                            (hero.HasBuffOfType(BuffType.Snare) || hero.HasBuffOfType(BuffType.Stun) ||
+                                             hero.HasBuffOfType(BuffType.Taunt) && hero.IsValidTarget(W.Range)))
+                            )
+                        {
+                            W.Cast(enemy.Position, UsePackets);
+                            return;
+                        }
+
+                        foreach (
+                            var enemy in
+                                ObjectManager.Get<Obj_AI_Hero>()
+                                    .Where(hero => hero.IsValidTarget(W.Range)))
+                        {
+                            W.CastIfWillHit(enemy, 1, UsePackets);
+                            return;
+                        }
+                    }
+
+                    if (R.CastCheck(Target, "ComboR") &&
+                        Helpers.EnemyInRange(ConfigValue<Slider>("ComboCountR").Value, R.Range))
+                    {
+                        R.Cast();
                     }
                 }
 
-                if (R.CastCheck(Target, "ComboR") &&
-                    Helpers.EnemyInRange(ConfigValue<Slider>("ComboCountR").Value, R.Range))
+                if (HarassMode)
                 {
-                    R.Cast();
+                    if (Q.CastCheck(Target, "HarassQ"))
+                    {
+                        Q.Cast(Target, UsePackets);
+                    }
+
+                    if (W.CastCheck(Target, "HarassW"))
+                    {
+                        foreach (
+                            var enemy in
+                                ObjectManager.Get<Obj_AI_Hero>()
+                                    .Where(
+                                        hero =>
+                                            (hero.HasBuffOfType(BuffType.Snare) || hero.HasBuffOfType(BuffType.Stun) ||
+                                             hero.HasBuffOfType(BuffType.Taunt) && hero.IsValidTarget(W.Range)))
+                            )
+                        {
+                            W.Cast(enemy.Position, UsePackets);
+                            return;
+                        }
+
+                        foreach (
+                            var enemy in
+                                ObjectManager.Get<Obj_AI_Hero>()
+                                    .Where(hero => hero.IsValidTarget(W.Range)))
+                        {
+                            W.CastIfWillHit(enemy, 1, UsePackets);
+                            return;
+                        }
+                    }
                 }
             }
-
-            if (HarassMode)
+            catch (Exception e)
             {
-                if (Q.CastCheck(Target, "HarassQ"))
-                {
-                    Q.Cast(Target, UsePackets);
-                }
-
-                if (W.CastCheck(Target, "HarassW"))
-                {
-                    foreach (
-                        var enemy in
-                            ObjectManager.Get<Obj_AI_Hero>()
-                                .Where(
-                                    hero =>
-                                        (hero.HasBuffOfType(BuffType.Snare) || hero.HasBuffOfType(BuffType.Stun) ||
-                                         hero.HasBuffOfType(BuffType.Taunt) && hero.IsValidTarget(W.Range)))
-                        )
-                    {
-                        W.Cast(enemy.Position, UsePackets);
-                        return;
-                    }
-
-                    foreach (
-                        var enemy in
-                            ObjectManager.Get<Obj_AI_Hero>()
-                                .Where(hero => hero.IsValidTarget(W.Range)))
-                    {
-                        W.CastIfWillHit(enemy, 2, UsePackets);
-                        return;
-                    }
-                }
+                Console.WriteLine(e);
             }
         }
 

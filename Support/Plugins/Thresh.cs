@@ -57,73 +57,80 @@ namespace Support.Plugins
 
         public override void OnUpdate(EventArgs args)
         {
-            if (_qTarget != null)
-                if (Environment.TickCount - _qTick >= QFollowTime)
-                    _qTarget = null;
-
-            if (ComboMode)
+            try
             {
-                if (Q.CastCheck(Target, "ComboQ") && FollowQBlock)
+                if (_qTarget != null)
+                    if (Environment.TickCount - _qTick >= QFollowTime)
+                        _qTarget = null;
+
+                if (ComboMode)
                 {
-                    if (Q.Cast(Target, UsePackets) == Spell.CastStates.SuccessfullyCasted)
+                    if (Q.CastCheck(Target, "ComboQ") && FollowQBlock)
                     {
-                        _qTick = Environment.TickCount;
-                        _qTarget = Target;
+                        if (Q.Cast(Target, UsePackets) == Spell.CastStates.SuccessfullyCasted)
+                        {
+                            _qTick = Environment.TickCount;
+                            _qTarget = Target;
+                        }
+                    }
+                    if (Q.CastCheck(_qTarget, "ComboQFollow"))
+                    {
+                        if (FollowQ)
+                            Q.Cast();
+                    }
+
+                    if (W.CastCheck(Target, "ComboW"))
+                    {
+                        EngageFriendLatern();
+                    }
+
+                    if (E.CastCheck(Target, "ComboE"))
+                    {
+                        if (Helpers.AllyBelowHp(ConfigValue<Slider>("ComboHealthE").Value, E.Range) != null)
+                        {
+                            E.Cast(Target.Position, UsePackets);
+                        }
+                        else
+                        {
+                            E.Cast(Helpers.ReversePosition(ObjectManager.Player.Position, Target.Position), UsePackets);
+                        }
+                    }
+
+                    if (R.CastCheck(Target, "ComboR"))
+                    {
+                        if (Helpers.EnemyInRange(ConfigValue<Slider>("ComboCountR").Value, R.Range))
+                            R.Cast();
                     }
                 }
-                if (Q.CastCheck(_qTarget, "ComboQFollow"))
-                {
-                    if (FollowQ)
-                        Q.Cast();
-                }
 
-                if (W.CastCheck(Target, "ComboW"))
+                if (HarassMode)
                 {
-                    EngageFriendLatern();
-                }
-
-                if (E.CastCheck(Target, "ComboE"))
-                {
-                    if (Helpers.AllyBelowHp(ConfigValue<Slider>("ComboHealthE").Value, E.Range) != null)
+                    if (Q.CastCheck(Target, "HarassQ") && FollowQBlock)
                     {
-                        E.Cast(Target.Position, UsePackets);
+                        Q.Cast(Target, UsePackets);
                     }
-                    else
-                    {
-                        E.Cast(Helpers.ReversePosition(ObjectManager.Player.Position, Target.Position), UsePackets);
-                    }
-                }
 
-                if (R.CastCheck(Target, "ComboR"))
-                {
-                    if (Helpers.EnemyInRange(ConfigValue<Slider>("ComboCountR").Value, R.Range))
-                        R.Cast();
+                    if (W.CastCheck(Target, "HarassW"))
+                    {
+                        SafeFriendLatern();
+                    }
+
+                    if (E.CastCheck(Target, "HarassE"))
+                    {
+                        if (Helpers.AllyBelowHp(ConfigValue<Slider>("HarassHealthE").Value, E.Range) != null)
+                        {
+                            E.Cast(Target.Position, UsePackets);
+                        }
+                        else
+                        {
+                            E.Cast(Helpers.ReversePosition(ObjectManager.Player.Position, Target.Position), UsePackets);
+                        }
+                    }
                 }
             }
-
-            if (HarassMode)
+            catch (Exception e)
             {
-                if (Q.CastCheck(Target, "HarassQ") && FollowQBlock)
-                {
-                    Q.Cast(Target, UsePackets);
-                }
-
-                if (W.CastCheck(Target, "HarassW"))
-                {
-                    SafeFriendLatern();
-                }
-
-                if (E.CastCheck(Target, "HarassE"))
-                {
-                    if (Helpers.AllyBelowHp(ConfigValue<Slider>("HarassHealthE").Value, E.Range) != null)
-                    {
-                        E.Cast(Target.Position, UsePackets);
-                    }
-                    else
-                    {
-                        E.Cast(Helpers.ReversePosition(ObjectManager.Player.Position, Target.Position), UsePackets);
-                    }
-                }
+                Console.WriteLine(e);
             }
         }
 

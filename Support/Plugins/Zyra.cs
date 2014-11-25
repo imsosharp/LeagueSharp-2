@@ -89,53 +89,60 @@ namespace Support.Plugins
 
         public override void OnUpdate(EventArgs args)
         {
-            if (ZyraisZombie())
+            try
             {
-                CastPassive();
-                return;
+                if (ZyraisZombie())
+                {
+                    CastPassive();
+                    return;
+                }
+
+                if (ComboMode)
+                {
+                    if (Q.CastCheck(Target, "Combo.Q"))
+                    {
+                        if (Q.Cast(Target, UsePackets) == Spell.CastStates.SuccessfullyCasted)
+                        {
+                            CastW(Q.GetPrediction(Target).CastPosition);
+                        }
+                    }
+
+                    if (E.CastCheck(Target, "Combo.E"))
+                    {
+                        if (E.Cast(Target, UsePackets) == Spell.CastStates.SuccessfullyCasted)
+                        {
+                            CastW(E.GetPrediction(Target).CastPosition);
+                        }
+                    }
+
+                    if (R.CastCheck(Target, "Combo.R"))
+                    {
+                        R.CastIfWillHit(Target, ConfigValue<Slider>("Combo.R.Count").Value, UsePackets);
+                    }
+                }
+
+                if (HarassMode)
+                {
+                    if (Q.CastCheck(Target, "Harass.Q"))
+                    {
+                        if (Q.Cast(Target, UsePackets) == Spell.CastStates.SuccessfullyCasted)
+                        {
+                            CastW(Q.GetPrediction(Target).CastPosition);
+                        }
+                    }
+
+                    if (E.CastCheck(Target, "Harass.E"))
+                    {
+                        if (E.Cast(Target, UsePackets) == Spell.CastStates.SuccessfullyCasted)
+                        {
+                            CastW(E.GetPrediction(Target).CastPosition);
+                        }
+                    }
+                }
             }
-
-            if (ComboMode)
+            catch (Exception e)
             {
-                if (Q.CastCheck(Target, "Combo.Q"))
-                {
-                    if (Q.Cast(Target, UsePackets) == Spell.CastStates.SuccessfullyCasted)
-                    {
-                        CastW(Q.GetPrediction(Target).CastPosition);
-                    }
-                }
-
-                if (E.CastCheck(Target, "Combo.E"))
-                {
-                    if (E.Cast(Target, UsePackets) == Spell.CastStates.SuccessfullyCasted)
-                    {
-                        CastW(E.GetPrediction(Target).CastPosition);
-                    }
-                }
-
-                if (R.CastCheck(Target, "Combo.R"))
-                {
-                    R.CastIfWillHit(Target, ConfigValue<Slider>("Combo.R.Count").Value, UsePackets);
-                }
-            }
-
-            if (HarassMode)
-            {
-                if (Q.CastCheck(Target, "Harass.Q"))
-                {
-                    if (Q.Cast(Target, UsePackets) == Spell.CastStates.SuccessfullyCasted)
-                    {
-                        CastW(Q.GetPrediction(Target).CastPosition);
-                    }
-                }
-
-                if (E.CastCheck(Target, "Harass.E"))
-                {
-                    if (E.Cast(Target, UsePackets) == Spell.CastStates.SuccessfullyCasted)
-                    {
-                        CastW(E.GetPrediction(Target).CastPosition);
-                    }
-                }
+                Console.WriteLine(e);
             }
         }
 

@@ -37,36 +37,43 @@ namespace Support.Plugins
 
         public override void OnUpdate(EventArgs args)
         {
-            if (ComboMode)
+            try
             {
-                if (Q.CastCheck(Target, "ComboQ"))
+                if (ComboMode)
                 {
-                    Q.Cast(Target, UsePackets);
+                    if (Q.CastCheck(Target, "ComboQ"))
+                    {
+                        Q.Cast(Target, UsePackets);
+                    }
+
+                    if (W.IsReady() && !Q.IsReady() && ConfigValue<bool>("ComboW"))
+                    {
+                        W.Cast();
+                    }
+
+                    // TODO: speed adc/jungler/engage
+                    if (E.IsReady() && Utility.CountEnemysInRange(2000) > 0 && ConfigValue<bool>("ComboE"))
+                    {
+                        E.Cast(Player);
+                    }
                 }
 
-                if (W.IsReady() && !Q.IsReady() && ConfigValue<bool>("ComboW"))
+                if (HarassMode)
                 {
-                    W.Cast();
-                }
+                    if (Q.CastCheck(Target, "HarassQ"))
+                    {
+                        Q.Cast(Target, UsePackets);
+                    }
 
-                // TODO: speed adc/jungler/engage
-                if (E.IsReady() && Utility.CountEnemysInRange(2000) > 0 && ConfigValue<bool>("ComboE"))
-                {
-                    E.Cast(Player);
+                    if (W.IsReady() && !Q.IsReady() && ConfigValue<bool>("HarassW"))
+                    {
+                        W.Cast();
+                    }
                 }
             }
-
-            if (HarassMode)
+            catch (Exception e)
             {
-                if (Q.CastCheck(Target, "HarassQ"))
-                {
-                    Q.Cast(Target, UsePackets);
-                }
-
-                if (W.IsReady() && !Q.IsReady() && ConfigValue<bool>("HarassW"))
-                {
-                    W.Cast();
-                }
+                Console.WriteLine(e);
             }
         }
 
