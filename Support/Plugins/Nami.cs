@@ -69,7 +69,7 @@ namespace Support.Plugins
 
             if (E.IsReady() && E.IsInRange(missile.SpellCaster) && ConfigValue<bool>("Misc.E.AA." + caster.ChampionName))
             {
-                E.CastOnUnit(caster, UsePackets);
+                E.CastOnUnit(caster, UsePackets); // add delay
             }
         }
 

@@ -82,44 +82,44 @@ namespace Support
 
         private void Game_OnGameUpdate(EventArgs args)
         {
-            var time = Environment.TickCount;
+            //var time = Environment.TickCount;
 
-            foreach (var enemyInfo in _enemyInfo.Where(x => x.Player.IsVisible))
-                enemyInfo.LastSeen = time;
+            //foreach (var enemyInfo in _enemyInfo.Where(x => x.Player.IsVisible))
+            //    enemyInfo.LastSeen = time;
 
-            if (PluginBase.ActiveMode != Orbwalking.OrbwalkingMode.Combo)
-                return;
+            //if (PluginBase.ActiveMode != Orbwalking.OrbwalkingMode.Combo)
+            //    return;
 
-            if (_menu.Item("AutoBushEnabled").GetValue<bool>())
-            {
-                foreach (var enemy in _enemyInfo.Where(x =>
-                    x.Player.IsValid &&
-                    !x.Player.IsVisible &&
-                    !x.Player.IsDead &&
-                    x.Player.Distance(ObjectManager.Player.ServerPosition) < 1000 &&
-                    time - x.LastSeen < 2500).Select(x => x.Player))
-                {
-                    var bestWardPos = GetWardPos(enemy.ServerPosition, 165, 2);
+            //if (_menu.Item("AutoBushEnabled").GetValue<bool>())
+            //{
+            //    foreach (var enemy in _enemyInfo.Where(x =>
+            //        x.Player.IsValid &&
+            //        !x.Player.IsVisible &&
+            //        !x.Player.IsDead &&
+            //        x.Player.Distance(ObjectManager.Player.ServerPosition) < 1000 &&
+            //        time - x.LastSeen < 2500).Select(x => x.Player))
+            //    {
+            //        var bestWardPos = GetWardPos(enemy.ServerPosition, 165, 2);
 
-                    if (bestWardPos != enemy.ServerPosition && bestWardPos != Vector3.Zero &&
-                        bestWardPos.Distance(ObjectManager.Player.ServerPosition) <= 600)
-                    {
-                        var timedif = Environment.TickCount - _lastTimeWarded;
+            //        if (bestWardPos != enemy.ServerPosition && bestWardPos != Vector3.Zero &&
+            //            bestWardPos.Distance(ObjectManager.Player.ServerPosition) <= 600)
+            //        {
+            //            var timedif = Environment.TickCount - _lastTimeWarded;
 
-                        if (timedif > 1250 && !(timedif < 2500 && GetNearObject("SightWard", bestWardPos, 200) != null))
-                            //no near wards
-                        {
-                            var wardSlot = GetWardSlot();
+            //            if (timedif > 1250 && !(timedif < 2500 && GetNearObject("SightWard", bestWardPos, 200) != null))
+            //                //no near wards
+            //            {
+            //                var wardSlot = GetWardSlot();
 
-                            if (wardSlot != null && wardSlot.Id != ItemId.Unknown)
-                            {
-                                wardSlot.UseItem(bestWardPos);
-                                _lastTimeWarded = Environment.TickCount;
-                            }
-                        }
-                    }
-                }
-            }
+            //                if (wardSlot != null && wardSlot.Id != ItemId.Unknown)
+            //                {
+            //                    wardSlot.UseItem(bestWardPos);
+            //                    _lastTimeWarded = Environment.TickCount;
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
         }
 
         private Vector3 GetWardPos(Vector3 lastPos, int radius = 165, int precision = 3)
