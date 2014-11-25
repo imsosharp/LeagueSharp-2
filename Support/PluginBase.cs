@@ -79,7 +79,7 @@ namespace Support
         /// </summary>
         private void InitTargetSelector()
         {
-            TargetSelector = new TargetSelector(Player.AttackRange, TargetSelector.TargetingMode.AutoPriority);
+            TargetSelector = new TargetSelector(Player.AttackRange, TargetSelector.TargetingMode.Closest);
         }
 
         /// <summary>
