@@ -88,6 +88,8 @@ namespace SpellDetector.Targeted
                 if (args.SData.Name.ToLower().Contains("summoner") || args.SData.Name.ToLower().Contains("recall"))
                     return; // ignore summoners TODO: add summoners to database
 
+                // TODO: add menu check
+
                 var caster = (Obj_AI_Hero) sender;
                 var target = (Obj_AI_Base) args.Target;
                 var data = TargetSpellDatabase.GetByName(args.SData.Name);
@@ -102,7 +104,7 @@ namespace SpellDetector.Targeted
                         CcType.No,
                         caster.AttackRange,
                         caster.AttackDelay,
-                        caster.BasicAttack.MissileSpeed);
+                        caster.BasicAttack.MissileSpeed); // TODO: check melee
                 }
 
                 if (data == null)
