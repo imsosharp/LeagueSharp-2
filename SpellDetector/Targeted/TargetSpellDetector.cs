@@ -86,7 +86,7 @@ namespace SpellDetector.Targeted
                     return; // only targeted
 
                 if (args.SData.Name.ToLower().Contains("summoner") || args.SData.Name.ToLower().Contains("recall"))
-                    return; // ignore summoner spells TODO: add summoners to database
+                    return; // ignore summoners TODO: add summoners to database
 
                 var caster = (Obj_AI_Hero) sender;
                 var target = (Obj_AI_Base) args.Target;
