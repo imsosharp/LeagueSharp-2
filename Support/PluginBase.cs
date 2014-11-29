@@ -24,6 +24,9 @@ using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
+using Support.Util;
+using ActiveGapcloser = Support.Util.ActiveGapcloser;
+using AntiGapcloser = Support.Util.AntiGapcloser;
 using Color = System.Drawing.Color;
 using Version = System.Version;
 

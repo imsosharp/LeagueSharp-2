@@ -17,6 +17,8 @@
 
 #region
 
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
@@ -24,7 +26,7 @@ using SharpDX;
 
 #endregion
 
-namespace Support
+namespace Support.Util
 {
     public enum HeroType
     {
@@ -238,6 +240,11 @@ namespace Support
         {
             menu.AddItem(
                 new MenuItem(name + ObjectManager.Player.ChampionName, displayName).SetValue(new Slider(value, min, max)));
+        }
+
+        public static void AddObject(this Menu menu, string name, string displayName, object value)
+        {
+            menu.AddItem(new MenuItem(name + ObjectManager.Player.ChampionName, displayName).SetValue(value));
         }
     }
 }

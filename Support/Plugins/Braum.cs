@@ -24,6 +24,8 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using Support.Evade;
+using Support.Util;
+using ActiveGapcloser = Support.Util.ActiveGapcloser;
 using SpellData = LeagueSharp.SpellData;
 
 #endregion
