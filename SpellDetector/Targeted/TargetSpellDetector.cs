@@ -98,7 +98,7 @@ namespace SpellDetector.Targeted
                         caster.ChampionName.ToLower(),
                         args.SData.Name.ToLower(),
                         SpellSlot.Unknown,
-                        Spelltype.AutoAttack,
+                        SpellType.AutoAttack,
                         CcType.No,
                         caster.AttackRange,
                         caster.AttackDelay,

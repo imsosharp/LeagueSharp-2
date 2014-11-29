@@ -59,7 +59,7 @@ namespace SpellDetector.Targeted
             get { return Spell.CcType; }
         }
 
-        public Spelltype Type
+        public SpellType Type
         {
             get { return Spell.Type; }
         }
@@ -74,14 +74,14 @@ namespace SpellDetector.Targeted
     {
         public string ChampionName { get; set; }
         public SpellSlot Spellslot { get; set; }
-        public Spelltype Type { get; set; }
+        public SpellType Type { get; set; }
         public CcType CcType { get; set; }
         public string Name { get; set; }
         public float Range { get; set; }
         public double Delay { get; set; }
         public double Speed { get; set; }
 
-        public TargetSpellData(string champion, string name, SpellSlot slot, Spelltype type, CcType cc, float range,
+        public TargetSpellData(string champion, string name, SpellSlot slot, SpellType type, CcType cc, float range,
             float delay, float speed)
         {
             ChampionName = champion;
@@ -95,7 +95,7 @@ namespace SpellDetector.Targeted
         }
     }
 
-    public enum Spelltype
+    public enum SpellType
     {
         Skillshot,
         Targeted,
