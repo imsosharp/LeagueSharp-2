@@ -41,7 +41,7 @@ namespace SpellDetector.Targeted
 
         public Vector2 EndPosition
         {
-            get { return Target.Position.To2D(); }
+            get { return Target.ServerPosition.To2D(); }
         }
 
         public Vector2 Direction
@@ -52,6 +52,16 @@ namespace SpellDetector.Targeted
         public double Damage
         {
             get { return Caster.GetSpellDamage(Target, Spell.Name); }
+        }
+
+        public CcType CrowdControl
+        {
+            get { return Spell.CcType; }
+        }
+
+        public Spelltype Type
+        {
+            get { return Spell.Type; }
         }
 
         public bool IsActive
