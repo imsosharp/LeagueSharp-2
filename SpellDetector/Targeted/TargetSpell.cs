@@ -54,6 +54,11 @@ namespace SpellDetector.Targeted
             get { return Caster.GetSpellDamage(Target, Spell.Name); }
         }
 
+        public bool IsKillable
+        {
+            get { return Damage >= Target.Health; }
+        }
+
         public CcType CrowdControl
         {
             get { return Spell.CcType; }
