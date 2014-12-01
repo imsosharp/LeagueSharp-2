@@ -74,10 +74,6 @@ namespace Support.Plugins
                     R.CastOnUnit(Player, UsePackets);
                     Utility.DelayAction.Add(200, () => E.CastOnUnit(Player, UsePackets));
                 }
-                if (W.CastCheck(Target, "Combo.W"))
-                {
-                    W.CastOnUnit(Target, UsePackets);
-                }
             }
 
             if (HarassMode)
@@ -94,6 +90,13 @@ namespace Support.Plugins
                 if (Q.CastCheck(Target, "Harass.Q"))
                 {
                     Q.Cast(Target, UsePackets);
+                }
+
+                if (E.IsReady() && R.IsReady() &&
+                    Helpers.AllyInRange(600).Count >= ConfigValue<Slider>("Misc.E.Count").Value)
+                {
+                    R.CastOnUnit(Player, UsePackets);
+                    Utility.DelayAction.Add(200, () => E.CastOnUnit(Player, UsePackets));
                 }
             }
         }
