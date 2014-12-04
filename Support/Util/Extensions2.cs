@@ -37,7 +37,7 @@ namespace Support.Util
         Bruiser
     }
 
-    public static class Extensions
+    public static class Extensions2
     {
         private static readonly string[] Ap =
         {

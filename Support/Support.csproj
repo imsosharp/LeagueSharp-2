@@ -88,7 +88,7 @@
     <Compile Include="Evade\SpellData.cs" />
     <Compile Include="Evade\SpellDatabase.cs" />
     <Compile Include="Evade\Utils.cs" />
-    <Compile Include="Util\Extensions.cs" />
+    <Compile Include="Util\Extensions2.cs" />
     <Compile Include="Plugins\Alistar.cs" />
     <Compile Include="Plugins\Blitzcrank.cs" />
     <Compile Include="Plugins\Braum.cs" />
