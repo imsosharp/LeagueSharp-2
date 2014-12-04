@@ -20,8 +20,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using LeagueSharp;
 using SpellDetector.Helpers;
+using SpellDetector.Targeted;
 
 #endregion
 

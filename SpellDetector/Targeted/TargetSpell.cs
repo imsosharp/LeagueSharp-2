@@ -73,6 +73,11 @@ namespace SpellDetector.Targeted
         {
             get { return Environment.TickCount <= EndTick; }
         }
+
+        public bool HasMissile
+        {
+            get { return Spell.Speed == float.MaxValue || Spell.Speed == 0; }
+        }
     }
 
     public class TargetSpellData
@@ -106,6 +111,18 @@ namespace SpellDetector.Targeted
         Targeted,
         Self,
         AutoAttack
+    }
+
+    public enum SpellSlot
+    {
+        Unknown = -1,
+        Q = 0,
+        W = 1,
+        E = 2,
+        R = 3,
+        Summoner1 = 4,
+        Summoner2 = 5,
+        Recall = 13,
     }
 
     public enum CcType
