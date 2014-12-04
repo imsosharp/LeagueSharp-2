@@ -27,10 +27,6 @@ namespace SpellDetector.Helpers
 {
     public static class Extensions
     {
-        public static bool IsValid<T>(this GameObject obj)
-        {
-            return obj.IsValid && obj is T;
-        }
     }
 
     public class SpellList<T> : List<T>
