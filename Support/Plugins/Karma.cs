@@ -58,7 +58,7 @@ namespace Support.Plugins
                 }
 
                 if (W.CastCheck(Target, "Combo.W") && R.IsReady() &&
-                    Player.HealthPercent() <= ConfigValue<Slider>("Misc.W.Hp").Value)
+                    Player.HealthPercentage() <= ConfigValue<Slider>("Misc.W.Hp").Value)
                 {
                     R.CastOnUnit(Player, UsePackets);
                     Utility.DelayAction.Add(200, () => W.CastOnUnit(Target, UsePackets));
