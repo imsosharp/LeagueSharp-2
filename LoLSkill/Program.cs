@@ -104,19 +104,22 @@ namespace LoLSkill
             var namePos = namePanelPos + new Vector2(5, 2);
             var summoner1Pos = origin + new Vector2(230, 40);
             var summoner2Pos = origin + new Vector2(230, 75);
-            var pingPos = origin + new Vector2(100, 100);
-            var loadedPos = origin + new Vector2(100, 100);
-            var skillScorePos = origin + new Vector2(100, 100);
-            var winsPos = origin + new Vector2(100, 100);
-            var performancePos = origin + new Vector2(100, 100);
-            var leaguePos = origin + new Vector2(100, 100);
-            var divisionPos = origin + new Vector2(100, 100);
-            var winLosePos = origin + new Vector2(100, 100);
-            var killsPos = origin + new Vector2(100, 100);
-            var deathsPos = origin + new Vector2(100, 100);
-            var assistsPos = origin + new Vector2(100, 100);
-            var csPos = origin + new Vector2(100, 100);
-            var goldPos = origin + new Vector2(100, 100);
+            var pingPos = origin + new Vector2(0, 0);
+            var loadedPos = origin + new Vector2(0, 0);
+
+            var skillScorePos = origin + new Vector2(0, 0);
+            var winsPos = origin + new Vector2(0, 0);
+
+            var performancePos = performancePanelPos + new Vector2(0, 0);
+            var leaguePos = performancePanelPos + new Vector2(0, 0);
+            var divisionPos = performancePanelPos + new Vector2(0, 0);
+
+            var winLosePos = statsPanelPos + new Vector2(0, 0);
+            var killsPos = statsPanelPos + new Vector2(0, 0);
+            var deathsPos = statsPanelPos + new Vector2(0, 0);
+            var assistsPos = statsPanelPos + new Vector2(0, 0);
+            var csPos = statsPanelPos + new Vector2(0, 0);
+            var goldPos = statsPanelPos + new Vector2(0, 0);
 
             // panels
             _renderObjects.Add(new Render.Rectangle(namePanelPos, 250, 20, "#121212".ToColorBgra()).Add());
