@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LoLSkill</RootNamespace>
+    <AssemblyName>LoLSkill</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <PreBuildEvent />
+    <PostBuildEvent />
+    <ProjectGuid>{8453C9D5-2A6A-4930-9B5C-963B8D86F998}</ProjectGuid>
+    <OutputPath>bin\Release</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="LeagueSharp">
+      <HintPath>D:\Games\LeagueSharp\\System\LeagueSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="LeagueSharp.Common">
+      <HintPath>D:\Games\LeagueSharp\\System\LeagueSharp.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX">
+      <HintPath>D:\Games\LeagueSharp\\System\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D9">
+      <HintPath>D:\Games\LeagueSharp\\System\SharpDX.Direct3D9.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Images.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Images.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Images.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Images.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SummonerBarrier.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SummonerBoost.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SummonerClairvoyance.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SummonerDot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SummonerExhaust.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SummonerFlash.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SummonerHaste.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SummonerHeal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SummonerMana.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SummonerOdinGarrison.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SummonerRevive.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SummonerSmite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SummonerTeleport.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Loadscreen.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
