@@ -7,7 +7,6 @@ namespace BamMod
 {
     class Program
     {
-        private static float _last;
         private static readonly SoundPlayer Player = new SoundPlayer(Sounds.bam);
         private static readonly Menu Config = new Menu("BamMod", "BamMod", true);
 
@@ -15,34 +14,27 @@ namespace BamMod
         {
             CustomEvents.Game.OnGameLoad += eventArgs =>
             {
-                Config.AddItem(new MenuItem("OnlyNew", "Only Largest Critical Strike").SetValue(true));
-                Config.AddItem(new MenuItem("PrintChat", "Print Chat").SetValue(true));
+                Config.AddItem(new MenuItem("Print", "BAM!").SetValue(true));
                 Config.AddItem(new MenuItem("PlaySound", "Play Sound").SetValue(true));
                 Config.AddToMainMenu();
             };
 
-            Game.OnGameUpdate += eventArgs =>
+            Game.OnGameProcessPacket += packet =>
             {
-                try
-                {
-                    if (ObjectManager.Player.LargestCriticalStrike == 0)
-                        return;
+                if (packet.PacketData[0] != Packet.S2C.Damage.Header)
+                    return;
 
-                    if (ObjectManager.Player.LargestCriticalStrike != _last || !Config.Item("OnlyNew").GetValue<bool>())
-                    {
-                        if (Config.Item("PrintChat").GetValue<bool>())
-                            Game.PrintChat("<font color='#FF0000'>BAM</font> <font color='#FFFFFF'>" + ObjectManager.Player.LargestCriticalStrike + "</font>");
+                var dmgPacket = Packet.S2C.Damage.Decoded(packet.PacketData);
 
-                        if (Config.Item("PlaySound").GetValue<bool>())
-                            Player.Play();
-                        
-                        _last = ObjectManager.Player.LargestCriticalStrike;
-                    }
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
+                if (dmgPacket.SourceNetworkId != ObjectManager.Player.NetworkId || dmgPacket.Type != Packet.DamageTypePacket.CriticalAttack)
+                    return;
+
+                if (Config.Item("Print").GetValue<bool>())
+                    Packet.S2C.FloatText.Encoded(new Packet.S2C.FloatText.Struct("BAM " + (int)dmgPacket.DamageAmount, Packet.FloatTextPacket.Critical,
+                        dmgPacket.TargetNetworkId)).Process();
+
+                if (Config.Item("PlaySound").GetValue<bool>())
+                    Player.Play();
             };
         }
     }
