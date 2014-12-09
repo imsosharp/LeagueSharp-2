@@ -1,16 +1,19 @@
-using System;
+#region
+
 using System.Media;
 using LeagueSharp;
 using LeagueSharp.Common;
 
+#endregion
+
 namespace BamMod
 {
-    class Program
+    internal class Program
     {
         private static readonly SoundPlayer Player = new SoundPlayer(Sounds.bam);
         private static readonly Menu Config = new Menu("BamMod", "BamMod", true);
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             CustomEvents.Game.OnGameLoad += eventArgs =>
             {
@@ -26,12 +29,13 @@ namespace BamMod
 
                 var dmgPacket = Packet.S2C.Damage.Decoded(packet.PacketData);
 
-                if (dmgPacket.SourceNetworkId != ObjectManager.Player.NetworkId || dmgPacket.Type != Packet.DamageTypePacket.CriticalAttack)
+                if (dmgPacket.SourceNetworkId != ObjectManager.Player.NetworkId ||
+                    dmgPacket.Type != Packet.DamageTypePacket.CriticalAttack)
                     return;
 
                 if (Config.Item("Print").GetValue<bool>())
-                    Packet.S2C.FloatText.Encoded(new Packet.S2C.FloatText.Struct("BAM " + (int)dmgPacket.DamageAmount, Packet.FloatTextPacket.Critical,
-                        dmgPacket.TargetNetworkId)).Process();
+                    Packet.S2C.FloatText.Encoded(new Packet.S2C.FloatText.Struct("BAM " + (int) dmgPacket.DamageAmount,
+                        Packet.FloatTextPacket.Critical, dmgPacket.TargetNetworkId)).Process();
 
                 if (Config.Item("PlaySound").GetValue<bool>())
                     Player.Play();
