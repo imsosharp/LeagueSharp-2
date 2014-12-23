@@ -43,9 +43,9 @@ namespace Support
 
         #region BeforeEnemyAttack
 
-        public static event BeforeEnemyAttackEvenH BeforeEnemyAttack;
-
         public delegate void BeforeEnemyAttackEvenH(BeforeEnemyAttackEventArgs args);
+
+        public static event BeforeEnemyAttackEvenH BeforeEnemyAttack;
 
         public class BeforeEnemyAttackEventArgs
         {
@@ -68,7 +68,6 @@ namespace Support
 
             InitConfig();
             InitOrbwalker();
-            InitTargetSelector();
             InitPluginEvents();
             InitPrivateEvents();
 
@@ -76,14 +75,6 @@ namespace Support
         }
 
         #region Private Stuff
-
-        /// <summary>
-        ///     SupportTargetSelector Initialization
-        /// </summary>
-        private void InitTargetSelector()
-        {
-            TargetSelector = new TargetSelector(Player.AttackRange, TargetSelector.TargetingMode.AutoPriority);
-        }
 
         /// <summary>
         ///     PluginEvents Initialization
@@ -100,6 +91,15 @@ namespace Support
             Game.OnGameSendPacket += OnSendPacket;
             Game.OnGameProcessPacket += OnProcessPacket;
             OnLoad(new EventArgs());
+
+            Game.OnGameUpdate += args =>
+            {
+                if (Game.Ping > 50)
+                {
+                    // If Game.Ping bigger than 50 then
+                    Game.PrintChat("Ping: " + Game.Ping); // Print "Ping: 50" in chat
+                }
+            };
         }
 
         /// <summary>
@@ -107,22 +107,21 @@ namespace Support
         /// </summary>
         private void InitPrivateEvents()
         {
-            Utility.DelayAction.Add(500, () =>
-            {
-                try
+            Utility.DelayAction.Add(
+                500, () =>
                 {
-                    _spells.Add(Q);
-                    _spells.Add(W);
-                    _spells.Add(E);
-                    _spells.Add(R);
-
-                    TargetSelector.SetRange(_spells.Where(s => s.Range != float.MaxValue).Select(s => s.Range).Max() + 500);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
-            });
+                    try
+                    {
+                        _spells.Add(Q);
+                        _spells.Add(W);
+                        _spells.Add(E);
+                        _spells.Add(R);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
+                });
 
             Game.OnGameUpdate += args =>
             {
@@ -162,7 +161,9 @@ namespace Support
 
                     if (args.Target.IsValid<Obj_AI_Hero>() && !ConfigValue<bool>("AttackChampions") &&
                         Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None)
+                    {
                         args.Process = false;
+                    }
                 }
                 catch (Exception e)
                 {
@@ -175,17 +176,22 @@ namespace Support
                 try
                 {
                     if (Player.IsDead)
+                    {
                         return;
+                    }
 
                     if (Target != null && ConfigValue<Circle>("Target").Active)
+                    {
                         Utility.DrawCircle(Target.Position, 125, ConfigValue<Circle>("Target").Color);
+                    }
 
                     foreach (var spell in _spells.Where(s => s != null))
                     {
                         var menuItem = ConfigValue<Circle>(spell.Slot + "Range");
                         if (menuItem.Active && spell.Level > 0)
                         {
-                            Utility.DrawCircle(Player.Position, spell.Range,
+                            Utility.DrawCircle(
+                                Player.Position, spell.Range,
                                 spell.IsReady() ? menuItem.Color : Color.FromArgb(150, Color.Red));
                         }
                     }
@@ -237,7 +243,7 @@ namespace Support
         {
             Config = new Menu("Support: " + Player.ChampionName, Player.ChampionName, true);
             Config.AddSubMenu(new Menu("Orbwalking", "Orbwalking"));
-            SimpleTs.AddToMenu(Config.AddSubMenu(new Menu("Target Selector", "Target Selector")));
+            TargetSelector.AddToMenu(Config.AddSubMenu(new Menu("Target Selector", "Target Selector")));
 
             ComboConfig = Config.AddSubMenu(new Menu("Combo", "Combo"));
             HarassConfig = Config.AddSubMenu(new Menu("Harass", "Harass"));
@@ -257,20 +263,19 @@ namespace Support
 
             // drawing
             DrawingConfig.AddItem(
-                new MenuItem("Target" + ChampionName, "Target").SetValue(new Circle(true,
-                    Color.DodgerBlue)));
+                new MenuItem("Target" + ChampionName, "Target").SetValue(new Circle(true, Color.DodgerBlue)));
             DrawingConfig.AddItem(
-                new MenuItem("QRange" + ChampionName, "Q Range").SetValue(new Circle(false,
-                    Color.FromArgb(150, Color.DodgerBlue))));
+                new MenuItem("QRange" + ChampionName, "Q Range").SetValue(
+                    new Circle(false, Color.FromArgb(150, Color.DodgerBlue))));
             DrawingConfig.AddItem(
-                new MenuItem("WRange" + ChampionName, "W Range").SetValue(new Circle(false,
-                    Color.FromArgb(150, Color.DodgerBlue))));
+                new MenuItem("WRange" + ChampionName, "W Range").SetValue(
+                    new Circle(false, Color.FromArgb(150, Color.DodgerBlue))));
             DrawingConfig.AddItem(
-                new MenuItem("ERange" + ChampionName, "E Range").SetValue(new Circle(false,
-                    Color.FromArgb(150, Color.DodgerBlue))));
+                new MenuItem("ERange" + ChampionName, "E Range").SetValue(
+                    new Circle(false, Color.FromArgb(150, Color.DodgerBlue))));
             DrawingConfig.AddItem(
-                new MenuItem("RRange" + ChampionName, "R Range").SetValue(new Circle(false,
-                    Color.FromArgb(150, Color.DodgerBlue))));
+                new MenuItem("RRange" + ChampionName, "R Range").SetValue(
+                    new Circle(false, Color.FromArgb(150, Color.DodgerBlue))));
 
             // plugins
             ComboMenu(ComboConfig);
@@ -328,10 +333,7 @@ namespace Support
         /// </summary>
         public bool ComboMode
         {
-            get
-            {
-                return Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && !Player.IsDead;
-            }
+            get { return Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && !Player.IsDead; }
         }
 
         /// <summary>
@@ -339,10 +341,7 @@ namespace Support
         /// </summary>
         public bool HarassMode
         {
-            get
-            {
-                return Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && HarassMana && !Player.IsDead;
-            }
+            get { return Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && HarassMana && !Player.IsDead; }
         }
 
         /// <summary>
@@ -377,18 +376,23 @@ namespace Support
             get { return Orbwalking.GetRealAutoAttackRange(Target); }
         }
 
+        public float SpellRange
+        { 
+            get { return _spells.Where(s => s.Range != float.MaxValue).Select(s => s.Range).Max() + 500; } 
+        }
+
         /// <summary>
         ///     Target
         /// </summary>
         public Obj_AI_Hero Target
         {
-            get { return TargetSelector.Target; }
+            get { return TargetSelector.GetTarget(SpellRange, TargetSelector.DamageType.Magical); }
         }
 
         /// <summary>
         ///     OrbwalkerTarget
         /// </summary>
-        public Obj_AI_Base OrbwalkerTarget
+        public AttackableUnit OrbwalkerTarget
         {
             get { return Orbwalker.GetTarget(); }
         }
@@ -482,9 +486,7 @@ namespace Support
         ///     override to Implement OnProcessPacket logic
         /// </remarks>
         /// <param name="args"></param>
-        public virtual void OnProcessPacket(GamePacketEventArgs args)
-        {
-        }
+        public virtual void OnProcessPacket(GamePacketEventArgs args) {}
 
         /// <summary>
         ///     OnSendPacket
@@ -493,9 +495,7 @@ namespace Support
         ///     override to Implement OnSendPacket logic
         /// </remarks>
         /// <param name="args"></param>
-        public virtual void OnSendPacket(GamePacketEventArgs args)
-        {
-        }
+        public virtual void OnSendPacket(GamePacketEventArgs args) {}
 
         /// <summary>
         ///     OnPossibleToInterrupt
@@ -505,9 +505,7 @@ namespace Support
         /// </remarks>
         /// <param name="unit">Obj_AI_Base</param>
         /// <param name="spell">InterruptableSpell</param>
-        public virtual void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
-        {
-        }
+        public virtual void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell) {}
 
         /// <summary>
         ///     OnEnemyGapcloser
@@ -516,9 +514,7 @@ namespace Support
         ///     override to Implement AntiGapcloser logic
         /// </remarks>
         /// <param name="gapcloser">ActiveGapcloser</param>
-        public virtual void OnEnemyGapcloser(ActiveGapcloser gapcloser)
-        {
-        }
+        public virtual void OnEnemyGapcloser(ActiveGapcloser gapcloser) {}
 
         /// <summary>
         ///     OnUpdate
@@ -527,9 +523,7 @@ namespace Support
         ///     override to Implement Update logic
         /// </remarks>
         /// <param name="args">EventArgs</param>
-        public virtual void OnUpdate(EventArgs args)
-        {
-        }
+        public virtual void OnUpdate(EventArgs args) {}
 
         /// <summary>
         ///     OnBeforeEnemyAttack
@@ -538,9 +532,7 @@ namespace Support
         ///     override to Implement OnBeforeEnemyAttack logic
         /// </remarks>
         /// <param name="args">BeforeEnemyAttackEventArgs</param>
-        public virtual void OnBeforeEnemyAttack(BeforeEnemyAttackEventArgs args)
-        {
-        }
+        public virtual void OnBeforeEnemyAttack(BeforeEnemyAttackEventArgs args) {}
 
         /// <summary>
         ///     OnBeforeAttack
@@ -549,9 +541,7 @@ namespace Support
         ///     override to Implement OnBeforeAttack logic
         /// </remarks>
         /// <param name="args">Orbwalking.BeforeAttackEventArgs</param>
-        public virtual void OnBeforeAttack(Orbwalking.BeforeAttackEventArgs args)
-        {
-        }
+        public virtual void OnBeforeAttack(Orbwalking.BeforeAttackEventArgs args) {}
 
         /// <summary>
         ///     OnAfterAttack
@@ -561,9 +551,7 @@ namespace Support
         /// </remarks>
         /// <param name="unit">unit</param>
         /// <param name="target">target</param>
-        public virtual void OnAfterAttack(Obj_AI_Base unit, Obj_AI_Base target)
-        {
-        }
+        public virtual void OnAfterAttack(AttackableUnit unit, AttackableUnit target) { }
 
         /// <summary>
         ///     OnLoad
@@ -572,9 +560,7 @@ namespace Support
         ///     override to Implement class Initialization
         /// </remarks>
         /// <param name="args">EventArgs</param>
-        public virtual void OnLoad(EventArgs args)
-        {
-        }
+        public virtual void OnLoad(EventArgs args) {}
 
         /// <summary>
         ///     OnDraw
@@ -583,9 +569,7 @@ namespace Support
         ///     override to Implement Drawing
         /// </remarks>
         /// <param name="args">EventArgs</param>
-        public virtual void OnDraw(EventArgs args)
-        {
-        }
+        public virtual void OnDraw(EventArgs args) {}
 
         /// <summary>
         ///     ComboMenu
@@ -594,9 +578,7 @@ namespace Support
         ///     override to Implement ComboMenu Config
         /// </remarks>
         /// <param name="config">Menu</param>
-        public virtual void ComboMenu(Menu config)
-        {
-        }
+        public virtual void ComboMenu(Menu config) {}
 
         /// <summary>
         ///     HarassMenu
@@ -605,9 +587,7 @@ namespace Support
         ///     override to Implement HarassMenu Config
         /// </remarks>
         /// <param name="config">Menu</param>
-        public virtual void HarassMenu(Menu config)
-        {
-        }
+        public virtual void HarassMenu(Menu config) {}
 
         /// <summary>
         ///     ManaMenu
@@ -616,9 +596,7 @@ namespace Support
         ///     override to Implement ManaMenu Config
         /// </remarks>
         /// <param name="config">Menu</param>
-        public virtual void ManaMenu(Menu config)
-        {
-        }
+        public virtual void ManaMenu(Menu config) {}
 
         /// <summary>
         ///     MiscMenu
@@ -627,9 +605,7 @@ namespace Support
         ///     override to Implement MiscMenu Config
         /// </remarks>
         /// <param name="config">Menu</param>
-        public virtual void MiscMenu(Menu config)
-        {
-        }
+        public virtual void MiscMenu(Menu config) {}
 
         /// <summary>
         ///     MiscMenu
@@ -638,9 +614,7 @@ namespace Support
         ///     override to Implement Interrupt Config
         /// </remarks>
         /// <param name="config">Menu</param>
-        public virtual void InterruptMenu(Menu config)
-        {
-        }
+        public virtual void InterruptMenu(Menu config) {}
 
         /// <summary>
         ///     DrawingMenu
@@ -649,8 +623,6 @@ namespace Support
         ///     override to Implement DrawingMenu Config
         /// </remarks>
         /// <param name="config">Menu</param>
-        public virtual void DrawingMenu(Menu config)
-        {
-        }
+        public virtual void DrawingMenu(Menu config) {}
     }
 }
