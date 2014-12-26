@@ -1,39 +1,47 @@
 ﻿#region LICENSE
 
-// Copyright 2014 - 2014 Support
+// Copyright 2014 Support
 // PluginBase.cs is part of Support.
+// 
 // Support is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
+// 
 // Support is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
+// 
 // You should have received a copy of the GNU General Public License
 // along with Support. If not, see <http://www.gnu.org/licenses/>.
-
-#endregion
-
-#region
-
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using LeagueSharp;
-using LeagueSharp.Common;
-using SharpDX;
-using Support.Util;
-using ActiveGapcloser = Support.Util.ActiveGapcloser;
-using AntiGapcloser = Support.Util.AntiGapcloser;
-using Color = System.Drawing.Color;
-using Version = System.Version;
+// 
+// Filename: Support/Support/PluginBase.cs
+// Created:  01/10/2014
+// Date:     26/12/2014/16:23
+// Author:   h3h3
 
 #endregion
 
 namespace Support
 {
+    #region
+
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Linq;
+    using LeagueSharp;
+    using LeagueSharp.Common;
+    using SharpDX;
+    using Support.Util;
+    using ActiveGapcloser = Support.Util.ActiveGapcloser;
+    using AntiGapcloser = Support.Util.AntiGapcloser;
+    using Color = System.Drawing.Color;
+    using Version = System.Version;
+
+    #endregion
+
     /// <summary>
     ///     PluginBase class
     /// </summary>
@@ -91,15 +99,6 @@ namespace Support
             Game.OnGameSendPacket += OnSendPacket;
             Game.OnGameProcessPacket += OnProcessPacket;
             OnLoad(new EventArgs());
-
-            Game.OnGameUpdate += args =>
-            {
-                if (Game.Ping > 50)
-                {
-                    // If Game.Ping bigger than 50 then
-                    Game.PrintChat("Ping: " + Game.Ping); // Print "Ping: 50" in chat
-                }
-            };
         }
 
         /// <summary>
@@ -202,38 +201,45 @@ namespace Support
                 }
             };
 
-            Game.OnGameProcessPacket += args =>
-            {
-                try
-                {
-                    if (args.PacketData[0] != Packet.MultiPacket.Header ||
-                        args.PacketData[5] != Packet.MultiPacket.OnAttack.SubHeader)
-                        return;
+            // TODO: 4.21 Packets
+            //Game.OnGameProcessPacket += args =>
+            //{
+            //    try
+            //    {
+            //        if (args.PacketData[0] != Packet.MultiPacket.Header ||
+            //            args.PacketData[5] != Packet.MultiPacket.OnAttack.SubHeader)
+            //        {
+            //            return;
+            //        }
 
-                    var basePacket = Packet.MultiPacket.DecodeHeader(args.PacketData);
-                    var attackPacket = Packet.MultiPacket.OnAttack.Decoded(args.PacketData);
-                    var caster = ObjectManager.GetUnitByNetworkId<GameObject>(basePacket.NetworkId) as Obj_AI_Base;
-                    var target = ObjectManager.GetUnitByNetworkId<GameObject>(attackPacket.TargetNetworkId) as Obj_AI_Base;
+            //        var basePacket = Packet.MultiPacket.DecodeHeader(args.PacketData);
+            //        var attackPacket = Packet.MultiPacket.OnAttack.Decoded(args.PacketData);
+            //        var caster = ObjectManager.GetUnitByNetworkId<GameObject>(basePacket.NetworkId) as Obj_AI_Base;
+            //        var target =
+            //            ObjectManager.GetUnitByNetworkId<GameObject>(attackPacket.TargetNetworkId) as Obj_AI_Base;
 
-                    if (!caster.IsValid<Obj_AI_Hero>() || caster == null || caster.IsAlly)
-                        return;
+            //        if (!caster.IsValid<Obj_AI_Hero>() || caster == null || caster.IsAlly)
+            //        {
+            //            return;
+            //        }
 
-                    if (BeforeEnemyAttack != null)
-                    {
-                        BeforeEnemyAttack(new BeforeEnemyAttackEventArgs
-                        {
-                            Caster = caster,
-                            Target = target,
-                            Position = attackPacket.Position,
-                            Type = attackPacket.Type
-                        });
-                    }
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
-            };
+            //        if (BeforeEnemyAttack != null)
+            //        {
+            //            BeforeEnemyAttack(
+            //                new BeforeEnemyAttackEventArgs
+            //                {
+            //                    Caster = caster,
+            //                    Target = target,
+            //                    Position = attackPacket.Position,
+            //                    Type = attackPacket.Type
+            //                });
+            //        }
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        Console.WriteLine(e);
+            //    }
+            //};
         }
 
         /// <summary>
@@ -357,7 +363,7 @@ namespace Support
         /// </summary>
         public bool UsePackets
         {
-            get { return ConfigValue<bool>("UsePackets"); }
+            get { return false; /* 4.21 ConfigValue<bool>("UsePackets"); */ }
         }
 
         /// <summary>
@@ -377,8 +383,8 @@ namespace Support
         }
 
         public float SpellRange
-        { 
-            get { return _spells.Where(s => s.Range != float.MaxValue).Select(s => s.Range).Max() + 500; } 
+        {
+            get { return _spells.Where(s => s.Range != float.MaxValue).Select(s => s.Range).Max() + 500; }
         }
 
         /// <summary>
@@ -551,7 +557,7 @@ namespace Support
         /// </remarks>
         /// <param name="unit">unit</param>
         /// <param name="target">target</param>
-        public virtual void OnAfterAttack(AttackableUnit unit, AttackableUnit target) { }
+        public virtual void OnAfterAttack(AttackableUnit unit, AttackableUnit target) {}
 
         /// <summary>
         ///     OnLoad

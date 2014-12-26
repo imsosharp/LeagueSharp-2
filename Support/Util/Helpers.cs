@@ -1,37 +1,45 @@
 ﻿#region LICENSE
 
-// Copyright 2014 - 2014 Support
+// Copyright 2014 Support
 // Helpers.cs is part of Support.
+// 
 // Support is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
+// 
 // Support is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
+// 
 // You should have received a copy of the GNU General Public License
 // along with Support. If not, see <http://www.gnu.org/licenses/>.
-
-#endregion
-
-#region
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using LeagueSharp;
-using LeagueSharp.Common;
-using SharpDX;
-using Version = System.Version;
+// 
+// Filename: Support/Support/Helpers.cs
+// Created:  26/11/2014
+// Date:     26/12/2014/16:23
+// Author:   h3h3
 
 #endregion
 
 namespace Support.Util
 {
+    #region
+
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Text.RegularExpressions;
+    using System.Threading.Tasks;
+    using LeagueSharp;
+    using LeagueSharp.Common;
+    using SharpDX;
+    using Version = System.Version;
+
+    #endregion
+
     internal static class Helpers
     {
         /// <summary>
@@ -50,48 +58,55 @@ namespace Support.Util
 
         public static void UpdateCheck()
         {
-            Task.Factory.StartNew(() =>
-            {
-                try
+            Task.Factory.StartNew(
+                () =>
                 {
-                    using (var c = new WebClient())
+                    try
                     {
-                        var rawVersion =
-                            c.DownloadString(
-                                "https://raw.githubusercontent.com/h3h3/LeagueSharp/master/Support/Properties/AssemblyInfo.cs");
-                        var match =
-                            new Regex(@"\[assembly\: AssemblyVersion\(""(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})""\)\]")
-                                .Match
-                                (rawVersion);
-
-                        if (match.Success)
+                        using (var c = new WebClient())
                         {
-                            var gitVersion =
-                                new Version(string.Format("{0}.{1}.{2}.{3}", match.Groups[1], match.Groups[2],
-                                    match.Groups[3],
-                                    match.Groups[4]));
+                            var rawVersion =
+                                c.DownloadString(
+                                    "https://raw.githubusercontent.com/h3h3/LeagueSharp/master/Support/Properties/AssemblyInfo.cs");
+                            var match =
+                                new Regex(
+                                    @"\[assembly\: AssemblyVersion\(""(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})""\)\]")
+                                    .Match(rawVersion);
 
-                            if (gitVersion > Program.Version)
+                            if (match.Success)
                             {
-                                Game.PrintChat("<font color='#15C3AC'>Support:</font> <font color='#FF0000'>" +
-                                               "OUTDATED - Please Update to Version: " + gitVersion + "</font>");
-                                Game.PrintChat("<font color='#15C3AC'>Support:</font> <font color='#FF0000'>" +
-                                               "OUTDATED - Please Update to Version: " + gitVersion + "</font>");
-                                Game.PrintChat("<font color='#15C3AC'>Support:</font> <font color='#FF0000'>" +
-                                               "OUTDATED - Please Update to Version: " + gitVersion + "</font>");
-                                Game.PrintChat("<font color='#15C3AC'>Support:</font> <font color='#FF0000'>" +
-                                               "OUTDATED - Please Update to Version: " + gitVersion + "</font>");
-                                Game.PrintChat("<font color='#15C3AC'>Support:</font> <font color='#FF0000'>" +
-                                               "OUTDATED - Please Update to Version: " + gitVersion + "</font>");
+                                var gitVersion =
+                                    new Version(
+                                        string.Format(
+                                            "{0}.{1}.{2}.{3}", match.Groups[1], match.Groups[2], match.Groups[3],
+                                            match.Groups[4]));
+
+                                if (gitVersion > Program.Version)
+                                {
+                                    Game.PrintChat(
+                                        "<font color='#15C3AC'>Support:</font> <font color='#FF0000'>" +
+                                        "OUTDATED - Please Update to Version: " + gitVersion + "</font>");
+                                    Game.PrintChat(
+                                        "<font color='#15C3AC'>Support:</font> <font color='#FF0000'>" +
+                                        "OUTDATED - Please Update to Version: " + gitVersion + "</font>");
+                                    Game.PrintChat(
+                                        "<font color='#15C3AC'>Support:</font> <font color='#FF0000'>" +
+                                        "OUTDATED - Please Update to Version: " + gitVersion + "</font>");
+                                    Game.PrintChat(
+                                        "<font color='#15C3AC'>Support:</font> <font color='#FF0000'>" +
+                                        "OUTDATED - Please Update to Version: " + gitVersion + "</font>");
+                                    Game.PrintChat(
+                                        "<font color='#15C3AC'>Support:</font> <font color='#FF0000'>" +
+                                        "OUTDATED - Please Update to Version: " + gitVersion + "</font>");
+                                }
                             }
                         }
                     }
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
-            });
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
+                });
         }
 
         public static void PrintMessage(string message)
@@ -101,19 +116,19 @@ namespace Support.Util
 
         public static bool EnemyInRange(int numOfEnemy, float range)
         {
-            return ObjectManager.Player.CountEnemysInRange((int)range) >= numOfEnemy;
+            return Utility.CountEnemysInRange(ObjectManager.Player, (int) range) >= numOfEnemy;
         }
 
         public static List<Obj_AI_Hero> AllyInRange(float range)
         {
-            return ObjectManager
-                .Get<Obj_AI_Hero>()
-                .Where(
-                    h =>
-                        ObjectManager.Player.Distance(h.Position) < range && h.IsAlly && !h.IsMe && h.IsValid &&
-                        !h.IsDead)
-                .OrderBy(h => ObjectManager.Player.Distance(h.Position))
-                .ToList();
+            return
+                ObjectManager.Get<Obj_AI_Hero>()
+                    .Where(
+                        h =>
+                            Geometry.Distance(ObjectManager.Player, h.Position) < range && h.IsAlly && !h.IsMe &&
+                            h.IsValid && !h.IsDead)
+                    .OrderBy(h => Geometry.Distance(ObjectManager.Player, h.Position))
+                    .ToList();
         }
 
         public static Obj_AI_Hero AllyBelowHp(int percentHp, float range)
@@ -122,7 +137,7 @@ namespace Support.Util
             {
                 if (ally.IsMe)
                 {
-                    if (((ObjectManager.Player.Health/ObjectManager.Player.MaxHealth)*100) < percentHp)
+                    if (((ObjectManager.Player.Health / ObjectManager.Player.MaxHealth) * 100) < percentHp)
                     {
                         return ally;
                     }
@@ -130,7 +145,7 @@ namespace Support.Util
                 else if (ally.IsAlly)
                 {
                     if (Vector3.Distance(ObjectManager.Player.Position, ally.Position) < range &&
-                        ((ally.Health/ally.MaxHealth)*100) < percentHp)
+                        ((ally.Health / ally.MaxHealth) * 100) < percentHp)
                     {
                         return ally;
                     }
