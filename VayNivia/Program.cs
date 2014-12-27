@@ -111,7 +111,7 @@ namespace VayNivia
                 var anivia =
                     ObjectManager.Get<Obj_AI_Hero>()
                         .SingleOrDefault(h => h.IsAlly && !h.IsDead && h.ChampionName == "Anivia");
-                var target = SimpleTs.GetTarget(Condemn.Range, SimpleTs.DamageType.Physical);
+                var target = TargetSelector.GetTarget(Condemn.Range, TargetSelector.DamageType.Physical);
 
                 if (ComboCheck(target))
                 {
