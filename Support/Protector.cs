@@ -233,7 +233,7 @@ namespace Support
                     ObjectManager.Get<Obj_AI_Hero>()
                         .Where(h => h.IsAlly && !h.IsDead)
                         .OrderByDescending(h => h.FlatPhysicalDamageMod)
-                        .Where(mikael.Item.IsInRange))
+                        .Where(h => ObjectManager.Player.Distance(h) < mikael.Item.Range))
                 {
                     foreach (var buff in CcTypes)
                     {
