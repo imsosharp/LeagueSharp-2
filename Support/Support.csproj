@@ -73,6 +73,7 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Plugins\Annie.cs" />
     <Compile Include="Util\AntiGapcloser.cs" />
     <Compile Include="Util\AutoBushRevealer.cs" />
     <Compile Include="Util\DamageBoostDatabase.cs" />
