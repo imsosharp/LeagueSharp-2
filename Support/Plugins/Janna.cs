@@ -47,7 +47,7 @@ namespace Support.Plugins
             E = new Spell(SpellSlot.E, 800);
             R = new Spell(SpellSlot.R, 550);
 
-            Q.SetSkillshot(0.25f, 150f, 900f, false, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(0.25f, 120f, 900f, false, SkillshotType.SkillshotLine);
             GameObject.OnCreate += TowerAttackOnCreate;
             GameObject.OnCreate += RangeAttackOnCreate;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
