@@ -105,7 +105,7 @@ namespace Support
             var menu = ConfigValue<Circle>(spell.Slot + "Range");
             if (menu.Active && spell.Level > 0)
             {
-                Utility.DrawCircle(Player.Position, spell.Range, spell.IsReady() ? menu.Color : Color.FromArgb(150, Color.Red));
+                Render.Circle(Player.Position, spell.Range, spell.IsReady() ? menu.Color : Color.FromArgb(150, Color.Red));
             }
         }
 
@@ -155,7 +155,7 @@ namespace Support
 
                     if (Target != null && ConfigValue<Circle>("Target").Active)
                     {
-                        Utility.DrawCircle(Target.Position, 125, ConfigValue<Circle>("Target").Color);
+                        Render.Circle(Target.Position, 125, ConfigValue<Circle>("Target").Color);
                     }
 
                     DrawSpell(Q);
