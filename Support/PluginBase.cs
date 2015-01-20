@@ -1,6 +1,6 @@
 ﻿#region LICENSE
 
-// Copyright 2014 Support
+// Copyright 2014-2015 Support
 // PluginBase.cs is part of Support.
 // 
 // Support is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 // 
 // Filename: Support/Support/PluginBase.cs
 // Created:  01/10/2014
-// Date:     26/12/2014/16:23
+// Date:     20/01/2015/11:20
 // Author:   h3h3
 
 #endregion
@@ -28,14 +28,13 @@ namespace Support
     #region
 
     using System;
+    using System.Drawing;
     using System.Linq;
     using LeagueSharp;
     using LeagueSharp.Common;
-    using SharpDX;
     using Support.Util;
     using ActiveGapcloser = Support.Util.ActiveGapcloser;
     using AntiGapcloser = Support.Util.AntiGapcloser;
-    using Color = System.Drawing.Color;
     using Version = System.Version;
 
     #endregion
@@ -45,22 +44,6 @@ namespace Support
     /// </summary>
     public abstract class PluginBase
     {
-        #region BeforeEnemyAttack
-
-        public delegate void BeforeEnemyAttackEvenH(BeforeEnemyAttackEventArgs args);
-
-        public static event BeforeEnemyAttackEvenH BeforeEnemyAttack;
-
-        public class BeforeEnemyAttackEventArgs
-        {
-            public Obj_AI_Base Caster { get; set; }
-            public Obj_AI_Base Target { get; set; }
-            public Packet.AttackTypePacket Type { get; set; }
-            public Vector3 Position { get; set; }
-        }
-
-        #endregion
-
         /// <summary>
         ///     Init BaseClass
         /// </summary>
@@ -77,199 +60,6 @@ namespace Support
 
             Helpers.PrintMessage(string.Format("{0} by {1} v.{2} loaded!", ChampionName, Author, Version));
         }
-
-        #region Private Stuff
-
-        /// <summary>
-        ///     PluginEvents Initialization
-        /// </summary>
-        private void InitPluginEvents()
-        {
-            Game.OnGameUpdate += OnUpdate;
-            Drawing.OnDraw += OnDraw;
-            BeforeEnemyAttack += OnBeforeEnemyAttack;
-            Orbwalking.BeforeAttack += OnBeforeAttack;
-            Orbwalking.AfterAttack += OnAfterAttack;
-            AntiGapcloser.OnEnemyGapcloser += OnEnemyGapcloser;
-            Interrupter.OnPossibleToInterrupt += OnPossibleToInterrupt;
-            //Game.OnGameSendPacket += OnSendPacket;
-            //Game.OnGameProcessPacket += OnProcessPacket;
-            OnLoad(new EventArgs());
-        }
-
-        private void DrawSpell(Spell spell)
-        {
-            if(spell == null)
-                return;
-
-            var menu = ConfigValue<Circle>(spell.Slot + "Range");
-            if (menu.Active && spell.Level > 0)
-            {
-                Utility.DrawCircle(Player.Position, spell.Range, spell.IsReady() ? menu.Color : Color.FromArgb(150, Color.Red));
-            }
-        }
-
-        /// <summary>
-        ///     PrivateEvents Initialization
-        /// </summary>
-        private void InitPrivateEvents()
-        {
-            Orbwalking.BeforeAttack += args =>
-            {
-                try
-                {
-                    if (args.Target.IsValid<Obj_AI_Minion>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-                    {
-                        switch (ConfigValue<StringList>("AttackMinions").SelectedIndex)
-                        {
-                            case 0: // Smart
-                                args.Process = AttackMinion;
-                                break;
-
-                            case 1: // Never
-                                args.Process = false;
-                                break;
-                        }
-                    }
-
-                    if (args.Target.IsValid<Obj_AI_Hero>() && !ConfigValue<bool>("AttackChampions") &&
-                        Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None)
-                    {
-                        args.Process = false;
-                    }
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
-            };
-
-            Drawing.OnDraw += args =>
-            {
-                try
-                {
-                    if (Player.IsDead)
-                    {
-                        return;
-                    }
-
-                    if (Target != null && ConfigValue<Circle>("Target").Active)
-                    {
-                        Utility.DrawCircle(Target.Position, 125, ConfigValue<Circle>("Target").Color);
-                    }
-
-                    DrawSpell(Q);
-                    DrawSpell(W);
-                    DrawSpell(E);
-                    DrawSpell(R);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
-            };
-
-            // TODO: 4.21 Packets
-            //Game.OnGameProcessPacket += args =>
-            //{
-            //    try
-            //    {
-            //        if (args.PacketData[0] != Packet.MultiPacket.Header ||
-            //            args.PacketData[5] != Packet.MultiPacket.OnAttack.SubHeader)
-            //        {
-            //            return;
-            //        }
-
-            //        var basePacket = Packet.MultiPacket.DecodeHeader(args.PacketData);
-            //        var attackPacket = Packet.MultiPacket.OnAttack.Decoded(args.PacketData);
-            //        var caster = ObjectManager.GetUnitByNetworkId<GameObject>(basePacket.NetworkId) as Obj_AI_Base;
-            //        var target =
-            //            ObjectManager.GetUnitByNetworkId<GameObject>(attackPacket.TargetNetworkId) as Obj_AI_Base;
-
-            //        if (!caster.IsValid<Obj_AI_Hero>() || caster == null || caster.IsAlly)
-            //        {
-            //            return;
-            //        }
-
-            //        if (BeforeEnemyAttack != null)
-            //        {
-            //            BeforeEnemyAttack(
-            //                new BeforeEnemyAttackEventArgs
-            //                {
-            //                    Caster = caster,
-            //                    Target = target,
-            //                    Position = attackPacket.Position,
-            //                    Type = attackPacket.Type
-            //                });
-            //        }
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        Console.WriteLine(e);
-            //    }
-            //};
-        }
-
-        /// <summary>
-        ///     Config Initialization
-        /// </summary>
-        private void InitConfig()
-        {
-            Config = new Menu("Support: " + Player.ChampionName, Player.ChampionName, true);
-            Config.AddSubMenu(new Menu("Orbwalking", "Orbwalking"));
-            TargetSelector.AddToMenu(Config.AddSubMenu(new Menu("Target Selector", "Target Selector")));
-
-            ComboConfig = Config.AddSubMenu(new Menu("Combo", "Combo"));
-            HarassConfig = Config.AddSubMenu(new Menu("Harass", "Harass"));
-            ManaConfig = Config.AddSubMenu(new Menu("Mana Limiter", "Mana Limiter"));
-            MiscConfig = Config.AddSubMenu(new Menu("Misc", "Misc"));
-            InterruptConfig = Config.AddSubMenu(new Menu("Interrupt", "Interrupt"));
-            DrawingConfig = Config.AddSubMenu(new Menu("Drawings", "Drawings"));
-
-            // mana
-            ManaConfig.AddSlider("HarassMana", "Harass Mana %", 1, 1, 100);
-
-            // misc
-            MiscConfig.AddBool("UsePackets", "Use Packets?", true);
-            MiscConfig.AddList("AttackMinions", "Attack Minions?", new[] { "Smart", "Never", "Always" });
-            MiscConfig.AddBool("AttackChampions", "Attack Champions?", true);
-
-            // drawing
-            DrawingConfig.AddItem(
-                new MenuItem("Target" + ChampionName, "Target").SetValue(new Circle(true, Color.DodgerBlue)));
-            DrawingConfig.AddItem(
-                new MenuItem("QRange" + ChampionName, "Q Range").SetValue(
-                    new Circle(false, Color.FromArgb(150, Color.DodgerBlue))));
-            DrawingConfig.AddItem(
-                new MenuItem("WRange" + ChampionName, "W Range").SetValue(
-                    new Circle(false, Color.FromArgb(150, Color.DodgerBlue))));
-            DrawingConfig.AddItem(
-                new MenuItem("ERange" + ChampionName, "E Range").SetValue(
-                    new Circle(false, Color.FromArgb(150, Color.DodgerBlue))));
-            DrawingConfig.AddItem(
-                new MenuItem("RRange" + ChampionName, "R Range").SetValue(
-                    new Circle(false, Color.FromArgb(150, Color.DodgerBlue))));
-
-            // plugins
-            ComboMenu(ComboConfig);
-            HarassMenu(HarassConfig);
-            ManaMenu(ManaConfig);
-            MiscMenu(MiscConfig);
-            InterruptMenu(InterruptConfig);
-            DrawingMenu(DrawingConfig);
-
-            Config.AddToMainMenu();
-        }
-
-        /// <summary>
-        ///     Orbwalker Initialization
-        /// </summary>
-        private void InitOrbwalker()
-        {
-            Orbwalker = new Orbwalking.Orbwalker(Config.SubMenu("Orbwalking"));
-        }
-
-        #endregion
 
         /// <summary>
         ///     Plugin display name
@@ -323,14 +113,6 @@ namespace Support
         public bool HarassMana
         {
             get { return Player.Mana > Player.MaxMana * ConfigValue<Slider>("HarassMana").Value / 100; }
-        }
-
-        /// <summary>
-        ///     UsePackets
-        /// </summary>
-        public bool UsePackets
-        {
-            get { return false; /* 4.21 ConfigValue<bool>("UsePackets"); */ }
         }
 
         /// <summary>
@@ -432,7 +214,6 @@ namespace Support
         /// </summary>
         public Menu InterruptConfig { get; set; }
 
-
         /// <summary>
         ///     ConfigValue
         /// </summary>
@@ -492,15 +273,6 @@ namespace Support
         /// </remarks>
         /// <param name="args">EventArgs</param>
         public virtual void OnUpdate(EventArgs args) {}
-
-        /// <summary>
-        ///     OnBeforeEnemyAttack
-        /// </summary>
-        /// <remarks>
-        ///     override to Implement OnBeforeEnemyAttack logic
-        /// </remarks>
-        /// <param name="args">BeforeEnemyAttackEventArgs</param>
-        public virtual void OnBeforeEnemyAttack(BeforeEnemyAttackEventArgs args) {}
 
         /// <summary>
         ///     OnBeforeAttack
@@ -592,5 +364,159 @@ namespace Support
         /// </remarks>
         /// <param name="config">Menu</param>
         public virtual void DrawingMenu(Menu config) {}
+
+        #region Private Stuff
+
+        /// <summary>
+        ///     PluginEvents Initialization
+        /// </summary>
+        private void InitPluginEvents()
+        {
+            Game.OnGameUpdate += OnUpdate;
+            Drawing.OnDraw += OnDraw;
+            Orbwalking.BeforeAttack += OnBeforeAttack;
+            Orbwalking.AfterAttack += OnAfterAttack;
+            AntiGapcloser.OnEnemyGapcloser += OnEnemyGapcloser;
+            Interrupter.OnPossibleToInterrupt += OnPossibleToInterrupt;
+            //Game.OnGameSendPacket += OnSendPacket;
+            //Game.OnGameProcessPacket += OnProcessPacket;
+            OnLoad(new EventArgs());
+        }
+
+        private void DrawSpell(Spell spell)
+        {
+            if (spell == null)
+            {
+                return;
+            }
+
+            var menu = ConfigValue<Circle>(spell.Slot + "Range");
+            if (menu.Active && spell.Level > 0)
+            {
+                Render.Circle.DrawCircle(
+                    Player.Position, spell.Range, spell.IsReady() ? menu.Color : Color.FromArgb(150, Color.Red));
+            }
+        }
+
+        /// <summary>
+        ///     PrivateEvents Initialization
+        /// </summary>
+        private void InitPrivateEvents()
+        {
+            Orbwalking.BeforeAttack += args =>
+            {
+                try
+                {
+                    if (args.Target.IsValid<Obj_AI_Minion>() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+                    {
+                        switch (ConfigValue<StringList>("AttackMinions").SelectedIndex)
+                        {
+                            case 0: // Smart
+                                args.Process = AttackMinion;
+                                break;
+
+                            case 1: // Never
+                                args.Process = false;
+                                break;
+                        }
+                    }
+
+                    if (args.Target.IsValid<Obj_AI_Hero>() && !ConfigValue<bool>("AttackChampions") &&
+                        Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None)
+                    {
+                        args.Process = false;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+            };
+
+            Drawing.OnDraw += args =>
+            {
+                try
+                {
+                    if (Player.IsDead)
+                    {
+                        return;
+                    }
+
+                    if (Target != null && ConfigValue<Circle>("Target").Active)
+                    {
+                        Render.Circle.DrawCircle(Target.Position, 125, ConfigValue<Circle>("Target").Color);
+                    }
+
+                    DrawSpell(Q);
+                    DrawSpell(W);
+                    DrawSpell(E);
+                    DrawSpell(R);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+            };
+        }
+
+        /// <summary>
+        ///     Config Initialization
+        /// </summary>
+        private void InitConfig()
+        {
+            Config = new Menu("Support: " + Player.ChampionName, Player.ChampionName, true);
+            Config.AddSubMenu(new Menu("Orbwalking", "Orbwalking"));
+            TargetSelector.AddToMenu(Config.AddSubMenu(new Menu("Target Selector", "Target Selector")));
+
+            ComboConfig = Config.AddSubMenu(new Menu("Combo", "Combo"));
+            HarassConfig = Config.AddSubMenu(new Menu("Harass", "Harass"));
+            ManaConfig = Config.AddSubMenu(new Menu("Mana Limiter", "Mana Limiter"));
+            MiscConfig = Config.AddSubMenu(new Menu("Misc", "Misc"));
+            InterruptConfig = Config.AddSubMenu(new Menu("Interrupt", "Interrupt"));
+            DrawingConfig = Config.AddSubMenu(new Menu("Drawings", "Drawings"));
+
+            // mana
+            ManaConfig.AddSlider("HarassMana", "Harass Mana %", 1, 1, 100);
+
+            // misc
+            MiscConfig.AddList("AttackMinions", "Attack Minions?", new[] { "Smart", "Never", "Always" });
+            MiscConfig.AddBool("AttackChampions", "Attack Champions?", true);
+
+            // drawing
+            DrawingConfig.AddItem(
+                new MenuItem("Target" + ChampionName, "Target").SetValue(new Circle(true, Color.DodgerBlue)));
+            DrawingConfig.AddItem(
+                new MenuItem("QRange" + ChampionName, "Q Range").SetValue(
+                    new Circle(false, Color.FromArgb(150, Color.DodgerBlue))));
+            DrawingConfig.AddItem(
+                new MenuItem("WRange" + ChampionName, "W Range").SetValue(
+                    new Circle(false, Color.FromArgb(150, Color.DodgerBlue))));
+            DrawingConfig.AddItem(
+                new MenuItem("ERange" + ChampionName, "E Range").SetValue(
+                    new Circle(false, Color.FromArgb(150, Color.DodgerBlue))));
+            DrawingConfig.AddItem(
+                new MenuItem("RRange" + ChampionName, "R Range").SetValue(
+                    new Circle(false, Color.FromArgb(150, Color.DodgerBlue))));
+
+            // plugins
+            ComboMenu(ComboConfig);
+            HarassMenu(HarassConfig);
+            ManaMenu(ManaConfig);
+            MiscMenu(MiscConfig);
+            InterruptMenu(InterruptConfig);
+            DrawingMenu(DrawingConfig);
+
+            Config.AddToMainMenu();
+        }
+
+        /// <summary>
+        ///     Orbwalker Initialization
+        /// </summary>
+        private void InitOrbwalker()
+        {
+            Orbwalker = new Orbwalking.Orbwalker(Config.SubMenu("Orbwalking"));
+        }
+
+        #endregion
     }
 }

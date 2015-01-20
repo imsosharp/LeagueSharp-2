@@ -1,6 +1,6 @@
 ﻿#region LICENSE
 
-// Copyright 2014 Support
+// Copyright 2014-2015 Support
 // Protector.cs is part of Support.
 // 
 // Support is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 // 
 // Filename: Support/Support/Protector.cs
 // Created:  05/10/2014
-// Date:     26/12/2014/16:23
+// Date:     20/01/2015/11:20
 // Author:   h3h3
 
 #endregion
@@ -105,7 +105,6 @@ namespace Support
         }
 
         public static event OnSkillshotProtectionH OnSkillshotProtection;
-
         public static event OnTargetedProtectionH OnTargetedProtection;
 
         public static void Init()
@@ -239,7 +238,7 @@ namespace Support
                     {
                         if (hero.HasBuffOfType(buff) && Menu.SubMenu("CC").Item(buff.ToString()).GetValue<bool>())
                         {
-                            if (mikael.IsActive(hero) && hero.CountEnemysInRange(800) > 0)
+                            if (mikael.IsActive(hero) && hero.CountEnemiesInRange(800) > 0)
                             {
                                 mikael.Item.Cast(hero);
                                 Console.WriteLine(
@@ -718,7 +717,6 @@ namespace Support
                 Console.WriteLine(e);
             }
         }
-
 
         /// <summary>
         ///     Returns true if the point is not inside the detected skillshots.
