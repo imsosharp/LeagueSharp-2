@@ -27,7 +27,7 @@
 
 #endregion
 
-namespace AIM.Plugins
+namespace Support.Plugins
 {
     #region
 
@@ -35,7 +35,7 @@ namespace AIM.Plugins
     using System.Linq;
     using LeagueSharp;
     using LeagueSharp.Common;
-    using AIM.Util;
+    using Support.Util;
 
     #endregion
 
