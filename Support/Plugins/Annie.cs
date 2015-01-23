@@ -27,7 +27,7 @@
 
 #endregion
 
-namespace Support.Plugins
+namespace AIM.Plugins
 {
     #region
 
@@ -35,7 +35,7 @@ namespace Support.Plugins
     using System.Linq;
     using LeagueSharp;
     using LeagueSharp.Common;
-    using Support.Util;
+    using AIM.Util;
 
     #endregion
 
@@ -43,6 +43,8 @@ namespace Support.Plugins
     {
         public Annie()
         {
+		
+            Author = "imsosharp";
             Q = new Spell(SpellSlot.Q, 650);
             W = new Spell(SpellSlot.W, 625);
             E = new Spell(SpellSlot.E);
@@ -65,9 +67,12 @@ namespace Support.Plugins
                 {
                     W.Cast(Target, true);
                 }
-
-                if (R.CastCheck(Target, "ComboR"))
+                if (Config.Item("REnemiesMinAnnie").GetValue<int>() >= R.GetPrediction(Target, true).AoeTargetsHitCount)
                 {
+                    if (!Config.Item("RNoStunAnnie").GetValue<bool>() && !(GetPassiveStacks() >= 4))
+                    {
+                        return;
+                    }
                     R.Cast(Target, true);
                 }
                 CastE();
@@ -145,7 +150,8 @@ namespace Support.Plugins
         {
             config.AddBool("ComboQ", "Use Q", true);
             config.AddBool("ComboW", "Use W", true);
-            config.AddBool("ComboR", "Use R", true);
+            config.AddBool("RNoStun", "Use R without stun", false);
+            config.AddSlider("REnemiesMin", "Only R if hit", 1, 1, 5);
         }
 
         public override void InterruptMenu(Menu config)
